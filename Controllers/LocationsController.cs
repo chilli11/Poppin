@@ -39,30 +39,20 @@ namespace Poppin.Controllers
 
         // POST: api/Locations
         [HttpPost]
-        public async Task<ActionResult<PoppinInsertActionResponse>> Post(PoppinLocationDTO _location)
+        public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationDTO _location)
         {
             var location = new PoppinLocation(_location);
+            var isExisting = _locationService.CheckExists(location);
             location.LastUpdate = DateTime.Now;
-            var searchParams = new YelpBusinessMatchParams(location);
-            var yelpMatches = await _yelpService.GetBusinessMatch(searchParams);
-            if (yelpMatches.Total == 1)
-            {
-                location.YelpId = yelpMatches.Businesses.First().Id;
-            }
 
-            var output = new PoppinInsertActionResponse()
-            {
-                location = location,
-                yelpMatches = yelpMatches
-            };
 
-            if (_locationService.CheckExists(location) == null)
+            if (isExisting == null)
             {
                 await _locationService.Add(location);
 
-                return CreatedAtAction("Post", output);
+                return CreatedAtAction("Post", location);
             }
-            return output;
+            return isExisting;
         }
 
         // PUT: api/Locations/5

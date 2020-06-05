@@ -28,12 +28,8 @@ export default class YelpMatchFormComponent extends Component {
 			});
 
 		if (this.args.locationDTO && (!this.args.yelpMatches || !this.args.yelpMatches.length)) {
-			const { locationDTO } = this.args;
-			const { address } = locationDTO;
-			const searchParams = new YelpBusinessSearchParams({
-				term: locationDTO.name,
-				location: address.city
-			});
+			const { location, term } = this.args;
+			const searchParams = new YelpBusinessSearchParams({ term, location });
 			this.store.findRecord('yelpBusinessMatch', searchParams);
 		}
 	}

@@ -1,5 +1,51 @@
 'use strict';
 
+define("poppin-ui/tests/helpers/ember-power-select", ["exports", "ember-power-select/test-support/helpers"], function (_exports, _helpers) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = deprecatedRegisterHelpers;
+  _exports.selectChoose = _exports.touchTrigger = _exports.nativeTouch = _exports.clickTrigger = _exports.typeInSearch = _exports.triggerKeydown = _exports.nativeMouseUp = _exports.nativeMouseDown = _exports.findContains = void 0;
+
+  function deprecateHelper(fn, name) {
+    return function (...args) {
+      (true && !(false) && Ember.deprecate(`DEPRECATED \`import { ${name} } from '../../tests/helpers/ember-power-select';\` is deprecated. Please, replace it with \`import { ${name} } from 'ember-power-select/test-support/helpers';\``, false, {
+        until: '1.11.0',
+        id: `ember-power-select-test-support-${name}`
+      }));
+      return fn(...args);
+    };
+  }
+
+  let findContains = deprecateHelper(_helpers.findContains, 'findContains');
+  _exports.findContains = findContains;
+  let nativeMouseDown = deprecateHelper(_helpers.nativeMouseDown, 'nativeMouseDown');
+  _exports.nativeMouseDown = nativeMouseDown;
+  let nativeMouseUp = deprecateHelper(_helpers.nativeMouseUp, 'nativeMouseUp');
+  _exports.nativeMouseUp = nativeMouseUp;
+  let triggerKeydown = deprecateHelper(_helpers.triggerKeydown, 'triggerKeydown');
+  _exports.triggerKeydown = triggerKeydown;
+  let typeInSearch = deprecateHelper(_helpers.typeInSearch, 'typeInSearch');
+  _exports.typeInSearch = typeInSearch;
+  let clickTrigger = deprecateHelper(_helpers.clickTrigger, 'clickTrigger');
+  _exports.clickTrigger = clickTrigger;
+  let nativeTouch = deprecateHelper(_helpers.nativeTouch, 'nativeTouch');
+  _exports.nativeTouch = nativeTouch;
+  let touchTrigger = deprecateHelper(_helpers.touchTrigger, 'touchTrigger');
+  _exports.touchTrigger = touchTrigger;
+  let selectChoose = deprecateHelper(_helpers.selectChoose, 'selectChoose');
+  _exports.selectChoose = selectChoose;
+
+  function deprecatedRegisterHelpers() {
+    (true && !(false) && Ember.deprecate("DEPRECATED `import registerPowerSelectHelpers from '../../tests/helpers/ember-power-select';` is deprecated. Please, replace it with `import registerPowerSelectHelpers from 'ember-power-select/test-support/helpers';`", false, {
+      until: '1.11.0',
+      id: 'ember-power-select-test-support-register-helpers'
+    }));
+    return (0, _helpers.default)();
+  }
+});
 define("poppin-ui/tests/integration/pods/components/admin/locations/yelp-match-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -182,6 +228,30 @@ define("poppin-ui/tests/unit/pods/admin/locations/route-test", ["qunit", "ember-
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:admin/locations');
       assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/services/api-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | api-service', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:api-service');
+      assert.ok(service);
+    });
+  });
+});
+define("poppin-ui/tests/unit/services/locations-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | locations-service', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:locations-service');
+      assert.ok(service);
     });
   });
 });

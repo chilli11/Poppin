@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import YelpBusinessModel from 'poppin-ui/models/yelp-business';
 
 const hoursDto = {
 	sunday: {
@@ -49,8 +50,10 @@ const hoursDto = {
 };
 
 export default class LocationFormComponent extends Component {
+	@service locationsService;
 	@service store;
 
+	@tracked yelpMatches;
 	@tracked name;
 	@tracked addressLine1;
 	@tracked addressLine2;
@@ -101,7 +104,7 @@ export default class LocationFormComponent extends Component {
 	get locationDTO() {
 		const { name, capacity, crowdSize, hours } = this;
 		return  {
-			name: name,
+			name,
 			address: {
 				line1: this.addressLine1,
 				line2: this.addressLine2,
@@ -111,9 +114,9 @@ export default class LocationFormComponent extends Component {
 				zipCodeTrailing: this.zipCodeTrailing ? parseInt(this.zipCodeTrailing) : null
 			},
 			categories: [],
-			capacity: capacity,
-			crowdSize: crowdSize,
-			hours: this.popHours(hours)
+			capacity: parseInt(this.capacity, 10),
+			crowdSize: parseInt(this.capacity, 10),
+			hours
 		};
 	}
 
@@ -170,23 +173,12 @@ export default class LocationFormComponent extends Component {
 		}
 	}
 
-	popHours(hoursObj) {
-		const out = {};
-		Object.keys(hoursObj).forEach(k => {
-			out[k] = {
-				opening: hoursObj[k].openingHour + hoursObj[k].openingMinute,
-				closing: hoursObj[k].closingHour + hoursObj[k].closingMinute
-			};
-		});
-		return out;
-	}
-
 	@action
 	submit(e) {
-		const location = this.store.createRecord('location', this.locationDTO);
-		location.save();
-			// .then(data => this.yelpMatches_yelpLocations = data.yelpMatches.businesses
-			// 	.map(b => YelpBusinessModel.extend(b).create())
-			// );
+		return this.locationsService.createNewLocation(this.locationDTO)
+			.then(({ businesses }) => {
+				this.yelpMatches = businesses;
+				return this.yelpMatches;
+			});
 	}
 }

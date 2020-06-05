@@ -5,7 +5,8 @@ module.exports = function(environment) {
     modulePrefix: 'poppin-ui',
     podModulePrefix: 'poppin-ui/pods',
     environment,
-    rootURL: '/',
+		rootURL: '/',
+		apiURL: 'https://localhost:44367/api/',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
