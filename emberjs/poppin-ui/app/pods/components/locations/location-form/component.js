@@ -51,10 +51,13 @@ const hoursDto = {
 
 export default class LocationFormComponent extends Component {
 	@service locationsService;
+	@service yelpService;
 	@service store;
 
 	@tracked yelpMatches;
+	@tracked locationId;
 	@tracked name;
+	@tracked yelpMatchId;
 	@tracked addressLine1;
 	@tracked addressLine2;
 	@tracked city;
@@ -102,8 +105,10 @@ export default class LocationFormComponent extends Component {
 	};
 
 	get locationDTO() {
-		const { name, capacity, crowdSize, hours } = this;
+		const { locationId, name, yelpMatchId,  capacity, crowdSize, hours } = this;
 		return  {
+			id: locationId,
+			yelpId: yelpMatchId,
 			name,
 			address: {
 				line1: this.addressLine1,
@@ -114,8 +119,8 @@ export default class LocationFormComponent extends Component {
 				zipCodeTrailing: this.zipCodeTrailing ? parseInt(this.zipCodeTrailing) : null
 			},
 			categories: [],
-			capacity: parseInt(this.capacity, 10),
-			crowdSize: parseInt(this.capacity, 10),
+			capacity: parseInt(capacity, 10),
+			crowdSize: parseInt(capacity, 10),
 			hours
 		};
 	}
@@ -128,6 +133,7 @@ export default class LocationFormComponent extends Component {
 	populate() {
 		if (this.args.location) {
 			const { loc } = this.args;
+			this.locationId = loc.id;
 			this.name = loc.Name || null;
 			this.addressLine1 = loc.address.line1;
 			this.addressLine2 = loc.address.line2;
@@ -175,10 +181,22 @@ export default class LocationFormComponent extends Component {
 
 	@action
 	submit(e) {
+		window.scroll({ top: 0, left: 0, behavior: 'smooth' })
 		return this.locationsService.createNewLocation(this.locationDTO)
-			.then(({ businesses }) => {
+			.then((location) => {
+				this.store.createRecord('location', location);
+				this.locationId = location.id;
+				return this.yelpService.getLocMatch(location.id);
+			}).then(({ businesses }) => {
 				this.yelpMatches = businesses;
 				return this.yelpMatches;
 			});
+	}
+
+	@action
+	acceptMatch(match) {
+		this.yelpMatchId = match.id;
+		return this.locationsService.updateLocation(this.locationDTO)
+			.then(alert('Match Added!'));
 	}
 }

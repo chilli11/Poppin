@@ -1,25 +1,32 @@
 {{!-- <div class="row"> --}}
+	<h4>Find a match from Yelp</h4>
 	<BsForm
-		@formLayout="horizontal" 
 		model={{this.yelpBusinessSearchParams}}
 		@onSubmit={{fn this.searchBusinesses}}
 		as |form|>
-		<form.element @controlType="text" @label="Find" @placeholder="Business Name" @property="term" />
-		<form.element @controlType="text" @label="in" @placeholder="Ex: Dallas, 75201, West 7th" @property="location" />
-		<PowerSelectMultiple
-			@searchEnabled={{true}}
-			@options={{this.yelpCategories}}
-			@searchField="title"
-			@selected={{this.categories}}
-			@onChange={{fn (mut this.categories)}} as |cat|>
-			{{cat.title}}
-		</PowerSelectMultiple>
+		<div class="form-row">
+			<form.element class="col-sm-6" @controlType="text" @placeholder="Business Name" @property="term" />
+			<div class="col-sm-1 text-center"><label>in</label></div>
+			<form.element class="col-sm-5" @controlType="text" @placeholder="Ex: Dallas, 75201, West 7th" @property="location" />
+		</div>
+		<form.group>
+			<label>Categories</label>
+			<PowerSelectMultiple
+				@searchEnabled={{true}}
+				@options={{this.yelpCategories}}
+				@placeholder="Search..."
+				@searchField="title"
+				@selected={{this.categories}}
+				@onChange={{fn (mut this.categories)}} as |cat|>
+				{{cat.title}}
+			</PowerSelectMultiple>
+		</form.group>
 		<br>
 		<BsButton @type="primary" type="submit" @defaultText="Submit" />
 	</BsForm>
 	<hr>
 	{{#each @yelpMatches as |match|}}
-		<h4>{{match.name}}</h4>
+		<h4>{{match.name}} - <a href="javascript:void(0)" {{on "click" (fn @acceptMatch match)}}>Accept Match</a></h4>
 		<dl>
 			<dt>Phone</dt>
 			<dd>{{match.phone}}</dd>

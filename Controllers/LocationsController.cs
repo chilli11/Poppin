@@ -55,17 +55,21 @@ namespace Poppin.Controllers
             return isExisting;
         }
 
-        // PUT: api/Locations/5
+        // PUT: api/Locations/
         [HttpPut]
-        public void Put(PoppinLocation location)
+        public void Put(PoppinLocationDTO _location)
         {
+            var location = new PoppinLocation(_location);
+            location.LastUpdate = DateTime.Now;
             _locationService.Update(location);
         }
 
         // PUT: api/Locations/5
         [HttpPut("{id}")]
-        public void Put(string id, PoppinLocation location)
+        public void Put(string id, PoppinLocationDTO _location)
         {
+            var location = new PoppinLocation(_location);
+            location.LastUpdate = DateTime.Now;
             _locationService.Update(id, location);
         }
 

@@ -16,6 +16,7 @@ namespace Poppin.Models
 								{
 												Id = v.Id;
 												Name = v.Name;
+												YelpId = v.YelpId;
 												Phone = v.Phone;
 												Address = v.Address;
 												Categories = v.Categories.ToList();
@@ -66,6 +67,7 @@ namespace Poppin.Models
 								public PoppinLocationDTO() { }
 
 								public string Id { get; set; }
+								public string YelpId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public Address Address { get; set; }

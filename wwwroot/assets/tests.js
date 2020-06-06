@@ -82,6 +82,42 @@ define("poppin-ui/tests/integration/pods/components/admin/locations/yelp-match-f
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/admin/sidebar/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | admin/sidebar', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Admin::Sidebar />
+      */
+      {
+        id: "0yzRnom7",
+        block: "{\"symbols\":[],\"statements\":[[8,\"admin/sidebar\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Admin::Sidebar>
+              template block text
+            </Admin::Sidebar>
+          
+      */
+      {
+        id: "DVdkbrvB",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"admin/sidebar\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/locations/location-display/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -231,6 +267,17 @@ define("poppin-ui/tests/unit/pods/admin/locations/route-test", ["qunit", "ember-
     });
   });
 });
+define("poppin-ui/tests/unit/pods/admin/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | admin', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:admin');
+      assert.ok(route);
+    });
+  });
+});
 define("poppin-ui/tests/unit/services/api-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -251,6 +298,18 @@ define("poppin-ui/tests/unit/services/locations-service-test", ["qunit", "ember-
 
     (0, _qunit.test)('it exists', function (assert) {
       let service = this.owner.lookup('service:locations-service');
+      assert.ok(service);
+    });
+  });
+});
+define("poppin-ui/tests/unit/services/yelp-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | yelp-service', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:yelp-service');
       assert.ok(service);
     });
   });

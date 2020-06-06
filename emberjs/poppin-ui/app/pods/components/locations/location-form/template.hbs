@@ -1,26 +1,25 @@
-<div class="row">
-	<div class="col-md">
-		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
-			<form.element @controlType="text" @label="Name" @placeholder="Name" @property="name" @required={{true}} />
-			<form.element @controlType="text" @label="Address" @placeholder="Line 1" @property="addressLine1" @required={{true}} />
-			<form.element @controlType="text" @label="" @placeholder="Line 2" @property="addressLine2" />
-			<form.element @controlType="text" @label="City" @placeholder="City" @property="city" @required={{true}} />
-			<form.element @controlType="text" @label="State" @placeholder="State" @property="state" @required={{true}} />
-			<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />
-			<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
-			{{#each-in this.hours as |name hourset|}}
-				<h5>{{name}}</h5>
-					{{#each-in hourset as |key val|}}
-						<form.element @controlType="time" @label={{key}} @property={{val}} />
-					{{/each-in}}
-			{{/each-in}}
-			<BsButton @type="primary" type="submit" @defaultText="Submit" />
-		</BsForm>
-	</div>
-	<div class="col-md">
-		<Locations::YelpMatchForm
-			@term={{this.name}}
-			@location={{this.city}}
-			@yelpMatches={{this.yelpMatches}} />
-	</div>
+<div class="col-md">
+	<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+		<form.element @controlType="text" @label="Name" @placeholder="Name" @property="name" @required={{true}} />
+		<form.element @controlType="text" @label="Address" @placeholder="Line 1" @property="addressLine1" @required={{true}} />
+		<form.element @controlType="text" @label="" @placeholder="Line 2" @property="addressLine2" />
+		<form.element @controlType="text" @label="City" @placeholder="City" @property="city" @required={{true}} />
+		<form.element @controlType="text" @label="State" @placeholder="State" @property="state" @required={{true}} />
+		<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />
+		<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
+		{{#each-in this.hours as |name hourset|}}
+			<h5>{{name}}</h5>
+				{{#each-in hourset as |key val|}}
+					<form.element @controlType="time" @label={{key}} @property={{val}} />
+				{{/each-in}}
+		{{/each-in}}
+		<BsButton @type="primary" type="submit" @defaultText="Submit" />
+	</BsForm>
+</div>
+<div class="col-md">
+	<Locations::YelpMatchForm
+		@term={{this.name}}
+		@location={{this.city}}
+		@yelpMatches={{this.yelpMatches}}
+		@acceptMatch={{acceptMatch}} />
 </div>

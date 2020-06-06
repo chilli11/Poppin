@@ -157,7 +157,7 @@ export default class ApiService extends Service.extend(Evented) {
 		};
 
 		fetchRequest = paramsToValues(options.resource, fetchRequest);
-		if (fetchRequest.method === POST) {
+		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
 		}
 

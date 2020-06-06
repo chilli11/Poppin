@@ -4,15 +4,18 @@ import HttpResources from '../utils/http-resources';
 
 export default class LocationsService extends Service {
 	@injectService apiService;
-	@injectService store;
 
-	createNewLocation(locationDTO) {
+	createNewLocation(location) {
 		return this.apiService.request({
 			resource: HttpResources.createNewLocation,
-			body: locationDTO
-		}).then((location) => {
-			this.store.createRecord('location', location);
-			return this.apiService.resources.getYelpMatch({ locId: location.id });
+			body: location
+		});
+	}
+
+	updateLocation(location) {
+		return this.apiService.request({
+			resource: HttpResources.updateLocation,
+			body: location
 		});
 	}
 }

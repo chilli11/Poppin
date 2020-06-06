@@ -43,10 +43,10 @@ namespace Poppin.Controllers
         }
 
         // POST: api/yelp/match
-        [HttpGet("match/{locationId}")]
-        public async Task<YelpBusinessSearchResponse> GetBusinessMatch(string locationId)
+        [HttpGet("match/{locId}")]
+        public async Task<YelpBusinessSearchResponse> GetBusinessMatch(string locId)
         {
-            var loc = _locationService.Get(locationId);
+            var loc = _locationService.Get(locId);
             var searchParams = new YelpBusinessMatchParams(loc);
             return await _yelpService.GetBusinessMatch(searchParams);
         }
