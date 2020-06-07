@@ -15,35 +15,6 @@ const GET = 'GET';
 const POST = 'POST';
 
 /**
- * make wrapper function over request function
- * @module Services/ApiService
- * @argument {Object} httpSrc - Resorce object from `HttpResources` inner object
- * @argument {Object} context - Context of api-service
- * @return {Object} Object of API functions
- */
-const tranformApiFns = (httpSrc, context) => {
-	const dest = {};
-	Object.keys(httpSrc).forEach((resourceName) => {
-		const resource = httpSrc[resourceName];
-		/**
-		 * API method wrapper
-		 * @argument {*} body
-		 * @argument {Object} [options]
-		 */
-		dest[resourceName] = function (body, options) {
-			if (options) {
-				return context.request(_.merge(options, {
-					resource: options.resource || resource,
-					body
-				}));
-			}
-			return context.request({ resource, body });
-		};
-	});
-	return dest;
-};
-
-/**
  * @module Services/ApiService
  * @param {Object} httpResource
  * @param {HTTPRequest} fetchRequest
@@ -63,7 +34,7 @@ const tranformApiFns = (httpSrc, context) => {
  * this.request.getLocations({locId: 11}); // { url: 'api/locations/:locId', body: {}}
  * this.request.getYelpMatch({locId: 11}); // { url: 'api/yelp/match/:locId', body: { locId: 22}}
  */
-export const paramsToValues = (httpResource, fetchRequest) => {
+export const paramsToSegments = (httpResource, fetchRequest) => {
 	const options = _.merge(fetchRequest, { url: httpResource.url });
 	const { body = {}, params = {} } = options;
 	(httpResource.params || []).forEach((param) => {
@@ -90,12 +61,6 @@ export const paramsToValues = (httpResource, fetchRequest) => {
  * @prop {Object} resources transformed `HttpResources`
  */
 export default class ApiService extends Service.extend(Evented) {
-	@service router;
-
-	constructor() {
-		super(...arguments);
-		this.resources = tranformApiFns(HttpResources, this);
-	}
 
 	/**
 	 * @param {String} url
@@ -105,20 +70,12 @@ export default class ApiService extends Service.extend(Evented) {
 			const { contractMode } = this;
 			let success = false;
 			let status;
-			fetch(config.apiURL + url).then((response) => {
-				status = response.status;
-				success = status >= 200 && status < 300;
-				return response._bodyBlob.type === 'application/json' ? response.json() : response.text();
-			}).then((data) => {
-				if (success) {
-					run(null, resolve, data);
-				} else {
-					run(null, reject, data);
-				}
+			fetch(config.rootURL + url).then((response) => {
+				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+				return isJson ? response.json() : response.text();
 			}).catch((response) => {
 				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-				const data = isJson ? response.json() : response.text();
-				run(null, reject, data);
+				return isJson ? response.json() : response.text();
 			});
 		});
 	}
@@ -156,7 +113,7 @@ export default class ApiService extends Service.extend(Evented) {
 			method: options.resource.method || POST,
 		};
 
-		fetchRequest = paramsToValues(options.resource, fetchRequest);
+		fetchRequest = paramsToSegments(options.resource, fetchRequest);
 		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
 		}

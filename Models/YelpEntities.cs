@@ -36,7 +36,7 @@ namespace Poppin.Models.Yelp
 								public IList<string> Photos { get; set; }
 								public string Price { get; set; }
 								public IList<string> Transactions { get; set; }
-								public YelpHourSet Hours { get; set; }
+								public IList<YelpHourSet> Hours { get; set; }
 				}
 
 				public class YelpShortBusiness
@@ -96,7 +96,7 @@ namespace Poppin.Models.Yelp
 
 				public class YelpHourSet
 				{
-								public List<YelpHourEntity> Open { get; set; }
+								public IList<YelpHourEntity> Open { get; set; }
 								public string HoursType { get; set; }
 								public bool IsOpenNow { get; set; }
 				}

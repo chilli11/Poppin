@@ -2,13 +2,12 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import { action, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { fetch } from 'fetch';
-
-import YelpBusinessModel from 'poppin-ui/models/yelp-business';
-import { YelpBusinessSearchParams } from 'poppin-ui/classes/yelp-search-entities';
-
 export default class YelpMatchFormComponent extends Component {
-	@service store;
+	namespace = 'YelpMatchForm';
+	@service yelpService;
+
+	@tracked location;
+	@tracked term;
 
 	categories = [];
 	@computed('categories')
@@ -16,26 +15,29 @@ export default class YelpMatchFormComponent extends Component {
 		return this.categories;
 	}
 	@tracked yelpCategories;
+	@tracked yelpBusinesses;
 
 	constructor() {
 		super(...arguments);
-		fetch('/yelp-categories.json')
-			.then(response => response.json())
-			.then((data) => {
-				console.log(data);
-				this.yelpCategories = data;
-				return data;
-			});
+		this.yelpService.getYelpCategories()
+			.then((data) => this.yelpCategories = data);
+	}
 
-		if (this.args.locationDTO && (!this.args.yelpMatches || !this.args.yelpMatches.length)) {
-			const { location, term } = this.args;
-			const searchParams = new YelpBusinessSearchParams({ term, location });
-			this.store.findRecord('yelpBusinessMatch', searchParams);
-		}
+	checkMatch(business) {
+		business.isMatch = business.id == this.args.yelpMatchId;
+		return business;
 	}
 
 	@action
 	searchBusinesses() {
+		const { term, location } = this;
+		this.yelpService.getYelpBusinessSearch({ term, location })
+			.then(({ businesses }) => this.yelpBusinesses = businesses.map(b => this.checkMatch(b)));
+	}
 
+	@action
+	fillData(match) {
+		match.isMatch = true;
+		return this.args.fillData(match);
 	}
 }

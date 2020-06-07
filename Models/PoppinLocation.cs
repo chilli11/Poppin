@@ -32,7 +32,7 @@ namespace Poppin.Models
 												Phone = v.Phone;
 												Address = new Address(v.Location, v.Coordinates);
 												Categories = v.Categories.Select(c => c.Alias).ToList();
-												Hours = new BusinessSchedule(v.Hours);
+												Hours = new BusinessSchedule(v.Hours.FirstOrDefault());
 												YelpDetails = v;
 								}
 

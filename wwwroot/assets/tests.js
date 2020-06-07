@@ -190,6 +190,42 @@ define("poppin-ui/tests/integration/pods/components/locations/location-form/comp
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/yelp-match-result/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | yelp-match-result', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <YelpMatchResult />
+      */
+      {
+        id: "x79CvpB6",
+        block: "{\"symbols\":[],\"statements\":[[8,\"yelp-match-result\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <YelpMatchResult>
+              template block text
+            </YelpMatchResult>
+          
+      */
+      {
+        id: "R7iiQtFf",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"yelp-match-result\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/test-helper", ["poppin-ui/app", "poppin-ui/config/environment", "@ember/test-helpers", "ember-qunit"], function (_app, _environment, _testHelpers, _emberQunit) {
   "use strict";
 

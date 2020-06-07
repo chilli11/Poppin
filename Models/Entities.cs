@@ -22,13 +22,13 @@ namespace Poppin.Models
 
 								public BusinessSchedule(YelpHourSet y)
 								{
-												Sunday = new Day(y.Open.Find(h => h.Day == 0));
-												Monday = new Day(y.Open.Find(h => h.Day == 1));
-												Tuesday = new Day(y.Open.Find(h => h.Day == 2));
-												Wednesday = new Day(y.Open.Find(h => h.Day == 3));
-												Thursday = new Day(y.Open.Find(h => h.Day == 4));
-												Friday = new Day(y.Open.Find(h => h.Day == 5));
-												Saturday = new Day(y.Open.Find(h => h.Day == 6));
+												Sunday = new Day(y.Open.FirstOrDefault(h => h.Day == 0));
+												Monday = new Day(y.Open.FirstOrDefault(h => h.Day == 1));
+												Tuesday = new Day(y.Open.FirstOrDefault(h => h.Day == 2));
+												Wednesday = new Day(y.Open.FirstOrDefault(h => h.Day == 3));
+												Thursday = new Day(y.Open.FirstOrDefault(h => h.Day == 4));
+												Friday = new Day(y.Open.FirstOrDefault(h => h.Day == 5));
+												Saturday = new Day(y.Open.FirstOrDefault(h => h.Day == 6));
 								}
 
 								public Day Sunday { get; set; }

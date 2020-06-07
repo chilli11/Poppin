@@ -17,14 +17,7 @@ namespace Poppin.Models
 												City = v.City;
 												State = v.State;
 
-												var spl = v.ZipCode.Split('-');
-												ZipCode = int.Parse(spl[0]);
-
-												if (!string.IsNullOrEmpty(spl[1]))
-												{
-																ZipCodeTrailing = int.Parse(spl[1]);
-												}
-
+												ZipCode = int.Parse(v.ZipCode);
 												Coordinates = c;
 								}
 
@@ -32,8 +25,7 @@ namespace Poppin.Models
 								public string Line2 { get; set; }
 								public string City { get; set; }
 								public string State { get; set; }
-								public int ZipCode { get; set; }
-								public int? ZipCodeTrailing { get; set; }
+								public int? ZipCode { get; set; }
 								public Coord Coordinates { get; set; }
 				}
 
