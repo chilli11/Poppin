@@ -6,6 +6,15 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
+
+				public class PoppinSearchResponse
+				{
+								public int Total { get; set; }
+								public List<PoppinLocation> Businesses { get; set; }
+								public YelpRegion Region { get; set; }
+								public IYelpSearchParams SearchParams { get; set; }
+				}
+
 				public class Address
 				{
 								public Address() { }

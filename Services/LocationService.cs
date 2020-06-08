@@ -5,12 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using Poppin.Models;
 using Poppin.Interfaces;
+using Poppin.Models.Yelp;
 
 namespace Poppin.Services
 {
 				public class LocationService : ILocationService
 				{
 								private readonly IMongoCollection<PoppinLocation> _locations;
+								private PoppinLocation yelpToPoppinFilter(YelpBusiness y)
+								{
+												var loc = _locations.Find(l => y.Id == l.YelpId).FirstOrDefault();
+												return loc;
+								}
 
 								public LocationService(IMongoDBSettings settings)
 								{
@@ -25,6 +31,9 @@ namespace Poppin.Services
 								{
 												return _locations.Find(l => l.Address.Line1 == location.Address.Line1 && l.Name == location.Name).FirstOrDefault();
 								}
+
+								public List<PoppinLocation> GetByYelpList(List<YelpBusiness> list) =>
+												list.Select(yelpToPoppinFilter).Where(l => l != null).ToList();
 								public List<PoppinLocation> GetByCity(string city) =>
 												_locations.Find(loc => loc.Address.City.ToLower() == city.ToLower()).ToList();
 								public List<PoppinLocation> GetByZip(int zipCode) =>

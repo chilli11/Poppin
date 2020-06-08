@@ -8,7 +8,7 @@ namespace Poppin.Extensions
 {
 				public static class LocationExtensions
 				{
-								public static void UpdateHours(this PoppinLocation loc, BusinessSchedule hours)
+								public static void UpdateHours(this PoppinLocation loc, List<HourSet> hours)
 								{
 												loc.Hours = hours;
 								}

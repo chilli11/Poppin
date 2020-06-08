@@ -22,7 +22,7 @@ namespace Poppin.Models
 												Categories = v.Categories.ToList();
 												Capacity = v.Capacity;
 												CrowdSize = v.CrowdSize;
-												Hours = new BusinessSchedule(v.Hours);
+												Hours = v.Hours;
 								}
 
 								public PoppinLocation(YelpBusiness v)
@@ -32,7 +32,7 @@ namespace Poppin.Models
 												Phone = v.Phone;
 												Address = new Address(v.Location, v.Coordinates);
 												Categories = v.Categories.Select(c => c.Alias).ToList();
-												Hours = new BusinessSchedule(v.Hours.FirstOrDefault());
+												Hours = v.Hours.FirstOrDefault().Open.Select(h => new HourSet(h)).ToList();
 												YelpDetails = v;
 								}
 
@@ -46,7 +46,7 @@ namespace Poppin.Models
 								public IList<string> Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
-								public BusinessSchedule Hours { get; set; }
+								public IList<HourSet> Hours { get; set; }
 
 								[BsonDateTimeOptions]
 								public DateTime LastUpdate { get; set; }
@@ -74,6 +74,6 @@ namespace Poppin.Models
 								public string[] Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
-								public BusinessScheduleDTO Hours { get; set; }
+								public IList<HourSet> Hours { get; set; }
 				}
 }

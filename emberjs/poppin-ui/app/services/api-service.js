@@ -1,15 +1,8 @@
 import Service from '@ember/service';
 import Evented from '@ember/object/evented';
-import { computed, set } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
-import { Promise } from 'rsvp';
-import { run } from '@ember/runloop';
-import { inject as service } from '@ember/service';
 import config from 'poppin-ui/config/environment';
 import _ from 'lodash';
-
-import HttpResources from '../utils/http-resources';
 
 const GET = 'GET';
 const POST = 'POST';
@@ -36,7 +29,7 @@ const POST = 'POST';
  */
 export const paramsToSegments = (httpResource, fetchRequest) => {
 	const options = _.merge(fetchRequest, { url: httpResource.url });
-	const { body = {}, params = {} } = options;
+	const { body = {} } = options;
 	(httpResource.params || []).forEach((param) => {
 		const { url } = options;
 		const inBody = param in body;
@@ -66,17 +59,12 @@ export default class ApiService extends Service.extend(Evented) {
 	 * @param {String} url
 	 */
 	getJSON(url) {
-		return new Promise((resolve, reject) => {
-			const { contractMode } = this;
-			let success = false;
-			let status;
-			fetch(config.rootURL + url).then((response) => {
-				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-				return isJson ? response.json() : response.text();
-			}).catch((response) => {
-				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-				return isJson ? response.json() : response.text();
-			});
+		return fetch(config.rootURL + url).then((response) => {
+			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+			return isJson ? response.json() : response.text();
+		}).catch((response) => {
+			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+			return isJson ? response.json() : response.text();
 		});
 	}
 
@@ -114,11 +102,16 @@ export default class ApiService extends Service.extend(Evented) {
 		};
 
 		fetchRequest = paramsToSegments(options.resource, fetchRequest);
+		fetchRequest.url = new URL(config.apiURL + fetchRequest.url);
 		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
+		} else {
+			Object.keys(options.body || {})
+				.forEach(k => fetchRequest.url.searchParams.append(k, options.body[k]));
+			fetchRequest = _.omit(fetchRequest, 'body');
 		}
 
-		return fetch(config.apiURL + fetchRequest.url, fetchRequest).then((response) => {
+		return fetch(fetchRequest.url, fetchRequest).then((response) => {
 			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
 			return isJson ? response.json() : response.text();
 		});

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Poppin.Models.Yelp;
 
 namespace Poppin.Interfaces
 {
@@ -10,6 +11,7 @@ namespace Poppin.Interfaces
 				{
 								public PoppinLocation Get(string id);
 								public PoppinLocation CheckExists(PoppinLocation location);
+								public List<PoppinLocation> GetByYelpList(List<YelpBusiness> businesses);
 								public List<PoppinLocation> GetByCity(string city);
 								public List<PoppinLocation> GetByZip(int zipCode);
 								public Task Add(PoppinLocation location);

@@ -1,25 +1,30 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
+import _ from 'lodash';
 
 import { states, actions } from './constants';
 
-const defHours = {
-	Sunday: { opening: null, closing: null },
-	Monday: { opening: null, closing: null },
-	Tuesday: { opening: null, closing: null },
-	Wednesday: { opening: null, closing: null },
-	Thursday: { opening: null, closing: null },
-	Friday: { opening: null, closing: null },
-	Saturday: { opening: null, closing: null }
-};
+const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+const hours = [
+	{ opening: null, closing: null,  day: days[0] },
+	{ opening: null, closing: null,  day: days[1] },
+	{ opening: null, closing: null,  day: days[2] },
+	{ opening: null, closing: null,  day: days[3] },
+	{ opening: null, closing: null,  day: days[4] },
+	{ opening: null, closing: null,  day: days[5] },
+	{ opening: null, closing: null,  day: days[6] },
+];
+
 
 export default class LocationFormComponent extends StatefulComponent {
 	namespace = 'LocationForm';
 	@service locationsService;
 	@service yelpService;
 	@service store;
+
+	days = days;
 
 	transitions = {
 		[states.IDLE]: {
@@ -58,15 +63,11 @@ export default class LocationFormComponent extends StatefulComponent {
 	get zipCode() {
 		return this.zip ? this.zip.substr(0, 5) : null;
 	}
-	get zipCodeTrailing() {
-		const spl = this.zip ? this.zip.split('-') : [];
-		return spl[1] || null;
-	}
 
 	@tracked coordinates;
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
-	@tracked hours = defHours;
+	@tracked hours = hours;
 
 	get locationDTO() {
 		const { locationId, name, yelpId,  capacity, crowdSize, hours } = this;
@@ -80,7 +81,6 @@ export default class LocationFormComponent extends StatefulComponent {
 				city: this.city,
 				state: this.state,
 				zipCode: parseInt(this.zipCode, 10),
-				zipCodeTrailing: this.zipCodeTrailing ? parseInt(this.zipCodeTrailing) : null,
 				coordinates: this.coordinates
 			},
 			categories: [],
@@ -110,9 +110,8 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = null;
 		this.state = null;
 		this.zipCode = null;
-		this.zipCodeTrailing = null;
 		this.capacity = 0;
-		this.hours = defHours;
+		this.hours = hours;
 	}
 
 	populateFromPoppin(location) {
@@ -120,29 +119,38 @@ export default class LocationFormComponent extends StatefulComponent {
 		if (loc) {
 			this.locationId = loc.id;
 			this.yelpId = loc.yelpId;
-			this.name = loc.Name || null;
+			this.name = loc.name;
 			this.addressLine1 = loc.address.line1;
 			this.addressLine2 = loc.address.line2;
 			this.city = loc.address.city;
 			this.state = loc.address.state;
 			this.zipCode = loc.address.zipCode;
-			this.zipCodeTrailing = loc.address.zipCodeTrailing;
-			this.capacity = loc.capacity || 0;
-			this.hours = loc.Hours || defHours;
+			this.capacity = loc.capacity;
+			this.hours = loc.hours || hours;
 		}
 	}
 
 	populateFromYelp(loc) {		
 		this.yelpId = loc.id;
-		this.name = loc.name || null;
+		this.name = loc.name;
 		this.addressLine1 = loc.location.address1;
 		this.addressLine2 = loc.location.address2;
 		this.city = loc.location.city;
 		this.state = loc.location.state;
-		this.zipCode = loc.location.zip.split('-')[0];
+		this.zip = loc.location.zip;
 		this.coordinates = loc.location.coordinates;
 		this.capacity = 0;
-		this.hours = loc.Hours || defHours;
+		
+		const _hours = _.merge(hours);
+		if (loc.hours && loc.hours.length) {
+			const { open } = loc.hours[0];
+			open.forEach(v => {
+				var obj = _hours[v.day];
+				set(obj, 'opening', v.start.slice(0,2) + ':' + v.start.slice(2));
+				set(obj, 'closing', v.end.slice(0,2) + ':' + v.end.slice(2));
+			});
+		}		
+		this.hours = _hours;
 	}
 
 	checkMatch(business) {

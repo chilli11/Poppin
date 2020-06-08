@@ -1,7 +1,24 @@
 <div class="col-md-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
-			<h4 class="card-title">Enter Business Details</h4>
+			<h4 class="card-title">Search Yelp</h4>
+		</div>
+		<div class="card-body">
+			<Yelp::YelpMatchForm
+				@term={{this.name}}
+				@location={{this.city}}
+				@yelpMatchId={{this.yelpId}}
+				@yelpMatches={{this.yelpMatches}}
+				@acceptMatch={{this.acceptMatch}}
+				@fillData={{this.fillData}}
+				@canAcceptMatch={{this.canAcceptMatch}} />
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Review Business Details</h4>
 			<p class="card-category">
 				<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
 			</p>
@@ -15,26 +32,25 @@
 				<form.element @controlType="text" @label="State" @placeholder="State" @property="state" @required={{true}} />
 				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
-				{{#each-in this.hours as |name hourset|}}
-					<span><strong>{{name}}</strong></span>
+				{{#each this.hours as |hourset|}}
+					<span><strong>{{hourset.day}}</strong></span>
 					<div class="form-row">
-						{{#each-in hourset as |key val|}}
-							<form.element class="col-sm-6" @controlType="time" @label={{key}} @property={{val}} />
-						{{/each-in}}
+						<form.group class="form-group row col-sm-6">
+							<label class="col-form-label col-md-4">Open</label>
+							<div class="col-md-8">
+								<Input class="form-control" type="time" @value={{hourset.opening}} />
+							</div>
+						</form.group>
+						<form.group class="form-group row col-sm-6">
+							<label class="col-form-label col-md-4">Close</label>
+							<div class="col-md-8">
+								<Input class="form-control" type="time" @value={{hourset.closing}} />
+							</div>
+						</form.group>
 					</div>
-				{{/each-in}}
+				{{/each}}
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
 			</BsForm>
 		</div>
 	</div>
-</div>
-<div class="col-md-6">
-	<Locations::YelpMatchForm
-		@term={{this.name}}
-		@location={{this.city}}
-		@yelpMatchId={{this.yelpId}}
-		@yelpMatches={{this.yelpMatches}}
-		@acceptMatch={{this.acceptMatch}}
-		@fillData={{this.fillData}}
-		@canAcceptMatch={{this.canAcceptMatch}} />
 </div>

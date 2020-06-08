@@ -37,6 +37,28 @@ namespace Poppin.Controllers
             return location;
         }
 
+        // GET: api/Locations
+        [HttpGet]
+        public async Task<PoppinSearchResponse> Get(string term, string location, string categories)
+        {
+            var yelpSearchResponse = await _yelpService.GetBusinessSearch(new YelpBusinessSearchParams()
+            {
+                term = term,
+                location = location,
+                categories = categories
+            });
+            var locList = _locationService.GetByYelpList(yelpSearchResponse.Businesses);
+
+            return new PoppinSearchResponse()
+            {
+                Total = locList.Count,
+                Businesses = locList,
+                Region = yelpSearchResponse.Region,
+                SearchParams = yelpSearchResponse.SearchParams
+            };
+        }
+
+
         // POST: api/Locations
         [HttpPost]
         public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationDTO _location)
