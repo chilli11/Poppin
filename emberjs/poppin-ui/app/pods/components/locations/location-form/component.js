@@ -61,7 +61,7 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	@tracked zip;	
 	get zipCode() {
-		return this.zip ? this.zip.substr(0, 5) : null;
+		return this.zip ? this.zip.toString().substr(0, 5) : null;
 	}
 
 	@tracked coordinates;
@@ -124,7 +124,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.addressLine2 = loc.address.line2;
 			this.city = loc.address.city;
 			this.state = loc.address.state;
-			this.zipCode = loc.address.zipCode;
+			this.zip = loc.address.zipCode;
 			this.capacity = loc.capacity;
 			this.hours = loc.hours || hours;
 		}
@@ -137,7 +137,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.addressLine2 = loc.location.address2;
 		this.city = loc.location.city;
 		this.state = loc.location.state;
-		this.zip = loc.location.zip;
+		this.zip = loc.location.zip || this.zip;
 		this.coordinates = loc.location.coordinates;
 		this.capacity = 0;
 		
@@ -159,9 +159,13 @@ export default class LocationFormComponent extends StatefulComponent {
 	}
 
 	[actions.SUBMIT_LOCATION]() {
-		return this.locationsService.createNewLocation(this.locationDTO).then((location) => {
+		const method = this.locationId ? 'updateLocation' : 'createNewLocation';
+		return this.locationsService[method](this.locationDTO).then((location) => {
 			this.locationId = location.id;
 			this.yelpId = location.yelpId;
+			if (typeof this.args.resolveAction == 'function') {
+				return this.args.resolveAction(this.locationDTO);
+			}
 			return this.dispatch(actions.GET_MATCHES, location.id);
 		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
 	}
@@ -182,9 +186,12 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	[actions.SUBMIT_MATCH](match) {
 		this.yelpId = match.id;
-		return this.locationsService.updateLocation(this.locationDTO)
-			.then(data => this.dispatch(actions.RESOLVE_SUBMIT_MATCH, data))
-			.catch(data => this.dispatch(actions.REJECT_ACTION, data));
+		return this.locationsService.updateLocation(this.locationDTO).then(data => {
+			if (typeof this.args.resolveAction == 'function') {
+				return this.args.resolveAction(this.locationDTO);
+			}
+			return this.dispatch(actions.RESOLVE_SUBMIT_MATCH, data);
+		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
 	}
 
 	[actions.RESOLVE_SUBMIT_MATCH]() {

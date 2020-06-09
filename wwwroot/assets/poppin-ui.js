@@ -294,7 +294,7 @@
       var self = this;
 
       if (!params.location && !params.longitude) {
-        throw '`location` or coordinates required.';
+        throw '`location` or `longitude` and `latitude` required.';
       }
 
       self = Ember.merge(self, params);
@@ -396,9 +396,10 @@
 
       var self = this;
       const required = ['name', 'address1', 'city', 'state', 'country'];
+      const missing = required.filter(i => !params[i]);
 
-      if (required.some(i => !params[i])) {
-        throw 'Missing required parameter ' + i;
+      if (missing.length) {
+        throw 'Missing required parameter(s) ' + missing.join(', ');
       }
 
       self = Ember.merge(self, params);
@@ -2620,8 +2621,16 @@
   });
   _exports.default = void 0;
 
-  class AdminLocationsLocationController extends Ember.Controller {}
+  var _dec, _class;
 
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  let AdminLocationsLocationController = (_dec = Ember._action, (_class = class AdminLocationsLocationController extends Ember.Controller {
+    refreshRoute(location) {
+      this.transitionToRoute('admin.locations.location', location);
+    }
+
+  }, (_applyDecoratedDescriptor(_class.prototype, "refreshRoute", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "refreshRoute"), _class.prototype)), _class));
   _exports.default = AdminLocationsLocationController;
 });
 ;define("poppin-ui/pods/admin/locations/location/route", ["exports"], function (_exports) {
@@ -2645,8 +2654,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "mZ9E8DIV",
-    "block": "{\"symbols\":[],\"statements\":[[1,[30,[36,1],[[30,[36,0],null,null]],null]]],\"hasEval\":false,\"upvars\":[\"-outlet\",\"component\"]}",
+    "id": "I+Jf0QW2",
+    "block": "{\"symbols\":[],\"statements\":[[8,\"locations/existing-location\",[],[[\"@location\",\"@refresh\"],[[34,0],[32,0,[\"refreshRoute\"]]]],null]],\"hasEval\":false,\"upvars\":[\"model\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/admin/locations/location/template.hbs"
     }
@@ -2732,6 +2741,105 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/components/locations/existing-location/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/pods/components/locations/existing-location/constants"], function (_exports, _statefulComponent, _constants) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  let _actions$END_EDIT;
+
+  var _dec, _dec2, _dec3, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._action, _dec3 = Ember._action, (_class = (_temp = (_actions$END_EDIT = _constants.actions.END_EDIT, class LocationFormComponent extends _statefulComponent.default {
+    constructor() {
+      super(...arguments);
+
+      _initializerDefineProperty(this, "store", _descriptor, this);
+
+      _defineProperty(this, "transitions", {
+        [_constants.states.IDLE]: {
+          [_constants.actions.START_EDIT]: _constants.states.EDIT_LOCATION
+        },
+        [_constants.states.EDIT_LOCATION]: {
+          [_constants.actions.END_EDIT]: _constants.states.IDLE
+        },
+        [_constants.states.LOADING]: {
+          [_constants.actions.END_LOADING]: _constants.states.IDLE
+        }
+      });
+
+      this.initMachine();
+    }
+
+    [_actions$END_EDIT](data) {
+      this.args.refresh(data);
+    }
+
+    startEdit() {
+      return this.dispatch(_constants.actions.START_EDIT);
+    }
+
+    endEdit(data) {
+      return this.dispatch(_constants.actions.END_EDIT, data);
+    }
+
+  }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "store", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype)), _class));
+  _exports.default = LocationFormComponent;
+});
+;define("poppin-ui/pods/components/locations/existing-location/constants", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.actions = _exports.states = void 0;
+  const states = {
+    IDLE: 'IDLE',
+    LOADING: 'LOADING',
+    EDIT_LOCATION: 'EDIT_LOCATION'
+  };
+  _exports.states = states;
+  const actions = {
+    START_EDIT: 'START_EDIT',
+    END_EDIT: 'END_EDIT',
+    END_LOADING: 'END_LOADING'
+  };
+  _exports.actions = actions;
+});
+;define("poppin-ui/pods/components/locations/existing-location/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "08i21Ri/",
+    "block": "{\"symbols\":[\"@location\",\"@refresh\"],\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"IDLE\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"locations/location-display\",[],[[\"@location\",\"@startEdit\",\"@refresh\"],[[32,1],[32,0,[\"startEdit\"]],[32,2]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[8,\"locations/location-form\",[],[[\"@reverseOrder\",\"@location\",\"@resolveAction\"],[\"true\",[32,1],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]}]]]],\"parameters\":[]}]]]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/components/locations/existing-location/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/components/locations/location-display/template", ["exports"], function (_exports) {
   "use strict";
 
@@ -2741,8 +2849,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "lfcSeylr",
-    "block": "{\"symbols\":[\"&default\"],\"statements\":[[18,1,null]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "RSVXc3j+",
+    "block": "{\"symbols\":[\"hourset\",\"category\",\"@location\",\"@startEdit\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,3,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,3,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,3,[\"address\",\"city\"]]],[2,\", \"],[1,[32,3,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-light\"],[4,[38,1],[\"click\",[32,4]],null],[12],[2,\"Edit\"],[13],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"crowdSize\"]]],[2,\"/\"],[1,[32,3,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"yelpDetails\",\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,2,[\"title\"]]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Hours:\"],[13],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"hours\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"strong\"],[12],[1,[32,1,[\"day\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\\tOpen: \"],[1,[30,[36,0],[[32,1,[\"opening\"]],[32,1,[\"opening\"]],\"unset\"],null]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"span\"],[14,0,\"text-muted\"],[12],[2,\"//\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\tClose: \"],[1,[30,[36,0],[[32,1,[\"closing\"]],[32,1,[\"closing\"]],\"unset\"],null]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[32,3,[\"yelpDetails\",\"url\"]]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\",\"on\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-display/template.hbs"
     }
@@ -2802,7 +2910,7 @@
   }];
   let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._action, _dec18 = Ember._action, _dec19 = Ember._action, _dec20 = Ember._action, (_class = (_temp = (_actions$SUBMIT_LOCAT = _constants.actions.SUBMIT_LOCATION, _actions$GET_MATCHES = _constants.actions.GET_MATCHES, _actions$GET_FULL_MAT = _constants.actions.GET_FULL_MATCH, _actions$SUBMIT_MATCH = _constants.actions.SUBMIT_MATCH, _actions$RESOLVE_SUBM = _constants.actions.RESOLVE_SUBMIT_MATCH, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
     get zipCode() {
-      return this.zip ? this.zip.substr(0, 5) : null;
+      return this.zip ? this.zip.toString().substr(0, 5) : null;
     }
 
     get locationDTO() {
@@ -2928,7 +3036,7 @@
         this.addressLine2 = loc.address.line2;
         this.city = loc.address.city;
         this.state = loc.address.state;
-        this.zipCode = loc.address.zipCode;
+        this.zip = loc.address.zipCode;
         this.capacity = loc.capacity;
         this.hours = loc.hours || hours;
       }
@@ -2941,7 +3049,7 @@
       this.addressLine2 = loc.location.address2;
       this.city = loc.location.city;
       this.state = loc.location.state;
-      this.zip = loc.location.zip;
+      this.zip = loc.location.zip || this.zip;
       this.coordinates = loc.location.coordinates;
       this.capacity = 0;
 
@@ -2967,9 +3075,15 @@
     }
 
     [_actions$SUBMIT_LOCAT]() {
-      return this.locationsService.createNewLocation(this.locationDTO).then(location => {
+      const method = this.locationId ? 'updateLocation' : 'createNewLocation';
+      return this.locationsService[method](this.locationDTO).then(location => {
         this.locationId = location.id;
         this.yelpId = location.yelpId;
+
+        if (typeof this.args.resolveAction == 'function') {
+          return this.args.resolveAction(this.locationDTO);
+        }
+
         return this.dispatch(_constants.actions.GET_MATCHES, location.id);
       }).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, data));
     }
@@ -2990,7 +3104,13 @@
 
     [_actions$SUBMIT_MATCH](match) {
       this.yelpId = match.id;
-      return this.locationsService.updateLocation(this.locationDTO).then(data => this.dispatch(_constants.actions.RESOLVE_SUBMIT_MATCH, data)).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, data));
+      return this.locationsService.updateLocation(this.locationDTO).then(data => {
+        if (typeof this.args.resolveAction == 'function') {
+          return this.args.resolveAction(this.locationDTO);
+        }
+
+        return this.dispatch(_constants.actions.RESOLVE_SUBMIT_MATCH, data);
+      }).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, data));
     }
 
     [_actions$RESOLVE_SUBM]() {
@@ -3138,8 +3258,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "0+6IJfDS",
-    "block": "{\"symbols\":[\"form\",\"hourset\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Review Business Details\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,1],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Address\",\"Line 1\",\"addressLine1\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"\",\"Line 2\",\"addressLine2\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"City\",\"City\",\"city\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"State\",\"State\",\"state\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Zip Code\",\"xxxxx-xxxx\",\"zip\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Capacity\",\"Capacity\",\"capacity\",true]],null],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"hours\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"span\"],[12],[10,\"strong\"],[12],[1,[32,2,[\"day\"]]],[13],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[[24,0,\"form-group row col-sm-6\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Open\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[8,\"input\",[[24,0,\"form-control\"],[24,4,\"time\"]],[[\"@value\"],[[32,2,[\"opening\"]]]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[[24,0,\"form-group row col-sm-6\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Close\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[8,\"input\",[[24,0,\"form-control\"],[24,4,\"time\"]],[[\"@value\"],[[32,2,[\"closing\"]]]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "0O1gCl4O",
+    "block": "{\"symbols\":[\"form\",\"hourset\",\"@reverseOrder\"],\"statements\":[[6,[37,0],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Review Business Details\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,1],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Address\",\"Line 1\",\"addressLine1\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"\",\"Line 2\",\"addressLine2\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"City\",\"City\",\"city\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"State\",\"State\",\"state\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Zip Code\",\"xxxxx-xxxx\",\"zip\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Capacity\",\"Capacity\",\"capacity\",true]],null],[2,\"\\n\"],[6,[37,4],[[30,[36,3],[[30,[36,3],[[32,0,[\"hours\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"span\"],[12],[10,\"strong\"],[12],[1,[32,2,[\"day\"]]],[13],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[[24,0,\"form-group row col-sm-6\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Open\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[8,\"input\",[[24,0,\"form-control\"],[24,4,\"time\"]],[[\"@value\"],[[32,2,[\"opening\"]]]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[[24,0,\"form-group row col-sm-6\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Close\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[8,\"input\",[[24,0,\"form-control\"],[24,4,\"time\"]],[[\"@value\"],[[32,2,[\"closing\"]]]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[6,[37,5],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]]],\"hasEval\":false,\"upvars\":[\"unless\",\"on\",\"fn\",\"-track-array\",\"each\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-form/template.hbs"
     }
@@ -3173,7 +3293,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -3183,7 +3303,11 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let YelpMatchFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.computed('categories'), _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._action, _dec8 = Ember._action, (_class = (_temp = class YelpMatchFormComponent extends _component.default {
+  let YelpMatchFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember.computed('categories'), _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._action, _dec9 = Ember._action, (_class = (_temp = class YelpMatchFormComponent extends _component.default {
+    get radius() {
+      return parseInt(this._radius, 10) * 1609.34;
+    }
+
     get categoryList() {
       return this.categories;
     }
@@ -3199,11 +3323,13 @@
 
       _initializerDefineProperty(this, "term", _descriptor3, this);
 
+      _initializerDefineProperty(this, "_radius", _descriptor4, this);
+
       _defineProperty(this, "categories", []);
 
-      _initializerDefineProperty(this, "yelpCategories", _descriptor4, this);
+      _initializerDefineProperty(this, "yelpCategories", _descriptor5, this);
 
-      _initializerDefineProperty(this, "yelpBusinesses", _descriptor5, this);
+      _initializerDefineProperty(this, "yelpBusinesses", _descriptor6, this);
 
       this.yelpService.getYelpCategories().then(data => this.yelpCategories = data);
     }
@@ -3228,7 +3354,7 @@
 
     fillData(match) {
       this.yelpBusinesses = null;
-      return this.args.fillData(this.checkMatch(match));
+      return this.args.fillData(match);
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "yelpService", [_dec], {
@@ -3246,17 +3372,22 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "categoryList", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "categoryList"), _class.prototype), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "yelpCategories", [_dec5], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "_radius", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "yelpBusinesses", [_dec6], {
+  }), _applyDecoratedDescriptor(_class.prototype, "categoryList", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "categoryList"), _class.prototype), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "yelpCategories", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "searchBusinesses", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "searchBusinesses"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillData", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "fillData"), _class.prototype)), _class));
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "yelpBusinesses", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "searchBusinesses", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "searchBusinesses"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillData", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "fillData"), _class.prototype)), _class));
   _exports.default = YelpMatchFormComponent;
 });
 ;define("poppin-ui/pods/components/yelp/yelp-match-form/template", ["exports"], function (_exports) {
@@ -3303,7 +3434,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -3313,7 +3444,11 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let YelpMatchFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember.computed('categories'), _dec5 = Ember._tracked, _dec6 = Ember._action, (_class = (_temp = class YelpMatchFormComponent extends _component.default {
+  let YelpMatchFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember.computed('categories'), _dec7 = Ember._action, (_class = (_temp = class YelpMatchFormComponent extends _component.default {
+    get radius() {
+      return parseInt(parseInt(this._radius || 0, 10) * 1609.34, 10).toString();
+    }
+
     get categoryList() {
       return this.categories;
     }
@@ -3329,9 +3464,11 @@
 
       _initializerDefineProperty(this, "term", _descriptor3, this);
 
-      _defineProperty(this, "categories", []);
+      _initializerDefineProperty(this, "_radius", _descriptor4, this);
 
-      _initializerDefineProperty(this, "yelpCategories", _descriptor4, this);
+      _initializerDefineProperty(this, "yelpCategories", _descriptor5, this);
+
+      _defineProperty(this, "categories", []);
 
       this.yelpService.getYelpCategories().then(data => this.yelpCategories = data);
     }
@@ -3345,12 +3482,14 @@
       const {
         term,
         location,
-        categories
+        categories,
+        radius
       } = this;
       return this.args.searchMethod({
         term,
         location,
-        categories: categories.map(c => c.alias)
+        radius,
+        categories: categories.map(c => c.alias).join(',')
       });
     }
 
@@ -3369,12 +3508,17 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "categoryList", [_dec4], Object.getOwnPropertyDescriptor(_class.prototype, "categoryList"), _class.prototype), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "yelpCategories", [_dec5], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "_radius", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "search", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "search"), _class.prototype)), _class));
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "yelpCategories", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "categoryList", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "categoryList"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "search", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "search"), _class.prototype)), _class));
   _exports.default = YelpMatchFormComponent;
 });
 ;define("poppin-ui/pods/components/yelp/yelp-search-form/template", ["exports"], function (_exports) {
@@ -3386,8 +3530,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "hG6f/Xe1",
-    "block": "{\"symbols\":[\"form\",\"cat\"],\"statements\":[[2,\"\\n\\t\"],[10,\"h4\"],[12],[2,\"Find a match from Yelp\"],[13],[2,\"\\n\\t\"],[8,\"bs-form\",[],[[\"@model\",\"@onSubmit\"],[[32,0],[30,[36,0],[[32,0,[\"search\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col-sm-6\"]],[[\"@controlType\",\"@placeholder\",\"@property\"],[\"text\",\"Business Name\",\"term\"]],null],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-sm-1 text-center\"],[12],[10,\"label\"],[12],[2,\"in\"],[13],[13],[2,\"\\n\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col-sm-5\"]],[[\"@controlType\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Ex: Dallas, 75201, West 7th\",\"location\",true]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[10,\"label\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"yelpCategories\"]],\"Search...\",\"title\",[32,0,[\"categories\"]],[30,[36,0],[[30,[36,1],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[1,[32,2,[\"title\"]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[10,\"br\"],[12],[13],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"mut\"]}",
+    "id": "cAhBhGaQ",
+    "block": "{\"symbols\":[\"form\",\"cat\"],\"statements\":[[2,\"\\n\\t\"],[10,\"h4\"],[12],[2,\"Find a match from Yelp\"],[13],[2,\"\\n\\t\"],[8,\"bs-form\",[],[[\"@model\",\"@onSubmit\"],[[32,0],[30,[36,0],[[32,0,[\"search\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col-sm-6\"]],[[\"@controlType\",\"@placeholder\",\"@property\"],[\"text\",\"Business Name\",\"term\"]],null],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-sm-1 text-center\"],[12],[10,\"label\"],[12],[2,\"in\"],[13],[13],[2,\"\\n\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col-sm-5\"]],[[\"@controlType\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Ex: Dallas, 75201, West 7th\",\"location\",true]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[10,\"label\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"yelpCategories\"]],\"Search...\",\"title\",[32,0,[\"categories\"]],[30,[36,0],[[30,[36,1],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[1,[32,2,[\"title\"]]],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@property\"],[\"number\",\"Radius (miles)\",\"_radius\"]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"br\"],[12],[13],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"mut\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/yelp/yelp-search-form/template.hbs"
     }
@@ -3629,7 +3773,7 @@
   var _default = _cookies.default;
   _exports.default = _default;
 });
-;define("poppin-ui/services/locations-service", ["exports", "poppin-ui/utils/http-resources"], function (_exports, _httpResources) {
+;define("poppin-ui/services/locations-service", ["exports", "poppin-ui/utils/http-resources", "poppin-ui/classes/yelp-search-entities"], function (_exports, _httpResources, _yelpSearchEntities) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -3675,10 +3819,16 @@
 
 
     getLocationsByYelpList(searchParams) {
-      return this.apiService.request({
-        resource: _httpResources.default.getLocationsByYelpList,
-        body: searchParams
-      });
+      try {
+        const params = new _yelpSearchEntities.default.YelpBusinessSearchParams(searchParams);
+        return this.apiService.request({
+          resource: _httpResources.default.getLocationsByYelpList,
+          body: params
+        });
+      } catch (e) {
+        console.error(e);
+        return Ember.RSVP.Promise.reject();
+      }
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
@@ -3774,11 +3924,15 @@
 
 
     getYelpMatch(searchParams) {
-      const params = new _yelpSearchEntities.default.YelpBusinessMatchSearchParams(searchParams);
-      return this.apiService.request({
-        resource: _httpResources.default.getYelpMatch,
-        body: params
-      });
+      try {
+        const params = new _yelpSearchEntities.default.YelpBusinessMatchSearchParams(searchParams);
+        return this.apiService.request({
+          resource: _httpResources.default.getYelpMatch,
+          body: params
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
     /**
      * @param {String} yelpId 
@@ -3800,11 +3954,15 @@
 
 
     getYelpBusinessSearch(searchParams) {
-      const params = new _yelpSearchEntities.default.YelpBusinessSearchParams(searchParams);
-      return this.apiService.request({
-        resource: _httpResources.default.getYelpBusinessSearch,
-        body: params
-      });
+      try {
+        const params = new _yelpSearchEntities.default.YelpBusinessSearchParams(searchParams);
+        return this.apiService.request({
+          resource: _httpResources.default.getYelpBusinessSearch,
+          body: params
+        });
+      } catch (e) {
+        console.error(e);
+      }
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
@@ -4118,8 +4276,8 @@
       method: PUT
     },
     getLocationsByYelpList: {
-      url: 'locations',
-      method: GET
+      url: 'locations/yelp-search',
+      method: POST
     },
 
     /* ===== YELP =====*/
@@ -4168,7 +4326,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+5769e47b"});
+            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+e6f6cb0b"});
           }
         
 //# sourceMappingURL=poppin-ui.map

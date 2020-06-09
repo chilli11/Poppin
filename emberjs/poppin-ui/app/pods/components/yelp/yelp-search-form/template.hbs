@@ -9,18 +9,23 @@
 			<div class="col-sm-1 text-center"><label>in</label></div>
 			<form.element class="col-sm-5" @controlType="text" @placeholder="Ex: Dallas, 75201, West 7th" @property="location" @required={{true}} />
 		</div>
-		<form.group>
-			<label>Categories</label>
-			<PowerSelectMultiple
-				@searchEnabled={{true}}
-				@options={{this.yelpCategories}}
-				@placeholder="Search..."
-				@searchField="title"
-				@selected={{this.categories}}
-				@onChange={{fn (mut this.categories)}} as |cat|>
-				{{cat.title}}
-			</PowerSelectMultiple>
-		</form.group>
+		<div class="form-row">
+			<form.group>
+				<label>Categories</label>
+				<PowerSelectMultiple
+					@searchEnabled={{true}}
+					@options={{this.yelpCategories}}
+					@placeholder="Search..."
+					@searchField="title"
+					@selected={{this.categories}}
+					@onChange={{fn (mut this.categories)}} as |cat|>
+					{{cat.title}}
+				</PowerSelectMultiple>
+			</form.group>
+		</div>
+		<div class="form-row">
+			<form.element @controlType="number" @label="Radius (miles)" @property="_radius" />
+		</div>
 		<br>
 		<BsButton @type="primary" type="submit" @defaultText="Submit" />
 	</BsForm>

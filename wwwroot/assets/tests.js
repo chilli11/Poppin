@@ -118,6 +118,42 @@ define("poppin-ui/tests/integration/pods/components/admin/sidebar/component-test
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/locations/existing-location/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | locations/existing-location', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Locations::ExistingLocation />
+      */
+      {
+        id: "PNtq+PGd",
+        block: "{\"symbols\":[],\"statements\":[[8,\"locations/existing-location\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Locations::ExistingLocation>
+              template block text
+            </Locations::ExistingLocation>
+          
+      */
+      {
+        id: "vJ9ksqke",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"locations/existing-location\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/locations/location-display/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 

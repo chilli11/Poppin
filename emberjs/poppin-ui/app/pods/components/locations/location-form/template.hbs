@@ -1,20 +1,22 @@
-<div class="col-md-6">
-	<div class="card">
-		<div class="card-header card-header-primary">
-			<h4 class="card-title">Search Yelp</h4>
-		</div>
-		<div class="card-body">
-			<Yelp::YelpMatchForm
-				@term={{this.name}}
-				@location={{this.city}}
-				@yelpMatchId={{this.yelpId}}
-				@yelpMatches={{this.yelpMatches}}
-				@acceptMatch={{this.acceptMatch}}
-				@fillData={{this.fillData}}
-				@canAcceptMatch={{this.canAcceptMatch}} />
+{{#unless @reverseOrder}}
+	<div class="col-md-6">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title">Search Yelp</h4>
+			</div>
+			<div class="card-body">
+				<Yelp::YelpMatchForm
+					@term={{this.name}}
+					@location={{this.city}}
+					@yelpMatchId={{this.yelpId}}
+					@yelpMatches={{this.yelpMatches}}
+					@acceptMatch={{this.acceptMatch}}
+					@fillData={{this.fillData}}
+					@canAcceptMatch={{this.canAcceptMatch}} />
+			</div>
 		</div>
 	</div>
-</div>
+{{/unless}}
 <div class="col-md-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
@@ -54,3 +56,22 @@
 		</div>
 	</div>
 </div>
+{{#if @reverseOrder}}
+	<div class="col-md-6">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title">Search Yelp</h4>
+			</div>
+			<div class="card-body">
+				<Yelp::YelpMatchForm
+					@term={{this.name}}
+					@location={{this.city}}
+					@yelpMatchId={{this.yelpId}}
+					@yelpMatches={{this.yelpMatches}}
+					@acceptMatch={{this.acceptMatch}}
+					@fillData={{this.fillData}}
+					@canAcceptMatch={{this.canAcceptMatch}} />
+			</div>
+		</div>
+	</div>
+{{/if}}

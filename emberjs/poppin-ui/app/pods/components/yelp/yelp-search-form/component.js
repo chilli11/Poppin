@@ -9,13 +9,17 @@ export default class YelpMatchFormComponent extends Component {
 
 	@tracked location;
 	@tracked term;
+	@tracked _radius;
+	get radius() {
+		return parseInt(parseInt(this._radius || 0, 10) * 1609.34, 10).toString();
+	}
+	@tracked yelpCategories;
 
 	categories = [];
 	@computed('categories')
 	get categoryList() {
 		return this.categories;
 	}
-	@tracked yelpCategories;
 
 	constructor() {
 		super(...arguments);
@@ -30,7 +34,7 @@ export default class YelpMatchFormComponent extends Component {
 
 	@action
 	search() {
-		const { term, location, categories } = this;
-		return this.args.searchMethod({ term, location, categories: categories.map(c => c.alias) });
+		const { term, location, categories, radius } = this;
+		return this.args.searchMethod({ term, location, radius, categories: categories.map(c => c.alias).join(',') });
 	}
 }

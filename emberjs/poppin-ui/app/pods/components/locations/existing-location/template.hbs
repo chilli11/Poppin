@@ -1,0 +1,11 @@
+{{#if (eq this.machineState 'IDLE')}}
+	<Locations::LocationDisplay
+		@location={{@location}}
+		@startEdit={{this.startEdit}}
+		@refresh={{@refresh}} />
+{{else if (eq this.machineState 'EDIT_LOCATION')}}
+	<Locations::LocationForm
+		@reverseOrder=true
+		@location={{@location}}
+		@resolveAction={{this.endEdit}} />
+{{/if}}

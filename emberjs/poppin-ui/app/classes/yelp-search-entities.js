@@ -54,7 +54,7 @@ export class YelpBusinessSearchParams {
 	constructor(params) {
 		var self = this;
 		if (!params.location && !params.longitude) {
-			throw '`location` or coordinates required.'
+			throw '`location` or `longitude` and `latitude` required.'
 		}
 		self = merge(self, params);
 	}
@@ -133,8 +133,9 @@ export class YelpBusinessMatchSearchParams {
 	constructor(params) {
 		var self = this;
 		const required = ['name', 'address1', 'city', 'state', 'country']
-		if (required.some(i => !params[i])) {
-			throw 'Missing required parameter ' + i;
+		const missing = required.filter(i => !params[i]);
+		if (missing.length) {
+			throw 'Missing required parameter(s) ' + missing.join(', ');
 		}
 		self = merge(self, params);
 	}

@@ -18,8 +18,8 @@ const HttpResources = {
 		method: PUT
 	},
 	getLocationsByYelpList: {
-		url: 'locations',
-		method: GET
+		url: 'locations/yelp-search',
+		method: POST
 	},
 
 	/* ===== YELP =====*/

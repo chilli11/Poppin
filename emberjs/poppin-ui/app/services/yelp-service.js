@@ -25,12 +25,16 @@ export default class YelpService extends Service {
 	 * @param {Object} searchParams
 	 */
 	getYelpMatch(searchParams) {
-		const params = new YelpSearchEntities.YelpBusinessMatchSearchParams(searchParams);
-		return this.apiService.request({
-			resource: HttpResources.getYelpMatch,
-			body: params
-		});
-	}
+		try {
+			const params = new YelpSearchEntities.YelpBusinessMatchSearchParams(searchParams);
+			return this.apiService.request({
+				resource: HttpResources.getYelpMatch,
+				body: params
+			});
+		} catch (e) {
+			console.error(e);
+		}
+ 	}
 
 	/**
 	 * @param {String} yelpId 
@@ -47,10 +51,14 @@ export default class YelpService extends Service {
 	 * @param {Object} searchParams 
 	 */
 	getYelpBusinessSearch(searchParams) {
-		const params = new YelpSearchEntities.YelpBusinessSearchParams(searchParams);
-		return this.apiService.request({
-			resource: HttpResources.getYelpBusinessSearch,
-			body: params
-		});
+		try {
+			const params = new YelpSearchEntities.YelpBusinessSearchParams(searchParams);
+			return this.apiService.request({
+				resource: HttpResources.getYelpBusinessSearch,
+				body: params
+			});
+		} catch (e) {
+			console.error(e);
+		}
 	}
 }

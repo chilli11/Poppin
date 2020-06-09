@@ -39,9 +39,22 @@ namespace Poppin.Services
 								public List<PoppinLocation> GetByZip(int zipCode) =>
 												_locations.Find(loc => loc.Address.ZipCode == zipCode).ToList();
 
-								public Task Add(PoppinLocation location) => _locations.InsertOneAsync(location);
-								public Task Update(string id, PoppinLocation location) => _locations.ReplaceOneAsync(loc => loc.Id == id, location);
-								public Task Update(PoppinLocation location) => _locations.ReplaceOneAsync(loc => loc.Id == location.Id, location);
+								public Task Add(PoppinLocation location)
+								{
+												location.YelpDetails = null;
+												return _locations.InsertOneAsync(location);
+								}
+
+								public Task Update(string id, PoppinLocation location)
+								{
+												location.YelpDetails = null;
+												return _locations.ReplaceOneAsync(loc => loc.Id == id, location);
+								}
+								public Task Update(PoppinLocation location)
+								{
+												location.YelpDetails = null;
+												return _locations.ReplaceOneAsync(loc => loc.Id == location.Id, location);
+								}
 								public void Delete(PoppinLocation location) => _locations.DeleteOne(loc => loc.Id == location.Id);
 								public void Delete(string id) => _locations.DeleteOne(loc => loc.Id == id);
 				}

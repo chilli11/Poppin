@@ -37,16 +37,11 @@ namespace Poppin.Controllers
             return location;
         }
 
-        // GET: api/Locations
-        [HttpGet]
-        public async Task<PoppinSearchResponse> Get(string term, string location, string categories)
+        // POST: api/Locations
+        [HttpPost("yelp-search")]
+        public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchParams searchParams)
         {
-            var yelpSearchResponse = await _yelpService.GetBusinessSearch(new YelpBusinessSearchParams()
-            {
-                term = term,
-                location = location,
-                categories = categories
-            });
+            var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
             var locList = _locationService.GetByYelpList(yelpSearchResponse.Businesses);
 
             return new PoppinSearchResponse()

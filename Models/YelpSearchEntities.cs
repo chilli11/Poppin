@@ -28,21 +28,23 @@ namespace Poppin.Models.Yelp
 												term = l.Name;
 												location = l.Address.Line1 + ", " + l.Address.City;
 												categories = string.Join(',', l.Categories);
+												latitude = l.Address.Coordinates.Latitude.ToString();
+												longitude = l.Address.Coordinates.Longitude.ToString();
 								}
 
 								public string term { get; set; }
 								public string location { get; set; }
-								public double? latitude { get; set; }
-								public double? longitude { get; set; }
-								public int? radius { get; set; }
+								public string latitude { get; set; }
+								public string longitude { get; set; }
+								public string radius { get; set; }
 								public string categories { get; set; }
 								public string locale { get; set; }
-								public int? limit { get; set; }
-								public int? offset { get; set; }
+								public string limit { get; set; }
+								public string offset { get; set; }
 								public string sort_by { get; set; }
 								public string price { get; set; }
-								public bool?	 open_now { get; set; }
-								public int? open_at { get; set; }
+								public string open_now { get; set; }
+								public string open_at { get; set; }
 								public string attributes { get; set; }
 				}
 
@@ -55,8 +57,8 @@ namespace Poppin.Models.Yelp
 				public class YelpTransactionParams : IYelpSearchParams
 				{
 								public string location { get; set; }
-								public double? latitude { get; set; }
-								public double? longitude { get; set; }
+								public string latitude { get; set; }
+								public string longitude { get; set; }
 				}
 
 				public class YelpBusinessMatchParams : IYelpSearchParams
@@ -76,9 +78,10 @@ namespace Poppin.Models.Yelp
 
 												if (l.Address.Coordinates != null)
 												{
-																latitude = l.Address.Coordinates.Latitude;
-																longitude = l.Address.Coordinates.Longitude;
-												} else
+																latitude = l.Address.Coordinates.Latitude.ToString();
+																longitude = l.Address.Coordinates.Longitude.ToString();
+												}
+												else
 												{
 																latitude = null;
 																longitude = null;
@@ -92,8 +95,8 @@ namespace Poppin.Models.Yelp
 								public string city { get; set; }
 								public string state { get; set; }
 								public string country { get; set; }
-								public double? latitude { get; set; }
-								public double? longitude { get; set; }
+								public string latitude { get; set; }
+								public string longitude { get; set; }
 								public string phone { get; set; }
 								public string zip_code { get; set; }
 								public string yelp_business_id { get; set; }
