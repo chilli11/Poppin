@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Poppin.Contracts.Requests;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace Poppin.Models
 				{
 								public PoppinLocation() { }
 
-								public PoppinLocation(PoppinLocationDTO v)
+								public PoppinLocation(PoppinLocationRequest v)
 								{
 												Id = v.Id;
 												Name = v.Name;
@@ -60,20 +61,5 @@ namespace Poppin.Models
 								}
 
 								public YelpBusiness YelpDetails { get; set; }
-				}
-
-				public class PoppinLocationDTO
-				{
-								public PoppinLocationDTO() { }
-
-								public string Id { get; set; }
-								public string YelpId { get; set; }
-								public string Name { get; set; }
-								public string Phone { get; set; }
-								public Address Address { get; set; }
-								public string[] Categories { get; set; }
-								public int Capacity { get; set; }
-								public int CrowdSize { get; set; }
-								public IList<HourSet> Hours { get; set; }
 				}
 }

@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.Yelp;
@@ -24,10 +27,10 @@ namespace Poppin.Controllers
         }
 
         // GET: api/Locations/5
-        [HttpGet("{id}", Name = "Get")]
-        public async Task<PoppinLocation> Get(string id)
+        [HttpGet("{locationId}", Name = "Get")]
+        public async Task<PoppinLocation> Get(string locationId)
         {
-            var location = _locationService.Get(id);
+            var location = _locationService.Get(locationId);
 
             if (!string.IsNullOrEmpty(location.YelpId))
             {
@@ -39,7 +42,7 @@ namespace Poppin.Controllers
 
         // POST: api/Locations
         [HttpPost("yelp-search")]
-        public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchParams searchParams)
+        public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchRequest searchParams)
         {
             var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
             var locList = _locationService.GetByYelpList(yelpSearchResponse.Businesses);
@@ -55,8 +58,11 @@ namespace Poppin.Controllers
 
 
         // POST: api/Locations
-        [HttpPost]
-        public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationDTO _location)
+        [
+            HttpPost,
+            Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)
+        ]
+        public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             var isExisting = _locationService.CheckExists(location);
@@ -73,8 +79,11 @@ namespace Poppin.Controllers
         }
 
         // PUT: api/Locations/
-        [HttpPut]
-        public void Put(PoppinLocationDTO _location)
+        [
+            HttpPut,
+            Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)
+        ]
+        public void Put(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             location.LastUpdate = DateTime.Now;
@@ -83,14 +92,14 @@ namespace Poppin.Controllers
 
         // PUT: api/Locations/5
         [HttpPut("{id}")]
-        public void Put(string id, PoppinLocationDTO _location)
+        public void Put(string id, PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             location.LastUpdate = DateTime.Now;
             _locationService.Update(id, location);
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/Locations/5
         [HttpDelete("{id}")]
         public void Delete(string id)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models.Yelp;
 
@@ -22,22 +23,22 @@ namespace Poppin.Controllers
         }
 
         // GET: api/yelp/4kMBvIEWPxWkWKFN__8SxQ
-        [HttpGet("{yelp_id}")]
-        public async Task<YelpBusiness> GetBusinesses(string yelp_id)
+        [HttpGet("{yelpId}")]
+        public async Task<YelpBusiness> GetBusiness(string yelpId)
         {
-            return await _yelpService.GetBusiness(yelp_id);
+            return await _yelpService.GetBusiness(yelpId);
         }
 
         // POST: api/yelp/businesses
         [HttpPost("businesses")]
-        public async Task<YelpBusinessSearchResponse> GetBusinessesSearch(YelpBusinessSearchParams searchParams)
+        public async Task<YelpBusinessSearchResponse> GetBusinessesSearch(YelpBusinessSearchRequest searchParams)
         {
             return await _yelpService.GetBusinessSearch(searchParams);
         }
 
         // POST: api/yelp/match
         [HttpPost("match")]
-        public async Task<YelpBusinessSearchResponse> GetBusinessMatch(YelpBusinessMatchParams searchParams)
+        public async Task<YelpBusinessSearchResponse> GetBusinessMatch(YelpBusinessMatchRequest searchParams)
         {
             return await _yelpService.GetBusinessMatch(searchParams);
         }
