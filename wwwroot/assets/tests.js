@@ -118,6 +118,42 @@ define("poppin-ui/tests/integration/pods/components/admin/sidebar/component-test
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/loading-spinner/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | loading-spinner', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <LoadingSpinner />
+      */
+      {
+        id: "11pdbnua",
+        block: "{\"symbols\":[],\"statements\":[[8,\"loading-spinner\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <LoadingSpinner>
+              template block text
+            </LoadingSpinner>
+          
+      */
+      {
+        id: "i5cTgO33",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"loading-spinner\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/locations/existing-location/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -262,6 +298,150 @@ define("poppin-ui/tests/integration/pods/components/locations/location-list/comp
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/user/results-list/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | user/results-list', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <User::ResultsList />
+      */
+      {
+        id: "Ndi/sVZr",
+        block: "{\"symbols\":[],\"statements\":[[8,\"user/results-list\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <User::ResultsList>
+              template block text
+            </User::ResultsList>
+          
+      */
+      {
+        id: "Yt9WXCIc",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"user/results-list\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("poppin-ui/tests/integration/pods/components/user/results-map/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | user/results-map', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <User::ResultsMap />
+      */
+      {
+        id: "y2s1mulK",
+        block: "{\"symbols\":[],\"statements\":[[8,\"user/results-map\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <User::ResultsMap>
+              template block text
+            </User::ResultsMap>
+          
+      */
+      {
+        id: "eC0L+rFs",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"user/results-map\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("poppin-ui/tests/integration/pods/components/user/results-single/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | user/results-single', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <User::ResultsSingle />
+      */
+      {
+        id: "aE3zEOGY",
+        block: "{\"symbols\":[],\"statements\":[[8,\"user/results-single\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <User::ResultsSingle>
+              template block text
+            </User::ResultsSingle>
+          
+      */
+      {
+        id: "SqnyAt5G",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"user/results-single\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("poppin-ui/tests/integration/pods/components/user/search-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | user/search-form', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <User::SearchForm />
+      */
+      {
+        id: "9SHzXQf2",
+        block: "{\"symbols\":[],\"statements\":[[8,\"user/search-form\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <User::SearchForm>
+              template block text
+            </User::SearchForm>
+          
+      */
+      {
+        id: "Inz1kUVG",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"user/search-form\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/yelp-match-result/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -366,6 +546,18 @@ define("poppin-ui/tests/unit/models/yelp-business-test", ["qunit", "ember-qunit"
     });
   });
 });
+define("poppin-ui/tests/unit/pods/admin/locations/add/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | admin/locations/add', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:admin/locations/add');
+      assert.ok(controller);
+    });
+  });
+});
 define("poppin-ui/tests/unit/pods/admin/locations/add/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -430,6 +622,17 @@ define("poppin-ui/tests/unit/pods/admin/route-test", ["qunit", "ember-qunit"], f
     (0, _emberQunit.setupTest)(hooks);
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:admin');
+      assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/search/index/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | search/index', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:search/index');
       assert.ok(route);
     });
   });

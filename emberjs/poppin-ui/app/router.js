@@ -13,4 +13,5 @@ Router.map(function() {
       this.route('add');
     });
   });
+  this.route('search', function() {});
 });

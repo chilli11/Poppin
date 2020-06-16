@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { states, actions } from './constants';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const hours = [
+const defHours = [
 	{ opening: null, closing: null,  day: days[0] },
 	{ opening: null, closing: null,  day: days[1] },
 	{ opening: null, closing: null,  day: days[2] },
@@ -67,7 +67,11 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked coordinates;
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
-	@tracked hours = hours;
+	@tracked hours = _.merge(defHours);
+
+	@tracked modalTitle;
+	@tracked modalText;
+	@tracked showModal = false;
 
 	get locationDTO() {
 		const { locationId, name, yelpId,  capacity, crowdSize, hours } = this;
@@ -111,7 +115,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.state = null;
 		this.zipCode = null;
 		this.capacity = 0;
-		this.hours = hours;
+		this.hours = _.merge(defHours);
 	}
 
 	populateFromPoppin(location) {
@@ -126,7 +130,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
 			this.capacity = loc.capacity;
-			this.hours = loc.hours || hours;
+			this.hours = loc.hours || _.merge(defHours);
 		}
 	}
 
@@ -141,7 +145,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.coordinates = loc.location.coordinates;
 		this.capacity = 0;
 		
-		const _hours = _.merge(hours);
+		const _hours = _.merge(defHours);
 		if (loc.hours && loc.hours.length) {
 			const { open } = loc.hours[0];
 			open.forEach(v => {
@@ -161,11 +165,24 @@ export default class LocationFormComponent extends StatefulComponent {
 	[actions.SUBMIT_LOCATION]() {
 		const method = this.locationId ? 'updateLocation' : 'createNewLocation';
 		return this.locationsService[method](this.locationDTO).then((location) => {
+			if (this.locationId) {
+				this.store.findRecord('location', this.locationId)
+					.then((loc) => Object.keys(loc).forEach(k => loc[k] = location[k]));
+			} else {
+				this.store.createRecord('location', location);
+			}
 			this.locationId = location.id;
 			this.yelpId = location.yelpId;
 			if (typeof this.args.resolveAction == 'function') {
 				return this.args.resolveAction(this.locationDTO);
 			}
+			if (location.yelpId) {
+				return this.args.redirectToLocation(location.id);
+			}
+			
+			this.modalText = this.name + " has been added to Poppin!";
+			this.modalTitle = "Success!";
+			this.showModal = true;
 			return this.dispatch(actions.GET_MATCHES, location.id);
 		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
 	}
@@ -194,12 +211,18 @@ export default class LocationFormComponent extends StatefulComponent {
 		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
 	}
 
-	[actions.RESOLVE_SUBMIT_MATCH]() {
-		alert('Match Added!')
+	[actions.RESOLVE_SUBMIT_MATCH](match) {
+		this.modalText = "Matched to " + match.name + ".";
+		this.modalTitle = "Match Added!";
+		this.showModal = true;
+		return true;
 	}
 
 	[actions.REJECT_ACTION](data) {
-		console.error(data);
+		this.modalText = data.toString();
+		this.modalTitle = "Error!";
+		this.showModal = true;
+		return console.error(data);
 	}
 
 

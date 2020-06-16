@@ -4,9 +4,11 @@
 			<h4 class="card-title">Search Poppin</h4>
 		</div>
 		<div class="card-body">
-			<Yelp::YelpSearchForm
-				@searchMethod={{this.searchMethod}}
-				@populateResults={{this.populateResults}} />
+			<LoadingSpinner @isLoading={{this.isLoading}}>
+				<Yelp::YelpSearchForm
+					@searchMethod={{this.searchMethod}}
+					@populateResults={{this.populateResults}} />
+			</LoadingSpinner>
 		</div>
 	</div>
 </div>

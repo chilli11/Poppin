@@ -75,3 +75,13 @@
 		</div>
 	</div>
 {{/if}}
+
+<BsModal @open={{this.showModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">{{this.modalTitle}}</h4>
+	</modal.header>
+	<modal.body>{{this.modalText}}</modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>

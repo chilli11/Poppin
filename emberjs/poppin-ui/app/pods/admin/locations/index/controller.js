@@ -8,14 +8,15 @@ export default class AdminLocationsController extends Controller {
 	@service router;
 
 	@tracked results;
+	@tracked isLoading;
 
 	@action
 	searchMethod(params) {
+		this.isLoading = true;
 		this.locationsService.getLocationsByYelpList(params)
-			.then((data) => {
-				this.results = data;
-				return data;
-			});
+			.then(data => this.results = data)
+			.catch(data => alert(data))
+			.finally(() => this.isLoading = false);
 	}
 
 	@action

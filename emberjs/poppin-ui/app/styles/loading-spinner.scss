@@ -1,0 +1,9 @@
+.loading-spinner {
+	height: 100%;
+	width: 100%;
+	background: #FFF url(/images/ajax-loader.gif) center center no-repeat;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 100;
+}
