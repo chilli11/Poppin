@@ -31,14 +31,14 @@ namespace Poppin.Controllers
 
         // POST: api/yelp/businesses
         [HttpPost("businesses")]
-        public async Task<YelpBusinessSearchResponse> GetBusinessesSearch(YelpBusinessSearchRequest searchParams)
+        public async Task<YelpBusinessSearchResponse> GetBusinessesSearch(YelpBusinessSearchParams searchParams)
         {
             return await _yelpService.GetBusinessSearch(searchParams);
         }
 
         // POST: api/yelp/match
         [HttpPost("match")]
-        public async Task<YelpBusinessSearchResponse> GetBusinessMatch(YelpBusinessMatchRequest searchParams)
+        public async Task<YelpBusinessSearchResponse> GetBusinessMatch(YelpBusinessMatchParams searchParams)
         {
             return await _yelpService.GetBusinessMatch(searchParams);
         }
@@ -47,7 +47,7 @@ namespace Poppin.Controllers
         [HttpGet("match/{locId}")]
         public async Task<YelpBusinessSearchResponse> GetBusinessMatch(string locId)
         {
-            var loc = _locationService.Get(locId);
+            var loc = await _locationService.Get(locId);
             var searchParams = new YelpBusinessMatchParams(loc);
             return await _yelpService.GetBusinessMatch(searchParams);
         }

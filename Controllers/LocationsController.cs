@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models;
+using Poppin.Models.Identity;
 using Poppin.Models.Yelp;
 using Poppin.Services;
 
@@ -30,7 +31,7 @@ namespace Poppin.Controllers
         [HttpGet("{locationId}", Name = "Get")]
         public async Task<PoppinLocation> Get(string locationId)
         {
-            var location = _locationService.Get(locationId);
+            var location = await _locationService.Get(locationId);
 
             if (!string.IsNullOrEmpty(location.YelpId))
             {
@@ -42,10 +43,14 @@ namespace Poppin.Controllers
 
         // POST: api/Locations
         [HttpPost("yelp-search")]
-        public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchRequest searchParams)
+        public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchParams searchParams)
         {
             var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
-            var locList = _locationService.GetByYelpList(yelpSearchResponse.Businesses);
+            var locList = new List<PoppinLocation>();
+            if (yelpSearchResponse.Total > 0)
+            {
+                locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses);
+            }
 
             return new PoppinSearchResponse()
             {
@@ -58,31 +63,25 @@ namespace Poppin.Controllers
 
 
         // POST: api/Locations
-        [
-            HttpPost,
-            Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)
-        ]
+        [HttpPost]
+        [AuthorizeRoles()]
         public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
-            var isExisting = _locationService.CheckExists(location);
+            var isExisting = await _locationService.CheckExists(location);
             location.LastUpdate = DateTime.Now;
-
 
             if (isExisting == null)
             {
                 await _locationService.Add(location);
-
                 return CreatedAtAction("Post", location);
             }
             return isExisting;
         }
 
         // PUT: api/Locations/
-        [
-            HttpPut,
-            Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)
-        ]
+        [HttpPut]
+        [AuthorizeRoles()]
         public void Put(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
@@ -92,18 +91,37 @@ namespace Poppin.Controllers
 
         // PUT: api/Locations/5
         [HttpPut("{id}")]
-        public void Put(string id, PoppinLocationRequest _location)
+        [AuthorizeRoles()]
+        public Task Put(string id, PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             location.LastUpdate = DateTime.Now;
-            _locationService.Update(id, location);
+            return _locationService.Update(id, location);
         }
 
         // DELETE: api/Locations/5
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        [AuthorizeRoles()]
+        public Task Delete(string id) => _locationService.Delete(id);
+
+        // GET: api/Locations/incrementCrowd/5
+        [HttpGet]
+        [AuthorizeRoles(Role.Vendor, Role.Admin)]
+        public async Task IncrementCrowd(string locationId)
         {
-            _locationService.Delete(id);
+            var location = await _locationService.Get(locationId);
+            location.CrowdSize++;
+            await _locationService.Update(location);
+        }
+
+        // GET: api/Locations/decrementCrowd/5
+        [HttpGet]
+        [AuthorizeRoles(Role.Vendor, Role.Admin)]
+        public async Task DecrementCrowd(string locationId)
+        {
+            var location = await _locationService.Get(locationId);
+            location.CrowdSize--;
+            await _locationService.Update(location);
         }
     }
 }

@@ -47,6 +47,7 @@ namespace Poppin.Models
 								public IList<string> Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
+								public string MenuUrl { get; set; }
 								public IList<HourSet> Hours { get; set; }
 
 								[BsonDateTimeOptions]

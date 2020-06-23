@@ -25,6 +25,15 @@ namespace Poppin.Controllers
         [HttpPost(ApiRoutes.Identity.Register)]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
+                    }
+                );
+            }
+
             var registrationResult = await _identityService.RegisterAsync(request.Email, request.Password);
 
             if (!registrationResult.Success)
@@ -37,6 +46,33 @@ namespace Poppin.Controllers
             return Ok(new AuthSuccessResponse
             {
                 Token = registrationResult.Token
+            });
+        }
+
+        [HttpPost(ApiRoutes.Identity.Login)]
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
+                }
+                );
+            }
+
+            var loginResult = await _identityService.LoginAsync(request.Email, request.Password);
+
+            if (!loginResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = loginResult.Errors
+                });
+            }
+            return Ok(new AuthSuccessResponse
+            {
+                Token = loginResult.Token
             });
         }
     }

@@ -1,7 +1,4 @@
-﻿using Poppin.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Poppin.Models.Identity;
 using System.Threading.Tasks;
 
 namespace Poppin.Interfaces
@@ -9,5 +6,6 @@ namespace Poppin.Interfaces
 				public interface IIdentityService
 				{
 								Task<AuthenticationResult> RegisterAsync(string email, string password);
+								Task<AuthenticationResult> LoginAsync(string email, string password);
 				}
 }
