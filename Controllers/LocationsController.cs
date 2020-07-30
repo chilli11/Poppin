@@ -27,6 +27,12 @@ namespace Poppin.Controllers
             _yelpService = yelpService;
         }
 
+        /// <summary>
+        /// Gets location info based on ID passed as URL param.
+        /// Includes <c>YelpDetails</c> if <c>YelpId</c> is available
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <returns></returns>
         // GET: api/Locations/5
         [HttpGet("{locationId}", Name = "Get")]
         public async Task<PoppinLocation> Get(string locationId)

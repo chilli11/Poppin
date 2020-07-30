@@ -101,5 +101,30 @@ namespace Poppin.Services
 																Token = tokenHandler.WriteToken(token)
 												};
 								}
+
+								private AuthenticationResult GenerateAuthenticationResultForUser(IdentityUser newUser)
+								{
+												var tokenHandler = new JwtSecurityTokenHandler();
+												var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+												var tokenDescriptor = new SecurityTokenDescriptor
+												{
+																Subject = new ClaimsIdentity(new[]
+																{
+																				new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
+																				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+																				new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
+																				new Claim("Id", newUser.Id)
+																}),
+																Expires = DateTime.UtcNow.AddHours(2),
+																SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+												};
+
+												var token = tokenHandler.CreateToken(tokenDescriptor);
+												return new AuthenticationResult
+												{
+																Success = true,
+																Token = tokenHandler.WriteToken(token)
+												};
+								}
 				}
 }

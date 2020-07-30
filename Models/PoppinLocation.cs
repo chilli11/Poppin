@@ -20,7 +20,6 @@ namespace Poppin.Models
 												YelpId = v.YelpId;
 												Phone = v.Phone;
 												Address = v.Address;
-												Categories = v.Categories.ToList();
 												Capacity = v.Capacity;
 												CrowdSize = v.CrowdSize;
 												Hours = v.Hours;
@@ -32,7 +31,6 @@ namespace Poppin.Models
 												Name = v.Name;
 												Phone = v.Phone;
 												Address = new Address(v.Location, v.Coordinates);
-												Categories = v.Categories.Select(c => c.Alias).ToList();
 												Hours = v.Hours.FirstOrDefault().Open.Select(h => new HourSet(h)).ToList();
 												YelpDetails = v;
 								}
@@ -44,7 +42,6 @@ namespace Poppin.Models
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public Address Address { get; set; }
-								public IList<string> Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
 								public string MenuUrl { get; set; }

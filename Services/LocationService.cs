@@ -56,8 +56,6 @@ namespace Poppin.Services
 
 				public static class LocationExtensions
 				{
-								public static List<PoppinLocation> FilterByCategory(this List<PoppinLocation> _list, string category) =>
-												_list.FindAll(loc => loc.Categories.Contains(category));
 								public static List<PoppinLocation> FilterByCrowdOver(this List<PoppinLocation> _list, double threshhold) =>
 												_list.FindAll(loc => loc.CrowdSize / loc.Capacity > threshhold);
 								public static List<PoppinLocation> FilterByCrowdUnder(this List<PoppinLocation> _list, double threshhold) =>
