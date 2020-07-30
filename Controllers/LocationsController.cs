@@ -41,7 +41,7 @@ namespace Poppin.Controllers
             return location;
         }
 
-        // POST: api/Locations
+        // POST: api/Locations/yelp-search
         [HttpPost("yelp-search")]
         public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchParams searchParams)
         {
@@ -90,22 +90,22 @@ namespace Poppin.Controllers
         }
 
         // PUT: api/Locations/5
-        [HttpPut("{id}")]
+        [HttpPut("{locationId}")]
         [AuthorizeRoles()]
-        public Task Put(string id, PoppinLocationRequest _location)
+        public Task Put(string locationId, PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             location.LastUpdate = DateTime.Now;
-            return _locationService.Update(id, location);
+            return _locationService.Update(locationId, location);
         }
 
         // DELETE: api/Locations/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{locationId}")]
         [AuthorizeRoles()]
-        public Task Delete(string id) => _locationService.Delete(id);
+        public Task Delete(string locationId) => _locationService.Delete(locationId);
 
         // GET: api/Locations/incrementCrowd/5
-        [HttpGet]
+        [HttpGet("incrementCrowd/{locationId}")]
         [AuthorizeRoles(Role.Vendor, Role.Admin)]
         public async Task IncrementCrowd(string locationId)
         {
@@ -115,7 +115,7 @@ namespace Poppin.Controllers
         }
 
         // GET: api/Locations/decrementCrowd/5
-        [HttpGet]
+        [HttpGet("decrementCrowd/{locationId}")]
         [AuthorizeRoles(Role.Vendor, Role.Admin)]
         public async Task DecrementCrowd(string locationId)
         {
