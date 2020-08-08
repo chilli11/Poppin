@@ -47,6 +47,11 @@ namespace Poppin.Controllers
             return location;
         }
 
+        /// <summary>
+        /// Gets a list of Locations based on results of a Yelp search
+        /// </summary>
+        /// <param name="searchParams"></param>
+        /// <returns></returns>
         // POST: api/Locations/yelp-search
         [HttpPost("yelp-search")]
         public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchParams searchParams)
@@ -55,7 +60,7 @@ namespace Poppin.Controllers
             var locList = new List<PoppinLocation>();
             if (yelpSearchResponse.Total > 0)
             {
-                locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses);
+                locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
             }
 
             return new PoppinSearchResponse()
@@ -70,7 +75,7 @@ namespace Poppin.Controllers
 
         // POST: api/Locations
         [HttpPost]
-        [AuthorizeRoles()]
+        // [AuthorizeRoles()]
         public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
@@ -87,7 +92,7 @@ namespace Poppin.Controllers
 
         // PUT: api/Locations/
         [HttpPut]
-        [AuthorizeRoles()]
+        // [AuthorizeRoles()]
         public void Put(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
@@ -97,8 +102,8 @@ namespace Poppin.Controllers
 
         // PUT: api/Locations/5
         [HttpPut("{locationId}")]
-        [AuthorizeRoles()]
-        public Task Put(string locationId, PoppinLocationRequest _location)
+								[AuthorizeRoles()]
+								public Task Put(string locationId, PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             location.LastUpdate = DateTime.Now;
@@ -107,13 +112,13 @@ namespace Poppin.Controllers
 
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]
-        [AuthorizeRoles()]
-        public Task Delete(string locationId) => _locationService.Delete(locationId);
+								[AuthorizeRoles()]
+								public Task Delete(string locationId) => _locationService.Delete(locationId);
 
         // GET: api/Locations/incrementCrowd/5
         [HttpGet("incrementCrowd/{locationId}")]
-        [AuthorizeRoles(Role.Vendor, Role.Admin)]
-        public async Task IncrementCrowd(string locationId)
+								[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
+								public async Task IncrementCrowd(string locationId)
         {
             var location = await _locationService.Get(locationId);
             location.CrowdSize++;
@@ -122,8 +127,8 @@ namespace Poppin.Controllers
 
         // GET: api/Locations/decrementCrowd/5
         [HttpGet("decrementCrowd/{locationId}")]
-        [AuthorizeRoles(Role.Vendor, Role.Admin)]
-        public async Task DecrementCrowd(string locationId)
+								[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
+								public async Task DecrementCrowd(string locationId)
         {
             var location = await _locationService.Get(locationId);
             location.CrowdSize--;

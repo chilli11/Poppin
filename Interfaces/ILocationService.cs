@@ -12,7 +12,7 @@ namespace Poppin.Interfaces
 								public Task<PoppinLocation> Get(string id);
 								public Task<PoppinLocation> CheckExists(PoppinLocation location);
 								public Task<List<PoppinLocation>> GetMany(IEnumerable<string> ids);
-								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<YelpBusiness> businesses);
+								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<string> ids);
 								public Task Add(PoppinLocation location);
 								public Task Update(string id, PoppinLocation location);
 								public Task Update(PoppinLocation location);

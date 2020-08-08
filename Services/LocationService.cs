@@ -31,8 +31,13 @@ namespace Poppin.Services
 																.Result.FirstOrDefaultAsync();
 								}
 
-								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<YelpBusiness> list) =>
-												_locations.FindAsync(l => list.Any(y => y.Id == l.YelpId)).Result.ToListAsync();
+								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<string> ids)
+								{
+												var locs = _locations.FindAsync(loc => ids.Contains(loc.YelpId));
+												var res = locs.Result;
+												var exitList = res.ToListAsync();
+												return exitList;
+								}
 
 								public Task Add(PoppinLocation location)
 								{
