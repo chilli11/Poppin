@@ -12,6 +12,7 @@ namespace Poppin.Contracts.Requests
 								[EmailAddress]
 								public string Email { get; set; }
 								public string Password { get; set; }
+								public string Password2 { get; set; }
 				}
 				public class UserLoginRequest
 				{

@@ -46,6 +46,78 @@ define("poppin-ui/tests/helpers/ember-power-select", ["exports", "ember-power-se
     return (0, _helpers.default)();
   }
 });
+define("poppin-ui/tests/integration/pods/components/account/login-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | account/login-form', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Account::LoginForm />
+      */
+      {
+        id: "b03WTJvO",
+        block: "{\"symbols\":[],\"statements\":[[8,\"account/login-form\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Account::LoginForm>
+              template block text
+            </Account::LoginForm>
+          
+      */
+      {
+        id: "n0FmFibt",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"account/login-form\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("poppin-ui/tests/integration/pods/components/account/registration-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | account/registration-form', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Account::RegistrationForm />
+      */
+      {
+        id: "Z5IDoogY",
+        block: "{\"symbols\":[],\"statements\":[[8,\"account/registration-form\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Account::RegistrationForm>
+              template block text
+            </Account::RegistrationForm>
+          
+      */
+      {
+        id: "TlitsSTd",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"account/registration-form\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/admin/locations/yelp-match-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -543,6 +615,51 @@ define("poppin-ui/tests/unit/models/yelp-business-test", ["qunit", "ember-qunit"
       let store = this.owner.lookup('service:store');
       let model = store.createRecord('yelp-business', {});
       assert.ok(model);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account-service/service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | account-service', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:account-service');
+      assert.ok(service);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/index/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/index', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/index');
+      assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/login/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/login', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/login');
+      assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/register/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/register', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/register');
+      assert.ok(route);
     });
   });
 });

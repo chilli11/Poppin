@@ -1,6 +1,7 @@
 import Service from '@ember/service';
 import Evented from '@ember/object/evented';
 import { fetch } from 'fetch';
+import { Promise } from 'rsvp';
 import config from 'poppin-ui/config/environment';
 import _ from 'lodash';
 
@@ -113,6 +114,7 @@ export default class ApiService extends Service.extend(Evented) {
 
 		return fetch(fetchRequest.url, fetchRequest).then((response) => {
 			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+			if (response.status > 299) throw isJson ? response.json() : response.text();
 			return isJson ? response.json() : response.text();
 		});
 	}

@@ -22,7 +22,7 @@ namespace Poppin.Controllers
             _identityService = idService;
         }
 
-        [HttpPost(ApiRoutes.Identity.Register)]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
             if (!ModelState.IsValid)
@@ -49,7 +49,7 @@ namespace Poppin.Controllers
             });
         }
 
-        [HttpPost(ApiRoutes.Identity.Login)]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
             if (!ModelState.IsValid)
