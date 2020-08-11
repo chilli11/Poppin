@@ -31,6 +31,7 @@ namespace Poppin.Services
 												{
 																return new AuthenticationResult
 																{
+																				Success = false,
 																				Errors = new[] { "User with this email address already exists." }
 																};
 												}
@@ -38,7 +39,8 @@ namespace Poppin.Services
 												var newUser = new User
 												{
 																Email = email,
-																UserName = email
+																UserName = email,
+																Role = RoleTypes.Admin
 												};
 												var createdUser = await _userManager.CreateAsync(newUser, password);
 
@@ -46,6 +48,7 @@ namespace Poppin.Services
 												{
 																return new AuthenticationResult
 																{
+																				Success = false,
 																				Errors = createdUser.Errors.Select(e => e.Description)
 																};
 												}
@@ -60,6 +63,7 @@ namespace Poppin.Services
 												{
 																return new AuthenticationResult
 																{
+																				Success = false,
 																				Errors = new[] { "User does not exist." }
 																};
 												}
@@ -69,11 +73,30 @@ namespace Poppin.Services
 												{
 																return new AuthenticationResult
 																{
+																				Success = false,
 																				Errors = new[] { "Username or password is incorrect." }
 																};
 												}
 
 												return GenerateAuthenticationResultForUser(user);
+								}
+
+								public async Task<UserDataResult> GetUser(string identifier)
+								{
+												var user = await _userManager.FindByIdAsync(identifier);
+												if (user == null)
+												{
+																return new UserDataResult
+																{
+																				Success = false,
+																				Errors = new[] { "User does not exist." }
+																};
+												}
+												return new UserDataResult
+												{
+																User = user,
+																Success = true
+												};
 								}
 
 								private AuthenticationResult GenerateAuthenticationResultForUser(User newUser)

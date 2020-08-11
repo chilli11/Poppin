@@ -1,6 +1,6 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 import _ from 'lodash';
 
@@ -60,7 +60,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		if (this.password !== this.password2) msgs.push('Passwords don\'t match');
 		if (msgs.length) return this.dispatch(actions.REJECT, msgs);
 
-		this.msgs = msgs;
+		set(this, 'msgs', msgs);
 		return this.dispatch(actions.SUBMIT);
 	}
 
@@ -69,21 +69,23 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		const { email, password, password2 } = this;
 		this.showMsg = false;
 		this.accountService.registerAccount({ email, password, password2 })
-			.then(() => this.dispatch(actions.RESOLVE, ['Registrtaion success!']))
-			.catch((results) => {
-				console.log(results);
-				return this.dispatch(actions.REJECT, ['oops']);
+			.then((response) => {
+				if (response.errors && response.errors.length) throw response;
+				return this.dispatch(actions.RESOLVE, ['Registrtaion success!']);
+			}).catch((response) => {
+				console.log(response);
+				return this.dispatch(actions.REJECT, response.errors);
 			});
 	}
 
 	[actions.REJECT](msgs) {
-		this.msgs = msgs || [];
-		this.msgType = 'error';
+		set(this, 'msgs',  msgs || []);
+		this.msgType = 'danger';
 		this.showMsg = true;
 	}
 
 	[actions.RESOLVE](msgs) {
-		this.msgs = msgs || [];
+		set(this, 'msgs', msgs || []);
 		this.msgType = 'success';
 		this.showMsg = true;
 	}
@@ -103,6 +105,6 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 	@action
 	hideMsg() {
 		this.showMsg = false;
-		this.msgs = [];
+		set(this, 'msgs', []);
 	}
 }

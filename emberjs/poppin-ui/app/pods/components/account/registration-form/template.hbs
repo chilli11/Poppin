@@ -10,7 +10,7 @@
 			<BsAlert
 				@visible={{showMsg}}
 				@fade={{true}}
-				@type="danger"
+				@type={{msgType}}
 				@dismissible={{true}}
 				@onDismissed={{fn this.hideMsg}}>
 				{{#each this.msgs as |msg|}}
@@ -33,7 +33,7 @@
 				<form.element
 					@controlType="password"
 					@label="Confirm Password"
-					@placeholder=="********"
+					@placeholder="********"
 					@property="password2"
 					@required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />

@@ -1,4 +1,5 @@
-﻿using Poppin.Models.Identity;
+﻿using Microsoft.AspNetCore.Mvc;
+using Poppin.Models.Identity;
 using System.Threading.Tasks;
 
 namespace Poppin.Interfaces
@@ -7,5 +8,6 @@ namespace Poppin.Interfaces
 				{
 								Task<AuthenticationResult> RegisterAsync(string email, string password);
 								Task<AuthenticationResult> LoginAsync(string email, string password);
+								Task<UserDataResult> GetUser(string identifier);
 				}
 }

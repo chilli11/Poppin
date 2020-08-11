@@ -112,10 +112,11 @@ export default class ApiService extends Service.extend(Evented) {
 			fetchRequest = _.omit(fetchRequest, 'body');
 		}
 
-		return fetch(fetchRequest.url, fetchRequest).then((response) => {
+		const fn = (response) => {
 			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-			if (response.status > 299) throw isJson ? response.json() : response.text();
 			return isJson ? response.json() : response.text();
-		});
+		};
+		
+		return fetch(fetchRequest.url, fetchRequest).then(fn).catch(fn);
 	}
 }

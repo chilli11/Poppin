@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts;
@@ -75,5 +76,24 @@ namespace Poppin.Controllers
                 Token = loginResult.Token
             });
         }
+
+        [Authorize]
+        [HttpPost("me")]
+        public async Task<IActionResult> GetUser()
+								{
+            var userResult = await _identityService.GetUser("kjhjk");
+
+            if (!userResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = userResult.Errors
+                });
+            }
+            return Ok(new UserSuccessResponse
+            {
+                User = userResult.User
+            });
+								}
     }
 }

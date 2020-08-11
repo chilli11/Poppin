@@ -10,4 +10,11 @@ export default class AccountService extends Service {
 			body: credentials
 		});
 	}
+
+	login(credentials) {
+		return this.apiService.request({
+			resource: HttpResources.login,
+			body: credentials
+		});
+	}
 }
