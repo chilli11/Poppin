@@ -211,7 +211,7 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            if (await UserHasLocationPermissions(location, HttpContext.GetUserId()))
+            if (HttpContext.GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, HttpContext.GetUserId()))
             {
                 location.CrowdSize--;
                 await _locationService.Update(location);

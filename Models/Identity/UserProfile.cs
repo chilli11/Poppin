@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Poppin.Interfaces;
+using Poppin.Models.BusinessEntities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,19 +11,9 @@ namespace Poppin.Models.Identity
     {
         public IEnumerable<string> VendorIds { get; set; }
 
-        public virtual IEnumerable<Vendor> Vendors
-        {
-            get
-            {
-                return new List<Vendor>();
-            }
-        }
-        public IEnumerable<PoppinLocation> Affiliations
-        {
-            get
-            {
-                return Vendors.SelectMany(v => v.Locations);
-            }
-        }
+        public async Task<List<Vendor>> GetVendors(IVendorService vs)
+								{
+            return await vs.GetVendorsByIds(VendorIds);
+								}
     }
 }

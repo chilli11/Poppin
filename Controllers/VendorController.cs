@@ -69,7 +69,7 @@ namespace Poppin.Controllers
 								}
 
 								// PUT api/<VendorController>/5
-								[HttpPut("{id}")]
+								[HttpPut]
 								public async Task<IActionResult> Put(PoppinVendorRequest _vendor)
 								{
 												var vendor = new Vendor(_vendor);
@@ -91,7 +91,7 @@ namespace Poppin.Controllers
 								}
 
 								// PUT api/<VendorController>/5
-								[HttpPut("{id}")]
+								[HttpPut("{vendorId}")]
 								public async Task<IActionResult> Put(string vendorId, PoppinVendorRequest _vendor)
 								{
 												var vendor = new Vendor(_vendor);
@@ -113,8 +113,8 @@ namespace Poppin.Controllers
 								}
 
 								// DELETE api/<VendorController>/5
-								[HttpDelete("{id}")]
-								public void Delete(int id)
+								[HttpDelete("{vendorId}")]
+								public void Delete(string vendorId)
 								{
 								}
 				}

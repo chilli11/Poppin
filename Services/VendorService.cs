@@ -22,9 +22,9 @@ namespace Poppin.Services
 								}
 								
 								public Task<Vendor> GetVendorById(string vendorId)
-								{
-												return _vendors.FindAsync(v => v.Id == vendorId).Result.FirstAsync();
-								}
+												=> _vendors.FindAsync(v => v.Id == vendorId).Result.FirstAsync();
+								public Task<List<Vendor>> GetVendorsByIds(IEnumerable<string> vendorIds)
+												=> _vendors.FindAsync(v => vendorIds.Contains(v.Id)).Result.ToListAsync();
 
 								public Task AddVendor(Vendor vendor) => _vendors.InsertOneAsync(vendor);
 								public Task UpdateVendor(Vendor vendor) => _vendors.ReplaceOneAsync(v => v.Id == vendor.Id, vendor);

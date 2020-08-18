@@ -9,6 +9,7 @@ namespace Poppin.Interfaces
 				public interface IVendorService
 				{
 								public Task<Vendor> GetVendorById(string vendorId);
+								public Task<List<Vendor>> GetVendorsByIds(IEnumerable<string> vendorIds);
 								public Task AddVendor(Vendor vendor);
 								public Task UpdateVendor(Vendor vendor);
 								public Task UpdateVendor(string vendorId, Vendor vendor);
