@@ -12,6 +12,7 @@ namespace Poppin.Contracts.Requests
 
 								public string Id { get; set; }
 								public string YelpId { get; set; }
+								public string VendorId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public Address Address { get; set; }

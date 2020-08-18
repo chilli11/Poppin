@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using Poppin.Configuration;
 using Poppin.Interfaces;
-using Poppin.Models;
+using Poppin.Models.BusinessEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +20,20 @@ namespace Poppin.Services
 
 												_vendors = database.GetCollection<Vendor>("Vendors");
 								}
+								
 								public Task<Vendor> GetVendorById(string vendorId)
 								{
 												return _vendors.FindAsync(v => v.Id == vendorId).Result.FirstAsync();
 								}
-								//public Task UpdateVendor(Vendor vendor);
-								//public Task UpdateVendor(string vendorId, Vendor vendor);
+
+								public Task AddVendor(Vendor vendor) => _vendors.InsertOneAsync(vendor);
+								public Task UpdateVendor(Vendor vendor) => _vendors.ReplaceOneAsync(v => v.Id == vendor.Id, vendor);
+								public Task UpdateVendor(string vendorId, Vendor vendor) => _vendors.ReplaceOneAsync(v => v.Id == vendorId, vendor);
+
+								public Task<Vendor> CheckExists(Vendor vendor)
+								{
+												return _vendors.FindAsync(v => v.OrganizationName == vendor.OrganizationName)
+																		.Result.FirstOrDefaultAsync();
+								}
 				}
 }

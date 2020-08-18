@@ -5,5 +5,8 @@ using System.Threading.Tasks;
 
 namespace Poppin.Contracts.Responses
 {
-				public class AuthFailedResponse : GenericFailure { }
+				public class GenericFailure
+				{
+								public IEnumerable<string> Errors { get; set; }
+				}
 }

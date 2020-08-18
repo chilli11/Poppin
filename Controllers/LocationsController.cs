@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts.Requests;
+using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
@@ -38,16 +39,25 @@ namespace Poppin.Controllers
         /// <returns></returns>
         // GET: api/Locations/5
         [HttpGet("{locationId}", Name = "Get")]
-        public async Task<PoppinLocation> Get(string locationId)
+        public async Task<IActionResult> Get(string locationId)
         {
             var location = await _locationService.Get(locationId);
 
+            if (location == null)
+            {
+                var errors = new List<string>();
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
             if (!string.IsNullOrEmpty(location.YelpId))
             {
                 location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
             }
 
-            return location;
+            return Ok(location);
         }
 
         /// <summary>
@@ -57,29 +67,41 @@ namespace Poppin.Controllers
         /// <returns></returns>
         // POST: api/Locations/yelp-search
         [HttpPost("yelp-search")]
-        public async Task<PoppinSearchResponse> GetByYelpSearch(YelpBusinessSearchParams searchParams)
+        public async Task<IActionResult> GetByYelpSearch(YelpBusinessSearchParams searchParams)
         {
-            var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
-            var locList = new List<PoppinLocation>();
-            if (yelpSearchResponse.Total > 0)
+            try
             {
-                locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
-            }
+                var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
+                var locList = new List<PoppinLocation>();
+                if (yelpSearchResponse.Total > 0)
+                {
+                    locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
+                }
 
-            return new PoppinSearchResponse()
+                return Ok(new PoppinSearchResponse()
+                {
+                    Total = locList.Count,
+                    Businesses = locList,
+                    Region = yelpSearchResponse.Region,
+                    SearchParams = yelpSearchResponse.SearchParams
+                });
+            }
+            catch(Exception e)
             {
-                Total = locList.Count,
-                Businesses = locList,
-                Region = yelpSearchResponse.Region,
-                SearchParams = yelpSearchResponse.SearchParams
-            };
+                var errors = new List<string>();
+                errors.Add(e.Message);
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
         }
 
 
         // POST: api/Locations
         [HttpPost]
         // [AuthorizeRoles()]
-        public async Task<ActionResult<PoppinLocation>> Post(PoppinLocationRequest _location)
+        public async Task<IActionResult> Post(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             var isExisting = await _locationService.CheckExists(location);
@@ -90,27 +112,53 @@ namespace Poppin.Controllers
                 await _locationService.Add(location);
                 return CreatedAtAction("Post", location);
             }
-            return isExisting;
+            return Ok(isExisting);
         }
 
         // PUT: api/Locations/
         [HttpPut]
         // [AuthorizeRoles()]
-        public void Put(PoppinLocationRequest _location)
+        public async Task<IActionResult> Put(PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
-            location.LastUpdate = DateTime.Now;
-            _locationService.Update(location);
+            try
+            {
+                location.LastUpdate = DateTime.Now;
+                await _locationService.Update(location);
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                var errors = new List<string>();
+                errors.Add(e.Message);
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
         }
 
         // PUT: api/Locations/5
         [HttpPut("{locationId}")]
 								[AuthorizeRoles()]
-								public Task Put(string locationId, PoppinLocationRequest _location)
+								public async Task<IActionResult> Put(string locationId, PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
-            location.LastUpdate = DateTime.Now;
-            return _locationService.Update(locationId, location);
+            try
+            {
+                location.LastUpdate = DateTime.Now;
+                await _locationService.Update(locationId, location);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                var errors = new List<string>();
+                errors.Add(e.Message);
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
         }
 
         // DELETE: api/Locations/5
@@ -120,28 +168,61 @@ namespace Poppin.Controllers
 
         // GET: api/Locations/incrementCrowd/5
         [HttpGet("incrementCrowd/{locationId}")]
-								[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
-								public async Task IncrementCrowd(string locationId)
+								//[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
+								public async Task<IActionResult> IncrementCrowd(string locationId)
         {
             var location = await _locationService.Get(locationId);
+            var errors = new List<string>();
+            if (location == null)
+            {
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
+
             if (await UserHasLocationPermissions(location, HttpContext.GetUserId()))
             {
                 location.CrowdSize++;
                 await _locationService.Update(location);
+                return Ok(location);
             }
+
+            errors.Add("You don't have permission.");
+            return BadRequest(new GenericFailure
+            {
+                Errors = errors
+            });
         }
 
         // GET: api/Locations/decrementCrowd/5
         [HttpGet("decrementCrowd/{locationId}")]
-								[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
-								public async Task DecrementCrowd(string locationId)
+								//[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
+								public async Task<IActionResult> DecrementCrowd(string locationId)
         {
-            var location = await _locationService.Get(locationId); ;
+            var location = await _locationService.Get(locationId);
+            var errors = new List<string>();
+            if (location == null)
+            {
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
             if (await UserHasLocationPermissions(location, HttpContext.GetUserId()))
             {
                 location.CrowdSize--;
                 await _locationService.Update(location);
+                return Ok(location);
             }
+
+            errors.Add("You don't have permission.");
+            return BadRequest(new GenericFailure
+            {
+                Errors = errors
+            });
         }
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)
         {
