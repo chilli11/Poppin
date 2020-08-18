@@ -4,6 +4,7 @@ using Poppin.Configuration;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -12,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace Poppin.Services
 {
+				/// <summary>
+				/// Identity Service based on tutorial by Nick Chapsas
+				/// https://www.youtube.com/channel/UCrkPsvLGln62OMZRO6K-llg
+				/// </summary>
 				public class IdentityService : IIdentityService
 				{
 								private readonly JwtSettings _jwtSettings;
@@ -23,7 +28,7 @@ namespace Poppin.Services
 												_userManager = userMgr;
 								}
 
-								public async Task<AuthenticationResult> RegisterAsync(string email, string password)
+								public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2)
 								{
 												var existingUser = await _userManager.FindByEmailAsync(email);
 
@@ -33,6 +38,15 @@ namespace Poppin.Services
 																{
 																				Success = false,
 																				Errors = new[] { "User with this email address already exists." }
+																};
+												}
+
+												if (password != password2)
+												{
+																return new AuthenticationResult
+																{
+																				Success = false,
+																				Errors = new[] { "Passwords do not match." }
 																};
 												}
 
@@ -74,14 +88,14 @@ namespace Poppin.Services
 																return new AuthenticationResult
 																{
 																				Success = false,
-																				Errors = new[] { "Username or password is incorrect." }
+																				Errors = new[] { "Invalid credentials" }
 																};
 												}
 
 												return GenerateAuthenticationResultForUser(user);
 								}
 
-								public async Task<UserDataResult> GetUser(string identifier)
+								public async Task<UserDataResult> GetUserById(string identifier)
 								{
 												var user = await _userManager.FindByIdAsync(identifier);
 												if (user == null)
@@ -99,7 +113,31 @@ namespace Poppin.Services
 												};
 								}
 
-								private AuthenticationResult GenerateAuthenticationResultForUser(User newUser)
+								public async Task<UserListResult> GetUsersById(IEnumerable<string> ids)
+								{
+												var list = new List<User>();
+												foreach (var id in ids)
+												{
+																var user = await _userManager.FindByIdAsync(id);
+																if (user == null)
+																{
+																				return new UserListResult
+																				{
+																								Success = false,
+																								Errors = new[] { "User does not exist." }
+																				};
+																}
+																list.Add(user);
+												}
+												
+												return new UserListResult
+												{
+																Users = list,
+																Success = true
+												};
+								}
+
+								private AuthenticationResult GenerateAuthenticationResultForUser(User user)
 								{
 												var tokenHandler = new JwtSecurityTokenHandler();
 												var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
@@ -107,11 +145,11 @@ namespace Poppin.Services
 												{
 																Subject = new ClaimsIdentity(new[]
 																{
-																				new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
+																				new Claim(JwtRegisteredClaimNames.Sub, user.Email),
 																				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-																				new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
-																				new Claim("Role", newUser.Role),
-																				new Claim("Id", newUser.Id)
+																				new Claim(JwtRegisteredClaimNames.Email, user.Email),
+																				new Claim("Role", user.Role),
+																				new Claim("Id", user.Id)
 																}),
 																Expires = DateTime.UtcNow.AddHours(2),
 																SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

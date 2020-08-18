@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts.Requests;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.Identity;
@@ -21,10 +22,12 @@ namespace Poppin.Controllers
     {
         private readonly ILocationService _locationService;
         private readonly IYelpService _yelpService;
-        public LocationsController(ILocationService locationService, IYelpService yelpService)
+        private readonly IVendorService _vendorService;
+        public LocationsController(ILocationService locationService, IYelpService yelpService, IVendorService vendorService)
         {
             _locationService = locationService;
             _yelpService = yelpService;
+            _vendorService = vendorService;
         }
 
         /// <summary>
@@ -121,8 +124,11 @@ namespace Poppin.Controllers
 								public async Task IncrementCrowd(string locationId)
         {
             var location = await _locationService.Get(locationId);
-            location.CrowdSize++;
-            await _locationService.Update(location);
+            if (await UserHasLocationPermissions(location, HttpContext.GetUserId()))
+            {
+                location.CrowdSize++;
+                await _locationService.Update(location);
+            }
         }
 
         // GET: api/Locations/decrementCrowd/5
@@ -130,9 +136,22 @@ namespace Poppin.Controllers
 								[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
 								public async Task DecrementCrowd(string locationId)
         {
-            var location = await _locationService.Get(locationId);
-            location.CrowdSize--;
-            await _locationService.Update(location);
+            var location = await _locationService.Get(locationId); ;
+            if (await UserHasLocationPermissions(location, HttpContext.GetUserId()))
+            {
+                location.CrowdSize--;
+                await _locationService.Update(location);
+            }
+        }
+        private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)
+        {
+            var vendor = await _vendorService.GetVendorById(loc.VendorId);
+
+            if (vendor != null)
+            {
+                return vendor.MemberIds.Contains(userId);
+            }
+            return false;
         }
     }
 }

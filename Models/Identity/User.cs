@@ -9,5 +9,7 @@ namespace Poppin.Models.Identity
 				public class User : IdentityUser
     {
         public string Role { get; set; }
+
+        public virtual Role RoleEntity { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 
 namespace Poppin.Controllers
@@ -35,7 +36,7 @@ namespace Poppin.Controllers
                 );
             }
 
-            var registrationResult = await _identityService.RegisterAsync(request.Email, request.Password);
+            var registrationResult = await _identityService.RegisterAsync(request.Email, request.Password, request.Password2);
 
             if (!registrationResult.Success)
             {
@@ -77,11 +78,11 @@ namespace Poppin.Controllers
             });
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("me")]
         public async Task<IActionResult> GetUser()
 								{
-            var userResult = await _identityService.GetUser("kjhjk");
+            var userResult = await _identityService.GetUserById(HttpContext.GetUserId());
 
             if (!userResult.Success)
             {

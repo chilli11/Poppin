@@ -9,7 +9,7 @@ namespace Poppin.Models.Identity
     {
         public IEnumerable<string> VendorIds { get; set; }
 
-        public IEnumerable<Vendor> Vendors
+        public virtual IEnumerable<Vendor> Vendors
         {
             get
             {
@@ -20,7 +20,7 @@ namespace Poppin.Models.Identity
         {
             get
             {
-                return Vendors.SelectMany(v => v.Affiliations);
+                return Vendors.SelectMany(v => v.Locations);
             }
         }
     }

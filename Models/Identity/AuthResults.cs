@@ -23,4 +23,11 @@ namespace Poppin.Models.Identity
 								public bool Success { get; set; }
 								public IEnumerable<string> Errors { get; set; }
 				}
+
+				public class UserListResult
+				{
+								public IEnumerable<User> Users { get; set; }
+								public bool Success { get; set; }
+								public IEnumerable<string> Errors { get; set; }
+				}
 }

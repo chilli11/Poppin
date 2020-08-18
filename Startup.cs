@@ -74,6 +74,7 @@ namespace Poppin
 																sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
 												services.AddSingleton<ILocationService, LocationService>();
+												services.AddSingleton<IVendorService, VendorService>();
 												services.AddHttpClient<IYelpService, YelpService>();
 
 												services.AddControllersWithViews();
