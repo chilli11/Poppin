@@ -1,4 +1,5 @@
-﻿using Poppin.Interfaces;
+﻿using Microsoft.AspNetCore.Identity;
+using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using System;
 using System.Collections.Generic;
@@ -7,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models.Identity
 {
-				public class UserProfile : ProfileEntity
+				public class PoppinUser : ProfileEntity
     {
+        public PoppinUser(IdentityUser user)
+								{
+            UserId = user.Id;
+            Username = user.UserName;
+								}
+
         public IEnumerable<string> VendorIds { get; set; }
 
         public async Task<List<Vendor>> GetVendors(IVendorService vs)

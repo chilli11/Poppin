@@ -19,13 +19,13 @@ namespace Poppin.Controllers
 				{
 								private readonly IVendorService _vendorService;
         private readonly ILocationService _locationService;
-        private readonly IIdentityService _identityService;
+        private readonly IUserService _userService;
 
-								public VendorController(IVendorService vendorService, ILocationService locationService, IIdentityService identityService)
+								public VendorController(IVendorService vendorService, ILocationService locationService, IUserService userService)
 								{
 												_vendorService = vendorService;
 												_locationService = locationService;
-												_identityService = identityService;
+												_userService = userService;
 								}
 
 								// GET: api/Vendor/5
@@ -47,7 +47,7 @@ namespace Poppin.Controllers
 												{
 																Vendor = vendor,
 																Locations = vendor.GetLocations(_locationService),
-																Members = vendor.GetMembers(_identityService)
+																Members = vendor.GetMembers(_userService)
 												};
 												return Ok(vResult);
 								}

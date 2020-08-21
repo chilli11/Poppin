@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
@@ -25,9 +26,6 @@ namespace Poppin.Models.BusinessEntities
 
 								public Vendor() { }
 
-								[BsonId]
-								[BsonRepresentation(BsonType.ObjectId)]
-								public string Id { get; set; }
 								public string OrganizationName { get; set; }
 								public string OrganizationContactName { get; set; }
 								public string OrganizationContactEmail { get; set; }
@@ -42,9 +40,9 @@ namespace Poppin.Models.BusinessEntities
 												return locationsService.GetMany(LocationIds).Result;
 								}
 
-								public IEnumerable<User> GetMembers(IIdentityService identityService)
+								public IEnumerable<PoppinUser> GetMembers(IUserService userService)
 								{
-												return identityService.GetUsersById(MemberIds).Result.Users;
+												return userService.GetUsersById(MemberIds).Result;
 								}
 				}
 }

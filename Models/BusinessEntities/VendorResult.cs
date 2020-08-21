@@ -1,4 +1,5 @@
-﻿using Poppin.Models.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Poppin.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,6 @@ namespace Poppin.Models.BusinessEntities
 				{
 								public Vendor Vendor { get; set; }
 								public IEnumerable<PoppinLocation> Locations { get; set; }
-								public IEnumerable<User> Members { get; set; }
+								public IEnumerable<PoppinUser> Members { get; set; }
 				}
 }
