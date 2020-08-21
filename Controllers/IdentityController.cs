@@ -18,10 +18,12 @@ namespace Poppin.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public IdentityController(IIdentityService idService)
+        public IdentityController(IIdentityService idService, IHttpContextAccessor httpContextAccessor)
         {
             _identityService = idService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpPost("register")]
@@ -78,11 +80,11 @@ namespace Poppin.Controllers
             });
         }
 
-        //[Authorize]
-        [HttpPost("me")]
+								[Authorize]
+								[HttpPost("me")]
         public async Task<IActionResult> GetUser()
 								{
-            var userResult = await _identityService.GetUserById(HttpContext.GetUserId());
+            var userResult = await _identityService.GetUserById(GetUserId());
 
             if (!userResult.Success)
             {
@@ -96,5 +98,14 @@ namespace Poppin.Controllers
                 User = userResult.User
             });
 								}
+        private string GetUserId()
+        {
+            if (_httpContextAccessor.HttpContext.User == null)
+            {
+                return string.Empty;
+            }
+
+            return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+        }
     }
 }

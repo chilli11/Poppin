@@ -1,8 +1,4 @@
-﻿using Poppin.Models.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Poppin.Contracts.Responses
 {
@@ -13,6 +9,6 @@ namespace Poppin.Contracts.Responses
 
 				public class UserSuccessResponse
 				{
-								public User User { get; set; }
+								public IdentityUser User { get; set; }
 				}
 }

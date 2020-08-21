@@ -20,9 +20,9 @@ namespace Poppin.Services
 				public class IdentityService : IIdentityService
 				{
 								private readonly JwtSettings _jwtSettings;
-								private readonly UserManager<User> _userManager;
+								private readonly UserManager<IdentityUser> _userManager;
 
-								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings)
+								public IdentityService(UserManager<IdentityUser> userMgr, JwtSettings jwtSettings)
 								{
 												_jwtSettings = jwtSettings;
 												_userManager = userMgr;
@@ -50,11 +50,10 @@ namespace Poppin.Services
 																};
 												}
 
-												var newUser = new User
+												var newUser = new IdentityUser
 												{
 																Email = email,
-																UserName = email,
-																Role = RoleTypes.Admin
+																UserName = email
 												};
 												var createdUser = await _userManager.CreateAsync(newUser, password);
 
@@ -115,7 +114,7 @@ namespace Poppin.Services
 
 								public async Task<UserListResult> GetUsersById(IEnumerable<string> ids)
 								{
-												var list = new List<User>();
+												var list = new List<IdentityUser>();
 												foreach (var id in ids)
 												{
 																var user = await _userManager.FindByIdAsync(id);

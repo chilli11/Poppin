@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,7 +35,7 @@ namespace Poppin
 								{
 												services.AddDbContext<ApplicationDbContext>(options =>
 																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-												services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+												services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
 																.AddEntityFrameworkStores<ApplicationDbContext>();
 												//services.AddIdentityServer()
 												//				.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
@@ -75,6 +76,8 @@ namespace Poppin
 
 												services.AddSingleton<ILocationService, LocationService>();
 												services.AddSingleton<IVendorService, VendorService>();
+												services.AddSingleton<IUserService, UserService>();
+												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 												services.AddHttpClient<IYelpService, YelpService>();
 
 												services.AddControllersWithViews();

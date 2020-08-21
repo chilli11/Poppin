@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,14 +20,14 @@ namespace Poppin.Models.Identity
 
 				public class UserDataResult
 				{
-								public User User { get; set; }
+								public IdentityUser User { get; set; }
 								public bool Success { get; set; }
 								public IEnumerable<string> Errors { get; set; }
 				}
 
 				public class UserListResult
 				{
-								public IEnumerable<User> Users { get; set; }
+								public IEnumerable<IdentityUser> Users { get; set; }
 								public bool Success { get; set; }
 								public IEnumerable<string> Errors { get; set; }
 				}
