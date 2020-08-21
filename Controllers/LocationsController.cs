@@ -100,6 +100,7 @@ namespace Poppin.Controllers
 
         // POST: api/Locations
         [HttpPost]
+        [Authorize]
         // [AuthorizeRoles()]
         public async Task<IActionResult> Post(PoppinLocationRequest _location)
         {
@@ -117,6 +118,7 @@ namespace Poppin.Controllers
 
         // PUT: api/Locations/
         [HttpPut]
+        [Authorize]
         // [AuthorizeRoles()]
         public async Task<IActionResult> Put(PoppinLocationRequest _location)
         {
@@ -140,8 +142,9 @@ namespace Poppin.Controllers
 
         // PUT: api/Locations/5
         [HttpPut("{locationId}")]
-								[AuthorizeRoles()]
-								public async Task<IActionResult> Put(string locationId, PoppinLocationRequest _location)
+        [Authorize]
+        //[AuthorizeRoles()]
+        public async Task<IActionResult> Put(string locationId, PoppinLocationRequest _location)
         {
             var location = new PoppinLocation(_location);
             try
@@ -163,13 +166,15 @@ namespace Poppin.Controllers
 
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]
-								[AuthorizeRoles()]
+        [Authorize]
+								//[AuthorizeRoles()]
 								public Task Delete(string locationId) => _locationService.Delete(locationId);
 
         // GET: api/Locations/incrementCrowd/5
         [HttpGet("incrementCrowd/{locationId}")]
-								//[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
-								public async Task<IActionResult> IncrementCrowd(string locationId)
+        [Authorize]
+        //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
+        public async Task<IActionResult> IncrementCrowd(string locationId)
         {
             var location = await _locationService.Get(locationId);
             var errors = new List<string>();
@@ -198,8 +203,9 @@ namespace Poppin.Controllers
 
         // GET: api/Locations/decrementCrowd/5
         [HttpGet("decrementCrowd/{locationId}")]
-								//[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
-								public async Task<IActionResult> DecrementCrowd(string locationId)
+        [Authorize]
+        //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
+        public async Task<IActionResult> DecrementCrowd(string locationId)
         {
             var location = await _locationService.Get(locationId);
             var errors = new List<string>();
