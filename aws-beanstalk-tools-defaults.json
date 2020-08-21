@@ -15,5 +15,5 @@
     "key-pair"         : "",
     "iis-website"      : "Default Web Site",
     "app-path"         : "/",
-    "enable-xray"      : false
+    "enable-xray"      : true
 }
