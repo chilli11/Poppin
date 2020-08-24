@@ -20,7 +20,12 @@ namespace Poppin.Models.Tracking
 
 				public class UserLog
 				{
+								public UserLog()
+								{
+												Date = DateTime.Today.ToString();
+								}
 								public string UserId { get; set; }
+								public string Date { get; set; }
 								public IEnumerable<LogEntry> Entries { get; set; }
 				}
 

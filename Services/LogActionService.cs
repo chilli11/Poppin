@@ -29,7 +29,12 @@ namespace Poppin.Services
 																Action = logAction
 												};
 
-												var log = _userLogs.Find(l => l.UserId == userId).FirstOrDefault();
+												if (userId == string.Empty)
+												{
+																userId = "anon";
+												}
+
+												var log = _userLogs.Find(l => l.UserId == userId && l.Date == DateTime.Today.ToString()).FirstOrDefault();
 												if (log == null)
 												{
 																log = new UserLog()
