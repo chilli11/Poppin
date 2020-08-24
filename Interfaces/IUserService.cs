@@ -14,5 +14,10 @@ namespace Poppin.Interfaces
 								public Task UpdateUser(PoppinUser poppinUser);
 								public Task UpdateUser(string poppinUserId, PoppinUser poppinUser);
 								public Task<PoppinUser> CheckExists(PoppinUser poppinUser);
+
+								public Task AddFavorite(string userId, string locationId);
+								public Task RemoveFavorite(string userId, string locationId);
+								public Task HideLocation(string userId, string locationId);
+								public Task UnhideLocation(string userId, string locationId);
 				}
 }

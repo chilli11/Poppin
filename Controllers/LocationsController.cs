@@ -12,6 +12,7 @@ using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.Identity;
+using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
 using Poppin.Services;
 
@@ -59,6 +60,13 @@ namespace Poppin.Controllers
             {
                 location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
             }
+
+            var action = new BasicLocationAction()
+            {
+                LocationId = location.Id
+            };
+            _logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.ViewLocation, action);
+
             return Ok(location);
         }
 
@@ -79,6 +87,14 @@ namespace Poppin.Controllers
                 {
                     locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
                 }
+
+                var action = new SearchAction()
+                {
+                    SearchTerm = searchParams.term,
+                    SearchLocation = searchParams.location,
+                    SearchCategories = searchParams.categories
+                };
+                _logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.Search, action);
 
                 return Ok(new PoppinSearchResponse()
                 {
