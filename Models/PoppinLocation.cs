@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Poppin.Contracts.Requests;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,13 @@ namespace Poppin.Models
 				{
 								public PoppinLocation() { }
 
-								public PoppinLocation(PoppinLocationDTO v)
+								public PoppinLocation(PoppinLocationRequest v)
 								{
 												Id = v.Id;
 												Name = v.Name;
 												YelpId = v.YelpId;
 												Phone = v.Phone;
 												Address = v.Address;
-												Categories = v.Categories.ToList();
 												Capacity = v.Capacity;
 												CrowdSize = v.CrowdSize;
 												Hours = v.Hours;
@@ -31,7 +31,6 @@ namespace Poppin.Models
 												Name = v.Name;
 												Phone = v.Phone;
 												Address = new Address(v.Location, v.Coordinates);
-												Categories = v.Categories.Select(c => c.Alias).ToList();
 												Hours = v.Hours.FirstOrDefault().Open.Select(h => new HourSet(h)).ToList();
 												YelpDetails = v;
 								}
@@ -40,12 +39,13 @@ namespace Poppin.Models
 								[BsonRepresentation(BsonType.ObjectId)]
 								public string Id { get; set; }
 								public string YelpId { get; set; }
+								public string VendorId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public Address Address { get; set; }
-								public IList<string> Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
+								public string MenuUrl { get; set; }
 								public IList<HourSet> Hours { get; set; }
 
 								[BsonDateTimeOptions]
@@ -60,20 +60,5 @@ namespace Poppin.Models
 								}
 
 								public YelpBusiness YelpDetails { get; set; }
-				}
-
-				public class PoppinLocationDTO
-				{
-								public PoppinLocationDTO() { }
-
-								public string Id { get; set; }
-								public string YelpId { get; set; }
-								public string Name { get; set; }
-								public string Phone { get; set; }
-								public Address Address { get; set; }
-								public string[] Categories { get; set; }
-								public int Capacity { get; set; }
-								public int CrowdSize { get; set; }
-								public IList<HourSet> Hours { get; set; }
 				}
 }

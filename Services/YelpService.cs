@@ -8,7 +8,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Web.Http;
 
 namespace Poppin.Services
 {
@@ -87,10 +86,10 @@ namespace Poppin.Services
 												return output;
 								}
 
-								public async Task<YelpBusinessSearchResponse> GetBusinessSearch(IYelpSearchParams searchParams)
+								public async Task<YelpBusinessSearchResponse> GetBusinessSearch(YelpBusinessSearchParams searchParams)
 								{
-
-												var endpoint = QueryHelpers.AddQueryString("/businesses/search", searchParams.AsStringDictionary());
+												var paramDictionary = searchParams.AsStringDictionary();
+												var endpoint = QueryHelpers.AddQueryString("/businesses/search", paramDictionary);
 												var request = new HttpRequestMessage(HttpMethod.Get, _apiEndpoint + endpoint);
 
 												var response = await _httpClient.SendAsync(request);
@@ -110,7 +109,7 @@ namespace Poppin.Services
 												return output;
 								}
 
-								public async Task<YelpBusinessSearchResponse> GetBusinessMatch(IYelpSearchParams searchParams)
+								public async Task<YelpBusinessSearchResponse> GetBusinessMatch(YelpBusinessMatchParams searchParams)
 								{
 
 												var endpoint = QueryHelpers.AddQueryString("/businesses/matches", searchParams.AsStringDictionary());

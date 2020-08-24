@@ -11,7 +11,7 @@ namespace Poppin.Interfaces
 								public Task<List<YelpCategory>> GetCategory();
 								public Task<YelpCategory> GetCategory(string alias);
 								public Task<YelpBusiness> GetBusiness(string id);
-								public Task<YelpBusinessSearchResponse> GetBusinessSearch(IYelpSearchParams searchParams);
-								public Task<YelpBusinessSearchResponse> GetBusinessMatch(IYelpSearchParams searchParams);
+								public Task<YelpBusinessSearchResponse> GetBusinessSearch(YelpBusinessSearchParams searchParams);
+								public Task<YelpBusinessSearchResponse> GetBusinessMatch(YelpBusinessMatchParams searchParams);
 				}
 }

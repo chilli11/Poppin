@@ -40,6 +40,20 @@ const HttpResources = {
 	getYelpBusinessSearch: {
 		url: 'yelp/businesses',
 		method: POST
+	},
+
+	/* ===== ACCOUNT =====*/
+	registerAccount: {
+		url: 'identity/register',
+		method: POST
+	},
+	login: {
+		url: 'identity/login',
+		method: POST
+	},
+	myAccount: {
+		url: 'identity/me',
+		method: POST
 	}
 };
 

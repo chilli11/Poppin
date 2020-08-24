@@ -6,17 +6,13 @@ using System.Threading.Tasks;
 using Poppin.Models;
 using Poppin.Interfaces;
 using Poppin.Models.Yelp;
+using Poppin.Configuration;
 
 namespace Poppin.Services
 {
 				public class LocationService : ILocationService
 				{
 								private readonly IMongoCollection<PoppinLocation> _locations;
-								private PoppinLocation yelpToPoppinFilter(YelpBusiness y)
-								{
-												var loc = _locations.Find(l => y.Id == l.YelpId).FirstOrDefault();
-												return loc;
-								}
 
 								public LocationService(IMongoDBSettings settings)
 								{
@@ -26,18 +22,22 @@ namespace Poppin.Services
 												_locations = database.GetCollection<PoppinLocation>("Locations");
 								}
 
-								public PoppinLocation Get(string id) => _locations.Find(loc => loc.Id == id).First();
-								public PoppinLocation CheckExists(PoppinLocation location)
+								public Task<PoppinLocation> Get(string id) => _locations.FindAsync(loc => loc.Id == id).Result.FirstAsync();
+								public Task<List<PoppinLocation>> GetMany(IEnumerable<string> ids) => _locations.FindAsync(loc => ids.Contains(loc.Id))
+												.Result.ToListAsync();
+								public Task<PoppinLocation> CheckExists(PoppinLocation location)
 								{
-												return _locations.Find(l => l.Address.Line1 == location.Address.Line1 && l.Name == location.Name).FirstOrDefault();
+												return _locations.FindAsync(l => l.Address.Line1 == location.Address.Line1 && l.Name == location.Name)
+																.Result.FirstOrDefaultAsync();
 								}
 
-								public List<PoppinLocation> GetByYelpList(List<YelpBusiness> list) =>
-												list.Select(yelpToPoppinFilter).Where(l => l != null).ToList();
-								public List<PoppinLocation> GetByCity(string city) =>
-												_locations.Find(loc => loc.Address.City.ToLower() == city.ToLower()).ToList();
-								public List<PoppinLocation> GetByZip(int zipCode) =>
-												_locations.Find(loc => loc.Address.ZipCode == zipCode).ToList();
+								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<string> ids)
+								{
+												var locs = _locations.FindAsync(loc => ids.Contains(loc.YelpId));
+												var res = locs.Result;
+												var exitList = res.ToListAsync();
+												return exitList;
+								}
 
 								public Task Add(PoppinLocation location)
 								{
@@ -55,14 +55,12 @@ namespace Poppin.Services
 												location.YelpDetails = null;
 												return _locations.ReplaceOneAsync(loc => loc.Id == location.Id, location);
 								}
-								public void Delete(PoppinLocation location) => _locations.DeleteOne(loc => loc.Id == location.Id);
-								public void Delete(string id) => _locations.DeleteOne(loc => loc.Id == id);
+								public Task Delete(PoppinLocation location) => _locations.DeleteOneAsync(loc => loc.Id == location.Id);
+								public Task Delete(string id) => _locations.DeleteOneAsync(loc => loc.Id == id);
 				}
 
 				public static class LocationExtensions
 				{
-								public static List<PoppinLocation> FilterByCategory(this List<PoppinLocation> _list, string category) =>
-												_list.FindAll(loc => loc.Categories.Contains(category));
 								public static List<PoppinLocation> FilterByCrowdOver(this List<PoppinLocation> _list, double threshhold) =>
 												_list.FindAll(loc => loc.CrowdSize / loc.Capacity > threshhold);
 								public static List<PoppinLocation> FilterByCrowdUnder(this List<PoppinLocation> _list, double threshhold) =>

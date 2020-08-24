@@ -6,7 +6,7 @@ module.exports = function(environment) {
     podModulePrefix: 'poppin-ui/pods',
     environment,
 		rootURL: '/',
-		apiURL: 'https://localhost:44367/api/',
+		apiURL: '/api/',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
@@ -30,7 +30,9 @@ module.exports = function(environment) {
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
-    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+		// ENV.APP.LOG_VIEW_LOOKUPS = true;
+		
+		ENV.apiURL = 'https://localhost:44367/api/';
   }
 
   if (environment === 'test') {

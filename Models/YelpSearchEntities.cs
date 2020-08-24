@@ -27,7 +27,6 @@ namespace Poppin.Models.Yelp
 								{
 												term = l.Name;
 												location = l.Address.Line1 + ", " + l.Address.City;
-												categories = string.Join(',', l.Categories);
 												latitude = l.Address.Coordinates.Latitude.ToString();
 												longitude = l.Address.Coordinates.Longitude.ToString();
 								}

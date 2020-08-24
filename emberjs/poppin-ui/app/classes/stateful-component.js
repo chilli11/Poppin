@@ -3,7 +3,7 @@ import { Promise } from 'rsvp';
 import { tracked } from '@glimmer/tracking';
 
 export const transitionsErrorMessage = 'transitions is non an object';
-export const currentStateErrorMessage = 'currentState is not a string';
+export const currentStateErrorMessage = 'machineState is not a string';
 
 export default class extends Component {
 	scrollToTop = false;
@@ -60,7 +60,7 @@ export default class extends Component {
 				throw `${machineState} machineState is not defined in transitions list`;
 			}
 
-			const prevAction = callStack[callStack.length - 1].action;
+			const prevAction = callStack.length > 0 ? callStack[callStack.length - 1].action : null;
 			callStack.push({ machineState, action, data, namespace });
 
 			const transtionState = trasnsitionList[action];

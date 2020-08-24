@@ -38,7 +38,9 @@ namespace Poppin
         public static IDictionary<string, string> AsStringDictionary(this object source, BindingFlags bindingAttr = BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance)
         {
             var output = new Dictionary<string, string>();
-            foreach (var propInfo in source.GetType().GetProperties(bindingAttr))
+            var sType = source.GetType();
+            var props = sType.GetProperties(bindingAttr);
+            foreach (var propInfo in props)
             {
                 var val = propInfo.GetValue(source);
                 if (val != null)
