@@ -100,12 +100,11 @@ namespace Poppin.Controllers
 								}
         private string GetUserId()
         {
-            if (_httpContextAccessor.HttpContext.User == null)
+            if (_httpContextAccessor.HttpContext.User.Claims.Any())
             {
-                return string.Empty;
+                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
             }
-
-            return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+            return string.Empty;
         }
     }
 }

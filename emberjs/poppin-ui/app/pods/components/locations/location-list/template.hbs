@@ -1,6 +1,6 @@
 {{#each @locations.businesses as |loc|}}
 	<div class="card">
-		<div class="card-body" {{on "click" (fn @clickAction loc)}}>
+		<div class="card-body" role="button" {{on "click" (fn @clickAction loc)}}>
 			<span class="strong">{{loc.name}}</span> //
 			<span>{{loc.categories}}</span>
 			<hr>

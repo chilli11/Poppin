@@ -10,12 +10,11 @@ namespace Poppin.Extensions
 				{
 								public static string GetUserId(this HttpContext httpContext)
 								{
-												if (httpContext.User == null)
+												if (httpContext.User.Claims.Any())
 												{
-																return string.Empty;
+																return httpContext.User.Claims.Single(u => u.Type == "Id").Value;
 												}
-
-												return httpContext.User.Claims.Single(u => u.Type == "Id").Value;
+												return string.Empty;
 								}
 
 								public static string GetUserRole(this HttpContext httpContext)
