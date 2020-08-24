@@ -24,11 +24,14 @@ namespace Poppin.Controllers
         private readonly ILocationService _locationService;
         private readonly IYelpService _yelpService;
         private readonly IVendorService _vendorService;
-        public LocationsController(ILocationService locationService, IYelpService yelpService, IVendorService vendorService)
+        private readonly ILogActionService _logActionService;
+
+        public LocationsController(ILocationService locationService, IYelpService yelpService, IVendorService vendorService, ILogActionService logActionService)
         {
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
+            _logActionService = logActionService;
         }
 
         /// <summary>
@@ -56,7 +59,6 @@ namespace Poppin.Controllers
             {
                 location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
             }
-
             return Ok(location);
         }
 

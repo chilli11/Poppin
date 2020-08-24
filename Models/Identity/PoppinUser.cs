@@ -16,6 +16,19 @@ namespace Poppin.Models.Identity
             Username = user.UserName;
 								}
 
+        /// <summary>
+        /// LocationIds saved by user
+        /// </summary>
+        public IEnumerable<string> Favorites { get; set; }
+
+        /// <summary>
+        /// LocationIds hidden by user
+        /// </summary>
+        public IEnumerable<string> Hidden { get; set; }
+
+        /// <summary>
+        /// Vendors that the user is a member of
+        /// </summary>
         public IEnumerable<string> VendorIds { get; set; }
 
         public async Task<List<Vendor>> GetVendors(IVendorService vs)
