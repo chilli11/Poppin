@@ -9,8 +9,10 @@ namespace Poppin.Models.Tracking
 				{
 								Search,
 								ViewLocation,
-								SaveLocation,
+								SaveFavorite,
+								RemoveFavorite,
 								HideLocation,
+								UnhideLocation,
 								UpdateProfile,
 								Checkin,
 								GetDirections

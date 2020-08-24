@@ -77,6 +77,7 @@ namespace Poppin
 												services.AddSingleton<ILocationService, LocationService>();
 												services.AddSingleton<IVendorService, VendorService>();
 												services.AddSingleton<IUserService, UserService>();
+												services.AddSingleton<ILogActionService, LogActionService>(); 
 												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 												services.AddHttpClient<IYelpService, YelpService>();
 

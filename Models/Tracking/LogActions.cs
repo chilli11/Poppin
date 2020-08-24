@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models.Tracking
 {
-				public class Search : LogAction
+				public class SearchAction : LogAction
 				{
 								public string SearchTerm { get; set; }
 								public string SearchLocation { get; set; }
@@ -17,33 +17,18 @@ namespace Poppin.Models.Tracking
 								public string SearchCategories { get; set; }
 				}
 
-				public class ViewLocation : LogAction
+				public class BasicLocationAction : LogAction
 				{
 								public string LocationId { get; set; }
 				}
 
-				public class SaveLocation : LogAction
-				{
-								public string LocationId { get; set; }
-				}
-
-				public class HideLocation : LogAction
-				{
-								public string LocationId { get; set; }
-				}
-
-				public class Checkin : LogAction
-				{
-								public string LocationId { get; set; }
-				}
-
-				public class GetDirections : LogAction
+				public class GetDirectionsAction : LogAction
 				{
 								public string LocationId { get; set; }
 								public Coord StartCoordinates { get; set; }
 				}
 
-				public class UpdateProfile : LogAction
+				public class UpdateProfileAction : LogAction
 				{
 								public string FieldUpdated { get; set; }
 								public string OldValue { get; set; }
