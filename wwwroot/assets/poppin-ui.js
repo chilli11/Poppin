@@ -15,7 +15,7 @@
     }
   });
 });
-;define("poppin-ui/adapters/application", ["exports", "@ember-data/adapter/rest", "fetch"], function (_exports, _rest, _fetch) {
+;define("poppin-ui/adapters/application", ["exports", "@ember-data/adapter/rest", "poppin-ui/config/environment", "fetch"], function (_exports, _rest, _environment, _fetch) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -29,7 +29,7 @@
     constructor(...args) {
       super(...args);
 
-      _defineProperty(this, "host", 'https://localhost:44367');
+      _defineProperty(this, "host", _environment.default.hostURL);
 
       _defineProperty(this, "namespace", 'api');
     }
@@ -3894,8 +3894,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "JyRN25Sa",
-    "block": "{\"symbols\":[\"loc\",\"@clickAction\",\"@locations\"],\"statements\":[[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"businesses\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[11,\"div\"],[24,0,\"card-body\"],[4,[38,1],[\"click\",[30,[36,0],[[32,2],[32,1]],null]],null],[12],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[14,0,\"strong\"],[12],[1,[32,1,[\"name\"]]],[13],[2,\" //\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"categories\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,1,[\"address\",\"city\"]]],[2,\", \"],[1,[32,1,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"on\",\"-track-array\",\"each\"]}",
+    "id": "wkQxS2Xy",
+    "block": "{\"symbols\":[\"loc\",\"@clickAction\",\"@locations\"],\"statements\":[[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"businesses\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[11,\"div\"],[24,0,\"card-body\"],[24,\"role\",\"button\"],[4,[38,1],[\"click\",[30,[36,0],[[32,2],[32,1]],null]],null],[12],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[14,0,\"strong\"],[12],[1,[32,1,[\"name\"]]],[13],[2,\" //\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"categories\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,1,[\"address\",\"city\"]]],[2,\", \"],[1,[32,1,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"on\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-list/template.hbs"
     }
@@ -5159,7 +5159,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+bc8d0af8"});
+            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+714f695a"});
           }
         
 //# sourceMappingURL=poppin-ui.map
