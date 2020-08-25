@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Poppin.Models.Identity
+namespace Poppin.Models.BusinessEntities
 {
 				public class ProfileEntity
     {

@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Poppin.Interfaces;
-using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Poppin.Models.BusinessEntities
