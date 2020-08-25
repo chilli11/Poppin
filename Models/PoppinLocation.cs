@@ -1,9 +1,12 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Poppin.Contracts.Requests;
+using Poppin.Interfaces;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +14,7 @@ namespace Poppin.Models
 {
 				public class PoppinLocation
 				{
+
 								public PoppinLocation() { }
 
 								public PoppinLocation(PoppinLocationRequest v)
@@ -39,6 +43,8 @@ namespace Poppin.Models
 								[BsonRepresentation(BsonType.ObjectId)]
 								public string Id { get; set; }
 								public string YelpId { get; set; }
+
+								[ForeignKey("Vendor")]
 								public string VendorId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
@@ -60,5 +66,10 @@ namespace Poppin.Models
 								}
 
 								public YelpBusiness YelpDetails { get; set; }
+
+								public async Task<Vendor> GetVendor(IVendorService vs)
+								{
+												return await vs.GetVendorById(VendorId);
+								}
 				}
 }

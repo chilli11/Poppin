@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Poppin.Interfaces;
-using Poppin.Models.BusinessEntities;
+using Poppin.Models.Identity;
+using Poppin.Models.Tracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Poppin.Models.Identity
+namespace Poppin.Models.BusinessEntities
 {
 				public class PoppinUser : ProfileEntity
     {
@@ -32,8 +33,20 @@ namespace Poppin.Models.Identity
         public IEnumerable<string> VendorIds { get; set; }
 
         public async Task<List<Vendor>> GetVendors(IVendorService vs)
-								{
+        {
             return await vs.GetVendorsByIds(VendorIds);
-								}
+        }
+        public async Task<List<PoppinLocation>> GetFavorites(ILocationService ls)
+        {
+            return await ls.GetMany(Favorites);
+        }
+        public async Task<List<PoppinLocation>> GetHidden(ILocationService ls)
+        {
+            return await ls.GetMany(Hidden);
+        }
+        public async Task<IEnumerable<UserLog>> GetuserActivity(ILogActionService las)
+        {
+            return await las.GetUserActivity(Id);
+        }
     }
 }

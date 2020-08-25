@@ -46,5 +46,10 @@ namespace Poppin.Services
 
 												log.Entries.Append(action);
 								}
+
+								public Task<List<UserLog>> GetUserActivity(string userId)
+								{
+												return _userLogs.FindAsync(ul => ul.UserId == userId).Result.ToListAsync();
+								}
 				}
 }
