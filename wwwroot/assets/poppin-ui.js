@@ -3619,6 +3619,7 @@
         this.city = loc.address.city;
         this.state = loc.address.state;
         this.zip = loc.address.zipCode;
+        this.coordinates = loc.address.coordinates;
         this.capacity = loc.capacity;
         this.hours = loc.hours || _lodash.default.merge(defHours);
       }
@@ -3632,7 +3633,7 @@
       this.city = loc.location.city;
       this.state = loc.location.state;
       this.zip = loc.location.zip || this.zip;
-      this.coordinates = loc.location.coordinates;
+      this.coordinates = loc.coordinates;
       this.capacity = 0;
 
       const _hours = _lodash.default.merge(defHours);
@@ -5159,7 +5160,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+714f695a"});
+            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+509894ea"});
           }
         
 //# sourceMappingURL=poppin-ui.map

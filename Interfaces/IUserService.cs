@@ -1,7 +1,5 @@
-﻿using Poppin.Models.Identity;
-using System;
+﻿using Poppin.Models.BusinessEntities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Poppin.Interfaces

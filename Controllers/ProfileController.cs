@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
-using Poppin.Models.Identity;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Tracking;
 using Segment;
 
@@ -25,13 +25,20 @@ namespace Poppin.Controllers
 								private readonly IUserService _userService;
 								private readonly IIdentityService _identityService;
 								private readonly ILogActionService _logActionService;
+								private readonly ILocationService _locationService;
 
-								public ProfileController(IIdentityService identityService, IUserService userService, IHttpContextAccessor httpContextAccessor, ILogActionService logActionService)
+								public ProfileController(
+												IIdentityService identityService,
+												IUserService userService,
+												IHttpContextAccessor httpContextAccessor,
+												ILogActionService logActionService,
+												ILocationService locationService)
 								{
 												_identityService = identityService;
 												_userService = userService;
 												_httpContextAccessor = httpContextAccessor;
 												_logActionService = logActionService;
+												_locationService = locationService;
 								}
 
 
@@ -56,8 +63,9 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
+                        
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
-												return Ok(user);
+												return Ok(GetPoppinUserResult(user));
 								}
 
 								// GET api/<ProfileController>/5
@@ -82,8 +90,9 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
+                        
 												Analytics.Client.Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
-												return Ok(user);
+												return Ok(GetPoppinUserResult(user));
 								}
 
 								/// <summary>
@@ -207,6 +216,16 @@ namespace Poppin.Controllers
 																return id;
 												}
 												return string.Empty;
+								}
+
+								private PoppinUserResult GetPoppinUserResult(PoppinUser user)
+								{
+												return new PoppinUserResult()
+												{
+																User = user,
+																Favorites = user.GetFavorites(_locationService).Result,
+																Hidden = user.GetHidden(_locationService).Result,
+												};
 								}
 				}
 }
