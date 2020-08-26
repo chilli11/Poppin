@@ -16,6 +16,8 @@ namespace Poppin.Models.Tracking
 												public const string Register = "Register";
 												public const string Login = "Login";
 												public const string UpdateProfile = "UpdateProfile";
+												public const string ViewUserProfile = "ViewUserProfile";
+
 												public const string AddFavorite = "AddFavorite";
 												public const string RemoveFavorite = "RemoveFavorite";
 												public const string HideLocation = "HideLocation";

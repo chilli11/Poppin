@@ -39,7 +39,7 @@ namespace Poppin.Controllers
 								[HttpGet]
 								public async Task<IActionResult> Get()
 								{
-												var id = GetUserId();
+												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 												if (id == null)
 												{
 																var errors = new List<string>();
@@ -56,6 +56,7 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
 												return Ok(user);
 								}
 
@@ -81,6 +82,7 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
+												Analytics.Client.Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
 												return Ok(user);
 								}
 
@@ -105,7 +107,7 @@ namespace Poppin.Controllers
 								}
 
 								/// <summary>
-								/// Add a location to the user's favorites list
+								/// Remove a location from the user's favorites list
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/remove/{locationid}")]
@@ -125,7 +127,7 @@ namespace Poppin.Controllers
 								}
 
 								/// <summary>
-								/// Add a location to the user's favorites list
+								/// Hide a location from the user's search results
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("hide/{locationid}")]
@@ -145,7 +147,7 @@ namespace Poppin.Controllers
 								}
 
 								/// <summary>
-								/// Add a location to the user's favorites list
+								/// Unhide a location from the user's search results
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("unhide/{locationid}")]
