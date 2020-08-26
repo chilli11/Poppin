@@ -129,6 +129,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.city = loc.address.city;
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
+			this.coordinates = loc.address.coordinates;
 			this.capacity = loc.capacity;
 			this.hours = loc.hours || _.merge(defHours);
 		}
@@ -142,7 +143,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = loc.location.city;
 		this.state = loc.location.state;
 		this.zip = loc.location.zip || this.zip;
-		this.coordinates = loc.location.coordinates;
+		this.coordinates = loc.coordinates;
 		this.capacity = 0;
 		
 		const _hours = _.merge(defHours);
