@@ -89,15 +89,19 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/add/{locationid}")]
-								public void AddFavorite(string locationId)
+								public IActionResult AddFavorite(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
 												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.SaveFavorite, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+
+												return Ok(_userService.AddFavorite(id, locationId));
 								}
 
 								/// <summary>
@@ -105,15 +109,19 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/remove/{locationid}")]
-								public void RemoveFavorite(string locationId)
+								public IActionResult RemoveFavorite(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
 												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.RemoveFavorite, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.RemoveFavorite);
+
+												return Ok(_userService.RemoveFavorite(id, locationId));
 								}
 
 								/// <summary>
@@ -121,15 +129,19 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("hide/{locationid}")]
-								public void HideLocation(string locationId)
+								public IActionResult HideLocation(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.HideLocation);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
 												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.HideLocation, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.HideLocation);
+
+												return Ok(_userService.HideLocation(id, locationId));
 								}
 
 								/// <summary>
@@ -137,15 +149,19 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("unhide/{locationid}")]
-								public void UnhideLocation(string locationId)
+								public IActionResult UnhideLocation(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.UnhideLocation);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
 												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.UnhideLocation, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UnhideLocation);
+
+												return Ok(_userService.UnhideLocation(id, locationId));
 								}
 
 								// PUT api/<ProfileController>/5
@@ -154,8 +170,8 @@ namespace Poppin.Controllers
 								{
 
 												// Segment.io Analytics
-												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.Login);
+												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
 
 								}
 
@@ -165,15 +181,28 @@ namespace Poppin.Controllers
 								{
 
 												// Segment.io Analytics
-												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.Login);
+												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
 								}
 
 								private string GetUserId()
 								{
 												if (_httpContextAccessor.HttpContext.User.Claims.Any())
 												{
-																return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
+																return id;
+												}
+												return string.Empty;
+								}
+
+								private string GetUserId(string action)
+								{
+												if (_httpContextAccessor.HttpContext.User.Claims.Any())
+												{
+																var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
+																return id;
 												}
 												return string.Empty;
 								}
