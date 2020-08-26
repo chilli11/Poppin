@@ -10,6 +10,7 @@ using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
+using Segment;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -149,14 +150,23 @@ namespace Poppin.Controllers
 
 								// PUT api/<ProfileController>/5
 								[HttpPut("{id}")]
-								public void Put(int id, [FromBody] string value)
+								public void Put(string id, [FromBody] string value)
 								{
+
+												// Segment.io Analytics
+												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.Login);
+
 								}
 
 								// DELETE api/<ProfileController>/5
 								[HttpDelete("{id}")]
-								public void Delete(int id)
+								public void Delete(string id)
 								{
+
+												// Segment.io Analytics
+												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.Login);
 								}
 
 								private string GetUserId()

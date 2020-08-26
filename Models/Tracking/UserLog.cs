@@ -33,7 +33,7 @@ namespace Poppin.Models.Tracking
 				{
 								public LogEntry()
 								{
-												Timestamp = DateTime.Now;
+												Timestamp = DateTime.UtcNow;
 								}
 
 								public DateTime Timestamp { get; set; }

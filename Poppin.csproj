@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Analytics" Version="3.0.0" />
     <PackageReference Include="EWSoftware.SHFB" Version="2020.3.6" />
     <PackageReference Include="EWSoftware.SHFB.NETFramework" Version="4.8.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
