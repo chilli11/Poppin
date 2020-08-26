@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
-using Poppin.Models.Identity;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Tracking;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,13 +24,20 @@ namespace Poppin.Controllers
 								private readonly IUserService _userService;
 								private readonly IIdentityService _identityService;
 								private readonly ILogActionService _logActionService;
+								private readonly ILocationService _locationService;
 
-								public ProfileController(IIdentityService identityService, IUserService userService, IHttpContextAccessor httpContextAccessor, ILogActionService logActionService)
+								public ProfileController(
+												IIdentityService identityService,
+												IUserService userService,
+												IHttpContextAccessor httpContextAccessor,
+												ILogActionService logActionService,
+												ILocationService locationService)
 								{
 												_identityService = identityService;
 												_userService = userService;
 												_httpContextAccessor = httpContextAccessor;
 												_logActionService = logActionService;
+												_locationService = locationService;
 								}
 
 
@@ -55,7 +62,7 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
-												return Ok(user);
+												return Ok(GetPoppinUserResult(user));
 								}
 
 								// GET api/<ProfileController>/5
@@ -80,7 +87,7 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
-												return Ok(user);
+												return Ok(GetPoppinUserResult(user));
 								}
 
 								/// <summary>
@@ -147,18 +154,6 @@ namespace Poppin.Controllers
 												_userService.AddFavorite(GetUserId(), locationId);
 								}
 
-								// PUT api/<ProfileController>/5
-								[HttpPut("{id}")]
-								public void Put(int id, [FromBody] string value)
-								{
-								}
-
-								// DELETE api/<ProfileController>/5
-								[HttpDelete("{id}")]
-								public void Delete(int id)
-								{
-								}
-
 								private string GetUserId()
 								{
 												if (_httpContextAccessor.HttpContext.User.Claims.Any())
@@ -166,6 +161,16 @@ namespace Poppin.Controllers
 																return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
 												}
 												return string.Empty;
+								}
+
+								private PoppinUserResult GetPoppinUserResult(PoppinUser user)
+								{
+												return new PoppinUserResult()
+												{
+																User = user,
+																Favorites = user.GetFavorites(_locationService).Result,
+																Hidden = user.GetHidden(_locationService).Result,
+												};
 								}
 				}
 }

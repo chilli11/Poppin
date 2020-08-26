@@ -1,13 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using Poppin.Contracts.Requests;
+﻿using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
-using Poppin.Models.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Poppin.Models.BusinessEntities
 {

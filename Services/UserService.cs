@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 using Poppin.Configuration;
 using Poppin.Interfaces;
-using Poppin.Models.Identity;
+using Poppin.Models.BusinessEntities;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
