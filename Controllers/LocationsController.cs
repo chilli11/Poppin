@@ -22,13 +22,20 @@ namespace Poppin.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILocationService _locationService;
         private readonly IYelpService _yelpService;
         private readonly IVendorService _vendorService;
         private readonly ILogActionService _logActionService;
 
-        public LocationsController(ILocationService locationService, IYelpService yelpService, IVendorService vendorService, ILogActionService logActionService)
+        public LocationsController(
+            IHttpContextAccessor httpContextAccessor,
+            ILocationService locationService,
+            IYelpService yelpService,
+            IVendorService vendorService,
+            ILogActionService logActionService)
         {
+            _httpContextAccessor = httpContextAccessor;
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
@@ -65,7 +72,7 @@ namespace Poppin.Controllers
             {
                 LocationId = location.Id
             };
-            _logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.ViewLocation, action);
+            _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.ViewLocation, action);
 
             return Ok(location);
         }
@@ -94,7 +101,7 @@ namespace Poppin.Controllers
                     SearchLocation = searchParams.location,
                     SearchCategories = searchParams.categories
                 };
-                _logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.Search, action);
+                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.Search, action);
 
                 return Ok(new PoppinSearchResponse()
                 {
@@ -205,7 +212,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            if (await UserHasLocationPermissions(location, HttpContext.GetUserId()))
+            if (await UserHasLocationPermissions(location, GetUserId()))
             {
                 location.CrowdSize++;
                 await _locationService.Update(location);
@@ -235,7 +242,7 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            if (HttpContext.GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, HttpContext.GetUserId()))
+            if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, HttpContext.GetUserId()))
             {
                 location.CrowdSize--;
                 await _locationService.Update(location);
@@ -248,6 +255,25 @@ namespace Poppin.Controllers
                 Errors = errors
             });
         }
+
+        private string GetUserId()
+        {
+            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            {
+                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+            }
+            return string.Empty;
+        }
+
+        private string GetUserRole()
+        {
+            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            {
+                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
+            }
+            return string.Empty;
+        }
+
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)
         {
             var vendor = await _vendorService.GetVendorById(loc.VendorId);

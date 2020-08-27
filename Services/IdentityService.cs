@@ -55,7 +55,8 @@ namespace Poppin.Services
 												var newUser = new User
 												{
 																Email = email,
-																UserName = email
+																UserName = email,
+																Role = RoleTypes.User
 												};
 												var createdUser = await _userManager.CreateAsync(newUser, password);
 
@@ -197,16 +198,16 @@ namespace Poppin.Services
 								{
 												var tokenHandler = new JwtSecurityTokenHandler();
 												var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+												var claims = new Claim[5];
+												claims.Append(new Claim(JwtRegisteredClaimNames.Sub, user.Email));
+												claims.Append(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
+												claims.Append(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+												claims.Append(new Claim("Role", user.Role));
+												claims.Append(new Claim("Id", user.Id));
+
 												var tokenDescriptor = new SecurityTokenDescriptor
 												{
-																Subject = new ClaimsIdentity(new[]
-																{
-																				new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-																				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-																				new Claim(JwtRegisteredClaimNames.Email, user.Email),
-																				new Claim("Role", user.Role),
-																				new Claim("Id", user.Id)
-																}),
+																Subject = new ClaimsIdentity(claims),
 																Expires = DateTime.UtcNow.AddHours(2),
 																SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 												};

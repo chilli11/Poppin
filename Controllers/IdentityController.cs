@@ -74,6 +74,8 @@ namespace Poppin.Controllers
                     Errors = loginResult.Errors
                 });
             }
+
+            SetTokenCookie(loginResult.RefreshToken);
             return Ok(new AuthSuccessResponse
             {
                 Token = loginResult.Token,

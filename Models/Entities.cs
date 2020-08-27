@@ -1,4 +1,5 @@
-﻿using Poppin.Models.Yelp;
+﻿using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,11 +44,27 @@ namespace Poppin.Models
 
 								public double Latitude { get; set; }
 								public double Longitude { get; set; }
+
+								public GeoJsonPoint<GeoJson2DGeographicCoordinates> ToGeoJson()
+								{
+												var lat = Convert.ToDouble(Latitude);
+												var lon = Convert.ToDouble(Longitude);
+												return new GeoJsonPoint<GeoJson2DGeographicCoordinates>(new GeoJson2DGeographicCoordinates(lon, lat));
+								}
 				}
 
 				public class CoordDTO
 				{
 								public string Latitude { get; set; }
 								public string Longitude { get; set; }
+
+								public GeoJsonPoint<GeoJson2DGeographicCoordinates> ToGeoJson()
+								{
+												var lat = Convert.ToDouble(Latitude);
+												var lon = Convert.ToDouble(Longitude);
+												return new GeoJsonPoint<GeoJson2DGeographicCoordinates>(new GeoJson2DGeographicCoordinates(lon, lat));
+								}
 				}
+
+
 }

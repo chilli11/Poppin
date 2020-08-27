@@ -15,6 +15,7 @@ namespace Poppin.Models.Tracking
 								UnhideLocation,
 								UpdateProfile,
 								Checkin,
+								UpdateGeo,
 								GetDirections
 				}
 

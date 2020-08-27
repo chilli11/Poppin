@@ -1,4 +1,5 @@
-﻿using Poppin.Models.Yelp;
+﻿using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace Poppin.Models
 												State = v.State;
 
 												ZipCode = int.Parse(v.ZipCode);
-												Coordinates = c;
+												Geo = c.ToGeoJson();
 								}
 
 								public string Line1 { get; set; }
@@ -35,7 +36,7 @@ namespace Poppin.Models
 								public string City { get; set; }
 								public string State { get; set; }
 								public int? ZipCode { get; set; }
-								public Coord Coordinates { get; set; }
+								public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
 				}
 
 				public class PoppinInsertActionResponse
