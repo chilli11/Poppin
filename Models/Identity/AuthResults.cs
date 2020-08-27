@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Poppin.Models.Identity
 {
 				public class AuthenticationResult
 				{
 								public string Token { get; set; }
+
+								[JsonIgnore] // refresh token is returned in http only cookie
+								public string RefreshToken { get; set; }
 								public bool Success { get; set; }
 								public IEnumerable<string> Errors { get; set; }
 				}
@@ -20,14 +20,14 @@ namespace Poppin.Models.Identity
 
 				public class UserDataResult
 				{
-								public IdentityUser User { get; set; }
+								public User User { get; set; }
 								public bool Success { get; set; }
 								public IEnumerable<string> Errors { get; set; }
 				}
 
 				public class UserListResult
 				{
-								public IEnumerable<IdentityUser> Users { get; set; }
+								public IEnumerable<User> Users { get; set; }
 								public bool Success { get; set; }
 								public IEnumerable<string> Errors { get; set; }
 				}

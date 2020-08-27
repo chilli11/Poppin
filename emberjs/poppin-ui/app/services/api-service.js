@@ -55,6 +55,7 @@ export const paramsToSegments = (httpResource, fetchRequest) => {
  * @prop {Object} resources transformed `HttpResources`
  */
 export default class ApiService extends Service.extend(Evented) {
+	jwt = null;
 
 	/**
 	 * @param {String} url
@@ -88,6 +89,10 @@ export default class ApiService extends Service.extend(Evented) {
 	 * @return {ApiResponse}
 	 */
 	request(options) {
+		if (this.jwt) {
+			options.headers.Authorization = 'Bearer ' + this.jwt;
+		}
+		
 		let fetchRequest = {
 			url: '',
 			body: options.body,
@@ -97,6 +102,7 @@ export default class ApiService extends Service.extend(Evented) {
 				'Content-Type': options.contentType || 'application/json',
 				Accept: 'application/json, text/*, */*',
 			}, options.headers),
+			withCredentials: true,
 			credentials: 'include',
 			mode: 'cors',
 			method: options.resource.method || POST,

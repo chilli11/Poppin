@@ -35,7 +35,7 @@ namespace Poppin
 								{
 												services.AddDbContext<ApplicationDbContext>(options =>
 																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-												services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
 																.AddEntityFrameworkStores<ApplicationDbContext>();
 												//services.AddIdentityServer()
 												//				.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();

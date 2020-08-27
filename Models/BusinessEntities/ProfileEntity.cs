@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Poppin.Models.Identity;
 
 namespace Poppin.Models.BusinessEntities
 {
@@ -14,7 +15,7 @@ namespace Poppin.Models.BusinessEntities
         public string Role { get; set; }
 
         //[ForeignKey(nameof(UserId))]
-        public IdentityUser User { get; set; }
+        public User User { get; set; }
 
         [PersonalData]
         public string FirstName { get; set; }

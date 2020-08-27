@@ -3,6 +3,7 @@ import HttpResources from '../utils/http-resources';
 
 export default class AccountService extends Service {
 	@injectService apiService;
+	@injectService session;
 
 	registerAccount(credentials) {
 		return this.apiService.request({
@@ -15,6 +16,6 @@ export default class AccountService extends Service {
 		return this.apiService.request({
 			resource: HttpResources.login,
 			body: credentials
-		});
+		}).then(response => this.apiService.jwt = response.token);
 	}
 }

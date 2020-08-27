@@ -9,6 +9,7 @@ using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
+using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -66,6 +67,7 @@ namespace Poppin.Controllers
 								}
 
 								// GET api/<ProfileController>/5
+								[Authorize(Roles = RoleTypes.Admin)]
 								[HttpGet("{id}")]
 								public async Task<IActionResult> Get(string id)
 								{

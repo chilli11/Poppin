@@ -26,6 +26,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 
 	@tracked email;
 	@tracked password;
+	@tracked password2;
 
 	@tracked showMsg = false;
 	@tracked msgType = "success";

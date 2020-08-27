@@ -8,7 +8,15 @@ module.exports = function(environment) {
 		rootURL: '/',
 		hostURL: 'https://localhost:44367',
 		apiURL: '/api/',
-    locationType: 'auto',
+		locationType: 'auto',
+		
+		'ember-simple-auth-token': {
+			serverTokenEndpoint: '/api/identity/login',
+			tokenPropertyName: 'token',
+			authorizationHeaderName: 'Authorization',
+			authorizationPrefix: 'Bearer '
+		},
+
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build

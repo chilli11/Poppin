@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Poppin.Configuration;
 using Poppin.Interfaces;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,15 +22,15 @@ namespace Poppin.Services
 				public class IdentityService : IIdentityService
 				{
 								private readonly JwtSettings _jwtSettings;
-								private readonly UserManager<IdentityUser> _userManager;
+								private readonly UserManager<User> _userManager;
 
-								public IdentityService(UserManager<IdentityUser> userMgr, JwtSettings jwtSettings)
+								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings)
 								{
 												_jwtSettings = jwtSettings;
 												_userManager = userMgr;
 								}
 
-								public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2)
+								public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress)
 								{
 												var existingUser = await _userManager.FindByEmailAsync(email);
 
@@ -50,7 +52,7 @@ namespace Poppin.Services
 																};
 												}
 
-												var newUser = new IdentityUser
+												var newUser = new User
 												{
 																Email = email,
 																UserName = email
@@ -66,10 +68,10 @@ namespace Poppin.Services
 																};
 												}
 
-												return GenerateAuthenticationResultForUser(newUser);
+												return GenerateAuthenticationResultForUser(newUser, ipAddress);
 								}
 
-								public async Task<AuthenticationResult> LoginAsync(string email, string password)
+								public async Task<AuthenticationResult> LoginAsync(string email, string password, string ipAddress)
 								{
 												var user = await _userManager.FindByEmailAsync(email);
 												if (user == null)
@@ -91,7 +93,7 @@ namespace Poppin.Services
 																};
 												}
 
-												return GenerateAuthenticationResultForUser(user);
+												return GenerateAuthenticationResultForUser(user, ipAddress);
 								}
 
 								public async Task<UserDataResult> GetUserById(string identifier)
@@ -114,7 +116,7 @@ namespace Poppin.Services
 
 								public async Task<UserListResult> GetUsersById(IEnumerable<string> ids)
 								{
-												var list = new List<IdentityUser>();
+												var list = new List<User>();
 												foreach (var id in ids)
 												{
 																var user = await _userManager.FindByIdAsync(id);
@@ -135,8 +137,63 @@ namespace Poppin.Services
 																Success = true
 												};
 								}
+								public async Task<AuthenticationResult> RefreshToken(string token, string ipAddress)
+								{
+												var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
 
-								private AuthenticationResult GenerateAuthenticationResultForUser(User user)
+												// return null if no user found with token
+												if (user == null) return null;
+
+												var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+												// return null if token is no longer active
+												if (!refreshToken.IsActive) return null;
+
+												// replace old refresh token with a new one and save
+												var newRefreshToken = GenerateRefreshToken(ipAddress);
+
+												// update user in database with token audit trail
+												//refreshToken.Revoked = DateTime.UtcNow;
+												//refreshToken.RevokedByIp = ipAddress;
+												//refreshToken.ReplacedByToken = newRefreshToken.Token;
+												user.RefreshTokens.Add(newRefreshToken);
+												user.RefreshTokens.Remove(refreshToken);
+												_userManager.UpdateAsync(user);
+
+												return GenerateAuthenticationResultForUser(user, ipAddress);
+								}
+
+								public async Task<bool> RevokeToken(string token, string ipAddress)
+								{
+												var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+
+												// return false if no user found with token
+												if (user == null) return false;
+
+												var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+
+												// return false if token is not active
+												if (!refreshToken.IsActive) return false;
+
+												// revoke token and save
+												user.RefreshTokens.Remove(refreshToken);
+												_userManager.UpdateAsync(user);
+
+												return true;
+								}
+
+
+								private AuthenticationResult GenerateAuthenticationResultForUser(User user, string ipAddress)
+								{											
+												return new AuthenticationResult
+												{
+																Success = true,
+																Token = GenerateJWT(user),
+																RefreshToken = GenerateRefreshToken(ipAddress).Token
+												};
+								}
+
+								private string GenerateJWT(User user)
 								{
 												var tokenHandler = new JwtSecurityTokenHandler();
 												var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
@@ -155,36 +212,23 @@ namespace Poppin.Services
 												};
 
 												var token = tokenHandler.CreateToken(tokenDescriptor);
-												return new AuthenticationResult
-												{
-																Success = true,
-																Token = tokenHandler.WriteToken(token)
-												};
+												return tokenHandler.WriteToken(token);
 								}
 
-								private AuthenticationResult GenerateAuthenticationResultForUser(IdentityUser newUser)
+								private RefreshToken GenerateRefreshToken(string ipAddress)
 								{
-												var tokenHandler = new JwtSecurityTokenHandler();
-												var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
-												var tokenDescriptor = new SecurityTokenDescriptor
+												using (var rngCryptoServiceProvider = new RNGCryptoServiceProvider())
 												{
-																Subject = new ClaimsIdentity(new[]
+																var randomBytes = new byte[64];
+																rngCryptoServiceProvider.GetBytes(randomBytes);
+																return new RefreshToken
 																{
-																				new Claim(JwtRegisteredClaimNames.Sub, newUser.Email),
-																				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-																				new Claim(JwtRegisteredClaimNames.Email, newUser.Email),
-																				new Claim("Id", newUser.Id)
-																}),
-																Expires = DateTime.UtcNow.AddHours(2),
-																SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-												};
-
-												var token = tokenHandler.CreateToken(tokenDescriptor);
-												return new AuthenticationResult
-												{
-																Success = true,
-																Token = tokenHandler.WriteToken(token)
-												};
+																				Token = Convert.ToBase64String(randomBytes),
+																				Expires = DateTime.UtcNow.AddHours(8),
+																				Created = DateTime.UtcNow,
+																				CreatedByIp = ipAddress
+																};
+												}
 								}
 				}
 }
