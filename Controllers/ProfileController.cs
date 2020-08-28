@@ -173,13 +173,49 @@ namespace Poppin.Controllers
 								}
 
 								// PUT api/<ProfileController>/5
+								[HttpPut()]
+								public IActionResult Put(PoppinUser user)
+								{
+												// Segment.io Analytics
+												_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+												Analytics.Client.Track(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
+												var oldUser = GetUserProfile(user.UserId);
+												if (oldUser == null)
+												{
+																var errors = new List<string>();
+																errors.Add("User not found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+
+												// log specific changes with UserLog
+
+												return Ok(_userService.UpdateUser(user));
+								}
+
+								// PUT api/<ProfileController>/5
 								[HttpPut("{id}")]
-								public void Put(string id, [FromBody] string value)
+								public IActionResult Put(string id, PoppinUser user)
 								{
 												// Segment.io Analytics
 												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
+												var oldUser = GetUserProfile(id);
+												if (oldUser == null)
+												{
+																var errors = new List<string>();
+																errors.Add("User not found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 
+												// log specific changes with UserLog
+
+												return Ok(_userService.UpdateUser(id, user));
 								}
 
 								// DELETE api/<ProfileController>/5
