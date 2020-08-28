@@ -15,6 +15,7 @@ using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
 using Poppin.Services;
+using Segment;
 
 namespace Poppin.Controllers
 {
@@ -27,19 +28,22 @@ namespace Poppin.Controllers
         private readonly IYelpService _yelpService;
         private readonly IVendorService _vendorService;
         private readonly ILogActionService _logActionService;
+        private readonly IIdentityService _identityService;
 
         public LocationsController(
             IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
             IYelpService yelpService,
             IVendorService vendorService,
-            ILogActionService logActionService)
+            ILogActionService logActionService,
+            IIdentityService identityService)
         {
             _httpContextAccessor = httpContextAccessor;
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
             _logActionService = logActionService;
+            _identityService = identityService;
         }
 
         /// <summary>
@@ -72,7 +76,7 @@ namespace Poppin.Controllers
             {
                 LocationId = location.Id
             };
-            _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.ViewLocation, action);
+            _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
             return Ok(location);
         }
@@ -101,7 +105,9 @@ namespace Poppin.Controllers
                     SearchLocation = searchParams.location,
                     SearchCategories = searchParams.categories
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.Search, action);
+                var id = GetUserId(SegmentIOKeys.Actions.Search);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search);
 
                 return Ok(new PoppinSearchResponse()
                 {
@@ -144,7 +150,9 @@ namespace Poppin.Controllers
                 {
                     LocationId = location.Id
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.AddLocation, action);
+                var id = GetUserId(SegmentIOKeys.Actions.AddLocation);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.AddLocation);
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -174,7 +182,9 @@ namespace Poppin.Controllers
                 {
                     LocationId = location.Id
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UpdateLocation, action);
+                var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -212,7 +222,9 @@ namespace Poppin.Controllers
                 {
                     LocationId = locationId
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UpdateLocation, action);
+                var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -245,7 +257,9 @@ namespace Poppin.Controllers
             {
                 LocationId = locationId
             };
-            _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.DeleteLocation, action);
+            var id = GetUserId(SegmentIOKeys.Actions.DeleteLocation);
+            _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DeleteLocation, action);
+            Analytics.Client.Track(id, SegmentIOKeys.Actions.DeleteLocation);
             return Ok();
         }
 
@@ -266,7 +280,8 @@ namespace Poppin.Controllers
                 });
             }
 
-            if (await UserHasLocationPermissions(location, GetUserId()))
+            var id = GetUserId(SegmentIOKeys.Actions.IncrementCrowd);
+            if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
                 location.CrowdSize++;
                 await _locationService.Update(location);
@@ -274,7 +289,8 @@ namespace Poppin.Controllers
                 {
                     LocationId = locationId
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.IncrementCrowd, action);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.IncrementCrowd);
                 return Ok(location);
             }
 
@@ -301,7 +317,9 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, HttpContext.GetUserId()))
+
+            var id = GetUserId(SegmentIOKeys.Actions.DecrementCrowd);
+            if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
                 location.CrowdSize--;
                 await _locationService.Update(location);
@@ -309,7 +327,8 @@ namespace Poppin.Controllers
                 {
                     LocationId = locationId
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.DecrementCrowd, action);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
                 return Ok(location);
             }
 
@@ -324,7 +343,20 @@ namespace Poppin.Controllers
         {
             if (_httpContextAccessor.HttpContext.User.Claims.Any())
             {
-                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+                _identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
+                return id;
+            }
+            return string.Empty;
+        }
+
+        private string GetUserId(string action)
+        {
+            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            {
+                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+                _identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
+                return id;
             }
             return string.Empty;
         }

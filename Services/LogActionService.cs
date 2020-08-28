@@ -21,7 +21,7 @@ namespace Poppin.Services
 												_userLogs = database.GetCollection<UserLog>("UserLogs");
 								}
 
-								public async void LogUserAction(string userId, int actionType, LogAction logAction)
+								public async void LogUserAction(string userId, string actionType, LogAction logAction)
 								{
 												var action = new LogEntry()
 												{
