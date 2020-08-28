@@ -22,12 +22,6 @@ Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to pe
 ### Profiles
   
 + User Profile: /api/profile (GET, PUT, POST)
-+ Other User Profile: /api/profile/{userId} (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
-+ Locations
-    + /api/profile/addfavorite/{locationId}
-    + /api/profile/hidefavorite/{locationId}
-    + /api/profile/hidelocation/{locationId} (hides from search)
-    + /api/profile/unhidelocation/{locationId} (unhides from search)
     + /api/profile/updateGeo
         + Uses GeoJson Point geometry type as body
         Example: 
@@ -40,3 +34,9 @@ Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to pe
             ]
         }
         ```
++ Other User's Profile: /api/profile/{userId} (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
++ Locations
+    + /api/profile/addfavorite/{locationId}
+    + /api/profile/hidefavorite/{locationId}
+    + /api/profile/hidelocation/{locationId} (hides from search)
+    + /api/profile/unhidelocation/{locationId} (unhides from search)
