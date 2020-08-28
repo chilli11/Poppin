@@ -12,16 +12,19 @@
  ## Users
 
  Data cannot be manipulated through /identity APIs
- + Login: /identity/login
- + Registration: /identity/register
- + Basic User info: /identity/me (contains user role)
+ + Login: /api/identity/login
+ + Registration: /api/identity/register
+ + Basic User info: /api/identity/me (contains user role)
+ + Validate Auth: /api/identity/is-authenticated
+
+ Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
 
  ### Profiles
 
- + User Profile: /profile (GET, PUT, POST)
- + Other User Profile: /profile/{userId} (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
+ + User Profile: /api/profile (GET, PUT, POST)
+ + Other User Profile: /api/profile/{userId} (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
  + Locations
- ++ /profile/addfavorite/{locationId}
- ++ /profile/hidefavorite/{locationId}
- ++ /profile/hidelocation/{locationId} (hides from search)
- ++ /profile/unhidelocation/{locationId} (unhides from search)
+ ++ /api/profile/addfavorite/{locationId}
+ ++ /api/profile/hidefavorite/{locationId}
+ ++ /api/profile/hidelocation/{locationId} (hides from search)
+ ++ /api/profile/unhidelocation/{locationId} (unhides from search)
