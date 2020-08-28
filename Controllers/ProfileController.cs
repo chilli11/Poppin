@@ -12,6 +12,7 @@ using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
+using Segment;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -47,7 +48,7 @@ namespace Poppin.Controllers
 								[HttpGet]
 								public async Task<IActionResult> Get()
 								{
-												var id = GetUserId();
+												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 												if (id == null)
 												{
 																var errors = new List<string>();
@@ -64,6 +65,8 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
+                        
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
 												return Ok(GetPoppinUserResult(user));
 								}
 
@@ -90,6 +93,8 @@ namespace Poppin.Controllers
 																user = new PoppinUser(u.User);
 																_userService.AddUser(user);
 												}
+                        
+												Analytics.Client.Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
 												return Ok(GetPoppinUserResult(user));
 								}
 
@@ -98,63 +103,98 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/add/{locationid}")]
-								public void AddFavorite(string locationId)
+								public IActionResult AddFavorite(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.SaveFavorite, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Tracking
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
+
+												return Ok(_userService.AddFavorite(id, locationId));
 								}
 
 								/// <summary>
-								/// Add a location to the user's favorites list
+								/// Remove a location from the user's favorites list
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/remove/{locationid}")]
-								public void RemoveFavorite(string locationId)
+								public IActionResult RemoveFavorite(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.RemoveFavorite, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.RemoveFavorite);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RemoveFavorite, action);
+
+												return Ok(_userService.RemoveFavorite(id, locationId));
 								}
 
 								/// <summary>
-								/// Add a location to the user's favorites list
+								/// Hide a location from the user's search results
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("hide/{locationid}")]
-								public void HideLocation(string locationId)
+								public IActionResult HideLocation(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.HideLocation);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.HideLocation, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.HideLocation);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.HideLocation, action);
+
+												return Ok(_userService.HideLocation(id, locationId));
 								}
 
 								/// <summary>
-								/// Add a location to the user's favorites list
+								/// Unhide a location from the user's search results
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("unhide/{locationid}")]
-								public void UnhideLocation(string locationId)
+								public IActionResult UnhideLocation(string locationId)
 								{
-
+												var id = GetUserId(SegmentIOKeys.Actions.UnhideLocation);
 												var action = new BasicLocationAction()
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UnhideLocation, action);
-												_userService.AddFavorite(GetUserId(), locationId);
+
+												// Segment.io Analytics
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UnhideLocation);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UnhideLocation, action);
+
+												return Ok(_userService.UnhideLocation(id, locationId));
+								}
+
+								// PUT api/<ProfileController>/5
+								[HttpPut("{id}")]
+								public void Put(string id, [FromBody] string value)
+								{
+												// Segment.io Analytics
+												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
+
+								}
+
+								// DELETE api/<ProfileController>/5
+								[HttpDelete("{id}")]
+								public void Delete(string id)
+								{
+												// Segment.io Analytics
+												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
 								}
 
 								/// <summary>
@@ -163,18 +203,35 @@ namespace Poppin.Controllers
 								[HttpPost]
 								public void UpdateGeo(GeoJsonPoint<GeoJson2DGeographicCoordinates> geoJson)
 								{
+												var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
 												var action = new UpdateGeoAction()
 												{
 																Coordinates = geoJson
 												};
-												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UnhideLocation, action);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, action);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
+
+												// check proximity with recent searches
 								}
 
 								private string GetUserId()
 								{
 												if (_httpContextAccessor.HttpContext.User.Claims.Any())
 												{
-																return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
+																return id;
+												}
+												return string.Empty;
+								}
+
+								private string GetUserId(string action)
+								{
+												if (_httpContextAccessor.HttpContext.User.Claims.Any())
+												{
+																var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
+																return id;
 												}
 												return string.Empty;
 								}

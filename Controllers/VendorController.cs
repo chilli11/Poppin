@@ -58,7 +58,7 @@ namespace Poppin.Controllers
 								{
 												var vendor = new Vendor(_vendor);
 												var isExisting = await _vendorService.CheckExists(vendor);
-												vendor.LastUpdate = DateTime.Now;
+												vendor.LastUpdate = DateTime.UtcNow;
 
 												if (isExisting == null)
 												{
@@ -75,7 +75,7 @@ namespace Poppin.Controllers
 												var vendor = new Vendor(_vendor);
 												try
 												{
-																vendor.LastUpdate = DateTime.Now;
+																vendor.LastUpdate = DateTime.UtcNow;
 																await _vendorService.UpdateVendor(vendor);
 																return Ok();
 												}
@@ -97,7 +97,7 @@ namespace Poppin.Controllers
 												var vendor = new Vendor(_vendor);
 												try
 												{
-																vendor.LastUpdate = DateTime.Now;
+																vendor.LastUpdate = DateTime.UtcNow;
 																await _vendorService.UpdateVendor(vendorId, vendor);
 																return Ok();
 												}
