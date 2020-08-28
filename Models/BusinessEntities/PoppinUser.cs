@@ -13,6 +13,7 @@ namespace Poppin.Models.BusinessEntities
 								{
             UserId = user.Id;
             Username = user.UserName;
+            Role = user.Role;
 								}
 
         /// <summary>

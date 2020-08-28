@@ -9,6 +9,7 @@ using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
+using Poppin.Models;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
@@ -58,13 +59,7 @@ namespace Poppin.Controllers
 																				Errors = errors
 																});
 												}
-												var user = await _userService.GetUserById(id);
-												if (user == null)
-												{
-																var u = await _identityService.GetUserById(id);
-																user = new PoppinUser(u.User);
-																_userService.AddUser(user);
-												}
+												var user = await GetUserProfile(id);
                         
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
 												return Ok(GetPoppinUserResult(user));
@@ -75,25 +70,24 @@ namespace Poppin.Controllers
 								[HttpGet("{id}")]
 								public async Task<IActionResult> Get(string id)
 								{
-												// var isAdmin = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value == RoleTypes.Admin;
+												var isAdmin = GetUserRole() == RoleTypes.Admin;
 
-												var user = await _userService.GetUserById(id);
+												if (!isAdmin)
+												{
+																return Forbid();
+												}
+
+												var user = await GetUserProfile(id);
 												if (user == null)
 												{
-																var u = await _identityService.GetUserById(id);
-																if (u == null)
+																var errors = new List<string>();
+																errors.Add("User not found");
+																return BadRequest(new GenericFailure
 																{
-																				var errors = new List<string>();
-																				errors.Add("User not found");
-																				return BadRequest(new GenericFailure
-																				{
-																								Errors = errors
-																				});
-																}
-																user = new PoppinUser(u.User);
-																_userService.AddUser(user);
+																				Errors = errors
+																});
 												}
-                        
+
 												Analytics.Client.Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
 												return Ok(GetPoppinUserResult(user));
 								}
@@ -200,13 +194,14 @@ namespace Poppin.Controllers
 								/// <summary>
 								/// Update User location
 								/// </summary>
-								[HttpPost]
-								public void UpdateGeo(GeoJsonPoint<GeoJson2DGeographicCoordinates> geoJson)
+								[HttpPost("update-geo")]
+								public void UpdateGeo(GeoCoords geoJson)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
+												var coords = new GeoJson2DGeographicCoordinates(geoJson.Coordinates[0], geoJson.Coordinates[1]);
 												var action = new UpdateGeoAction()
 												{
-																Coordinates = geoJson
+																Coordinates = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords)
 												};
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, action);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
@@ -234,6 +229,30 @@ namespace Poppin.Controllers
 																return id;
 												}
 												return string.Empty;
+								}
+
+								private string GetUserRole()
+								{
+												if (_httpContextAccessor.HttpContext.User.Claims.Any())
+												{
+																return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
+												}
+												return string.Empty;
+								}
+
+								private async Task<PoppinUser> GetUserProfile(string id)
+								{
+												var user = await _userService.GetUserById(id);
+												if (user == null)
+												{
+																var u = await _identityService.GetUserById(id);
+																if (u != null)
+																{
+																				user = new PoppinUser(u.User);
+																				_userService.AddUser(user);
+																}
+												}
+												return user;
 								}
 
 								private PoppinUserResult GetPoppinUserResult(PoppinUser user)

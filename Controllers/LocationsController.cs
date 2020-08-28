@@ -105,7 +105,11 @@ namespace Poppin.Controllers
                     locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
                     if (id != string.Empty)
                     {
-                        locList = locList.Where(l => !GetUserProfile(id).Hidden.Contains(l.Id)).ToList();
+                        var profile = GetUserProfile(id);
+                        if (profile.Hidden != null && profile.Hidden.Any())
+                        {
+                            locList = locList.Where(l => !profile.Hidden.Contains(l.Id)).ToList();
+                        }
                     }
                     locList.ForEach(l => l.YelpDetails = yelpSearchResponse.Businesses.FirstOrDefault(yb => yb.Id == l.YelpId));
                 }
@@ -382,7 +386,13 @@ namespace Poppin.Controllers
 
         private PoppinUser GetUserProfile(string id)
 								{
-            return _userService.GetUserById(id).Result;
+            PoppinUser profile = _userService.GetUserById(id).Result;
+            if (profile == null)
+												{
+                _userService.AddUser(new PoppinUser(_identityService.GetUserById(id).Result.User));
+                profile = _userService.GetUserById(id).Result;
+            }
+            return profile;
 								}
 
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)

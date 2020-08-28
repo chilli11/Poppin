@@ -82,6 +82,11 @@ namespace Poppin.Models
 								public GeoCoords Geo { get; set; }
 				}
 
+				/// <summary>
+				/// Uses GeoJson Point geometry type 
+				/// https://developer.here.com/documentation/studio/map_customization_suite_hlp/dev_guide/topics/geojson-basics.html
+				/// https://geojsonlint.com/
+				/// </summary>
 				public class GeoCoords
 				{
 								public string Type { get; set; }
