@@ -26,6 +26,17 @@ namespace Poppin.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [HttpGet("is-authenticated")]
+        public async Task<IActionResult> IsAuthenticated()
+								{
+            var userId = GetUserId();
+            if (userId == string.Empty)
+												{
+                return Unauthorized();
+												}
+            return Ok();
+								}
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
