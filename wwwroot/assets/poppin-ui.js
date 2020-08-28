@@ -15,7 +15,7 @@
     }
   });
 });
-;define("poppin-ui/adapters/application", ["exports", "@ember-data/adapter/rest", "poppin-ui/config/environment", "ember-simple-auth-token/mixins/token-adapter", "fetch"], function (_exports, _rest, _environment, _tokenAdapter, _fetch) {
+;define("poppin-ui/adapters/application", ["exports", "@ember-data/adapter/rest", "poppin-ui/config/environment", "ember-simple-auth-token/mixins/token-adapter"], function (_exports, _rest, _environment, _tokenAdapter) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2600,7 +2600,7 @@
     }
 
     model() {
-      return this.accountService.me();
+      return this.authorized ? this.accountService.me() : null;
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -2890,7 +2890,7 @@
     }
 
     clickAction(business) {
-      return this.router.transitionTo('admin.locations.location', business.id);
+      return this.router.transitionTo('admin.locations.location', business);
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "locationsService", [_dec], {
@@ -2948,7 +2948,7 @@
 
   let AdminLocationsLocationController = (_dec = Ember._action, (_class = class AdminLocationsLocationController extends Ember.Controller {
     refreshRoute(location) {
-      this.transitionToRoute('admin.locations.location', location.id);
+      this.transitionToRoute('admin.locations.location', location);
     }
 
   }, (_applyDecoratedDescriptor(_class.prototype, "refreshRoute", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "refreshRoute"), _class.prototype)), _class));
@@ -3040,7 +3040,7 @@
     }
 
     beforeModel() {
-      this.accountService.isAuthenticated().catch(() => this.transitionTo('account.login'));
+      this.accountService.isAuthenticated().catch(() => this.transitionTo('account'));
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -3069,7 +3069,7 @@
 
   _exports.default = _default;
 });
-;define("poppin-ui/pods/components/account/login-form/component", ["exports", "poppin-ui/classes/stateful-component", "lodash", "poppin-ui/pods/components/account/login-form/constants"], function (_exports, _statefulComponent, _lodash, _constants) {
+;define("poppin-ui/pods/components/account/login-form/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/pods/components/account/login-form/constants"], function (_exports, _statefulComponent, _constants) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -3156,7 +3156,6 @@
       Ember.set(this, 'msgs', msgs || []);
       this.msgType = 'success';
       this.showMsg = true;
-      return setTimeout(() => this.router.transitionTo('account.me'), 3000);
     }
 
     clearForm() {
@@ -3519,7 +3518,7 @@
     }
 
     logout() {
-      return this.accountService.logout().then(this.router.transitionTo('account.login'));
+      return this.accountService.logout().then(this.router.transitionTo('account'));
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "accountService", [_dec], {
@@ -3545,8 +3544,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "MzANoIS0",
-    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"sidebar\"],[14,\"data-color\",\"purple\"],[14,\"data-background-color\",\"white\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"sidebar-wrapper ps-container ps-theme-default\"],[14,1,\"Navbar\"],[12],[2,\"\\n\"],[6,[37,1],[[32,0,[\"authorized\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[11,\"a\"],[24,0,\"logout-button\"],[24,\"role\",\"button\"],[4,[38,0],[\"click\",[32,0,[\"logout\"]]],null],[12],[2,\"Logout\"],[13],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\"],[8,\"link-to\",[[24,0,\"logout-button\"]],[[\"@route\"],[\"account.login\"]],[[\"default\"],[{\"statements\":[[2,\"Login\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[10,\"ul\"],[14,0,\"nav\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations\"]],[[\"default\"],[{\"statements\":[[2,\"Locations\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a location\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"if\"]}",
+    "id": "YaKdyUyM",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"sidebar\"],[14,\"data-color\",\"purple\"],[14,\"data-background-color\",\"white\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"sidebar-wrapper ps-container ps-theme-default\"],[14,1,\"Navbar\"],[12],[2,\"\\n\"],[6,[37,1],[[32,0,[\"authorized\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[11,\"a\"],[24,0,\"logout-button\"],[24,\"role\",\"button\"],[4,[38,0],[\"click\",[32,0,[\"logout\"]]],null],[12],[2,\"Logout\"],[13],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\"],[8,\"link-to\",[[24,0,\"logout-button\"]],[[\"@route\"],[\"account\"]],[[\"default\"],[{\"statements\":[[2,\"Login\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[10,\"ul\"],[14,0,\"nav\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations\"]],[[\"default\"],[{\"statements\":[[2,\"Locations\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a location\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/admin/side-bar/template.hbs"
     }
@@ -4528,6 +4527,41 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/index/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class IndexRoute extends Ember.Route {
+    beforeModel() {
+      return this.transitionTo('account');
+    }
+
+  }
+
+  _exports.default = IndexRoute;
+});
+;define("poppin-ui/pods/index/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "SM2I2Fer",
+    "block": "{\"symbols\":[],\"statements\":[[1,[30,[36,1],[[30,[36,0],null,null]],null]]],\"hasEval\":false,\"upvars\":[\"-outlet\",\"component\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/index/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/search/index/route", ["exports"], function (_exports) {
   "use strict";
 
@@ -4591,9 +4625,8 @@
     });
     this.route('search', function () {});
     this.route('account', function () {
-      this.route('register');
-      this.route('login');
-      this.route('me');
+      this.route('register'); // this.route('login');
+      // this.route('me');
     });
   });
 });
@@ -4717,6 +4750,9 @@
       }).then(response => {
         sessionStorage.setItem('poppin_jwt', response.token);
         this.apiService.jwt = response.token;
+        this.authInfo = {
+          authorized: true
+        };
         return response.token;
       });
     }
@@ -4731,6 +4767,7 @@
 
     logout() {
       this.apiService.jwt = null;
+      this.authInfo = null;
       sessionStorage.removeItem('poppin_jwt');
       return Ember.RSVP.Promise.resolve();
     }
@@ -4890,7 +4927,8 @@
         method: options.resource.method || POST
       };
       fetchRequest = paramsToSegments(options.resource, fetchRequest);
-      fetchRequest.url = new URL(_environment.default.apiURL + fetchRequest.url);
+      const apiURL = _environment.default.apiURL.indexOf('http') == 0 ? _environment.default.apiURL : window.location.origin + _environment.default.apiURL;
+      fetchRequest.url = new URL(apiURL + fetchRequest.url);
 
       if (fetchRequest.method !== GET) {
         fetchRequest.body = JSON.stringify(fetchRequest.body);
@@ -4913,7 +4951,7 @@
     }
 
     unauthRedirect() {
-      this.router.transitionTo('account.login');
+      this.router.transitionTo('account');
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
@@ -5514,7 +5552,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+64aad322"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+38312e08"});
           }
         
 //# sourceMappingURL=poppin-ui.map

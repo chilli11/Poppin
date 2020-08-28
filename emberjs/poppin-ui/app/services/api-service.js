@@ -112,7 +112,8 @@ export default class ApiService extends Service.extend(Evented) {
 		};
 
 		fetchRequest = paramsToSegments(options.resource, fetchRequest);
-		fetchRequest.url = new URL(config.apiURL + fetchRequest.url);
+		const apiURL = config.apiURL.indexOf('http') == 0 ? config.apiURL : window.location.origin + config.apiURL;
+		fetchRequest.url = new URL(apiURL + fetchRequest.url);
 		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
 		} else {
@@ -134,6 +135,6 @@ export default class ApiService extends Service.extend(Evented) {
 	}
 
 	unauthRedirect() {
-		this.router.transitionTo('account.login');
+		this.router.transitionTo('account');
 	}
 }

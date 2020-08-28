@@ -6,7 +6,7 @@ module.exports = function(environment) {
     podModulePrefix: 'poppin-ui/pods',
     environment,
 		rootURL: '/',
-		hostURL: 'https://localhost:44367',
+		hostURL: '/',
 		apiURL: '/api/',
 		locationType: 'auto',
 		
@@ -34,7 +34,6 @@ module.exports = function(environment) {
     }
 	};
 	
-	ENV.apiURL = ENV.hostURL + '/api/';
 
   if (environment === 'development') {
     ENV.APP.LOG_RESOLVER = true;
@@ -43,7 +42,8 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		ENV.APP.LOG_VIEW_LOOKUPS = true;
 		
-		ENV.hostURL = 'https://localhost:44367';
+		// ENV.hostURL = 'https://localhost:44367';
+		// ENV.apiURL = ENV.hostURL + '/api/';
   }
 
   if (environment === 'test') {
@@ -56,11 +56,13 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+		ENV.apiURL = ENV.hostURL + '/api/';
   }
 
   if (environment === 'production') {
 		// here you can enable a production-specific feature
-		ENV.hostURL = 'http://poppindev2-env.eba-zygausnr.us-west-2.elasticbeanstalk.com';
+		// ENV.hostURL = 'http://poppindev2-env.eba-zygausnr.us-west-2.elasticbeanstalk.com';
+		// ENV.apiURL = ENV.hostURL + '/api/';
   }
 
   return ENV;

@@ -3,7 +3,7 @@
 		{{#if this.authorized}}
 			<a class="logout-button" role="button"  {{on "click" this.logout}}>Logout</a>
 		{{else}}
-			<LinkTo class="logout-button" @route="account.login">Login</LinkTo>
+			<LinkTo class="logout-button" @route="account">Login</LinkTo>
 		{{/if}}
 		<ul class="nav">
 			<li class="nav-item"><LinkTo class="nav-link" @route="admin.locations">Locations</LinkTo></li>

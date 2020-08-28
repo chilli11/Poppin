@@ -34,6 +34,7 @@ export default class AccountService extends Service {
 		}).then((response) => {
 			sessionStorage.setItem('poppin_jwt', response.token);
 			this.apiService.jwt = response.token;
+			this.authInfo = { authorized: true }
 			return response.token;
 		});
 	}
@@ -46,6 +47,7 @@ export default class AccountService extends Service {
 
 	logout() {
 		this.apiService.jwt = null;
+		this.authInfo = null;
 		sessionStorage.removeItem('poppin_jwt');
 		return Promise.resolve();
 	}

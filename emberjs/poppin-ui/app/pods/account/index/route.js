@@ -7,6 +7,6 @@ export default class AccountIndexRoute extends Route {
 		return this.accountService.authInfo && this.accountService.authInfo.authorized;
 	}
 	model() {
-		return this.accountService.me();
+		return this.authorized ? this.accountService.me() : null;
 	}
 }

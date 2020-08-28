@@ -13,6 +13,6 @@ export default class extends Component {
 	@action
 	logout() {
 		return this.accountService.logout()
-			.then(this.router.transitionTo('account.login'));
+			.then(this.router.transitionTo('account'));
 	}
 }

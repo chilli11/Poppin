@@ -26694,7 +26694,7 @@ body {
   z-index: 100;
 }
 
-.logout-button {
+a.logout-button {
   display: block;
   padding: 10px;
   text-align: center;
