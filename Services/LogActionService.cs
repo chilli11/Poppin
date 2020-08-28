@@ -21,7 +21,7 @@ namespace Poppin.Services
 												_userLogs = database.GetCollection<UserLog>("UserLogs");
 								}
 
-								public void LogUserAction(string userId, int actionType, LogAction logAction)
+								public async void LogUserAction(string userId, int actionType, LogAction logAction)
 								{
 												var action = new LogEntry()
 												{
@@ -34,17 +34,24 @@ namespace Poppin.Services
 																userId = "anon";
 												}
 
-												var log = _userLogs.Find(l => l.UserId == userId && l.Date == DateTime.Today.ToString()).FirstOrDefault();
+												var log = _userLogs.Find(l => l.UserId == userId && l.Date == DateTime.Today).FirstOrDefault();
 												if (log == null)
 												{
+																var entries = new List<LogEntry>();
+																entries.Add(action);
 																log = new UserLog()
 																{
 																				UserId = userId,
-																				Entries = new List<LogEntry>()
+																				Entries = entries
 																};
+																await _userLogs.InsertOneAsync(log);
+												}
+												else
+												{
+																log.Entries.Add(action);
+																await _userLogs.ReplaceOneAsync(l => l.Id == log.Id, log);
 												}
 
-												log.Entries.Append(action);
 								}
 
 								public Task<List<UserLog>> GetUserActivity(string userId)

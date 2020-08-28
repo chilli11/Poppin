@@ -26,6 +26,6 @@ export default class AdminLocationsController extends Controller {
 
 	@action
 	clickAction(business) {
-		return this.router.transitionTo('admin.locations.location', business.id);
+		return this.router.transitionTo('admin.locations.location', business);
 	}
 }

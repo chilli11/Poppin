@@ -26,6 +26,17 @@ namespace Poppin.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [HttpGet("is-authenticated")]
+        public async Task<IActionResult> IsAuthenticated()
+								{
+            var userId = GetUserId();
+            if (userId == string.Empty)
+												{
+                return Unauthorized();
+												}
+            return Ok();
+								}
+
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
@@ -38,7 +49,7 @@ namespace Poppin.Controllers
                 );
             }
 
-            var registrationResult = await _identityService.RegisterAsync(request.Email, request.Password, request.Password2);
+            var registrationResult = await _identityService.RegisterAsync(request.Email, request.Password, request.Password2, GetIpAddress());
 
             if (!registrationResult.Success)
             {
@@ -65,7 +76,7 @@ namespace Poppin.Controllers
                 );
             }
 
-            var loginResult = await _identityService.LoginAsync(request.Email, request.Password);
+            var loginResult = await _identityService.LoginAsync(request.Email, request.Password, GetIpAddress());
 
             if (!loginResult.Success)
             {
@@ -74,13 +85,73 @@ namespace Poppin.Controllers
                     Errors = loginResult.Errors
                 });
             }
+
+            SetTokenCookie(loginResult.RefreshToken);
             return Ok(new AuthSuccessResponse
             {
-                Token = loginResult.Token
+                Token = loginResult.Token,
+                RefreshToken = loginResult.RefreshToken
             });
         }
 
-								[Authorize]
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            var response = await _identityService.RefreshToken(refreshToken, GetIpAddress());
+
+            if (response == null)
+            {
+                var errors = new List<string>();
+                errors.Add("Invalid token");
+                return Unauthorized(new AuthFailedResponse
+                {
+                    Errors = errors
+                });
+            }
+
+            SetTokenCookie(response.RefreshToken);
+
+            return Ok(new AuthSuccessResponse
+            {
+                Token = response.Token,
+                RefreshToken = response.RefreshToken
+            });
+        }
+
+        [Authorize]
+        [HttpPost("revoke-token")]
+        public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
+        {
+            // accept token from request body or cookie
+            var token = model.Token ?? Request.Cookies["refreshToken"];
+
+            if (string.IsNullOrEmpty(token))
+            {
+                var errors = new List<string>();
+                errors.Add("Token is required");
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = errors
+                });
+            }
+
+            var response = await _identityService.RevokeToken(token, GetIpAddress());
+
+            if (!response)
+            {
+                var errors = new List<string>();
+                errors.Add("Token not found");
+                return NotFound(new AuthFailedResponse
+                {
+                    Errors = errors
+                });
+            }
+
+            return Ok(new { message = "Token revoked" });
+        }
+
+        [Authorize]
 								[HttpPost("me")]
         public async Task<IActionResult> GetUser()
 								{
@@ -105,6 +176,35 @@ namespace Poppin.Controllers
                 return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
             }
             return string.Empty;
+        }
+
+        [HttpGet("{id}/refresh-tokens")]
+        public async Task<IActionResult> GetRefreshTokens(string id)
+        {
+            var userResult = await _identityService.GetUserById(id);
+            if (userResult.User == null) return NotFound();
+
+            return Ok(userResult.User.RefreshTokens);
+        }
+
+        // helper methods
+
+        private void SetTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.UtcNow.AddDays(7)
+            };
+            Response.Cookies.Append("refreshToken", token, cookieOptions);
+        }
+
+        private string GetIpAddress()
+        {
+            if (Request.Headers.ContainsKey("X-Forwarded-For"))
+                return Request.Headers["X-Forwarded-For"];
+            else
+                return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
     }
 }

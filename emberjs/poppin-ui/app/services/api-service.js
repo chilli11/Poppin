@@ -1,4 +1,4 @@
-import Service from '@ember/service';
+import Service, { inject } from '@ember/service';
 import Evented from '@ember/object/evented';
 import { fetch } from 'fetch';
 import { Promise } from 'rsvp';
@@ -55,6 +55,8 @@ export const paramsToSegments = (httpResource, fetchRequest) => {
  * @prop {Object} resources transformed `HttpResources`
  */
 export default class ApiService extends Service.extend(Evented) {
+	@inject router;
+	jwt = sessionStorage.getItem('poppin_jwt');
 
 	/**
 	 * @param {String} url
@@ -88,6 +90,12 @@ export default class ApiService extends Service.extend(Evented) {
 	 * @return {ApiResponse}
 	 */
 	request(options) {
+		if (this.jwt) {
+			options.headers = _.merge({
+				Authorization: 'Bearer ' + this.jwt
+			}, options.headers);
+		}
+
 		let fetchRequest = {
 			url: '',
 			body: options.body,
@@ -97,13 +105,15 @@ export default class ApiService extends Service.extend(Evented) {
 				'Content-Type': options.contentType || 'application/json',
 				Accept: 'application/json, text/*, */*',
 			}, options.headers),
+			withCredentials: true,
 			credentials: 'include',
 			mode: 'cors',
 			method: options.resource.method || POST,
 		};
 
 		fetchRequest = paramsToSegments(options.resource, fetchRequest);
-		fetchRequest.url = new URL(config.apiURL + fetchRequest.url);
+		const apiURL = config.apiURL.indexOf('http') == 0 ? config.apiURL : window.location.origin + config.apiURL;
+		fetchRequest.url = new URL(apiURL + fetchRequest.url);
 		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
 		} else {
@@ -111,12 +121,20 @@ export default class ApiService extends Service.extend(Evented) {
 				.forEach(k => fetchRequest.url.searchParams.append(k, options.body[k]));
 			fetchRequest = _.omit(fetchRequest, 'body');
 		}
-
-		const fn = (response) => {
-			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-			return isJson ? response.json() : response.text();
-		};
 		
-		return fetch(fetchRequest.url, fetchRequest).then(fn).catch(fn);
+		return new Promise((resolve, reject) => {
+			const fn = (response) => {
+				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+				const error = response.status > 399;
+				const output = isJson ? response.json() : (typeof response.text == 'function'? response.text() : response);
+				if (error) return reject(output);
+				return resolve(output);
+			};
+			fetch(fetchRequest.url, fetchRequest).then(fn).catch(fn)
+		});
+	}
+
+	unauthRedirect() {
+		this.router.transitionTo('account');
 	}
 }

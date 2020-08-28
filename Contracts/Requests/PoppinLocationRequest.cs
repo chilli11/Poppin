@@ -15,7 +15,7 @@ namespace Poppin.Contracts.Requests
 								public string VendorId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
-								public Address Address { get; set; }
+								public AddressDTO Address { get; set; }
 								public string[] Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }

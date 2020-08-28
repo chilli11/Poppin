@@ -23,7 +23,7 @@ namespace Poppin.Models
 												Name = v.Name;
 												YelpId = v.YelpId;
 												Phone = v.Phone;
-												Address = v.Address;
+												Address = new Address(v.Address);
 												Capacity = v.Capacity;
 												CrowdSize = v.CrowdSize;
 												Hours = v.Hours;

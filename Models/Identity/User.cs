@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Poppin.Models.Identity
 {
 				public class User : IdentityUser
     {
         public string Role { get; set; }
+        [JsonIgnore]
+        public List<RefreshToken> RefreshTokens { get; set; }
 
-        public virtual Role RoleEntity { get; set; }
+        public Role RoleEntity { get; set; }
     }
 }

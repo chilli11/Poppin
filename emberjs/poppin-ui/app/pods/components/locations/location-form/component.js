@@ -64,7 +64,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.zip ? this.zip.toString().substr(0, 5) : null;
 	}
 
-	@tracked coordinates;
+	@tracked geo;
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
 	@tracked hours = _.merge(defHours);
@@ -85,7 +85,7 @@ export default class LocationFormComponent extends StatefulComponent {
 				city: this.city,
 				state: this.state,
 				zipCode: parseInt(this.zipCode, 10),
-				coordinates: this.coordinates
+				geo: this.geo
 			},
 			categories: [],
 			capacity: parseInt(capacity, 10),
@@ -129,7 +129,10 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.city = loc.address.city;
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
-			this.coordinates = loc.address.coordinates;
+			this.geo = {
+				type: 'Point',
+				coordinates: loc.address.geo.coordinates.values
+			};
 			this.capacity = loc.capacity;
 			this.hours = loc.hours || _.merge(defHours);
 		}
@@ -143,7 +146,10 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = loc.location.city;
 		this.state = loc.location.state;
 		this.zip = loc.location.zip || this.zip;
-		this.coordinates = loc.coordinates;
+		this.geo = {
+			type: 'Point',
+			coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
+		};
 		this.capacity = 0;
 		
 		const _hours = _.merge(defHours);
@@ -168,7 +174,8 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.locationsService[method](this.locationDTO).then((location) => {
 			if (this.locationId) {
 				this.store.findRecord('location', this.locationId)
-					.then((loc) => Object.keys(loc).forEach(k => loc[k] = location[k]));
+					// eslint-disable-next-line no-unused-vars
+					.then(loc => loc = location);
 			} else {
 				this.store.createRecord('location', location);
 			}
@@ -178,7 +185,7 @@ export default class LocationFormComponent extends StatefulComponent {
 				return this.args.resolveAction(this.locationDTO);
 			}
 			if (location.yelpId) {
-				return this.args.redirectToLocation(location.id);
+				return this.args.redirectToLocation(location);
 			}
 			
 			this.modalText = this.name + " has been added to Poppin!";

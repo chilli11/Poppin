@@ -1,4 +1,5 @@
-﻿using Poppin.Models.Yelp;
+﻿using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace Poppin.Models.Tracking
 				public class GetDirectionsAction : LogAction
 				{
 								public string LocationId { get; set; }
-								public Coord StartCoordinates { get; set; }
+								public GeoJsonPoint<GeoJson2DGeographicCoordinates> StartCoordinates { get; set; }
 				}
 
 				public class UpdateProfileAction : LogAction
@@ -33,6 +34,11 @@ namespace Poppin.Models.Tracking
 								public string FieldUpdated { get; set; }
 								public string OldValue { get; set; }
 								public string NewValue { get; set; }
+				}
+
+				public class UpdateGeoAction : LogAction
+				{
+								public GeoJsonPoint<GeoJson2DGeographicCoordinates> Coordinates { get; set; }
 				}
 
 				public class LogAction

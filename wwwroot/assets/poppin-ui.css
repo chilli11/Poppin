@@ -26694,4 +26694,13 @@ body {
   z-index: 100;
 }
 
+a.logout-button {
+  display: block;
+  padding: 10px;
+  text-align: center;
+  background: #AAA;
+  color: #FFF;
+  font-weight: bold;
+}
+
 /*# sourceMappingURL=poppin-ui.css.map */

@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
+using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -66,6 +68,7 @@ namespace Poppin.Controllers
 								}
 
 								// GET api/<ProfileController>/5
+								[Authorize(Roles = RoleTypes.Admin)]
 								[HttpGet("{id}")]
 								public async Task<IActionResult> Get(string id)
 								{
@@ -102,7 +105,7 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.SaveFavorite, action);
+												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.SaveFavorite, action);
 												_userService.AddFavorite(GetUserId(), locationId);
 								}
 
@@ -118,7 +121,7 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.RemoveFavorite, action);
+												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.RemoveFavorite, action);
 												_userService.AddFavorite(GetUserId(), locationId);
 								}
 
@@ -134,7 +137,7 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.HideLocation, action);
+												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.HideLocation, action);
 												_userService.AddFavorite(GetUserId(), locationId);
 								}
 
@@ -150,8 +153,21 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.UnhideLocation, action);
+												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UnhideLocation, action);
 												_userService.AddFavorite(GetUserId(), locationId);
+								}
+
+								/// <summary>
+								/// Update User location
+								/// </summary>
+								[HttpPost]
+								public void UpdateGeo(GeoJsonPoint<GeoJson2DGeographicCoordinates> geoJson)
+								{
+												var action = new UpdateGeoAction()
+												{
+																Coordinates = geoJson
+												};
+												_logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UnhideLocation, action);
 								}
 
 								private string GetUserId()
