@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using Poppin.Configuration;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
+using Poppin.Models.Tracking;
+using Segment;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -69,6 +71,17 @@ namespace Poppin.Services
 																};
 												}
 
+												// Segment.io Analytics
+												Analytics.Client.Identify(newUser.Id, new Segment.Model.Traits
+												{
+																{ "email", newUser.Email },
+																{ "username", newUser.UserName },
+																{ "category", SegmentIOKeys.Categories.Identity },
+																{ "action", SegmentIOKeys.Actions.Register },
+																{ "createdAt", DateTime.UtcNow }
+												});
+												Analytics.Client.Track(newUser.Id, SegmentIOKeys.Actions.Register);
+
 												return GenerateAuthenticationResultForUser(newUser, ipAddress);
 								}
 
@@ -93,6 +106,10 @@ namespace Poppin.Services
 																				Errors = new[] { "Invalid credentials" }
 																};
 												}
+
+												// Segment.io Analytics
+												Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
+												Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Login);
 
 												return GenerateAuthenticationResultForUser(user, ipAddress);
 								}
@@ -160,8 +177,26 @@ namespace Poppin.Services
 												user.RefreshTokens.Add(newRefreshToken);
 												user.RefreshTokens.Remove(refreshToken);
 												_userManager.UpdateAsync(user);
-
 												return GenerateAuthenticationResultForUser(user, ipAddress);
+								}
+								public void Identify(IdentityUser user, string category, string action)
+								{
+												Analytics.Client.Identify(user.Id, new Segment.Model.Traits
+												{
+																{ "email", user.Email },
+																{ "username", user.UserName },
+																{ "category", category },
+																{ "action", action }
+												});
+								}
+
+								public void Identify(string userId, string category, string action)
+								{
+												var user = _userManager.FindByIdAsync(userId).Result;
+												if (user != null)
+												{
+																Identify(user, category, action);
+												}
 								}
 
 								public async Task<bool> RevokeToken(string token, string ipAddress)

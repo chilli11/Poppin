@@ -68,7 +68,7 @@ namespace Poppin
 																				ValidateLifetime = true
 																};
 												});
-												
+
 
 												// requires using Microsoft.Extensions.Options
 												services.Configure<MongoDBSettings>(
@@ -76,6 +76,10 @@ namespace Poppin
 
 												services.AddSingleton<IMongoDBSettings, MongoDBSettings>(sp =>
 																sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
+
+												var segmentSettings = new SegmentSettings();
+												Configuration.Bind(nameof(SegmentSettings), segmentSettings);
+												Segment.Analytics.Initialize(segmentSettings.Key);
 
 												services.AddSingleton<ILocationService, LocationService>();
 												services.AddSingleton<IVendorService, VendorService>();
