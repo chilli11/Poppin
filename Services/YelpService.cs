@@ -18,7 +18,7 @@ namespace Poppin.Services
 								private readonly string _clientId = "Bap_m5iTSk_GaXl3IoY-5A";
 								private readonly string _apiEndpoint = "https://api.yelp.com/v3";
 
-
+								private List<YelpBusiness> _yelpBusinessCache = new List<YelpBusiness>();
 
 								public YelpService(HttpClient httpClient)
 								{
@@ -68,15 +68,21 @@ namespace Poppin.Services
 
 								public async Task<YelpBusiness> GetBusiness(string id)
 								{
-												var endpoint = "/businesses/" + id;
-												var request = new HttpRequestMessage(HttpMethod.Get, _apiEndpoint + endpoint);
-												var response = await _httpClient.SendAsync(request);
 												YelpBusiness output;
 
 												try
 												{
-																var stream = await response.Content.ReadAsStringAsync();
-																output = JsonConvert.DeserializeObject<YelpBusiness>(stream);
+																output = _yelpBusinessCache.Find(yb => yb.Id == id);
+																if (output == null)
+																{
+																				var endpoint = "/businesses/" + id;
+																				var request = new HttpRequestMessage(HttpMethod.Get, _apiEndpoint + endpoint);
+																				var response = await _httpClient.SendAsync(request);
+																				var stream = await response.Content.ReadAsStringAsync();
+																				output = JsonConvert.DeserializeObject<YelpBusiness>(stream);
+																				_yelpBusinessCache.Add(output);
+																}
+																
 												}
 												catch (Exception e)
 												{
@@ -99,6 +105,8 @@ namespace Poppin.Services
 												{
 																var stream = await response.Content.ReadAsStringAsync();
 																output = JsonConvert.DeserializeObject<YelpBusinessSearchResponse>(stream);
+																output.Businesses.Where(yb => !_yelpBusinessCache.Contains(yb)).ToList()
+																				.ForEach(yb => _yelpBusinessCache.Add(yb));
 												}
 												catch (Exception e)
 												{
@@ -122,6 +130,8 @@ namespace Poppin.Services
 												{
 																var stream = await response.Content.ReadAsStringAsync();
 																output = JsonConvert.DeserializeObject<YelpBusinessSearchResponse>(stream);
+																output.Businesses.Where(yb => !_yelpBusinessCache.Contains(yb)).ToList()
+																				.ForEach(yb => _yelpBusinessCache.Add(yb));
 												}
 												catch (Exception e)
 												{

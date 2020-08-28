@@ -11,6 +11,7 @@ using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
@@ -24,6 +25,7 @@ namespace Poppin.Controllers
     public class LocationsController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
         private readonly ILocationService _locationService;
         private readonly IYelpService _yelpService;
         private readonly IVendorService _vendorService;
@@ -33,12 +35,14 @@ namespace Poppin.Controllers
         public LocationsController(
             IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
+            IUserService userService,
             IYelpService yelpService,
             IVendorService vendorService,
             ILogActionService logActionService,
             IIdentityService identityService)
         {
             _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
@@ -92,11 +96,22 @@ namespace Poppin.Controllers
         {
             try
             {
+                var id = GetUserId(SegmentIOKeys.Actions.Search);
                 var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
                 var locList = new List<PoppinLocation>();
+
                 if (yelpSearchResponse.Total > 0)
                 {
                     locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
+                    if (id != string.Empty)
+                    {
+                        var profile = GetUserProfile(id);
+                        if (profile.Hidden != null && profile.Hidden.Any())
+                        {
+                            locList = locList.Where(l => !profile.Hidden.Contains(l.Id)).ToList();
+                        }
+                    }
+                    locList.ForEach(l => l.YelpDetails = yelpSearchResponse.Businesses.FirstOrDefault(yb => yb.Id == l.YelpId));
                 }
 
                 var action = new SearchAction()
@@ -105,7 +120,6 @@ namespace Poppin.Controllers
                     SearchLocation = searchParams.location,
                     SearchCategories = searchParams.categories
                 };
-                var id = GetUserId(SegmentIOKeys.Actions.Search);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.Search);
 
@@ -369,6 +383,17 @@ namespace Poppin.Controllers
             }
             return string.Empty;
         }
+
+        private PoppinUser GetUserProfile(string id)
+								{
+            PoppinUser profile = _userService.GetUserById(id).Result;
+            if (profile == null)
+												{
+                _userService.AddUser(new PoppinUser(_identityService.GetUserById(id).Result.User));
+                profile = _userService.GetUserById(id).Result;
+            }
+            return profile;
+								}
 
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)
         {
