@@ -121,6 +121,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	populateFromPoppin(location) {
 		const loc = location || this.args.location
 		if (loc) {
+			this.yelpEntity = loc.yelpDetails;
 			this.locationId = loc.id;
 			this.yelpId = loc.yelpId;
 			this.name = loc.name;
@@ -139,6 +140,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	}
 
 	populateFromYelp(loc) {		
+		this.yelpEntity = loc;
 		this.yelpId = loc.id;
 		this.name = loc.name;
 		this.addressLine1 = loc.location.address1;
@@ -185,6 +187,7 @@ export default class LocationFormComponent extends StatefulComponent {
 				return this.args.resolveAction(this.locationDTO);
 			}
 			if (location.yelpId) {
+				location.yelpDetails = this.yelpEntity;
 				return this.args.redirectToLocation(location);
 			}
 			

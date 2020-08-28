@@ -11,6 +11,7 @@ using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
@@ -97,7 +98,8 @@ namespace Poppin.Controllers
                 if (yelpSearchResponse.Total > 0)
                 {
                     locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
-                    locList = locList.Where(l => !GetUserProfile(id).Hidden.Contains(l.Id));
+                    locList = locList.Where(l => !GetUserProfile(id).Hidden.Contains(l.Id)).ToList();
+                    locList.ForEach(l => l.YelpDetails = yelpSearchResponse.Businesses.FirstOrDefault(yb => yb.Id == l.YelpId));
                 }
 
                 var action = new SearchAction()
