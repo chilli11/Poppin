@@ -688,6 +688,17 @@ define("poppin-ui/tests/unit/pods/account/login/route-test", ["qunit", "ember-qu
     });
   });
 });
+define("poppin-ui/tests/unit/pods/account/me/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/me', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/me');
+      assert.ok(route);
+    });
+  });
+});
 define("poppin-ui/tests/unit/pods/account/register/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 

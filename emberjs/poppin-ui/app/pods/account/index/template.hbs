@@ -1,1 +1,5 @@
-<Account::MyAccount @user={{@model}} />
+{{#if authorized}}
+	<Account::MyAccount @user={{@model}} />
+{{else}}
+	<Account::LoginForm />
+{{/if}}

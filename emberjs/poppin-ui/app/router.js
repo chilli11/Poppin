@@ -17,5 +17,6 @@ Router.map(function() {
   this.route('account', function() {
     this.route('register');
     this.route('login');
+    this.route('me');
   });
 });

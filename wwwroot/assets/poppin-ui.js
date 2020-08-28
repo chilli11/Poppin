@@ -2570,7 +2570,7 @@
     }
   });
 });
-;define("poppin-ui/pods/account/index/route", ["exports", "poppin-ui/utils/http-resources"], function (_exports, _httpResources) {
+;define("poppin-ui/pods/account/index/route", ["exports"], function (_exports) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -2592,18 +2592,18 @@
     constructor(...args) {
       super(...args);
 
-      _initializerDefineProperty(this, "apiService", _descriptor, this);
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+    }
+
+    get authorized() {
+      return this.accountService.authInfo && this.accountService.authInfo.authorized;
     }
 
     model() {
-      return this.apiService.request({
-        resource: _httpResources.default.myAccount
-      }).then(({
-        user
-      }) => user);
+      return this.accountService.me();
     }
 
-  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -2620,8 +2620,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "ZHs+cWLv",
-    "block": "{\"symbols\":[\"@model\"],\"statements\":[[8,\"account/my-account\",[],[[\"@user\"],[[32,1]]],null]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "kpPnoKob",
+    "block": "{\"symbols\":[\"@model\"],\"statements\":[[6,[37,1],[[35,0]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"account/my-account\",[],[[\"@user\"],[[32,1]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\"],[8,\"account/login-form\",[],[[],[]],null],[2,\"\\n\"]],\"parameters\":[]}]]]],\"hasEval\":false,\"upvars\":[\"authorized\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/account/index/template.hbs"
     }
@@ -2659,6 +2659,61 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/account/me/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountIndexRoute = (_dec = Ember.inject.service, (_class = (_temp = class AccountIndexRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+    }
+
+    model() {
+      return this.accountService.me();
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountIndexRoute;
+});
+;define("poppin-ui/pods/account/me/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "6xHnBHfj",
+    "block": "{\"symbols\":[\"@model\"],\"statements\":[[8,\"account/my-account\",[],[[\"@user\"],[[32,1]]],null]],\"hasEval\":false,\"upvars\":[]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/me/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/account/register/route", ["exports"], function (_exports) {
   "use strict";
 
@@ -2689,6 +2744,61 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/account/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountRoute = (_dec = Ember.inject.service, (_class = (_temp = class AccountRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+    }
+
+    beforeModel() {
+      return this.accountService.isAuthenticated();
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountRoute;
+});
+;define("poppin-ui/pods/account/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "Fzpzd6hc",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"wrapper\"],[12],[2,\"\\n\\t\"],[8,\"admin/side-bar\",[],[[],[]],null],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"main-panel ps-container ps-theme-default\"],[12],[2,\"\\n\\t\\t\"],[10,\"nav\"],[14,0,\"navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top\"],[12],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"content\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"container-fluid\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[1,[30,[36,1],[[30,[36,0],null,null]],null]],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"]],\"hasEval\":false,\"upvars\":[\"-outlet\",\"component\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/admin/locations/add/controller", ["exports"], function (_exports) {
   "use strict";
 
@@ -2702,10 +2812,8 @@
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
   let AdminLocationsAddController = (_dec = Ember._action, (_class = class AdminLocationsAddController extends Ember.Controller {
-    redirectToLocation(location_id) {
-      this.transitionToRoute('admin.locations.location', {
-        location_id
-      });
+    redirectToLocation(location) {
+      this.transitionToRoute('admin.locations.location', location);
     }
 
   }, (_applyDecoratedDescriptor(_class.prototype, "redirectToLocation", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "redirectToLocation"), _class.prototype)), _class));
@@ -2914,8 +3022,33 @@
   });
   _exports.default = void 0;
 
-  class AdminRoute extends Ember.Route {}
+  var _dec, _class, _descriptor, _temp;
 
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AdminRoute = (_dec = Ember.inject.service, (_class = (_temp = class AdminRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+    }
+
+    beforeModel() {
+      this.accountService.isAuthenticated().catch(() => this.transitionTo('account.login'));
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
   _exports.default = AdminRoute;
 });
 ;define("poppin-ui/pods/admin/template", ["exports"], function (_exports) {
@@ -2956,7 +3089,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let RegistrationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = (_temp = (_actions$SUBMIT = _constants.actions.SUBMIT, _actions$REJECT = _constants.actions.REJECT, _actions$RESOLVE = _constants.actions.RESOLVE, class RegistrationFormComponent extends _statefulComponent.default {
+  let RegistrationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = (_temp = (_actions$SUBMIT = _constants.actions.SUBMIT, _actions$REJECT = _constants.actions.REJECT, _actions$RESOLVE = _constants.actions.RESOLVE, class RegistrationFormComponent extends _statefulComponent.default {
     constructor() {
       super(...arguments);
 
@@ -2965,6 +3098,8 @@
       _initializerDefineProperty(this, "accountService", _descriptor, this);
 
       _initializerDefineProperty(this, "store", _descriptor2, this);
+
+      _initializerDefineProperty(this, "router", _descriptor3, this);
 
       _defineProperty(this, "transitions", {
         [_constants.states.IDLE]: {
@@ -2979,11 +3114,9 @@
         }
       });
 
-      _initializerDefineProperty(this, "email", _descriptor3, this);
+      _initializerDefineProperty(this, "email", _descriptor4, this);
 
-      _initializerDefineProperty(this, "password", _descriptor4, this);
-
-      _initializerDefineProperty(this, "password2", _descriptor5, this);
+      _initializerDefineProperty(this, "password", _descriptor5, this);
 
       _initializerDefineProperty(this, "showMsg", _descriptor6, this);
 
@@ -2998,14 +3131,12 @@
       this.showMsg = false;
       const {
         email,
-        password,
-        password2
+        password
       } = this;
       this.showMsg = false;
       this.accountService.login({
         email,
-        password,
-        password2
+        password
       }).then(response => {
         if (response.errors && response.errors.length) throw response;
         return this.dispatch(_constants.actions.RESOLVE, ['Login success!']);
@@ -3025,6 +3156,7 @@
       Ember.set(this, 'msgs', msgs || []);
       this.msgType = 'success';
       this.showMsg = true;
+      return setTimeout(() => this.router.transitionTo('account.me'), 3000);
     }
 
     clearForm() {
@@ -3051,17 +3183,17 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "email", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "password", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "email", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "password2", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "password", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -3115,8 +3247,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "xfZLUaQ0",
-    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password2\",\"********\",\"password2\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "QqSSKNm9",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/login-form/template.hbs"
     }
@@ -3133,8 +3265,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "hR+xdqCZ",
-    "block": "{\"symbols\":[\"&default\"],\"statements\":[[18,1,null]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "RMoGFBti",
+    "block": "{\"symbols\":[\"@user\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Account\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"userName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/my-account/template.hbs"
     }
@@ -3355,6 +3487,55 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/components/admin/side-bar/component", ["exports", "@glimmer/component"], function (_exports, _component) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _class2, _descriptor, _descriptor2, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let _class = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._action, (_class2 = (_temp = class _class2 extends _component.default {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _initializerDefineProperty(this, "router", _descriptor2, this);
+    }
+
+    get authorized() {
+      return this.accountService.authInfo && this.accountService.authInfo.authorized;
+    }
+
+    logout() {
+      return this.accountService.logout().then(this.router.transitionTo('account.login'));
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "router", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class2.prototype, "logout", [_dec3], Object.getOwnPropertyDescriptor(_class2.prototype, "logout"), _class2.prototype)), _class2));
+
+  _exports.default = _class;
+});
 ;define("poppin-ui/pods/components/admin/side-bar/template", ["exports"], function (_exports) {
   "use strict";
 
@@ -3364,8 +3545,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "WWmkBKEe",
-    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"sidebar\"],[14,\"data-color\",\"purple\"],[14,\"data-background-color\",\"white\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"sidebar-wrapper ps-container ps-theme-default\"],[14,1,\"Navbar\"],[12],[2,\"\\n\\t\\t\"],[10,\"ul\"],[14,0,\"nav\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations\"]],[[\"default\"],[{\"statements\":[[2,\"Locations\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a location\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "MzANoIS0",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"sidebar\"],[14,\"data-color\",\"purple\"],[14,\"data-background-color\",\"white\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"sidebar-wrapper ps-container ps-theme-default\"],[14,1,\"Navbar\"],[12],[2,\"\\n\"],[6,[37,1],[[32,0,[\"authorized\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[11,\"a\"],[24,0,\"logout-button\"],[24,\"role\",\"button\"],[4,[38,0],[\"click\",[32,0,[\"logout\"]]],null],[12],[2,\"Logout\"],[13],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\"],[8,\"link-to\",[[24,0,\"logout-button\"]],[[\"@route\"],[\"account.login\"]],[[\"default\"],[{\"statements\":[[2,\"Login\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[10,\"ul\"],[14,0,\"nav\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations\"]],[[\"default\"],[{\"statements\":[[2,\"Locations\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"li\"],[14,0,\"nav-item\"],[12],[8,\"link-to\",[[24,0,\"nav-link\"]],[[\"@route\"],[\"admin.locations.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a location\"]],\"parameters\":[]}]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/admin/side-bar/template.hbs"
     }
@@ -3499,8 +3680,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "RSVXc3j+",
-    "block": "{\"symbols\":[\"hourset\",\"category\",\"@location\",\"@startEdit\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,3,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,3,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,3,[\"address\",\"city\"]]],[2,\", \"],[1,[32,3,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-light\"],[4,[38,1],[\"click\",[32,4]],null],[12],[2,\"Edit\"],[13],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"crowdSize\"]]],[2,\"/\"],[1,[32,3,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"yelpDetails\",\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,2,[\"title\"]]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Hours:\"],[13],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"hours\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"strong\"],[12],[1,[32,1,[\"day\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\\tOpen: \"],[1,[30,[36,0],[[32,1,[\"opening\"]],[32,1,[\"opening\"]],\"unset\"],null]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"span\"],[14,0,\"text-muted\"],[12],[2,\"//\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\tClose: \"],[1,[30,[36,0],[[32,1,[\"closing\"]],[32,1,[\"closing\"]],\"unset\"],null]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[32,3,[\"yelpDetails\",\"url\"]]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\",\"on\",\"-track-array\",\"each\"]}",
+    "id": "QkdPHSAb",
+    "block": "{\"symbols\":[\"hourset\",\"category\",\"@location\",\"@startEdit\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,3,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,3,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,3,[\"address\",\"city\"]]],[2,\", \"],[1,[32,3,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-light\"],[4,[38,1],[\"click\",[32,4]],null],[12],[2,\"Edit\"],[13],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"crowdSize\"]]],[2,\"/\"],[1,[32,3,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"yelpDetails\",\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,2,[\"title\"]]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Hours:\"],[13],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"hours\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"strong\"],[12],[1,[32,1,[\"day\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\\tOpen: \"],[1,[30,[36,0],[[32,1,[\"opening\"]],[32,1,[\"opening\"]],\"unset\"],null]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"span\"],[14,0,\"text-muted\"],[12],[2,\"//\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\tClose: \"],[1,[30,[36,0],[[32,1,[\"closing\"]],[32,1,[\"closing\"]],\"unset\"],null]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details \"],[1,[30,[36,4],[[32,3,[\"yelpDetails\"]],\"(unavailable...check back later)\"],null]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[32,3,[\"yelpDetails\",\"url\"]]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\",\"on\",\"-track-array\",\"each\",\"unless\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-display/template.hbs"
     }
@@ -3582,7 +3763,7 @@
           city: this.city,
           state: this.state,
           zipCode: parseInt(this.zipCode, 10),
-          coordinates: this.coordinates
+          geo: this.geo
         },
         categories: [],
         capacity: parseInt(capacity, 10),
@@ -3650,7 +3831,7 @@
 
       _initializerDefineProperty(this, "zip", _descriptor12, this);
 
-      _initializerDefineProperty(this, "coordinates", _descriptor13, this);
+      _initializerDefineProperty(this, "geo", _descriptor13, this);
 
       _initializerDefineProperty(this, "capacity", _descriptor14, this);
 
@@ -3693,7 +3874,10 @@
         this.city = loc.address.city;
         this.state = loc.address.state;
         this.zip = loc.address.zipCode;
-        this.coordinates = loc.address.coordinates;
+        this.geo = {
+          type: 'Point',
+          coordinates: loc.address.geo.coordinates.values
+        };
         this.capacity = loc.capacity;
         this.hours = loc.hours || _lodash.default.merge(defHours);
       }
@@ -3707,7 +3891,10 @@
       this.city = loc.location.city;
       this.state = loc.location.state;
       this.zip = loc.location.zip || this.zip;
-      this.coordinates = loc.coordinates;
+      this.geo = {
+        type: 'Point',
+        coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
+      };
       this.capacity = 0;
 
       const _hours = _lodash.default.merge(defHours);
@@ -3735,7 +3922,8 @@
       const method = this.locationId ? 'updateLocation' : 'createNewLocation';
       return this.locationsService[method](this.locationDTO).then(location => {
         if (this.locationId) {
-          this.store.findRecord('location', this.locationId).then(loc => Object.keys(loc).forEach(k => loc[k] = location[k]));
+          this.store.findRecord('location', this.locationId) // eslint-disable-next-line no-unused-vars
+          .then(loc => loc = location);
         } else {
           this.store.createRecord('location', location);
         }
@@ -3748,7 +3936,7 @@
         }
 
         if (location.yelpId) {
-          return this.args.redirectToLocation(location.id);
+          return this.args.redirectToLocation(location);
         }
 
         this.modalText = this.name + " has been added to Poppin!";
@@ -3869,7 +4057,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "coordinates", [_dec13], {
+  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "geo", [_dec13], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -4405,6 +4593,7 @@
     this.route('account', function () {
       this.route('register');
       this.route('login');
+      this.route('me');
     });
   });
 });
@@ -4478,7 +4667,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _class, _descriptor, _descriptor2, _temp;
+  var _dec, _dec2, _dec3, _class, _descriptor, _descriptor2, _descriptor3, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4488,13 +4677,30 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let AccountService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, (_class = (_temp = class AccountService extends Ember.Service {
+  let AccountService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, (_class = (_temp = class AccountService extends Ember.Service {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "apiService", _descriptor, this);
 
       _initializerDefineProperty(this, "session", _descriptor2, this);
+
+      _initializerDefineProperty(this, "authInfo", _descriptor3, this);
+    }
+
+    isAuthenticated() {
+      if (this.authInfo) {
+        if (this.authInfo.authorized) return Ember.RSVP.Promise.resolve();
+        return Ember.RSVP.Promise.reject();
+      }
+
+      return this.apiService.request({
+        resource: _httpResources.default.isAuthenticated
+      }).then(() => this.authInfo = {
+        authorized: true
+      }).catch(() => this.authInfo = {
+        authorized: false
+      });
     }
 
     registerAccount(credentials) {
@@ -4508,7 +4714,25 @@
       return this.apiService.request({
         resource: _httpResources.default.login,
         body: credentials
-      }).then(response => this.apiService.jwt = response.token);
+      }).then(response => {
+        sessionStorage.setItem('poppin_jwt', response.token);
+        this.apiService.jwt = response.token;
+        return response.token;
+      });
+    }
+
+    me() {
+      return this.apiService.request({
+        resource: _httpResources.default.myAccount
+      }).then(({
+        user
+      }) => user);
+    }
+
+    logout() {
+      this.apiService.jwt = null;
+      sessionStorage.removeItem('poppin_jwt');
+      return Ember.RSVP.Promise.resolve();
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
@@ -4521,6 +4745,13 @@
     enumerable: true,
     writable: true,
     initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return null;
+    }
   })), _class));
   _exports.default = AccountService;
 });
@@ -4532,7 +4763,15 @@
   });
   _exports.default = _exports.paramsToSegments = void 0;
 
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
   function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   const GET = 'GET';
   const POST = 'POST';
@@ -4589,12 +4828,13 @@
 
 
   _exports.paramsToSegments = paramsToSegments;
-
-  class ApiService extends Ember.Service.extend(Ember.Evented) {
+  let ApiService = (_dec = Ember.inject.service, (_class = (_temp = class ApiService extends Ember.Service.extend(Ember.Evented) {
     constructor(...args) {
       super(...args);
 
-      _defineProperty(this, "jwt", null);
+      _initializerDefineProperty(this, "router", _descriptor, this);
+
+      _defineProperty(this, "jwt", sessionStorage.getItem('poppin_jwt'));
     }
 
     /**
@@ -4630,7 +4870,9 @@
 
     request(options) {
       if (this.jwt) {
-        options.headers.Authorization = 'Bearer ' + this.jwt;
+        options.headers = _lodash.default.merge({
+          Authorization: 'Bearer ' + this.jwt
+        }, options.headers);
       }
 
       let fetchRequest = {
@@ -4657,16 +4899,29 @@
         fetchRequest = _lodash.default.omit(fetchRequest, 'body');
       }
 
-      const fn = response => {
-        const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-        return isJson ? response.json() : response.text();
-      };
+      return new Ember.RSVP.Promise((resolve, reject) => {
+        const fn = response => {
+          const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+          const error = response.status > 399;
+          const output = isJson ? response.json() : typeof response.text == 'function' ? response.text() : response;
+          if (error) return reject(output);
+          return resolve(output);
+        };
 
-      return (0, _fetch.fetch)(fetchRequest.url, fetchRequest).then(fn).catch(fn);
+        (0, _fetch.fetch)(fetchRequest.url, fetchRequest).then(fn).catch(fn);
+      });
     }
 
-  }
+    unauthRedirect() {
+      this.router.transitionTo('account.login');
+    }
 
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "router", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
   _exports.default = ApiService;
 });
 ;define("poppin-ui/services/cookies", ["exports", "ember-cookies/services/cookies"], function (_exports, _cookies) {
@@ -5216,6 +5471,10 @@
     },
 
     /* ===== ACCOUNT =====*/
+    isAuthenticated: {
+      url: 'identity/is-authenticated',
+      method: GET
+    },
     registerAccount: {
       url: 'identity/register',
       method: POST
@@ -5255,7 +5514,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+2ebad87e"});
+            require("poppin-ui/app")["default"].create({"name":"poppin-ui","version":"0.0.0+64aad322"});
           }
         
 //# sourceMappingURL=poppin-ui.map

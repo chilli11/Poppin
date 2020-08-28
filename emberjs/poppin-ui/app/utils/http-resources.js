@@ -43,6 +43,10 @@ const HttpResources = {
 	},
 
 	/* ===== ACCOUNT =====*/
+	isAuthenticated: {
+		url: 'identity/is-authenticated',
+		method: GET
+	},
 	registerAccount: {
 		url: 'identity/register',
 		method: POST

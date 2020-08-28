@@ -10,6 +10,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 	namespace = 'RegistrationForm';
 	@service accountService;
 	@service store;
+	@service router;
 
 	transitions = {
 		[states.IDLE]: {
@@ -26,7 +27,6 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 
 	@tracked email;
 	@tracked password;
-	@tracked password2;
 
 	@tracked showMsg = false;
 	@tracked msgType = "success";
@@ -39,9 +39,9 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 
 	[actions.SUBMIT]() {
 		this.showMsg = false;
-		const { email, password, password2 } = this;
+		const { email, password } = this;
 		this.showMsg = false;
-		this.accountService.login({ email, password, password2 })
+		this.accountService.login({ email, password })
 			.then((response) => {
 				if (response.errors && response.errors.length) throw response;
 				return this.dispatch(actions.RESOLVE, ['Login success!']);
@@ -61,6 +61,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		set(this, 'msgs', msgs || []);
 		this.msgType = 'success';
 		this.showMsg = true;
+		return setTimeout(() => this.router.transitionTo('account.me'), 3000);
 	}
 
 	@action

@@ -1,4 +1,4 @@
-import Service from '@ember/service';
+import Service, { inject } from '@ember/service';
 import Evented from '@ember/object/evented';
 import { fetch } from 'fetch';
 import { Promise } from 'rsvp';
@@ -55,7 +55,8 @@ export const paramsToSegments = (httpResource, fetchRequest) => {
  * @prop {Object} resources transformed `HttpResources`
  */
 export default class ApiService extends Service.extend(Evented) {
-	jwt = null;
+	@inject router;
+	jwt = sessionStorage.getItem('poppin_jwt');
 
 	/**
 	 * @param {String} url
@@ -90,9 +91,11 @@ export default class ApiService extends Service.extend(Evented) {
 	 */
 	request(options) {
 		if (this.jwt) {
-			options.headers.Authorization = 'Bearer ' + this.jwt;
+			options.headers = _.merge({
+				Authorization: 'Bearer ' + this.jwt
+			}, options.headers);
 		}
-		
+
 		let fetchRequest = {
 			url: '',
 			body: options.body,
@@ -117,12 +120,20 @@ export default class ApiService extends Service.extend(Evented) {
 				.forEach(k => fetchRequest.url.searchParams.append(k, options.body[k]));
 			fetchRequest = _.omit(fetchRequest, 'body');
 		}
-
-		const fn = (response) => {
-			const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
-			return isJson ? response.json() : response.text();
-		};
 		
-		return fetch(fetchRequest.url, fetchRequest).then(fn).catch(fn);
+		return new Promise((resolve, reject) => {
+			const fn = (response) => {
+				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
+				const error = response.status > 399;
+				const output = isJson ? response.json() : (typeof response.text == 'function'? response.text() : response);
+				if (error) return reject(output);
+				return resolve(output);
+			};
+			fetch(fetchRequest.url, fetchRequest).then(fn).catch(fn)
+		});
+	}
+
+	unauthRedirect() {
+		this.router.transitionTo('account.login');
 	}
 }

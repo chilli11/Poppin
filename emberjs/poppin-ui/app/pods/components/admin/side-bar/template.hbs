@@ -1,5 +1,10 @@
 <div class="sidebar" data-color="purple" data-background-color="white">
 	<div class="sidebar-wrapper ps-container ps-theme-default" id="Navbar">
+		{{#if this.authorized}}
+			<a class="logout-button" role="button"  {{on "click" this.logout}}>Logout</a>
+		{{else}}
+			<LinkTo class="logout-button" @route="account.login">Login</LinkTo>
+		{{/if}}
 		<ul class="nav">
 			<li class="nav-item"><LinkTo class="nav-link" @route="admin.locations">Locations</LinkTo></li>
 			<li class="nav-item"><LinkTo class="nav-link" @route="admin.locations.add">Add a location</LinkTo></li>

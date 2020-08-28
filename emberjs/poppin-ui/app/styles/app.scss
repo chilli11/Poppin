@@ -6,3 +6,12 @@
 @import "material-dashboard";
 
 @import "loading-spinner.scss";
+
+.logout-button {
+	display: block;
+	padding: 10px;
+	text-align: center;
+	background: #AAA;
+	color: #FFF;
+	font-weight: bold;
+}
