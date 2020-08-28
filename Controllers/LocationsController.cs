@@ -129,6 +129,10 @@ namespace Poppin.Controllers
         // [AuthorizeRoles()]
         public async Task<IActionResult> Post(PoppinLocationRequest _location)
         {
+            if (GetUserRole() != RoleTypes.Admin)
+												{
+                return Unauthorized();
+												}
             var location = new PoppinLocation(_location);
             var isExisting = await _locationService.CheckExists(location);
             location.LastUpdate = DateTime.Now;
@@ -136,6 +140,16 @@ namespace Poppin.Controllers
             if (isExisting == null)
             {
                 await _locationService.Add(location);
+                var action = new BasicLocationAction()
+                {
+                    LocationId = location.Id
+                };
+                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.AddLocation, action);
+
+                if (!string.IsNullOrEmpty(location.YelpId))
+                {
+                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
+                }
                 return CreatedAtAction("Post", location);
             }
             return Ok(isExisting);
@@ -147,11 +161,25 @@ namespace Poppin.Controllers
         // [AuthorizeRoles()]
         public async Task<IActionResult> Put(PoppinLocationRequest _location)
         {
+            if (GetUserRole() != RoleTypes.Admin)
+            {
+                return Unauthorized();
+            }
             var location = new PoppinLocation(_location);
             try
             {
                 location.LastUpdate = DateTime.Now;
                 await _locationService.Update(location);
+                var action = new BasicLocationAction()
+                {
+                    LocationId = location.Id
+                };
+                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UpdateLocation, action);
+
+                if (!string.IsNullOrEmpty(location.YelpId))
+                {
+                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
+                }
                 return Ok(location);
             }
             catch(Exception e)
@@ -171,12 +199,26 @@ namespace Poppin.Controllers
         //[AuthorizeRoles()]
         public async Task<IActionResult> Put(string locationId, PoppinLocationRequest _location)
         {
+            if (GetUserRole() != RoleTypes.Admin)
+            {
+                return Unauthorized();
+            }
             var location = new PoppinLocation(_location);
             try
             {
                 location.LastUpdate = DateTime.Now;
                 await _locationService.Update(locationId, location);
-                return Ok();
+                var action = new BasicLocationAction()
+                {
+                    LocationId = locationId
+                };
+                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.UpdateLocation, action);
+
+                if (!string.IsNullOrEmpty(location.YelpId))
+                {
+                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
+                }
+                return Ok(location);
             }
             catch (Exception e)
             {
@@ -193,7 +235,19 @@ namespace Poppin.Controllers
         [HttpDelete("{locationId}")]
         [Authorize]
 								//[AuthorizeRoles()]
-								public Task Delete(string locationId) => _locationService.Delete(locationId);
+								public IActionResult Delete(string locationId) {
+            if (GetUserRole() != RoleTypes.Admin)
+												{
+                return Unauthorized();
+            }
+            _locationService.Delete(locationId);
+            var action = new BasicLocationAction()
+            {
+                LocationId = locationId
+            };
+            _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.DeleteLocation, action);
+            return Ok();
+        }
 
         // GET: api/Locations/incrementCrowd/5
         [HttpGet("incrementCrowd/{locationId}")]
@@ -216,6 +270,11 @@ namespace Poppin.Controllers
             {
                 location.CrowdSize++;
                 await _locationService.Update(location);
+                var action = new BasicLocationAction()
+                {
+                    LocationId = locationId
+                };
+                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.IncrementCrowd, action);
                 return Ok(location);
             }
 
@@ -246,6 +305,11 @@ namespace Poppin.Controllers
             {
                 location.CrowdSize--;
                 await _locationService.Update(location);
+                var action = new BasicLocationAction()
+                {
+                    LocationId = locationId
+                };
+                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.DecrementCrowd, action);
                 return Ok(location);
             }
 
