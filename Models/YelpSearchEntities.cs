@@ -27,8 +27,8 @@ namespace Poppin.Models.Yelp
 								{
 												term = l.Name;
 												location = l.Address.Line1 + ", " + l.Address.City;
-												latitude = l.Address.Coordinates.Latitude.ToString();
-												longitude = l.Address.Coordinates.Longitude.ToString();
+												latitude = l.Address.Geo.Coordinates.Latitude.ToString();
+												longitude = l.Address.Geo.Coordinates.Longitude.ToString();
 								}
 
 								public string term { get; set; }
@@ -75,10 +75,10 @@ namespace Poppin.Models.Yelp
 												phone = l.Phone;
 												country = "US";
 
-												if (l.Address.Coordinates != null)
+												if (l.Address.Geo.Coordinates != null)
 												{
-																latitude = l.Address.Coordinates.Latitude.ToString();
-																longitude = l.Address.Coordinates.Longitude.ToString();
+																latitude = l.Address.Geo.Coordinates.Latitude.ToString();
+																longitude = l.Address.Geo.Coordinates.Longitude.ToString();
 												}
 												else
 												{

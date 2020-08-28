@@ -8,7 +8,7 @@ using Poppin.Models.Identity;
 
 namespace Poppin.Data
 {
-				public class ApplicationDbContext : IdentityDbContext<IdentityUser, Role, string>
+				public class ApplicationDbContext : IdentityDbContext<User, Role, string>
 				{
 								public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
 												: base(options)

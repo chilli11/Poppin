@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,18 +17,31 @@ namespace Poppin.Models.Tracking
 								UnhideLocation,
 								UpdateProfile,
 								Checkin,
-								GetDirections
+								UpdateGeo,
+								GetDirections,
+
+								AddVendor,
+								AddMember,
+								AddLocation,
+								UpdateLocation,
+								DeleteLocation,
+								IncrementCrowd,
+								DecrementCrowd
 				}
 
 				public class UserLog
 				{
 								public UserLog()
 								{
-												Date = DateTime.Today.ToString();
+												Date = DateTime.Today;
 								}
+
+								[BsonId]
+								[BsonRepresentation(BsonType.ObjectId)]
+								public string Id { get; set; }
 								public string UserId { get; set; }
-								public string Date { get; set; }
-								public IEnumerable<LogEntry> Entries { get; set; }
+								public DateTime Date { get; set; }
+								public List<LogEntry> Entries { get; set; }
 				}
 
 				public class LogEntry

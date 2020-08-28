@@ -2,7 +2,6 @@ import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
-import _ from 'lodash';
 
 import { states, actions } from './constants';
 
@@ -10,6 +9,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 	namespace = 'RegistrationForm';
 	@service accountService;
 	@service store;
+	@service router;
 
 	transitions = {
 		[states.IDLE]: {
@@ -38,9 +38,9 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 
 	[actions.SUBMIT]() {
 		this.showMsg = false;
-		const { email, password, password2 } = this;
+		const { email, password } = this;
 		this.showMsg = false;
-		this.accountService.login({ email, password, password2 })
+		this.accountService.login({ email, password })
 			.then((response) => {
 				if (response.errors && response.errors.length) throw response;
 				return this.dispatch(actions.RESOLVE, ['Login success!']);

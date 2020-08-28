@@ -47,7 +47,6 @@
     "ember-power-select": "^4.0.2",
     "ember-qunit": "^4.6.0",
     "ember-resolver": "^8.0.0",
-    "ember-simple-auth": "^3.0.0",
     "ember-source": "~3.18.0",
     "ember-template-lint": "^2.6.0",
     "ember-welcome-page": "^4.0.0",
@@ -66,6 +65,8 @@
     "edition": "octane"
   },
   "dependencies": {
+    "ember-simple-auth": "^3.0.0",
+    "ember-simple-auth-token": "^5.2.0",
     "node-sass": "^4.14.1"
   }
 }

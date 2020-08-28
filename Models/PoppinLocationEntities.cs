@@ -1,4 +1,5 @@
-﻿using Poppin.Models.Yelp;
+﻿using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,49 @@ namespace Poppin.Models
 				{
 								public Address() { }
 
+								public Address(AddressDTO a)
+								{
+												Line1 = a.Line1;
+												Line2 = a.Line2;
+												City = a.City;
+												State = a.State;
+
+												ZipCode = a.ZipCode;
+												if (a.Geo != null)
+												{
+																var x = new GeoJson2DGeographicCoordinates(a.Geo.Coordinates[0], a.Geo.Coordinates[1]);
+																Geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
+												}
+												else
+												{
+																Geo = a.Coordinates.ToGeoJson();
+												}
+								}
+
 								public Address(YelpLocation v, Coord c)
+								{
+												Line1 = v.Address1;
+												Line2 = v.Address2;
+												City = v.City;
+												State = v.State;
+
+												ZipCode = int.Parse(v.ZipCode);
+												Geo = c.ToGeoJson();
+								}
+
+								public string Line1 { get; set; }
+								public string Line2 { get; set; }
+								public string City { get; set; }
+								public string State { get; set; }
+								public int? ZipCode { get; set; }
+								public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
+				}
+
+				public class AddressDTO
+				{
+								public AddressDTO() { }
+
+								public AddressDTO(YelpLocation v, Coord c)
 								{
 												Line1 = v.Address1;
 												Line2 = v.Address2;
@@ -36,6 +79,13 @@ namespace Poppin.Models
 								public string State { get; set; }
 								public int? ZipCode { get; set; }
 								public Coord Coordinates { get; set; }
+								public GeoCoords Geo { get; set; }
+				}
+
+				public class GeoCoords
+				{
+								public string Type { get; set; }
+								public double[] Coordinates { get; set; }
 				}
 
 				public class PoppinInsertActionResponse

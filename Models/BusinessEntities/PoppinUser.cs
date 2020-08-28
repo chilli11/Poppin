@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Poppin.Interfaces;
+using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Poppin.Models.BusinessEntities
 {
 				public class PoppinUser : ProfileEntity
     {
-        public PoppinUser(IdentityUser user)
+        public PoppinUser(User user)
 								{
             UserId = user.Id;
             Username = user.UserName;

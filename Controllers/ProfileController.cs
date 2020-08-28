@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
+using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using Segment;
 
@@ -69,6 +71,7 @@ namespace Poppin.Controllers
 								}
 
 								// GET api/<ProfileController>/5
+								[Authorize(Roles = RoleTypes.Admin)]
 								[HttpGet("{id}")]
 								public async Task<IActionResult> Get(string id)
 								{
@@ -107,10 +110,10 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.SaveFavorite, action);
 
-												// Segment.io Analytics
+												// Tracking
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
 
 												return Ok(_userService.AddFavorite(id, locationId));
 								}
@@ -127,10 +130,10 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.RemoveFavorite, action);
 
 												// Segment.io Analytics
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.RemoveFavorite);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RemoveFavorite, action);
 
 												return Ok(_userService.RemoveFavorite(id, locationId));
 								}
@@ -147,10 +150,10 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.HideLocation, action);
 
 												// Segment.io Analytics
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.HideLocation);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.HideLocation, action);
 
 												return Ok(_userService.HideLocation(id, locationId));
 								}
@@ -167,10 +170,10 @@ namespace Poppin.Controllers
 												{
 																LocationId = locationId
 												};
-												_logActionService.LogUserAction(HttpContext.GetUserId(), (int)ActionTypes.UnhideLocation, action);
 
 												// Segment.io Analytics
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UnhideLocation);
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UnhideLocation, action);
 
 												return Ok(_userService.UnhideLocation(id, locationId));
 								}
@@ -179,7 +182,6 @@ namespace Poppin.Controllers
 								[HttpPut("{id}")]
 								public void Put(string id, [FromBody] string value)
 								{
-
 												// Segment.io Analytics
 												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
@@ -190,10 +192,26 @@ namespace Poppin.Controllers
 								[HttpDelete("{id}")]
 								public void Delete(string id)
 								{
-
 												// Segment.io Analytics
 												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
+								}
+
+								/// <summary>
+								/// Update User location
+								/// </summary>
+								[HttpPost]
+								public void UpdateGeo(GeoJsonPoint<GeoJson2DGeographicCoordinates> geoJson)
+								{
+												var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
+												var action = new UpdateGeoAction()
+												{
+																Coordinates = geoJson
+												};
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, action);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
+
+												// check proximity with recent searches
 								}
 
 								private string GetUserId()
