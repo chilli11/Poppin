@@ -152,7 +152,7 @@ namespace Poppin.Controllers
             {
                 location.LastUpdate = DateTime.Now;
                 await _locationService.Update(location);
-                return Ok();
+                return Ok(location);
             }
             catch(Exception e)
             {
