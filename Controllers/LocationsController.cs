@@ -23,6 +23,7 @@ namespace Poppin.Controllers
     public class LocationsController : ControllerBase
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUserService _userService;
         private readonly ILocationService _locationService;
         private readonly IYelpService _yelpService;
         private readonly IVendorService _vendorService;
@@ -31,11 +32,13 @@ namespace Poppin.Controllers
         public LocationsController(
             IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
+            IUserService userService,
             IYelpService yelpService,
             IVendorService vendorService,
             ILogActionService logActionService)
         {
             _httpContextAccessor = httpContextAccessor;
+            _userService = userService;
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
@@ -88,11 +91,13 @@ namespace Poppin.Controllers
         {
             try
             {
+                var id = GetUserId();
                 var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
                 var locList = new List<PoppinLocation>();
                 if (yelpSearchResponse.Total > 0)
                 {
                     locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
+                    locList = locList.Where(l => !GetUserProfile(id).Hidden.Contains(l.Id));
                 }
 
                 var action = new SearchAction()
@@ -101,7 +106,7 @@ namespace Poppin.Controllers
                     SearchLocation = searchParams.location,
                     SearchCategories = searchParams.categories
                 };
-                _logActionService.LogUserAction(GetUserId(), (int)ActionTypes.Search, action);
+                _logActionService.LogUserAction(id, (int)ActionTypes.Search, action);
 
                 return Ok(new PoppinSearchResponse()
                 {
@@ -337,6 +342,11 @@ namespace Poppin.Controllers
             }
             return string.Empty;
         }
+
+        private PoppinUser GetUserProfile(string id)
+								{
+            return _userService.GetUserById(id).Result;
+								}
 
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)
         {
