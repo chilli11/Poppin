@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +19,7 @@ using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using Poppin.Services;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Poppin
@@ -134,8 +137,26 @@ namespace Poppin
 												app.UseSwagger(o => o.RouteTemplate = swaggerOptions.JsonRoute);
 												app.UseSwaggerUI(o => o.SwaggerEndpoint(swaggerOptions.UIEndpoint, swaggerOptions.Description));
 
+												// rewrite client-side routes to return index.html
+												var options = new RewriteOptions()
+																.AddRewrite("^admin", "index.html", skipRemainingRules: true)
+																.AddRewrite("^admin/.*", "index.html", skipRemainingRules: true)
+																.AddRewrite("^account", "index.html", skipRemainingRules: true)
+																.AddRewrite("^account/.*", "index.html", skipRemainingRules: true)
+																.AddRewrite("^search", "index.html", skipRemainingRules: true)
+																.AddRewrite("^search/.*", "index.html", skipRemainingRules: true);
+												app.UseRewriter(options);
+
+
 												app.UseHttpsRedirection();
-												app.UseDefaultFiles();
+												//app.UseDefaultFiles();
+												// index.html is the default if a file isn't asked for
+												app.UseDefaultFiles(new DefaultFilesOptions()
+												{
+																DefaultFileNames = new List<string>() { "index.html" },
+																FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot")),
+																RequestPath = new PathString("")
+												});
 												app.UseStaticFiles();
 
 												app.UseRouting();
