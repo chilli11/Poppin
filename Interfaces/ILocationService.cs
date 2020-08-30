@@ -1,9 +1,8 @@
-﻿using Poppin.Models;
-using System;
+﻿using MongoDB.Driver;
+using Poppin.Models;
+using Poppin.Models.Tracking;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Poppin.Models.Yelp;
 
 namespace Poppin.Interfaces
 {
@@ -18,5 +17,9 @@ namespace Poppin.Interfaces
 								public Task Update(PoppinLocation location);
 								public Task Delete(PoppinLocation location);
 								public Task Delete(string id);
+								public Task NewCheckin(Checkin c);
+								public UpdateResult InvalidateCheckin(string userId);
+								public Task<List<Checkin>> GetCheckinsForLocation(string locId);
+								public Task<List<Checkin>> GetCheckinsForUser(string uId);
 				}
 }

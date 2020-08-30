@@ -32,6 +32,8 @@ namespace Poppin.Controllers
         private readonly ILogActionService _logActionService;
         private readonly IIdentityService _identityService;
 
+        private List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
+
         public LocationsController(
             IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
@@ -52,7 +54,6 @@ namespace Poppin.Controllers
 
         /// <summary>
         /// Gets location info based on ID passed as URL param.
-        /// Includes <c>YelpDetails</c> if <c>YelpId</c> is available
         /// </summary>
         /// <param name="locationId"></param>
         /// <returns></returns>
@@ -60,20 +61,20 @@ namespace Poppin.Controllers
         [HttpGet("{locationId}", Name = "Get")]
         public async Task<IActionResult> Get(string locationId)
         {
-            var location = await _locationService.Get(locationId);
-
+            var location = _searchedLocations.Find(l => l.Id == locationId);
             if (location == null)
             {
-                var errors = new List<string>();
-                errors.Add("Location ID is invalid");
-                return BadRequest(new GenericFailure
+                location = await _locationService.Get(locationId);
+                if (location == null)
                 {
-                    Errors = errors
-                });
-            }
-            if (!string.IsNullOrEmpty(location.YelpId))
-            {
-                location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
+                    var errors = new List<string>();
+                    errors.Add("Location ID is invalid");
+                    return BadRequest(new GenericFailure
+                    {
+                        Errors = errors
+                    });
+                }
+                _searchedLocations.Add(location);
             }
 
             var action = new BasicLocationAction()
@@ -82,6 +83,51 @@ namespace Poppin.Controllers
             };
             _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
+            location.SetCrowdSize(_locationService).Wait();
+            return Ok(location);
+        }
+
+        /// <summary>
+        /// Gets location info based on ID passed as URL param.
+        /// Includes <c>YelpDetails</c> if <c>YelpId</c> is available
+        /// </summary>
+        /// <param name="locationId"></param>
+        /// <returns></returns>
+        // GET: api/Locations/5
+        [HttpGet("with-yelp/{locationId}", Name = "Get")]
+        public async Task<IActionResult> GetWithYelp(string locationId)
+        {
+            var location = _searchedLocations.Find(l => l.Id == locationId);
+            if (location == null)
+            {
+                location = await _locationService.Get(locationId);
+                if (location == null)
+                {
+                    var errors = new List<string>();
+                    errors.Add("Location ID is invalid");
+                    return BadRequest(new GenericFailure
+                    {
+                        Errors = errors
+                    });
+                }
+            }
+            if (location.YelpDetails == null)
+            {
+                if (!string.IsNullOrEmpty(location.YelpId))
+                {
+                    _searchedLocations.Remove(location);
+                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
+                    _searchedLocations.Add(location);
+                }
+            }
+
+            var action = new BasicLocationAction()
+            {
+                LocationId = location.Id
+            };
+            _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
+
+            location.SetCrowdSize(_locationService).Wait();
             return Ok(location);
         }
 
@@ -103,15 +149,20 @@ namespace Poppin.Controllers
                 if (yelpSearchResponse.Total > 0)
                 {
                     locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
-                    if (id != string.Empty)
-                    {
-                        var profile = GetUserProfile(id);
-                        if (profile.Hidden != null && profile.Hidden.Any())
-                        {
-                            locList = locList.Where(l => !profile.Hidden.Contains(l.Id)).ToList();
-                        }
-                    }
+
+                    //Hidden locations: Implement in v2
+                    //if (id != string.Empty)
+                    //{
+                    //    var profile = GetUserProfile(id);
+                    //    if (profile.Hidden != null && profile.Hidden.Any())
+                    //    {
+                    //        locList = locList.Where(l => !profile.Hidden.Contains(l.Id)).ToList();
+                    //    }
+                    //}
+
                     locList.ForEach(l => l.YelpDetails = yelpSearchResponse.Businesses.FirstOrDefault(yb => yb.Id == l.YelpId));
+                    _searchedLocations.AddRange(locList.Where(l => !_searchedLocations.Any(sl => sl.Id == l.Id)));
+                    locList.ForEach(l => l.SetCrowdSize(_locationService).Wait());
                 }
 
                 var action = new SearchAction()
@@ -256,6 +307,32 @@ namespace Poppin.Controllers
                 });
             }
         }
+
+        [HttpGet("checkin/{locationId}")]
+        public async Task<IActionResult> UserCheckIn(string locationId)
+								{
+            var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
+            var location = await _locationService.Get(locationId);
+
+            if (location == null)
+            {
+                var errors = new List<string>();
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
+            var checkin = new Checkin(locationId, userId, location.VisitLength);
+
+            var action = new BasicLocationAction()
+            {
+                LocationId = location.Id
+            };
+            _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
+
+            return Ok(_locationService.NewCheckin(checkin));
+								}
 
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]

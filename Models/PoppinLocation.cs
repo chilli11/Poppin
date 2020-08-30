@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
+				/// </summary>
 				public class PoppinLocation
 				{
 
@@ -25,7 +26,6 @@ namespace Poppin.Models
 												Phone = v.Phone;
 												Address = new Address(v.Address);
 												Capacity = v.Capacity;
-												CrowdSize = v.CrowdSize;
 												Hours = v.Hours;
 								}
 
@@ -51,6 +51,10 @@ namespace Poppin.Models
 								public Address Address { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
+								/// <summary>
+								/// VisitLength is in minutes
+								/// </summary>
+								public int VisitLength { get; set; }
 								public string MenuUrl { get; set; }
 								public IList<HourSet> Hours { get; set; }
 
@@ -70,6 +74,13 @@ namespace Poppin.Models
 								public async Task<Vendor> GetVendor(IVendorService vs)
 								{
 												return await vs.GetVendorById(VendorId);
+								}
+
+								public async Task SetCrowdSize(ILocationService _locationService)
+								{
+												var s = await _locationService.GetCheckinsForLocation(Id);
+												CrowdSize = s.Count;
+												return;
 								}
 				}
 }
