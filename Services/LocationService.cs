@@ -59,7 +59,7 @@ namespace Poppin.Services
 
 								public Task NewCheckin(Checkin c)
 								{
-												InvalidateCheckin(c.UserId);
+												if (c.UserId != null) InvalidateCheckin(c.UserId);
 												return _checkins.InsertOneAsync(c);
 								}
 
@@ -68,6 +68,18 @@ namespace Poppin.Services
 												var filter = Builders<Checkin>.Filter.Eq("UserId", userId) & Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now);
 												var update = Builders<Checkin>.Update.Set("Timeout", DateTime.Now);
 												return _checkins.UpdateMany(filter, update);
+								}
+								public Task InvalidateVendorCheckin(string locId)
+								{
+												var checkins = _checkins.Find(c => c.LocationId == locId && c.UserId == null && c.Timeout > DateTime.Now).ToList();
+												if (checkins.Count > 0)
+												{
+																checkins.Sort((a, b) => a.Timeout.CompareTo(b.Timeout));
+																var replace = checkins.FirstOrDefault();
+																replace.Timeout = DateTime.Now;
+																return _checkins.ReplaceOneAsync(c => c.Id == replace.Id, replace);
+												}
+												return null;
 								}
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId) =>
 												_checkins.Find(c => c.LocationId == locId && c.Timeout > DateTime.Now).ToListAsync();

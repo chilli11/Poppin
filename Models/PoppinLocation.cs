@@ -79,7 +79,7 @@ namespace Poppin.Models
 								public async Task SetCrowdSize(ILocationService _locationService)
 								{
 												var s = await _locationService.GetCheckinsForLocation(Id);
-												CrowdSize = s.Count;
+												CrowdSize = (int)Math.Round(s.Select(c => c.ReliabilityScore).Sum());
 												return;
 								}
 				}

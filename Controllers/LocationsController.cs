@@ -61,20 +61,15 @@ namespace Poppin.Controllers
         [HttpGet("{locationId}", Name = "Get")]
         public async Task<IActionResult> Get(string locationId)
         {
-            var location = _searchedLocations.Find(l => l.Id == locationId);
+            var location = GetLocation(locationId);
             if (location == null)
             {
-                location = await _locationService.Get(locationId);
-                if (location == null)
+                var errors = new List<string>();
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
                 {
-                    var errors = new List<string>();
-                    errors.Add("Location ID is invalid");
-                    return BadRequest(new GenericFailure
-                    {
-                        Errors = errors
-                    });
-                }
-                _searchedLocations.Add(location);
+                    Errors = errors
+                });
             }
 
             var action = new BasicLocationAction()
@@ -97,19 +92,15 @@ namespace Poppin.Controllers
         [HttpGet("with-yelp/{locationId}", Name = "Get")]
         public async Task<IActionResult> GetWithYelp(string locationId)
         {
-            var location = _searchedLocations.Find(l => l.Id == locationId);
+            var location = GetLocation(locationId);
             if (location == null)
             {
-                location = await _locationService.Get(locationId);
-                if (location == null)
+                var errors = new List<string>();
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
                 {
-                    var errors = new List<string>();
-                    errors.Add("Location ID is invalid");
-                    return BadRequest(new GenericFailure
-                    {
-                        Errors = errors
-                    });
-                }
+                    Errors = errors
+                });
             }
             if (location.YelpDetails == null)
             {
@@ -323,13 +314,14 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            var checkin = new Checkin(locationId, userId, location.VisitLength);
+            var checkin = new Checkin(locationId, userId, location.VisitLength, ReliabilityScores.User);
 
             var action = new BasicLocationAction()
             {
                 LocationId = location.Id
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
+            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin);
 
             return Ok(_locationService.NewCheckin(checkin));
 								}
@@ -360,7 +352,7 @@ namespace Poppin.Controllers
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> IncrementCrowd(string locationId)
         {
-            var location = await _locationService.Get(locationId);
+            var location = GetLocation(locationId);
             var errors = new List<string>();
             if (location == null)
             {
@@ -374,14 +366,16 @@ namespace Poppin.Controllers
             var id = GetUserId(SegmentIOKeys.Actions.IncrementCrowd);
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
-                location.CrowdSize++;
-                await _locationService.Update(location);
+                var c = new Checkin(locationId, id, location.VisitLength, ReliabilityScores.Vendor);
+                await _locationService.NewCheckin(c);
+
                 var action = new BasicLocationAction()
                 {
                     LocationId = locationId
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.IncrementCrowd);
+
                 return Ok(location);
             }
 
@@ -412,8 +406,7 @@ namespace Poppin.Controllers
             var id = GetUserId(SegmentIOKeys.Actions.DecrementCrowd);
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
-                location.CrowdSize--;
-                await _locationService.Update(location);
+                await _locationService.InvalidateVendorCheckin(locationId);
                 var action = new BasicLocationAction()
                 {
                     LocationId = locationId
@@ -471,6 +464,17 @@ namespace Poppin.Controllers
             }
             return profile;
 								}
+
+        private PoppinLocation GetLocation(string locationId)
+        {
+            var location = _searchedLocations.Find(l => l.Id == locationId);
+            if (location == null)
+            {
+                location = _locationService.Get(locationId).Result;
+                _searchedLocations.Add(location);
+            }
+            return location;
+        }
 
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)
         {

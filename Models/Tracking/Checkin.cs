@@ -7,14 +7,21 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models.Tracking
 {
+				public static class ReliabilityScores
+				{
+								public static double Geo = 0.5;
+								public static double Vendor = 1.0;
+								public static double User = 1.5;
+				}
 				public class Checkin
 				{
-								public Checkin(string locationId, string userId, int visitLength)
+								public Checkin(string locationId, string userId, int visitLength, double reliabilityScore)
 								{
 												UserId = UserId;
 												LocationId = locationId;
 												Timestamp = DateTime.Now;
 												Timeout = DateTime.Now.AddMinutes(visitLength);
+												ReliabilityScore = reliabilityScore;
 								}
 
 								[BsonId]
@@ -24,7 +31,7 @@ namespace Poppin.Models.Tracking
 								public string LocationId { get; set; }
 								public DateTime Timestamp { get; set; }
 								public DateTime Timeout { get; set; }
-								public float ReliabilityScore { get; set; }
+								public double ReliabilityScore { get; set; }
 								public bool IsValid
 								{
 												get
