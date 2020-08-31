@@ -58,8 +58,8 @@ namespace Poppin.Controllers
         /// <param name="locationId"></param>
         /// <returns></returns>
         // GET: api/Locations/5
-        [HttpGet("{locationId}", Name = "Get")]
-        public async Task<IActionResult> Get(string locationId)
+        [HttpGet("{locationId}")]
+        public IActionResult Get(string locationId)
         {
             var location = GetLocation(locationId);
             if (location == null)
@@ -89,7 +89,7 @@ namespace Poppin.Controllers
         /// <param name="locationId"></param>
         /// <returns></returns>
         // GET: api/Locations/5
-        [HttpGet("with-yelp/{locationId}", Name = "Get")]
+        [HttpGet("with-yelp/{locationId}")]
         public async Task<IActionResult> GetWithYelp(string locationId)
         {
             var location = GetLocation(locationId);
