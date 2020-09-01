@@ -22,7 +22,50 @@ All location information can be found and updated from /locations APIs. These AP
 `GET /api/locations/incrementcrowd` and `GET /api/locations/decrementcrowd` are for Vendor view only.
 
 ### Yelp
-`/api/yelp/match/{locId}`: returns just the Yelp info for the location
+`GET /api/yelp/match/{locactionId}`: returns just the Yelp info for the location
+
+`GET /api/yelp/{yelpId}`: returns the Yelp info for a given Yelp ID
+
+`POST /api/yelp/businesses`: a basic Yelp search
++ Body:
+    ```
+    {
+      "term": "string",
+      "location": "string",
+      "latitude": "string",
+      "longitude": "string",
+      "radius": "string",
+      "categories": "string",
+      "locale": "string",
+      "limit": "string",
+      "offset": "string",
+      "sort_by": "string",
+      "price": "string",
+      "open_now": "string",
+      "open_at": "string",
+      "attributes": "string"
+    }
+    ```
+
+`POST /api/yelp/match`: gets Yelp data based on business name and location or phone number
++ Body
+    ```
+    {
+      "name": "string",
+      "address1": "string",
+      "address2": "string",
+      "address3": "string",
+      "city": "string",
+      "state": "string",
+      "country": "string",
+      "latitude": "string",
+      "longitude": "string",
+      "phone": "string",
+      "zip_code": "string",
+      "yelp_business_id": "string",
+      "match_threshold": "string"
+    }
+    ```
 
 ## Users
 
