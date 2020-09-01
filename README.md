@@ -1,4 +1,4 @@
-# Poppin
+﻿# Poppin
 Poppin app
 
 
@@ -12,7 +12,14 @@ All location information can be found and updated from /locations APIs. These AP
 `GET /api/locations/{locationId}`: does not return Yelp data unless it's been previously retrieved and in cache; don't expect it.
 + use `GET /api/locations/with-yelp/{locationId}` instead
 
-`/api/locations/incrementcrowd` and `decrementcrowd` are for Vendor view only.
+### Checkins
+
+`​GET /api​/Locations​/checkin​/{locationId}`: Can be anonymous, represents a user initiated check in
++ Has a value of 1.5
++ vendor checkin has value of 1 (`incrementcrowd` and `decrementcrowd`)
++ location checkin has value of .5
+
+`GET /api/locations/incrementcrowd` and `GET /api/locations/decrementcrowd` are for Vendor view only.
 
 ### Yelp
 `/api/yelp/match/{locId}`: returns just the Yelp info for the location
@@ -26,20 +33,20 @@ Login: `/api/identity/login`
 Registration: `/api/identity/register`
 + Password requirements: 1 upper, 1 lower, 1 number, 1 symbol (_!@#$%^&*)
 
-Basic User info: `/api/identity/me` (contains user role)
+Basic User info: `POST /api/identity/me` (contains user role)
 
-Validate Auth: `/api/identity/is-authenticated` (GET)
+Validate Auth: `GET /api/identity/is-authenticated`
   
-Refresh Token: `/api/identity/refresh-token` (POST)
+Refresh Token: `POST /api/identity/refresh-token`
 + Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
 
-Revoke Token: `/api/identity/revoke-token` (POST)
+Revoke Token: `POST /api/identity/revoke-token`
   
 ### Profiles
   
 User Profile: `/api/profile` (GET, PUT, POST)
 
-Track User Location: `/api/profile/updateGeo`
+Track User Location: `POST /api/profile/updateGeo`
 + Uses GeoJson Point geometry type as body
     Example: 
     ```
@@ -52,10 +59,11 @@ Track User Location: `/api/profile/updateGeo`
     }
     ```
 
-Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
+Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE)
++ only available to Admins as of 28-08-2020)
 
 User Locations:
-+ `/api/profile/addfavorite/{locationId}`
-+ `/api/profile/hidefavorite/{locationId}`
-+ `/api/profile/hidelocation/{locationId}` (hides from search)
-+ `/api/profile/unhidelocation/{locationId}` (unhides from search)
++ `GET /api/profile/addfavorite/{locationId}`
++ `GET /api/profile/hidefavorite/{locationId}`
++ `GET /api/profile/hidelocation/{locationId}` (hides from search)
++ `GET /api/profile/unhidelocation/{locationId}` (unhides from search)
