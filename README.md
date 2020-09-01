@@ -30,7 +30,10 @@ Basic User info: `/api/identity/me` (contains user role)
 
 Validate Auth: `/api/identity/is-authenticated` (GET)
   
-Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
+Refresh Token: `/api/identity/refresh-token` (POST)
++ Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
+
+Revoke Token: `/api/identity/revoke-token` (POST)
   
 ### Profiles
   
