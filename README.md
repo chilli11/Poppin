@@ -8,8 +8,10 @@ See API formats in Swagger docs @ /swagger in dev or local
 ## Locations
 
 All location information can be found and updated from /locations APIs. These APIs use a basic cache. 
+
 `GET /api/locations/{locationId}`: does not return Yelp data unless it's been previously retrieved and in cache; don't expect it.
 + use `GET /api/locations/with-yelp/{locationId}` instead
+
 `/api/locations/incrementcrowd` and `decrementcrowd` are for Vendor view only.
 
 ### Yelp
@@ -18,10 +20,14 @@ All location information can be found and updated from /locations APIs. These AP
 ## Users
 
 Data cannot be manipulated through /identity APIs
+
 Login: `/api/identity/login`
+
 Registration: `/api/identity/register`
 + Password requirements: 1 upper, 1 lower, 1 number, 1 symbol (_!@#$%^&*)
+
 Basic User info: `/api/identity/me` (contains user role)
+
 Validate Auth: `/api/identity/is-authenticated` (GET)
   
 Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
@@ -29,6 +35,7 @@ Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to pe
 ### Profiles
   
 User Profile: `/api/profile` (GET, PUT, POST)
+
 Track User Location: `/api/profile/updateGeo`
 + Uses GeoJson Point geometry type as body
     Example: 
@@ -41,8 +48,10 @@ Track User Location: `/api/profile/updateGeo`
         ]
     }
     ```
+
 Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
-Locations
+
+User Locations:
     + `/api/profile/addfavorite/{locationId}`
     + `/api/profile/hidefavorite/{locationId}`
     + `/api/profile/hidelocation/{locationId}` (hides from search)
