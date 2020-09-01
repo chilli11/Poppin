@@ -52,7 +52,7 @@ Track User Location: `/api/profile/updateGeo`
 Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE; only available to Admins as of 28-08-2020)
 
 User Locations:
-    + `/api/profile/addfavorite/{locationId}`
-    + `/api/profile/hidefavorite/{locationId}`
-    + `/api/profile/hidelocation/{locationId}` (hides from search)
-    + `/api/profile/unhidelocation/{locationId}` (unhides from search)
++ `/api/profile/addfavorite/{locationId}`
++ `/api/profile/hidefavorite/{locationId}`
++ `/api/profile/hidelocation/{locationId}` (hides from search)
++ `/api/profile/unhidelocation/{locationId}` (unhides from search)
