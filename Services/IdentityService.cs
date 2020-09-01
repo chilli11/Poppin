@@ -13,6 +13,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Poppin.Services
@@ -51,6 +52,15 @@ namespace Poppin.Services
 																{
 																				Success = false,
 																				Errors = new[] { "Passwords do not match." }
+																};
+												}
+
+												if (!IsValidPassword(password))
+												{
+																return new AuthenticationResult
+																{
+																				Success = false,
+																				Errors = new[] { "Password does not meet requirements." }
 																};
 												}
 
@@ -266,6 +276,16 @@ namespace Poppin.Services
 																				CreatedByIp = ipAddress
 																};
 												}
+								}
+							
+								private bool IsValidPassword(string password)
+								{
+												bool hasUpper = new Regex(@"[A-Z]+").IsMatch(password);
+												bool hasLower = new Regex(@"[a-z]+").IsMatch(password);
+												bool hasNumber = new Regex(@"[0-9]+").IsMatch(password);
+												bool hasSpecial = new Regex(@"[_!@#$%^&*]+").IsMatch(password);
+												bool isOnlyAllowed = new Regex(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^&*])(?=.{8,24})").IsMatch(password);
+												return hasUpper && hasLower && hasNumber && hasSpecial && isOnlyAllowed;
 								}
 				}
 }

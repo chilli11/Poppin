@@ -21,6 +21,8 @@ namespace Poppin.Controllers
         private readonly ILocationService _locationService;
         private readonly IUserService _userService;
 
+								private Vendor _vendor;
+
 								public VendorController(IVendorService vendorService, ILocationService locationService, IUserService userService)
 								{
 												_vendorService = vendorService;
@@ -32,8 +34,11 @@ namespace Poppin.Controllers
 								[HttpGet("{vendorId}")]
 								public async Task<IActionResult> Get(string vendorId)
 								{
-												var vendor = await _vendorService.GetVendorById(vendorId);
-												if (vendor == null)
+												if (_vendor == null)
+												{
+																_vendor = await _vendorService.GetVendorById(vendorId);
+												}
+												if (_vendor == null)
 												{
 																var errors = new List<string>();
 																errors.Add("Vendor ID is invalid");
@@ -45,24 +50,26 @@ namespace Poppin.Controllers
 
 												var vResult = new VendorResult
 												{
-																Vendor = vendor,
-																Locations = vendor.GetLocations(_locationService),
-																Members = vendor.GetMembers(_userService)
+																Vendor = _vendor,
+																Locations = _vendor.GetLocations(_locationService),
+																Admins = _vendor.GetAdmins(_userService),
+																Members = _vendor.GetMembers(_userService)
 												};
 												return Ok(vResult);
 								}
 
 								// POST api/<VendorController>
 								[HttpPost]
-								public async Task<IActionResult> Post(PoppinVendorRequest _vendor)
+								public async Task<IActionResult> Post(PoppinVendorRequest newVendor)
 								{
-												var vendor = new Vendor(_vendor);
+												var vendor = new Vendor(newVendor);
 												var isExisting = await _vendorService.CheckExists(vendor);
 												vendor.LastUpdate = DateTime.UtcNow;
 
 												if (isExisting == null)
 												{
 																await _vendorService.AddVendor(vendor);
+																_vendor = vendor;
 																return CreatedAtAction("Post", vendor);
 												}
 												return Ok(isExisting);
@@ -70,13 +77,14 @@ namespace Poppin.Controllers
 
 								// PUT api/<VendorController>/5
 								[HttpPut]
-								public async Task<IActionResult> Put(PoppinVendorRequest _vendor)
+								public async Task<IActionResult> Put(PoppinVendorRequest newVendor)
 								{
-												var vendor = new Vendor(_vendor);
+												var vendor = new Vendor(newVendor);
 												try
 												{
 																vendor.LastUpdate = DateTime.UtcNow;
 																await _vendorService.UpdateVendor(vendor);
+																_vendor = vendor;
 																return Ok();
 												}
 												catch (Exception e)
@@ -92,13 +100,14 @@ namespace Poppin.Controllers
 
 								// PUT api/<VendorController>/5
 								[HttpPut("{vendorId}")]
-								public async Task<IActionResult> Put(string vendorId, PoppinVendorRequest _vendor)
+								public async Task<IActionResult> Put(string vendorId, PoppinVendorRequest newVendor)
 								{
-												var vendor = new Vendor(_vendor);
+												var vendor = new Vendor(newVendor);
 												try
 												{
 																vendor.LastUpdate = DateTime.UtcNow;
 																await _vendorService.UpdateVendor(vendorId, vendor);
+																_vendor = vendor;
 																return Ok();
 												}
 												catch (Exception e)
