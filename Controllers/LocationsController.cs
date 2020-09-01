@@ -1,26 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
-using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
-using Poppin.Services;
 using Segment;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Poppin.Controllers
 {
-    [Route("api/[controller]")]
+				[Route("api/[controller]")]
     [ApiController]
     public class LocationsController : ControllerBase
     {
