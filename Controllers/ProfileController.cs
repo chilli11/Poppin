@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver.GeoJsonObjectModel;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using Poppin.Contracts.Responses;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.BusinessEntities;
@@ -28,6 +31,8 @@ namespace Poppin.Controllers
 								private readonly IIdentityService _identityService;
 								private readonly ILogActionService _logActionService;
 								private readonly ILocationService _locationService;
+
+								private readonly GeometryFactory geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
 								public ProfileController(
 												IIdentityService identityService,
@@ -108,10 +113,8 @@ namespace Poppin.Controllers
 																				Errors = errors
 																});
 												}
-												var log = _logActionService.GetUserActivity(id, DateTime.Today.AddDays(-1));
-												var recent = log.SelectMany(l => l.Entries.Where(e => e.ActionType == SegmentIOKeys.Actions.ViewLocation)).Select(a => (BasicLocationAction)a.Action);
-												var recentLocations = _locationService.GetMany(recent.Select(a => a.LocationId));
 
+												var recentLocations = GetRecentLocationList(id, -1, 0);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
 												return Ok(recentLocations);
 								}
@@ -266,7 +269,59 @@ namespace Poppin.Controllers
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, action);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
 
-												// check proximity with recent searches
+												var recent = GetRecentLocationList(id, 0, -2);
+												if (recent.Count > 0)
+												{
+																if (recent.Count > 1)
+																{
+																				recent.Sort((a, b) => CompareDistance(geoJson, a, b));
+																}
+																var closest = recent.First();
+																if (GetDistance(
+																				new[] { geoJson.Coordinates[0], geoJson.Coordinates[1] },
+																				new[] { closest.Address.Geo.Coordinates.Longitude, closest.Address.Geo.Coordinates.Latitude }
+																) < 50)
+																{
+																				var checkinAction = new BasicLocationAction()
+																				{
+																								LocationId = closest.Id
+																				};
+																				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.Checkin, checkinAction);
+																				Analytics.Client.Track(id, SegmentIOKeys.Actions.Checkin);
+
+																				var checkin = new Checkin(closest.Id, id, closest.VisitLength, ReliabilityScores.Geo);
+																				_locationService.NewCheckin(checkin);
+																}
+												}
+
+								}
+
+								/// <summary>
+								/// https://docs.microsoft.com/en-us/ef/core/modeling/spatial
+								/// </summary>
+								/// <param name="geoJson"></param>
+								/// <param name="a"></param>
+								/// <param name="b"></param>
+								/// <returns>-1|0|1</returns>
+								private int CompareDistance(GeoCoords geoJson, PoppinLocation a, PoppinLocation b)
+								{
+												var currentLoc = geometryFactory.CreatePoint(new Coordinate(geoJson.Coordinates[0], geoJson.Coordinates[1])).ProjectTo(4326);
+												var pointA = geometryFactory.CreatePoint(new Coordinate(a.Address.Geo.Coordinates.Longitude, a.Address.Geo.Coordinates.Latitude)).ProjectTo(4326);
+												var pointB = geometryFactory.CreatePoint(new Coordinate(b.Address.Geo.Coordinates.Longitude, b.Address.Geo.Coordinates.Latitude)).ProjectTo(4326);
+												return currentLoc.Distance(pointA).CompareTo(pointB);
+								}
+
+								/// <summary>
+								/// https://docs.microsoft.com/en-us/ef/core/modeling/spatial
+								/// </summary>
+								/// <param name="a"></param>
+								/// <param name="b"></param>
+								/// <returns>Distance in meters</returns>
+								private double GetDistance(double[] a, double[] b)
+								{
+												var pointA = geometryFactory.CreatePoint(new Coordinate(a[0], a[1])).ProjectTo(4326);
+												var pointB = geometryFactory.CreatePoint(new Coordinate(b[0], b[1])).ProjectTo(4326);
+												return pointA.Distance(pointB);
 								}
 
 								private string GetUserId()
@@ -323,6 +378,23 @@ namespace Poppin.Controllers
 																Favorites = user.GetFavorites(_locationService).Result,
 																Hidden = user.GetHidden(_locationService).Result,
 												};
+								}
+
+								private List<PoppinLocation> GetRecentLocationList(string id, int dayOffset, int hourOffset)
+								{
+												if (hourOffset > 0) hourOffset = hourOffset * -1;
+												if (dayOffset > 0) dayOffset = dayOffset * -1;
+
+												var startDay = DateTime.Today;
+												if (hourOffset == 0)
+												{
+																startDay = startDay.AddDays(dayOffset);
+												}
+
+												var logs = _logActionService.GetUserActivity(id, startDay);
+												if (hourOffset < 0) logs = logs.Where(l => l.Date > startDay.AddHours(hourOffset)).ToList();
+												var recent = logs.SelectMany(l => l.Entries.Where(e => e.ActionType == SegmentIOKeys.Actions.ViewLocation)).Select(a => (BasicLocationAction)a.Action);
+												return _locationService.GetMany(recent.Select(a => a.LocationId)).Result;
 								}
 				}
 }

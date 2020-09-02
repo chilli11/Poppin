@@ -27,7 +27,7 @@ namespace Poppin.Controllers
         }
 
         [HttpGet("is-authenticated")]
-        public async Task<IActionResult> IsAuthenticated()
+        public IActionResult IsAuthenticated()
 								{
             var userId = GetUserId();
             if (userId == string.Empty)

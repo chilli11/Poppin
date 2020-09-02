@@ -15,7 +15,7 @@ namespace Poppin.Services
 				{
 								private readonly HttpClient _httpClient;
 								private readonly string _apiKey = "mn6I-cotcvPa3KzwOXFLQgxommmMZ-PTKBMsRuNhRIz0UF-ULb-9lxv5LlOseZkFhjdbyzk1nFkyumJALKw5O7mEgFKriyR-OWxd8Yh0Y7ze5xnV_b6ywfwtp-u-XnYx";
-								private readonly string _clientId = "Bap_m5iTSk_GaXl3IoY-5A";
+								//private readonly string _clientId = "Bap_m5iTSk_GaXl3IoY-5A";
 								private readonly string _apiEndpoint = "https://api.yelp.com/v3";
 
 								private List<YelpBusiness> _yelpBusinessCache = new List<YelpBusiness>();

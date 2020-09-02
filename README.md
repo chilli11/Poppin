@@ -16,8 +16,8 @@ All location information can be found and updated from /locations APIs. These AP
 
 `​GET /api​/Locations​/checkin​/{locationId}`: Can be anonymous, represents a user initiated check in
 + Has a value of 1.5
-+ vendor checkin has value of 1 (`incrementcrowd` and `decrementcrowd`)
-+ location checkin has value of .5
++ Vendor Checkin has value of 1 (`incrementcrowd` and `decrementcrowd`)
++ Geo Checkin has value of .5
 
 `GET /api/locations/incrementcrowd` and `GET /api/locations/decrementcrowd` are for Vendor view only.
 
@@ -101,6 +101,7 @@ Track User Location: `POST /api/profile/updateGeo`
         ]
     }
     ```
++ If the nearest location searched in the previous 2 hours is within 50 meters, a Geo Checkin will be logged
 
 Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE)
 + only available to Admins as of 28-08-2020)
