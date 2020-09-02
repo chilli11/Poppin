@@ -70,7 +70,7 @@ namespace Poppin.Models.Yelp
 												address2 = l.Address.Line2;
 												city = l.Address.City;
 												state = l.Address.State;
-												zip_code = l.Address.ZipCode.ToString();
+												zip_code = l.Address.ZipCode;
 												yelp_business_id = l.YelpId;
 												phone = l.Phone;
 												country = "US";

@@ -46,7 +46,7 @@ namespace Poppin.Models
 												City = v.City;
 												State = v.State;
 
-												ZipCode = int.Parse(v.ZipCode);
+												ZipCode = v.ZipCode;
 												Geo = c.ToGeoJson();
 								}
 
@@ -54,7 +54,7 @@ namespace Poppin.Models
 								public string Line2 { get; set; }
 								public string City { get; set; }
 								public string State { get; set; }
-								public int? ZipCode { get; set; }
+								public string ZipCode { get; set; }
 								public Coord Coordinates {
 												get
 												{
@@ -79,7 +79,7 @@ namespace Poppin.Models
 												City = v.City;
 												State = v.State;
 
-												ZipCode = int.Parse(v.ZipCode);
+												ZipCode = v.ZipCode;
 												Coordinates = c;
 								}
 
@@ -87,7 +87,7 @@ namespace Poppin.Models
 								public string Line2 { get; set; }
 								public string City { get; set; }
 								public string State { get; set; }
-								public int? ZipCode { get; set; }
+								public string ZipCode { get; set; }
 								public Coord Coordinates { get; set; }
 								public GeoCoords Geo { get; set; }
 				}
