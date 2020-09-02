@@ -55,6 +55,16 @@ namespace Poppin.Models
 								public string City { get; set; }
 								public string State { get; set; }
 								public int? ZipCode { get; set; }
+								public Coord Coordinates {
+												get
+												{
+																return new Coord()
+																{
+																				Latitude = Geo.Coordinates.Latitude,
+																				Longitude = Geo.Coordinates.Longitude
+																};
+												}
+								}
 								public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
 				}
 
