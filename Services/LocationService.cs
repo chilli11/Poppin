@@ -22,6 +22,16 @@ namespace Poppin.Services
 
 												_locations = database.GetCollection<PoppinLocation>("Locations");
 												_checkins = database.GetCollection<Checkin>("Checkins");
+
+												var lYelpIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Text(l => l.YelpId));
+												_locations.Indexes.CreateOne(lYelpIndex);
+
+												var cUserIndex = new CreateIndexModel<Checkin>(Builders<Checkin>.IndexKeys.Text(c => c.UserId));
+												var cTimeoutIndex = new CreateIndexModel<Checkin>(Builders<Checkin>.IndexKeys.Descending(c => c.Timeout));
+												var indexes = new List<CreateIndexModel<Checkin>>();
+												indexes.Add(cUserIndex);
+												indexes.Add(cTimeoutIndex);
+												_checkins.Indexes.CreateMany(indexes);
 								}
 
 								public Task<PoppinLocation> Get(string id) => _locations.Find(loc => loc.Id == id).FirstAsync();
