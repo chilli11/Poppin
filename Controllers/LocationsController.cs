@@ -69,9 +69,9 @@ namespace Poppin.Controllers
                 });
             }
 
-            var action = new BasicLocationAction()
+            var action = new Dictionary<string, string>()
             {
-                LocationId = location.Id
+                { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
@@ -109,9 +109,9 @@ namespace Poppin.Controllers
                 }
             }
 
-            var action = new BasicLocationAction()
+            var action = new Dictionary<string, string>()
             {
-                LocationId = location.Id
+                { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
@@ -153,11 +153,11 @@ namespace Poppin.Controllers
                     locList.ForEach(l => l.SetCrowdSize(_locationService).Wait());
                 }
 
-                var action = new SearchAction()
+                var action = new Dictionary<string, string>()
                 {
-                    SearchTerm = searchParams.term,
-                    SearchLocation = searchParams.location,
-                    SearchCategories = searchParams.categories
+                    { "SearchTerm", searchParams.term },
+                    { "SearchLocation", searchParams.location },
+                    { "SSearchCategories", searchParams.categories }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.Search);
@@ -199,9 +199,10 @@ namespace Poppin.Controllers
             if (isExisting == null)
             {
                 await _locationService.Add(location);
-                var action = new BasicLocationAction()
+
+                var action = new Dictionary<string, string>()
                 {
-                    LocationId = location.Id
+                    { "LocationId", location.Id }
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.AddLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
@@ -231,9 +232,10 @@ namespace Poppin.Controllers
             {
                 location.LastUpdate = DateTime.UtcNow;
                 await _locationService.Update(location);
-                var action = new BasicLocationAction()
+
+                var action = new Dictionary<string, string>()
                 {
-                    LocationId = location.Id
+                    { "LocationId", location.Id }
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
@@ -271,9 +273,10 @@ namespace Poppin.Controllers
             {
                 location.LastUpdate = DateTime.UtcNow;
                 await _locationService.Update(locationId, location);
-                var action = new BasicLocationAction()
+
+                var action = new Dictionary<string, string>()
                 {
-                    LocationId = locationId
+                    { "LocationId", location.Id }
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
@@ -313,9 +316,9 @@ namespace Poppin.Controllers
             }
             var checkin = new Checkin(locationId, userId, location.VisitLength, ReliabilityScores.User);
 
-            var action = new BasicLocationAction()
+            var action = new Dictionary<string, string>()
             {
-                LocationId = location.Id
+                { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
             Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin);
@@ -333,9 +336,10 @@ namespace Poppin.Controllers
                 return Unauthorized();
             }
             _locationService.Delete(locationId);
-            var action = new BasicLocationAction()
+
+            var action = new Dictionary<string, string>()
             {
-                LocationId = locationId
+                { "LocationId", locationId }
             };
             var id = GetUserId(SegmentIOKeys.Actions.DeleteLocation);
             _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DeleteLocation, action);
@@ -366,9 +370,9 @@ namespace Poppin.Controllers
                 var c = new Checkin(locationId, id, location.VisitLength, ReliabilityScores.Vendor);
                 await _locationService.NewCheckin(c);
 
-                var action = new BasicLocationAction()
+                var action = new Dictionary<string, string>()
                 {
-                    LocationId = locationId
+                    { "LocationId", locationId }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.IncrementCrowd);
@@ -404,9 +408,10 @@ namespace Poppin.Controllers
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
                 await _locationService.InvalidateVendorCheckin(locationId);
-                var action = new BasicLocationAction()
+
+                var action = new Dictionary<string, string>()
                 {
-                    LocationId = locationId
+                    { "LocationId", locationId }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);

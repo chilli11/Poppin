@@ -127,9 +127,10 @@ namespace Poppin.Controllers
 								public IActionResult AddFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
-												var action = new BasicLocationAction()
+
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Tracking
@@ -147,9 +148,10 @@ namespace Poppin.Controllers
 								public IActionResult RemoveFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
-												var action = new BasicLocationAction()
+
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Segment.io Analytics
@@ -167,9 +169,10 @@ namespace Poppin.Controllers
 								public IActionResult HideLocation(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.HideLocation);
-												var action = new BasicLocationAction()
+
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Segment.io Analytics
@@ -187,9 +190,9 @@ namespace Poppin.Controllers
 								public IActionResult UnhideLocation(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.UnhideLocation);
-												var action = new BasicLocationAction()
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Segment.io Analytics
@@ -262,11 +265,8 @@ namespace Poppin.Controllers
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
 												var coords = new GeoJson2DGeographicCoordinates(geoJson.Coordinates[0], geoJson.Coordinates[1]);
-												var action = new UpdateGeoAction()
-												{
-																Coordinates = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords)
-												};
-												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, action);
+												var action = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords).AsStringDictionary();
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, (Dictionary<string,string>)action);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
 
 												var recent = GetRecentLocationList(id, 0, -2);
@@ -282,9 +282,9 @@ namespace Poppin.Controllers
 																				new[] { closest.Address.Geo.Coordinates.Longitude, closest.Address.Geo.Coordinates.Latitude }
 																) < 50)
 																{
-																				var checkinAction = new BasicLocationAction()
+																				var checkinAction = new Dictionary<string, string>()
 																				{
-																								LocationId = closest.Id
+																								{ "LocationId", closest.Id }
 																				};
 																				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.Checkin, checkinAction);
 																				Analytics.Client.Track(id, SegmentIOKeys.Actions.Checkin);
@@ -393,8 +393,8 @@ namespace Poppin.Controllers
 
 												var logs = _logActionService.GetUserActivity(id, startDay);
 												if (hourOffset < 0) logs = logs.Where(l => l.Date > startDay.AddHours(hourOffset)).ToList();
-												var recent = logs.SelectMany(l => l.Entries.Where(e => e.ActionType == SegmentIOKeys.Actions.ViewLocation)).Select(a => (BasicLocationAction)a.Action);
-												return _locationService.GetMany(recent.Select(a => a.LocationId)).Result;
+												var recent = logs.SelectMany(l => l.Entries.Where(e => e.ActionType == SegmentIOKeys.Actions.ViewLocation)).Select(a => a.Action);
+												return _locationService.GetMany(recent.Select(a => a["LocationId"])).Result;
 								}
 				}
 }

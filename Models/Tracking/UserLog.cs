@@ -53,6 +53,6 @@ namespace Poppin.Models.Tracking
 
 								public DateTime Timestamp { get; set; }
 								public string ActionType { get; set; }
-								public LogAction Action { get; set; }
+								public Dictionary<string, string> Action { get; set; }
 				}
 }

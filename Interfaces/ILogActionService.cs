@@ -7,7 +7,7 @@ namespace Poppin.Interfaces
 {
 				public interface ILogActionService
 				{
-								public void LogUserAction(string userId, string actionType, LogAction logAction);
+								public void LogUserAction(string userId, string actionType, Dictionary<string, string> logAction);
 								public Task<List<UserLog>> GetUserActivity(string userId);
 								public List<UserLog> GetUserActivity(string userId, DateTime day);
 				}
