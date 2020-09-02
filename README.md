@@ -106,6 +106,7 @@ Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE)
 + only available to Admins as of 28-08-2020)
 
 User Locations:
++ `GET /api/profile/recently-viewed` returns list of locations viewed today and yesterday
 + `GET /api/profile/addfavorite/{locationId}`
 + `GET /api/profile/hidefavorite/{locationId}`
 + `GET /api/profile/hidelocation/{locationId}` (hides from search)
