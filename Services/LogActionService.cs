@@ -54,9 +54,13 @@ namespace Poppin.Services
 
 								}
 
-								public Task<List<UserLog>> GetUserActivity(string userId)
+								public Task<List<UserLog>> GetUserActivity(string userId) =>
+												_userLogs.FindAsync(ul => ul.UserId == userId).Result.ToListAsync();
+
+								public List<UserLog> GetUserActivity(string userId, DateTime day)
 								{
-												return _userLogs.FindAsync(ul => ul.UserId == userId).Result.ToListAsync();
+												var logs = _userLogs.Find(ul => ul.UserId == userId).ToList();
+												return logs.Where(l => l.Date >= day).ToList();
 								}
 				}
 }

@@ -93,6 +93,31 @@ namespace Poppin.Controllers
 								}
 
 								/// <summary>
+								/// Returns locations viewed since the day before
+								/// </summary>
+								/// <returns></returns>
+								[HttpGet("recently-viewed")]
+								public IActionResult GetRecentlyViewed()
+								{
+												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
+												if (id == null)
+												{
+																var errors = new List<string>();
+																errors.Add("User not found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+												var log = _logActionService.GetUserActivity(id, DateTime.Today.AddDays(-1));
+												var recent = log.SelectMany(l => l.Entries.Where(e => e.ActionType == SegmentIOKeys.Actions.ViewLocation)).Select(a => (BasicLocationAction)a.Action);
+												var recentLocations = _locationService.GetMany(recent.Select(a => a.LocationId));
+
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+												return Ok(recentLocations);
+								}
+
+								/// <summary>
 								/// Add a location to the user's favorites list
 								/// </summary>
 								/// <param name="locationId"></param>

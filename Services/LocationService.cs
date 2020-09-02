@@ -25,8 +25,11 @@ namespace Poppin.Services
 								}
 
 								public Task<PoppinLocation> Get(string id) => _locations.Find(loc => loc.Id == id).FirstAsync();
-								public Task<List<PoppinLocation>> GetMany(IEnumerable<string> ids) => _locations.Find(loc => ids.Contains(loc.Id))
-												.ToListAsync();
+								public Task<List<PoppinLocation>> GetMany(IEnumerable<string> ids)
+								{
+												var filter = Builders<PoppinLocation>.Filter.In(l => l.Id, ids);
+												return _locations.Find(filter).ToListAsync();
+								}
 								public Task<PoppinLocation> CheckExists(PoppinLocation location)
 								{
 												return _locations.Find(l => l.Address.Line1 == location.Address.Line1 && l.Name == location.Name)
