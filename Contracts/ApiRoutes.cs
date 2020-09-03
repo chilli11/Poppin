@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Poppin.Contracts
 {
+				/// <summary>
+				/// Not yet implemented
+				/// </summary>
 				public static class ApiRoutes
 				{
 								public const string Root = "";

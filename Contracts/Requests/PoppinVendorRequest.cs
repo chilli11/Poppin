@@ -5,6 +5,10 @@ using System.Threading.Tasks;
 
 namespace Poppin.Contracts.Requests
 {
+				/// <summary>
+				/// Request format to create a new <see cref="Models.BusinessEntities.Vendor"/>,
+				/// or to edit an existing (if `Id` is included)
+				/// </summary>
 				public class PoppinVendorRequest
 				{
 								public PoppinVendorRequest() { }
