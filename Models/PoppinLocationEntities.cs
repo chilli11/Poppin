@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver.GeoJsonObjectModel;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Extensions;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
@@ -54,6 +56,8 @@ namespace Poppin.Models
 								public string Line2 { get; set; }
 								public string City { get; set; }
 								public string State { get; set; }
+
+								[BsonSerializer(typeof(TestingObjectTypeSerializer))]
 								public string ZipCode { get; set; }
 								public Coord Coordinates {
 												get
