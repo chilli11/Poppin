@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Internal;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,7 +21,7 @@ namespace Poppin.Controllers
         private readonly ILocationService _locationService;
         private readonly IUserService _userService;
 
-								private Vendor _vendor;
+								private List<Vendor> _vendors;
 
 								public VendorController(IVendorService vendorService, ILocationService locationService, IUserService userService)
 								{
@@ -32,11 +34,12 @@ namespace Poppin.Controllers
 								[HttpGet("{vendorId}")]
 								public async Task<IActionResult> Get(string vendorId)
 								{
-												if (_vendor == null)
+												var vendor = _vendors.Find(v => v.Id == vendorId);
+												if (vendor == null)
 												{
-																_vendor = await _vendorService.GetVendorById(vendorId);
+																vendor = await _vendorService.GetVendorById(vendorId);
 												}
-												if (_vendor == null)
+												if (vendor == null)
 												{
 																var errors = new List<string>();
 																errors.Add("Vendor ID is invalid");
@@ -48,12 +51,67 @@ namespace Poppin.Controllers
 
 												var vResult = new VendorResult
 												{
-																Vendor = _vendor,
-																Locations = _vendor.GetLocations(_locationService),
-																Admins = _vendor.GetAdmins(_userService),
-																Members = _vendor.GetMembers(_userService)
+																Vendor = vendor,
+																Locations = vendor.GetLocations(_locationService),
+																Admins = vendor.GetAdmins(_userService),
+																Members = vendor.GetMembers(_userService)
 												};
 												return Ok(vResult);
+								}
+
+								// GET: api/Vendor/5
+								[HttpPost("get-by-list")]
+								public async Task<IActionResult> GetByIds(IEnumerable<string> vendorIds)
+								{
+												if (_vendors.Count > 0)
+												{
+																var vendors = _vendors.Where(v => vendorIds.Contains(v.Id)).ToList();
+																vendorIds = vendorIds.Where(id => !vendors.Any(v => v.Id == id));
+																vendors.AddRange(await _vendorService.GetVendorsByIds(vendorIds));
+																if (vendors == null)
+																{
+																				var errors = new List<string>();
+																				errors.Add("No Results Found");
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
+																return Ok(vendors);
+												}
+												else
+												{
+																var vendors = await _vendorService.GetVendorsByIds(vendorIds);
+																if (vendors == null)
+																{
+																				var errors = new List<string>();
+																				errors.Add("No Results Found");
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
+																return Ok(vendors);
+												}
+								}
+
+								// GET: api/Vendor/5
+								[HttpPost("get-by-search")]
+								public async Task<IActionResult> GetBySearch(string searchTerm)
+								{
+												var vendors = await _vendorService.GetVendorsBySearch(searchTerm);
+												if (vendors == null)
+												{
+																var errors = new List<string>();
+																errors.Add("No Results Found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+												var leftovers = vendors.Where(v => !_vendors.Any(_v => v.Id == _v.Id));
+												_vendors.AddRange(leftovers);
+												return Ok(vendors);
 								}
 
 								// POST api/<VendorController>
@@ -67,7 +125,7 @@ namespace Poppin.Controllers
 												if (isExisting == null)
 												{
 																await _vendorService.AddVendor(vendor);
-																_vendor = vendor;
+																_vendors.Add(vendor);
 																return CreatedAtAction("Post", vendor);
 												}
 												return Ok(isExisting);
@@ -82,7 +140,12 @@ namespace Poppin.Controllers
 												{
 																vendor.LastUpdate = DateTime.UtcNow;
 																await _vendorService.UpdateVendor(vendor);
-																_vendor = vendor;
+																var ind = _vendors.FindIndex(v => v.Id == vendor.Id);
+																if (ind > -1)
+																{
+																				_vendors.RemoveAt(ind);
+																}
+																_vendors.Add(vendor);
 																return Ok();
 												}
 												catch (Exception e)
@@ -105,7 +168,12 @@ namespace Poppin.Controllers
 												{
 																vendor.LastUpdate = DateTime.UtcNow;
 																await _vendorService.UpdateVendor(vendorId, vendor);
-																_vendor = vendor;
+																var ind = _vendors.FindIndex(v => v.Id == vendorId);
+																if (ind > -1)
+																{
+																				_vendors.RemoveAt(ind);
+																}
+																_vendors.Add(vendor);
 																return Ok();
 												}
 												catch (Exception e)

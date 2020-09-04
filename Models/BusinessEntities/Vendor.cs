@@ -1,11 +1,13 @@
-﻿using Poppin.Contracts.Requests;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using System;
 using System.Collections.Generic;
 
 namespace Poppin.Models.BusinessEntities
 {
-				public class Vendor : ProfileEntity
+				public class Vendor
 				{
 								public Vendor(PoppinVendorRequest v)
 								{
@@ -20,6 +22,9 @@ namespace Poppin.Models.BusinessEntities
 
 								public Vendor() { }
 
+								[BsonId]
+								[BsonRepresentation(BsonType.ObjectId)]
+								public string Id { get; set; }
 								public string OrganizationName { get; set; }
 								public string OrganizationContactName { get; set; }
 								public string OrganizationContactEmail { get; set; }
@@ -45,6 +50,11 @@ namespace Poppin.Models.BusinessEntities
 								public IEnumerable<PoppinUser> GetMembers(IUserService userService)
 								{
 												return userService.GetUsersById(MemberIds).Result;
+								}
+
+								public IEnumerable<Vendor> GetSubVendors(IVendorService vendorService)
+								{
+												return vendorService.GetVendorsByIds(SubVendorIds).Result;
 								}
 				}
 }
