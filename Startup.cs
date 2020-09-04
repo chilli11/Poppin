@@ -40,10 +40,6 @@ namespace Poppin
 																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
 																.AddEntityFrameworkStores<ApplicationDbContext>();
-												//services.AddIdentityServer()
-												//				.AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
-												//services.AddAuthentication()
-												//				.AddIdentityServerJwt();
 
 												// JWT
 												var jwtSettings = new JwtSettings();
@@ -73,9 +69,9 @@ namespace Poppin
 												// requires using Microsoft.Extensions.Options
 												services.Configure<MongoDBSettings>(
 																Configuration.GetSection(nameof(MongoDBSettings)));
-
 												services.AddSingleton<IMongoDBSettings, MongoDBSettings>(sp =>
 																sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
+												services.AddHostedService<ConfigureMongoDbIndexesService>();
 
 												var segmentSettings = new SegmentSettings();
 												Configuration.Bind(nameof(SegmentSettings), segmentSettings);
