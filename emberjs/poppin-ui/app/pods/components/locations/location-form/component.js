@@ -68,13 +68,14 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
 	@tracked hours = _.merge(defHours);
+	@tracked visitLength = '45';
 
 	@tracked modalTitle;
 	@tracked modalText;
 	@tracked showModal = false;
 
 	get locationDTO() {
-		const { locationId, name, yelpId,  capacity, crowdSize, hours } = this;
+		const { locationId, name, yelpId,  capacity, crowdSize, hours, visitLength } = this;
 		return  {
 			id: locationId,
 			yelpId: yelpId,
@@ -90,7 +91,8 @@ export default class LocationFormComponent extends StatefulComponent {
 			categories: [],
 			capacity: parseInt(capacity, 10),
 			crowdSize: parseInt(crowdSize, 10),
-			hours
+			hours,
+			visitLength
 		};
 	}
 
@@ -136,6 +138,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			};
 			this.capacity = loc.capacity;
 			this.hours = loc.hours || _.merge(defHours);
+			this.visitLength = loc.visitLength;
 		}
 	}
 
@@ -153,6 +156,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
 		};
 		this.capacity = 0;
+		this.visitLength = 45;
 		
 		const _hours = _.merge(defHours);
 		if (loc.hours && loc.hours.length) {

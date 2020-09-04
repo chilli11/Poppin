@@ -13,15 +13,8 @@
 				{{#each @location.yelpDetails.categories as |category|}}
 					<dd>{{category.title}}</dd>
 				{{/each}}
-				<dt>Hours:</dt>
-				{{#each @location.hours as |hourset|}}
-					<dd>
-						<strong>{{hourset.day}}</strong>
-						Open: {{if hourset.opening hourset.opening 'unset'}}
-						<span class="text-muted">//</span>
-						Close: {{if hourset.closing hourset.closing 'unset'}}
-					</dd>
-				{{/each}}
+				<dt>Visit Length:</dt>
+				<dd>{{@location.visitLength}}</dd>
 			</dl>
 		</div>
 	</div>

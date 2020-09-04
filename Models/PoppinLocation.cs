@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
-				/// </summary>
 				public class PoppinLocation
 				{
 
@@ -51,6 +50,7 @@ namespace Poppin.Models
 								public Address Address { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
+
 								/// <summary>
 								/// VisitLength is in minutes
 								/// </summary>

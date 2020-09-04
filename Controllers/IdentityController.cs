@@ -13,6 +13,9 @@ using Poppin.Interfaces;
 
 namespace Poppin.Controllers
 {
+    /// <summary>
+    /// Handles all registration, login and token actions
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class IdentityController : ControllerBase
@@ -26,8 +29,12 @@ namespace Poppin.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <summary>
+        /// Indicates whether the token is valid or not
+        /// </summary>
+        /// <returns>401 or 200</returns>
         [HttpGet("is-authenticated")]
-        public async Task<IActionResult> IsAuthenticated()
+        public IActionResult IsAuthenticated()
 								{
             var userId = GetUserId();
             if (userId == string.Empty)
@@ -37,6 +44,11 @@ namespace Poppin.Controllers
             return Ok();
 								}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"><see cref="UserRegistrationRequest" /></param>
+        /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>)</returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationRequest request)
         {
@@ -64,6 +76,11 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"><see cref="UserLoginRequest" /></param>
+        /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
@@ -94,6 +111,10 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Refreshes user token through cookie
+        /// </summary>
+        /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
         [HttpPost("refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
@@ -119,6 +140,11 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Revokes included token
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>400/404 (<see cref="AuthFailedResponse"/>) or 200)</returns>
         [Authorize]
         [HttpPost("revoke-token")]
         public async Task<IActionResult> RevokeToken([FromBody] RevokeTokenRequest model)
@@ -151,6 +177,10 @@ namespace Poppin.Controllers
             return Ok(new { message = "Token revoked" });
         }
 
+        /// <summary>
+        /// Returns user Identity data; not useful for UI
+        /// </summary>
+        /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="UserSuccessResponse"/>)</returns>
         [Authorize]
 								[HttpPost("me")]
         public async Task<IActionResult> GetUser()
@@ -169,6 +199,11 @@ namespace Poppin.Controllers
                 User = userResult.User
             });
 								}
+
+        /// <summary>
+        /// Gets user id claim from current token
+        /// </summary>
+        /// <returns>String</returns>
         private string GetUserId()
         {
             if (_httpContextAccessor.HttpContext.User.Claims.Any())
@@ -189,6 +224,10 @@ namespace Poppin.Controllers
 
         // helper methods
 
+        /// <summary>
+        /// Sets cookie, with a 7 day expiration
+        /// </summary>
+        /// <param name="token"></param>
         private void SetTokenCookie(string token)
         {
             var cookieOptions = new CookieOptions
@@ -199,6 +238,10 @@ namespace Poppin.Controllers
             Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
 
+        /// <summary>
+        /// Gets user IP Address for login/registration logs
+        /// </summary>
+        /// <returns>String</returns>
         private string GetIpAddress()
         {
             if (Request.Headers.ContainsKey("X-Forwarded-For"))

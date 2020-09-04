@@ -8,7 +8,10 @@ namespace Poppin.Contracts.Responses
 				{
 								public string Token { get; set; }
 
-								[JsonIgnore] // refresh token is returned in http only cookie
+								/// <summary>
+								/// Only included in the cookie
+								/// </summary>
+								[JsonIgnore]
 								public string RefreshToken { get; set; }
 				}
 

@@ -8,7 +8,8 @@ export default class LocationModel extends Model {
   @attr categories;
   @attr('number') capacity;
   @attr('number') crowdSize;
-  @attr hours;
+	@attr('number') visitLength;
+	@attr hours;
   @attr('date') lastUpdate;
   @attr('boolean') atCapacity
   @attr yelpDetails;

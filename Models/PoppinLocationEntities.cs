@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver.GeoJsonObjectModel;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Extensions;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
@@ -46,7 +48,7 @@ namespace Poppin.Models
 												City = v.City;
 												State = v.State;
 
-												ZipCode = int.Parse(v.ZipCode);
+												ZipCode = v.ZipCode;
 												Geo = c.ToGeoJson();
 								}
 
@@ -54,7 +56,19 @@ namespace Poppin.Models
 								public string Line2 { get; set; }
 								public string City { get; set; }
 								public string State { get; set; }
-								public int? ZipCode { get; set; }
+
+								[BsonSerializer(typeof(TestingObjectTypeSerializer))]
+								public string ZipCode { get; set; }
+								public Coord Coordinates {
+												get
+												{
+																return new Coord()
+																{
+																				Latitude = Geo.Coordinates.Latitude,
+																				Longitude = Geo.Coordinates.Longitude
+																};
+												}
+								}
 								public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
 				}
 
@@ -69,7 +83,7 @@ namespace Poppin.Models
 												City = v.City;
 												State = v.State;
 
-												ZipCode = int.Parse(v.ZipCode);
+												ZipCode = v.ZipCode;
 												Coordinates = c;
 								}
 
@@ -77,7 +91,7 @@ namespace Poppin.Models
 								public string Line2 { get; set; }
 								public string City { get; set; }
 								public string State { get; set; }
-								public int? ZipCode { get; set; }
+								public string ZipCode { get; set; }
 								public Coord Coordinates { get; set; }
 								public GeoCoords Geo { get; set; }
 				}

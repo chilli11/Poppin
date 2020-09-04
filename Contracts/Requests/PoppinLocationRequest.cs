@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace Poppin.Contracts.Requests
 {
+				/// <summary>
+				/// Request format to create a new <see cref="PoppinLocation"/>,
+				/// or to edit an existing (if `Id` is included)
+				/// </summary>
 				public class PoppinLocationRequest
 				{
 								public PoppinLocationRequest() { }

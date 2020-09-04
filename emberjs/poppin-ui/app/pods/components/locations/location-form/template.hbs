@@ -34,23 +34,7 @@
 				<form.element @controlType="text" @label="State" @placeholder="State" @property="state" @required={{true}} />
 				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
-				{{#each this.hours as |hourset|}}
-					<span><strong>{{hourset.day}}</strong></span>
-					<div class="form-row">
-						<form.group class="form-group row col-sm-6">
-							<label class="col-form-label col-md-4">Open</label>
-							<div class="col-md-8">
-								<Input class="form-control" type="time" @value={{hourset.opening}} />
-							</div>
-						</form.group>
-						<form.group class="form-group row col-sm-6">
-							<label class="col-form-label col-md-4">Close</label>
-							<div class="col-md-8">
-								<Input class="form-control" type="time" @value={{hourset.closing}} />
-							</div>
-						</form.group>
-					</div>
-				{{/each}}
+				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
 			</BsForm>
 		</div>

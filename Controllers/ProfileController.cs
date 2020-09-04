@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver.GeoJsonObjectModel;
+using NetTopologySuite;
+using NetTopologySuite.Geometries;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
@@ -14,6 +12,10 @@ using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using Segment;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,6 +31,8 @@ namespace Poppin.Controllers
 								private readonly IIdentityService _identityService;
 								private readonly ILogActionService _logActionService;
 								private readonly ILocationService _locationService;
+
+								private readonly GeometryFactory geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
 								public ProfileController(
 												IIdentityService identityService,
@@ -93,6 +97,29 @@ namespace Poppin.Controllers
 								}
 
 								/// <summary>
+								/// Returns locations viewed since the day before
+								/// </summary>
+								/// <returns></returns>
+								[HttpGet("recently-viewed")]
+								public IActionResult GetRecentlyViewed()
+								{
+												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
+												if (id == null)
+												{
+																var errors = new List<string>();
+																errors.Add("User not found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+
+												var recentLocations = GetRecentLocationList(id, -1, 0);
+												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+												return Ok(recentLocations);
+								}
+
+								/// <summary>
 								/// Add a location to the user's favorites list
 								/// </summary>
 								/// <param name="locationId"></param>
@@ -100,9 +127,10 @@ namespace Poppin.Controllers
 								public IActionResult AddFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
-												var action = new BasicLocationAction()
+
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Tracking
@@ -120,9 +148,10 @@ namespace Poppin.Controllers
 								public IActionResult RemoveFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
-												var action = new BasicLocationAction()
+
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Segment.io Analytics
@@ -140,9 +169,10 @@ namespace Poppin.Controllers
 								public IActionResult HideLocation(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.HideLocation);
-												var action = new BasicLocationAction()
+
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Segment.io Analytics
@@ -160,9 +190,9 @@ namespace Poppin.Controllers
 								public IActionResult UnhideLocation(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.UnhideLocation);
-												var action = new BasicLocationAction()
+												var action = new Dictionary<string, string>()
 												{
-																LocationId = locationId
+																{ "LocationId", locationId }
 												};
 
 												// Segment.io Analytics
@@ -235,14 +265,63 @@ namespace Poppin.Controllers
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
 												var coords = new GeoJson2DGeographicCoordinates(geoJson.Coordinates[0], geoJson.Coordinates[1]);
-												var action = new UpdateGeoAction()
-												{
-																Coordinates = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords)
-												};
-												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, action);
+												var action = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords).AsStringDictionary();
+												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, (Dictionary<string,string>)action);
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
 
-												// check proximity with recent searches
+												var recent = GetRecentLocationList(id, 0, -2);
+												if (recent.Count > 0)
+												{
+																if (recent.Count > 1)
+																{
+																				recent.Sort((a, b) => CompareDistance(geoJson, a, b));
+																}
+																var closest = recent.First();
+																if (GetDistance(
+																				new[] { geoJson.Coordinates[0], geoJson.Coordinates[1] },
+																				new[] { closest.Address.Geo.Coordinates.Longitude, closest.Address.Geo.Coordinates.Latitude }
+																) < 50)
+																{
+																				var checkinAction = new Dictionary<string, string>()
+																				{
+																								{ "LocationId", closest.Id }
+																				};
+																				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.Checkin, checkinAction);
+																				Analytics.Client.Track(id, SegmentIOKeys.Actions.Checkin);
+
+																				var checkin = new Checkin(closest.Id, id, closest.VisitLength, ReliabilityScores.Geo);
+																				_locationService.NewCheckin(checkin);
+																}
+												}
+
+								}
+
+								/// <summary>
+								/// https://docs.microsoft.com/en-us/ef/core/modeling/spatial
+								/// </summary>
+								/// <param name="geoJson"></param>
+								/// <param name="a"></param>
+								/// <param name="b"></param>
+								/// <returns>-1|0|1</returns>
+								private int CompareDistance(GeoCoords geoJson, PoppinLocation a, PoppinLocation b)
+								{
+												var currentLoc = geometryFactory.CreatePoint(new Coordinate(geoJson.Coordinates[0], geoJson.Coordinates[1])).ProjectTo(4326);
+												var pointA = geometryFactory.CreatePoint(new Coordinate(a.Address.Geo.Coordinates.Longitude, a.Address.Geo.Coordinates.Latitude)).ProjectTo(4326);
+												var pointB = geometryFactory.CreatePoint(new Coordinate(b.Address.Geo.Coordinates.Longitude, b.Address.Geo.Coordinates.Latitude)).ProjectTo(4326);
+												return currentLoc.Distance(pointA).CompareTo(pointB);
+								}
+
+								/// <summary>
+								/// https://docs.microsoft.com/en-us/ef/core/modeling/spatial
+								/// </summary>
+								/// <param name="a"></param>
+								/// <param name="b"></param>
+								/// <returns>Distance in meters</returns>
+								private double GetDistance(double[] a, double[] b)
+								{
+												var pointA = geometryFactory.CreatePoint(new Coordinate(a[0], a[1])).ProjectTo(4326);
+												var pointB = geometryFactory.CreatePoint(new Coordinate(b[0], b[1])).ProjectTo(4326);
+												return pointA.Distance(pointB);
 								}
 
 								private string GetUserId()
@@ -299,6 +378,23 @@ namespace Poppin.Controllers
 																Favorites = user.GetFavorites(_locationService).Result,
 																Hidden = user.GetHidden(_locationService).Result,
 												};
+								}
+
+								private List<PoppinLocation> GetRecentLocationList(string id, int dayOffset, int hourOffset)
+								{
+												if (hourOffset > 0) hourOffset = hourOffset * -1;
+												if (dayOffset > 0) dayOffset = dayOffset * -1;
+
+												var startDay = DateTime.Today;
+												if (hourOffset == 0)
+												{
+																startDay = startDay.AddDays(dayOffset);
+												}
+
+												var logs = _logActionService.GetUserActivity(id, startDay);
+												if (hourOffset < 0) logs = logs.Where(l => l.Date > startDay.AddHours(hourOffset)).ToList();
+												var recent = logs.SelectMany(l => l.Entries.Where(e => e.ActionType == SegmentIOKeys.Actions.ViewLocation)).Select(a => a.Action);
+												return _locationService.GetMany(recent.Select(a => a["LocationId"])).Result;
 								}
 				}
 }
