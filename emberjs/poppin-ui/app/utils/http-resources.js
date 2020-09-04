@@ -58,6 +58,28 @@ const HttpResources = {
 	myAccount: {
 		url: 'identity/me',
 		method: POST
+	},
+
+	/* ===== VENDOR ===== */
+	createNewVendor: {
+		url: 'vendor',
+		method: POST
+	},
+	updateVendor: {
+		url: 'vendor/:vendorId',
+		method: PUT
+	},
+	getVendorById: {
+		url: 'vendor/:vendorId',
+		method: GET
+	},
+	getVendorsByList: {
+		url: 'vendor/get-by-list',
+		method: POST
+	},
+	getVendorsBySearch: {
+		url: 'vendor/get-by-search',
+		method: POST
 	}
 };
 

@@ -1,0 +1,10 @@
+{{#if (eq this.machineState 'IDLE')}}
+	<Vendors::VendorDisplay
+		@vendor={{@vendor}}
+		@startEdit={{this.startEdit}}
+		@refresh={{@refresh}} />
+{{else if (eq this.machineState 'EDIT_LOCATION')}}
+	<Vendors::VendorForm
+		@vendor={{@vendor}}
+		@resolveAction={{this.endEdit}} />
+{{/if}}
