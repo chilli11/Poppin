@@ -6,9 +6,16 @@
 			<p><a href="javascript:void(0)" class="text-light" {{on "click" @startEdit}}>Edit</a></p>
 		</div>
 		<div class="card-body">
+			<div>
+				<h3>
+					<button {{on 'click' @decrement}}>-</button>
+					{{@location.crowdSize}}
+					<button {{on 'click' @increment}}>+</button>
+				</h3>
+			</div>
 			<dl>
 				<dt>Occupancy</dt>
-				<dd>{{@location.crowdSize}}/{{@location.capacity}}</dd>
+				<dd>{{@location.capacity}}</dd>
 				<dt>Categories:</dt>
 				{{#each @location.yelpDetails.categories as |category|}}
 					<dd>{{category.title}}</dd>

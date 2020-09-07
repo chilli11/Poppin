@@ -33,14 +33,17 @@ namespace Poppin.Models.BusinessEntities
 
         public async Task<List<Vendor>> GetVendors(IVendorService vs)
         {
+            if (VendorIds == null) return null;
             return await vs.GetVendorsByIds(VendorIds);
         }
         public async Task<List<PoppinLocation>> GetFavorites(ILocationService ls)
         {
+            if (Favorites == null) return null;
             return await ls.GetMany(Favorites);
         }
         public async Task<List<PoppinLocation>> GetHidden(ILocationService ls)
         {
+            if (Hidden == null) return null;
             return await ls.GetMany(Hidden);
         }
         public async Task<IEnumerable<UserLog>> GetuserActivity(ILogActionService las)

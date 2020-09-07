@@ -21,6 +21,16 @@ const HttpResources = {
 		url: 'locations/yelp-search',
 		method: POST
 	},
+	incrementCrowd: {
+		url: 'locations/incrementCrowd/:locId',
+		method: GET,
+		params: ['locId']
+	},
+	decrementCrowd: {
+		url: 'locations/decrementCrowd/:locId',
+		method: GET,
+		params: ['locId']
+	},
 
 	/* ===== YELP =====*/
 	getYelpMatch: {

@@ -1,0 +1,15 @@
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Vendors</h4>
+			<p class="card-category">
+				Choose a vendor {{#if this.results.total}}({{this.results.total}} Result(s)){{/if}}
+			</p>
+		</div>
+		<div class="card-body">
+			<Locations::LocationList
+				@locations={{this.results}}
+				@clickAction={{this.clickAction}} />
+		</div>
+	</div>
+</div>
