@@ -1,0 +1,30 @@
+<BsNavbar class="navbar-dark bg-primary" as |navbar|>
+	<div>
+		<navbar.toggle />
+		<a class="navbar-brand mr-0 mr-md-2 navbar-absolute-logo" href="#">Poppin</a>
+	</div>
+	<navbar.content>
+		<navbar.nav as |nav|>
+			<nav.item>
+				<nav.linkTo @route="locations">Locations</nav.linkTo>
+			</nav.item>
+			{{#if this.authorized}}
+				{{#if this.isAdmin}}
+					<nav.item>
+						<nav.linkTo @route="locations.add">Add a location</nav.linkTo>
+					</nav.item>
+				{{/if}}
+				<nav.item>
+					<nav.linkTo class="logout-button" @route="account">My Profile</nav.linkTo>
+				</nav.item>
+				<nav.item>
+					<a class="nav-link" role="button" {{on "click" this.logout}}>Logout</a>
+				</nav.item>
+			{{else}}
+				<nav.item>
+					<nav.linkTo class="logout-button" @route="account">Login</nav.linkTo>
+				</nav.item>
+			{{/if}}
+		</navbar.nav>
+	</navbar.content>
+</BsNavbar>

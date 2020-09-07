@@ -21,6 +21,16 @@ const HttpResources = {
 		url: 'locations/yelp-search',
 		method: POST
 	},
+	incrementCrowd: {
+		url: 'locations/incrementCrowd/:locId',
+		method: GET,
+		params: ['locId']
+	},
+	decrementCrowd: {
+		url: 'locations/decrementCrowd/:locId',
+		method: GET,
+		params: ['locId']
+	},
 
 	/* ===== YELP =====*/
 	getYelpMatch: {
@@ -57,6 +67,28 @@ const HttpResources = {
 	},
 	myAccount: {
 		url: 'identity/me',
+		method: POST
+	},
+
+	/* ===== VENDOR ===== */
+	createNewVendor: {
+		url: 'vendor',
+		method: POST
+	},
+	updateVendor: {
+		url: 'vendor/:vendorId',
+		method: PUT
+	},
+	getVendorById: {
+		url: 'vendor/:vendorId',
+		method: GET
+	},
+	getVendorsByList: {
+		url: 'vendor/get-by-list',
+		method: POST
+	},
+	getVendorsBySearch: {
+		url: 'vendor/get-by-search',
 		method: POST
 	}
 };

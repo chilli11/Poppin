@@ -3,10 +3,8 @@ import { inject as service } from '@ember/service';
 
 export default class AccountIndexRoute extends Route {
 	@service accountService;
-	get authorized() {
-		return this.accountService.authInfo && this.accountService.authInfo.authorized;
-	}
 	model() {
-		return this.authorized ? this.accountService.me() : null;
+		const isAuthorized = this.accountService.authInfo && this.accountService.authInfo.authorized;
+		return isAuthorized ? this.accountService.me() : null;
 	}
 }
