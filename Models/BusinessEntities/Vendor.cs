@@ -34,16 +34,19 @@ namespace Poppin.Models.BusinessEntities
 
 								public IEnumerable<PoppinLocation> GetLocations(ILocationService locationsService)
 								{
+												if (LocationIds == null) return null;
 												return locationsService.GetMany(LocationIds).Result;
 								}
 
 								public IEnumerable<PoppinUser> GetAdmins(IUserService userService)
 								{
+												if (AdminIds == null) return null;
 												return userService.GetUsersById(AdminIds).Result;
 								}
 
 								public IEnumerable<PoppinUser> GetMembers(IUserService userService)
 								{
+												if (MemberIds == null) return null;
 												return userService.GetUsersById(MemberIds).Result;
 								}
 				}

@@ -2,6 +2,8 @@
 	<Locations::LocationDisplay
 		@location={{@location}}
 		@startEdit={{this.startEdit}}
+		@increment={{this.increment}}
+		@decrement={{this.decrement}}
 		@refresh={{@refresh}} />
 {{else if (eq this.machineState 'EDIT_LOCATION')}}
 	<Locations::LocationForm
@@ -9,3 +11,13 @@
 		@location={{@location}}
 		@resolveAction={{this.endEdit}} />
 {{/if}}
+
+<BsModal @open={{this.showModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">{{this.modalTitle}}</h4>
+	</modal.header>
+	<modal.body>{{this.modalText}}</modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>

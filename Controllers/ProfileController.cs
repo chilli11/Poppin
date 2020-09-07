@@ -66,7 +66,7 @@ namespace Poppin.Controllers
 												var user = await GetUserProfile(id);
                         
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
-												return Ok(GetPoppinUserResult(user));
+												return Ok(await GetPoppinUserResult(user));
 								}
 
 								// GET api/<ProfileController>/5
@@ -370,13 +370,13 @@ namespace Poppin.Controllers
 												return user;
 								}
 
-								private PoppinUserResult GetPoppinUserResult(PoppinUser user)
+								private async Task<PoppinUserResult> GetPoppinUserResult(PoppinUser user)
 								{
 												return new PoppinUserResult()
 												{
 																User = user,
-																Favorites = user.GetFavorites(_locationService).Result,
-																Hidden = user.GetHidden(_locationService).Result,
+																Favorites = await user.GetFavorites(_locationService),
+																Hidden = await user.GetHidden(_locationService),
 												};
 								}
 

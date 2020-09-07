@@ -377,6 +377,7 @@ namespace Poppin.Controllers
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.IncrementCrowd);
 
+                await location.SetCrowdSize(_locationService);
                 return Ok(location);
             }
 
@@ -415,6 +416,8 @@ namespace Poppin.Controllers
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+
+                await location.SetCrowdSize(_locationService);
                 return Ok(location);
             }
 

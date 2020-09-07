@@ -7,16 +7,22 @@ export default class AccountService extends Service {
 	@injectService apiService;
 	@injectService session;
 
-	@tracked authInfo = null
+	@tracked authInfo = null;
+	@tracked accountInfo = null;
+	@tracked profile = null;
+	@tracked vendors = null;
+	@tracked favorites = null;
+	@tracked hidden = null;
 
 	isAuthenticated() {
 		if (this.authInfo) {
-			if (this.authInfo.authorized) return Promise.resolve();
+			if (this.authInfo.authorized) return this.myProfile();
 			return Promise.reject();
 		}
 		return this.apiService.request({
 			resource: HttpResources.isAuthenticated
 		}).then(() => this.authInfo = { authorized: true })
+			.then(() => this.myProfile())
 			.catch(() => this.authInfo = { authorized: false });
 	}
 
@@ -42,7 +48,18 @@ export default class AccountService extends Service {
 	me() {
 		return this.apiService.request({
 			resource: HttpResources.myAccount,
-		}).then(({ user }) => user);
+		}).then(({ user }) => this.accountInfo = user);
+	}
+
+	myProfile() {
+		return this.apiService.request({
+			resource: HttpResources.myProfile
+		}).then(({ user, vendors, favorites, hidden }) => {
+			this.profile = user;
+			this.vendors = vendors;
+			this.favorites = favorites;
+			this.hidden = hidden;
+		});
 	}
 
 	logout() {

@@ -628,6 +628,18 @@ define("poppin-ui/tests/test-helper", ["poppin-ui/app", "poppin-ui/config/enviro
   (0, _testHelpers.setApplication)(_app.default.create(_environment.default.APP));
   (0, _emberQunit.start)();
 });
+define("poppin-ui/tests/unit/controllers/application-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | application', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:application');
+      assert.ok(controller);
+    });
+  });
+});
 define("poppin-ui/tests/unit/models/poppin-location-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -663,6 +675,18 @@ define("poppin-ui/tests/unit/pods/account-service/service-test", ["qunit", "embe
     (0, _qunit.test)('it exists', function (assert) {
       let service = this.owner.lookup('service:account-service');
       assert.ok(service);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/index/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | account/index', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:account/index');
+      assert.ok(controller);
     });
   });
 });
@@ -707,6 +731,18 @@ define("poppin-ui/tests/unit/pods/account/register/route-test", ["qunit", "ember
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:account/register');
       assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/admin/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | admin', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:admin');
+      assert.ok(controller);
     });
   });
 });
@@ -801,6 +837,18 @@ define("poppin-ui/tests/unit/pods/index/route-test", ["qunit", "ember-qunit"], f
     });
   });
 });
+define("poppin-ui/tests/unit/pods/locations/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | locations', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:locations');
+      assert.ok(controller);
+    });
+  });
+});
 define("poppin-ui/tests/unit/pods/search/index/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -808,6 +856,17 @@ define("poppin-ui/tests/unit/pods/search/index/route-test", ["qunit", "ember-qun
     (0, _emberQunit.setupTest)(hooks);
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:search/index');
+      assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/routes/application-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | application', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:application');
       assert.ok(route);
     });
   });
