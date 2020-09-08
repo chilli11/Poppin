@@ -5,6 +5,7 @@ export default class AdminRoute extends Route {
 	@service accountService;
 	beforeModel() {
 		this.accountService.isAuthenticated()
+			.then(({ authorized }) => !authorized ? this.transitionTo('account') : true)
 			.catch(() => this.transitionTo('account'));
 	}
 }

@@ -17,8 +17,9 @@ Router.map(function() {
 	});
   this.route('search', function() {});
   this.route('account', function() {
+    this.route('index');
     this.route('register');
-    // this.route('login');
-    // this.route('me');
+    this.route('login');
+    this.route('me');
   });
 });
