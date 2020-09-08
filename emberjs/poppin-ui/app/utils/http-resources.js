@@ -69,6 +69,10 @@ const HttpResources = {
 		url: 'identity/me',
 		method: POST
 	},
+	myProfile: {
+		url: 'profile',
+		method: GET
+	},
 
 	/* ===== VENDOR ===== */
 	createNewVendor: {

@@ -60,7 +60,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		set(this, 'msgs', msgs || []);
 		this.msgType = 'success';
 		this.showMsg = true;
-		return this.accountService.myProfile();
+		return this.args.refresh();
 	}
 
 	@action

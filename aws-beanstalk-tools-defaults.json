@@ -6,7 +6,7 @@
     "application" : "Poppin-dev2",
     "environment" : "PoppinDev2-env",
     "cname"       : "poppin-dev",
-    "solution-stack" : "64bit Windows Server 2019 v2.5.8 running IIS 10.0",
+    "solution-stack" : "64bit Windows Server 2019 v2.5.9 running IIS 10.0",
     "environment-type" : "SingleInstance",
     "instance-profile" : "aws-elasticbeanstalk-ec2-role",
     "service-role"     : "aws-elasticbeanstalk-service-role",
