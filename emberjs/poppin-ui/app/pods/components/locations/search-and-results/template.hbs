@@ -1,0 +1,29 @@
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Search Poppin</h4>
+		</div>
+		<div class="card-body">
+			<LoadingSpinner @isLoading={{this.isLoading}}>
+				<Yelp::YelpSearchForm
+					@searchMethod={{this.searchMethod}}
+					@populateResults={{this.populateResults}} />
+			</LoadingSpinner>
+		</div>
+	</div>
+</div>
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Search Results</h4>
+			<p class="card-category">
+				Choose a business {{#if this.results.total}}({{this.results.total}} Result(s)){{/if}}
+			</p>
+		</div>
+		<div class="card-body">
+			<Locations::LocationList
+				@locations={{this.results}}
+				@clickAction={{@clickAction}} />
+		</div>
+	</div>
+</div>

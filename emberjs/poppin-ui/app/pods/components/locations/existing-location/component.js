@@ -39,7 +39,9 @@ export default class LocationFormComponent extends StatefulComponent {
 		const method = data > 0 ? 'incrementCrowd' : 'decrementCrowd';
 		return this.locationsService[method](this.args.location.id)
 			.then((location) => {
-				this.args.refresh(location);
+				// this.args.refresh(location);
+				this.store.findRecord('location', location.id)
+					.then((loc) => loc.crowdSize = location.crowdSize);
 				return this.dispatch(actions.END_LOADING);
 			}).catch(({ errors }) => this.dispatch(actions.REJECT_ACTION, errors));
 	}

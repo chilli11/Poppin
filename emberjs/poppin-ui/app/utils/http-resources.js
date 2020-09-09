@@ -76,23 +76,27 @@ const HttpResources = {
 
 	/* ===== VENDOR ===== */
 	createNewVendor: {
-		url: 'vendor',
+		url: 'vendors',
 		method: POST
 	},
 	updateVendor: {
-		url: 'vendor/:vendorId',
+		url: 'vendors',
 		method: PUT
 	},
+	getAllVendors: {
+		url: 'vendors',
+		method: GET
+	},
 	getVendorById: {
-		url: 'vendor/:vendorId',
+		url: 'vendors/:vendorId',
 		method: GET
 	},
 	getVendorsByList: {
-		url: 'vendor/get-by-list',
+		url: 'vendors/get-by-list',
 		method: POST
 	},
 	getVendorsBySearch: {
-		url: 'vendor/get-by-search',
+		url: 'vendors/get-by-search',
 		method: POST
 	}
 };

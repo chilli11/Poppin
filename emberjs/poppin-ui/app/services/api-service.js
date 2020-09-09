@@ -117,8 +117,8 @@ export default class ApiService extends Service.extend(Evented) {
 		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
 		} else {
-			Object.keys(options.body || {})
-				.forEach(k => fetchRequest.url.searchParams.append(k, options.body[k]));
+			Object.keys(fetchRequest.body || {})
+				.forEach(k => fetchRequest.url.searchParams.append(k, fetchRequest.body[k]));
 			fetchRequest = _.omit(fetchRequest, 'body');
 		}
 		

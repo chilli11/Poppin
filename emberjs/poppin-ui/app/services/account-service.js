@@ -63,9 +63,18 @@ export default class AccountService extends Service {
 	}
 
 	logout() {
+		this.clearUserData();
+		return Promise.resolve();
+	}
+
+	clearUserData() {
 		this.apiService.jwt = null;
 		this.authInfo = null;
+		this.accountInfo = null;
+		this.profile = null;
+		this.vendors = null;
+		this.favorites = null;
+		this.hidden = null;
 		sessionStorage.removeItem('poppin_jwt');
-		return Promise.resolve();
 	}
 }

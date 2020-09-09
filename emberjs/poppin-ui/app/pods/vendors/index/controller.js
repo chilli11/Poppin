@@ -5,10 +5,14 @@ import { action } from '@ember/object';
 
 export default class AdminLocationsController extends Controller {
 	@service vendorsService;
-	@service router;
-
-	@tracked results;
+	get results() {
+		return this.vendorsService.vendors;
+	}
 	@tracked isLoading;
+
+	get vendorsList() {
+		return this.results || this.vendorsService.vendors;
+	}
 
 	@action
 	searchMethod(params) {
@@ -26,6 +30,6 @@ export default class AdminLocationsController extends Controller {
 
 	@action
 	clickAction(vendor) {
-		return this.router.transitionTo('admin.vendors.vendor', vendor);
+		return this.transitionToRoute('vendors.vendor', vendor);
 	}
 }

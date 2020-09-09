@@ -1,1 +1,9 @@
-{{yield}}
+{{#each @vendors as |v|}}
+	<div class="card">
+		<div class="card-body" role="button" {{on "click" (fn @clickAction v)}}>
+			<span class="strong">{{v.organizationName}}</span>
+			<span>{{v.organizationContactName}}</span> // <span>{{v.organizationContactEmail}}</span>
+			{{!-- <span>Last Updated: {{moment v.lastUpdate}}</span> --}}
+		</div>
+	</div>
+{{/each}}

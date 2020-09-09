@@ -1,28 +1,38 @@
 import Service, { inject as injectService } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import HttpResources from '../utils/http-resources';
 import { Promise } from 'rsvp';
 
-export default class LocationsService extends Service {
+export default class VendorsService extends Service {
+	namespace = 'VendorsService';
 	@injectService apiService;
 
-	createNewVendor(location) {
+	@tracked vendors;
+
+	createNewVendor(vendor) {
 		return this.apiService.request({
-			resource: HttpResources.createNewLocation,
-			body: location
+			resource: HttpResources.createNewVendor,
+			body: vendor
 		});
 	}
 
-	updateVendor(location) {
+	updateVendor(vendor) {
 		return this.apiService.request({
-			resource: HttpResources.updateLocation,
-			body: location
+			resource: HttpResources.updateVendor,
+			body: vendor
 		});
 	}
 
-	getVendorById(locId) {
+	getAllVendors() {
 		return this.apiService.request({
-			resource: HttpResources.getLocation,
-			body: { locId }
+			resource: HttpResources.getAllVendors
+		}).then(vendors => this.vendors = vendors);
+	}
+
+	getVendorById(vId) {
+		return this.apiService.request({
+			resource: HttpResources.getVendorById,
+			body: { vId }
 		});
 	}
 

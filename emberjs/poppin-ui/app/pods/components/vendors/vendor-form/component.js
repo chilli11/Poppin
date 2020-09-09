@@ -1,103 +1,105 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
-import { action, set } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import _ from 'lodash';
 
 import { states, actions } from './constants';
 
-const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const defHours = [
-	{ opening: null, closing: null,  day: days[0] },
-	{ opening: null, closing: null,  day: days[1] },
-	{ opening: null, closing: null,  day: days[2] },
-	{ opening: null, closing: null,  day: days[3] },
-	{ opening: null, closing: null,  day: days[4] },
-	{ opening: null, closing: null,  day: days[5] },
-	{ opening: null, closing: null,  day: days[6] },
-];
 
-
-export default class LocationFormComponent extends StatefulComponent {
+export default class VendorFormComponent extends StatefulComponent {
 	namespace = 'LocationForm';
+	@service vendorsService;
 	@service locationsService;
-	@service yelpService;
+	@service accountService;
 	@service store;
-
-	days = days;
 
 	transitions = {
 		[states.IDLE]: {
-			[actions.SUBMIT_LOCATION]: states.SUBMITTING_LOCATION,
-			[actions.GET_FULL_MATCH]: states.GETTING_FULL_MATCH,
-			[actions.SUBMIT_MATCH]: states.SUBMITTING_MATCH
+			[actions.SUBMIT_VENDOR]: states.SUBMITTING_VENDOR,
+			[actions.ADD_MEMBER]: states.ADDING_MEMBER,
+			[actions.GET_LOCATION_ID]: states.GETTING_LOCATION_ID,
+			[actions.ADD_LOCATION]: states.ADDING_LOCATION
 		},
-		[states.SUBMITTING_LOCATION]: {
-			[actions.GET_MATCHES]: states.GETTING_MATCHES,
+		[states.SUBMITTING_VENDOR]: {
+			[actions.RESOLVE_SUBMIT_VENDOR]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
-		[states.GETTING_MATCHES]: {
-			[actions.RESOLVE_GET_MATCHES]: states.IDLE,
+		[states.ADDING_MEMBER]: {
+			[actions.RESOLVE_ADD_MEMBER]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
-		[states.GETTING_FULL_MATCH]: {
-			[actions.RESOLVE_FULL_MATCH]: states.IDLE,
+		[states.GETTING_LOCATION_ID]: {
+			[actions.RESOLVE_GET_LOCATION_ID]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
-		[states.SUBMITTING_MATCH]: {
-			[actions.RESOLVE_SUBMIT_MATCH]: states.IDLE,
+		[states.ADDING_MEMBER]: {
+			[actions.RESOLVE_ADD_LOCATION]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
-		}
+		},
 	};
 
-	@tracked yelpMatches;
-	@tracked locationId;
-	@tracked name;
-	@tracked yelpId;
-	@tracked addressLine1;
-	@tracked addressLine2;
-	@tracked city;
-	@tracked state;
+	@tracked showLocationFormModal;
+	@tracked showStatusModal;
 
-	@tracked zip;	
-	get zipCode() {
-		return this.zip ? this.zip.toString().substr(0, 5) : null;
+	@tracked vendorId;
+	@tracked parentVendorId;
+	@tracked organizationName;
+	@tracked organizationContactName;
+	@tracked organizationContactEmail;
+
+	_adminIds = [];
+	_memberIds = [];
+	_subVendorIds = [];
+	_locationIds = [];
+	
+	get adminIds() {
+		return this._adminIds;
 	}
-
-	@tracked geo;
-	@tracked capacity = '0';
-	@tracked crowdSize = '0';
-	@tracked hours = _.merge(defHours);
-	@tracked visitLength = '45';
+	get memberIds() {
+		return this._memberIds;
+	}
+	get subVendorIds() {
+		return this._subVendorIds;
+	}
+	get locationIds() {
+		return this._locationIds;
+	}
 
 	@tracked modalTitle;
 	@tracked modalText;
 	@tracked showModal = false;
 
-	get locationDTO() {
-		const { locationId, name, yelpId,  capacity, crowdSize, hours, visitLength } = this;
+	get isLoading() {
+		return /ing/i.test(this.machineState);
+	}
+
+	get vendorDTO() {
+		const {
+			vendorId,
+			parentVendorId,
+			organizationName,
+			organizationContactName,
+			organizationContactEmail,
+			adminIds,
+			memberIds,
+			subVendorIds,
+			locationIds
+		} = this;
 		return  {
-			id: locationId,
-			yelpId: yelpId,
-			name,
-			address: {
-				line1: this.addressLine1,
-				line2: this.addressLine2,
-				city: this.city,
-				state: this.state,
-				zipCode: parseInt(this.zipCode, 10),
-				geo: this.geo
-			},
-			categories: [],
-			capacity: parseInt(capacity, 10),
-			crowdSize: parseInt(crowdSize, 10),
-			hours,
-			visitLength
+			id: vendorId,
+			parentVendorId,
+			organizationName,
+			organizationContactName,
+			organizationContactEmail,
+			adminIds,
+			memberIds,
+			subVendorIds,
+			locationIds
 		};
 	}
 
-	get canAcceptMatch() {
-		return !!this.locationId;
+	get canAddMember() {
+		return !!this.vendorId;
 	}
 
 	constructor() {
@@ -108,129 +110,59 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	@action
 	clearForm() {
-		this.locationId = null;
-		this.yelpId = null;
-		this.name = null;
-		this.addressLine1 = null;
-		this.addressLine2 = null;
-		this.city = null;
-		this.state = null;
-		this.zipCode = null;
-		this.capacity = 0;
-		this.hours = _.merge(defHours);
+		this.vendorId = null;
+		this.parentVendorId = null;
+		this.organizationName = null;
+		this.organizationContactName = null;
+		this.organizationContactEmail = null;
+		this._adminIds = [];
+		this._memberIds = [];
+		this._subVendorIds = [];
+		this._locationIds = [];
 	}
 
-	populateFromPoppin(location) {
-		const loc = location || this.args.location
-		if (loc) {
-			this.yelpEntity = loc.yelpDetails;
-			this.locationId = loc.id;
-			this.yelpId = loc.yelpId;
-			this.name = loc.name;
-			this.addressLine1 = loc.address.line1;
-			this.addressLine2 = loc.address.line2;
-			this.city = loc.address.city;
-			this.state = loc.address.state;
-			this.zip = loc.address.zipCode;
-			this.geo = {
-				type: 'Point',
-				coordinates: loc.address.geo.coordinates.values
-			};
-			this.capacity = loc.capacity;
-			this.hours = loc.hours || _.merge(defHours);
-			this.visitLength = loc.visitLength;
+	populateFromPoppin(vendor) {
+		const v = vendor || this.args.vendor;
+		if (v) {
+			this.vendorId = v.id;
+			this.parentVendorId = v.parentVendorId;
+			this.organizationName = v.organizationName;
+			this.organizationContactName = v.organizationContactName;
+			this.organizationContactEmail = v.organizationContactEmail;
+			this._adminIds = v.adminIds || [];
+			this._memberIds = v.memberIds || [];
+			this._subVendorIds = v.subVendorIds || [];
+			this._locationIds = v.locationIds || [];
 		}
 	}
 
-	populateFromYelp(loc) {		
-		this.yelpEntity = loc;
-		this.yelpId = loc.id;
-		this.name = loc.name;
-		this.addressLine1 = loc.location.address1;
-		this.addressLine2 = loc.location.address2;
-		this.city = loc.location.city;
-		this.state = loc.location.state;
-		this.zip = loc.location.zip || this.zip;
-		this.geo = {
-			type: 'Point',
-			coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
-		};
-		this.capacity = 0;
-		this.visitLength = 45;
-		
-		const _hours = _.merge(defHours);
-		if (loc.hours && loc.hours.length) {
-			const { open } = loc.hours[0];
-			open.forEach(v => {
-				var obj = _hours[v.day];
-				set(obj, 'opening', v.start.slice(0,2) + ':' + v.start.slice(2));
-				set(obj, 'closing', v.end.slice(0,2) + ':' + v.end.slice(2));
-			});
-		}		
-		this.hours = _hours;
-	}
-
-	checkMatch(business) {
-		business.isMatch = business.id == this.yelpId;
-		return business;
-	}
-
-	[actions.SUBMIT_LOCATION]() {
-		const method = this.locationId ? 'updateLocation' : 'createNewLocation';
-		return this.locationsService[method](this.locationDTO).then((location) => {
-			if (this.locationId) {
-				this.store.findRecord('location', this.locationId)
+	[actions.SUBMIT_VENDOR]() {
+		const method = this.vendorId ? 'updateVendor' : 'createNewVendor';
+		return this.vendorsService[method](this.vendorDTO).then((vendor) => {
+			if (this.vendorId) {
+				this.store.findRecord('vendor', this.vendorId)
 					// eslint-disable-next-line no-unused-vars
-					.then(loc => loc = location);
+					.then(v => v = this.vendorDTO);
 			} else {
-				this.store.createRecord('location', location);
+				this.store.createRecord('vendor', vendor);
+				this.vendorId = vendor.id;
 			}
-			this.locationId = location.id;
-			this.yelpId = location.yelpId;
 			if (typeof this.args.resolveAction == 'function') {
-				return this.args.resolveAction(this.locationDTO);
-			}
-			if (location.yelpId) {
-				location.yelpDetails = this.yelpEntity;
-				return this.args.redirectToLocation(location);
+				return this.args.resolveAction(vendor);
 			}
 			
-			this.modalText = this.name + " has been added to Poppin!";
+			this.modalText = this.organizationName + " has been added to Poppin!";
 			this.modalTitle = "Success!";
-			this.showModal = true;
-			return this.dispatch(actions.GET_MATCHES, location.id);
+			this.showStatusModal = true;
 		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
 	}
 
-	[actions.GET_MATCHES](id) {
-		return this.yelpService.getLocMatch(id).then((data) => {
-			this.yelpMatches = data.businesses.map(b => this.checkMatch(b));
-			return this.dispatch(actions.RESOLVE_GET_MATCHES, data);
-		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
+	[actions.ADD_LOCATION](id) {
+		return this._locationIds.indexOf(id) == -1 ? this._locationIds.push(id) : true;
 	}
 
-	[actions.GET_FULL_MATCH](match) {
-		return this.yelpService.getYelpBusiness(match.id).then((data) => {
-			this.populateFromYelp(data);
-			return this.dispatch(actions.RESOLVE_FULL_MATCH, data);
-		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
-	}
-
-	[actions.SUBMIT_MATCH](match) {
-		this.yelpId = match.id;
-		return this.locationsService.updateLocation(this.locationDTO).then(data => {
-			if (typeof this.args.resolveAction == 'function') {
-				return this.args.resolveAction(this.locationDTO);
-			}
-			return this.dispatch(actions.RESOLVE_SUBMIT_MATCH, data);
-		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
-	}
-
-	[actions.RESOLVE_SUBMIT_MATCH](match) {
-		this.modalText = "Matched to " + match.name + ".";
-		this.modalTitle = "Match Added!";
-		this.showModal = true;
-		return true;
+	[actions.GET_LOCATION_ID]() {
+		this.showLocationFormModal = true;
 	}
 
 	[actions.REJECT_ACTION](data) {
@@ -243,16 +175,16 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	@action
 	submit() {
-		return this.dispatch(actions.SUBMIT_LOCATION, null, true);
+		return this.dispatch(actions.SUBMIT_VENDOR, null, true);
 	}
 
 	@action
-	acceptMatch(match) {
-		return this.dispatch(actions.SUBMIT_MATCH, match);
+	addLocation(loc) {
+		return this.dispatch(actions.ADD_LOCATION, loc.id);
 	}
 
 	@action
-	fillData(match) {
-		this.dispatch(actions.GET_FULL_MATCH, match);
+	addMember(email) {
+		this.dispatch(actions.ADD_MEMBER, email);
 	}
 }
