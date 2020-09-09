@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
+using Poppin.Models.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,23 +16,41 @@ using System.Threading.Tasks;
 namespace Poppin.Controllers
 {
 				[Route("api/[controller]")]
+				[Authorize]
 				[ApiController]
-				public class VendorController : ControllerBase
+				public class VendorsController : ControllerBase
 				{
 								private readonly IVendorService _vendorService;
         private readonly ILocationService _locationService;
         private readonly IUserService _userService;
 
-								private List<Vendor> _vendors;
+								private List<Vendor> _vendors = new List<Vendor>();
 
-								public VendorController(IVendorService vendorService, ILocationService locationService, IUserService userService)
+								public VendorsController(IVendorService vendorService, ILocationService locationService, IUserService userService)
 								{
 												_vendorService = vendorService;
 												_locationService = locationService;
 												_userService = userService;
 								}
 
-								// GET: api/Vendor/5
+								// GET: api/Vendors/5
+								[HttpGet]
+								public async Task<IActionResult> Get()
+								{
+												var vendors = await _vendorService.GetAll();
+												if (vendors == null)
+												{
+																var errors = new List<string>();
+																errors.Add("No Results Found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+												return Ok(vendors);
+								}
+
+								// GET: api/Vendors/5
 								[HttpGet("{vendorId}")]
 								public async Task<IActionResult> Get(string vendorId)
 								{
@@ -52,14 +72,19 @@ namespace Poppin.Controllers
 												var vResult = new VendorResult
 												{
 																Vendor = vendor,
+																SubVendors = vendor.GetSubVendors(_vendorService),
 																Locations = vendor.GetLocations(_locationService),
 																Admins = vendor.GetAdmins(_userService),
 																Members = vendor.GetMembers(_userService)
 												};
+												if (vendor.ParentVendorId != null)
+												{
+																vResult.Parent = await _vendorService.GetVendorById(vendor.ParentVendorId);
+												}
 												return Ok(vResult);
 								}
 
-								// GET: api/Vendor/5
+								// GET: api/Vendors/5
 								[HttpPost("get-by-list")]
 								public async Task<IActionResult> GetByIds(IEnumerable<string> vendorIds)
 								{
@@ -95,7 +120,7 @@ namespace Poppin.Controllers
 												}
 								}
 
-								// GET: api/Vendor/5
+								// GET: api/Vendors/5
 								[HttpPost("get-by-search")]
 								public async Task<IActionResult> GetBySearch(string searchTerm)
 								{
@@ -114,7 +139,7 @@ namespace Poppin.Controllers
 												return Ok(vendors);
 								}
 
-								// POST api/<VendorController>
+								// POST api/Vendors
 								[HttpPost]
 								public async Task<IActionResult> Post(PoppinVendorRequest newVendor)
 								{
@@ -131,7 +156,7 @@ namespace Poppin.Controllers
 												return Ok(isExisting);
 								}
 
-								// PUT api/<VendorController>/5
+								// PUT api/Vendors/5
 								[HttpPut]
 								public async Task<IActionResult> Put(PoppinVendorRequest newVendor)
 								{
@@ -159,7 +184,7 @@ namespace Poppin.Controllers
 												}
 								}
 
-								// PUT api/<VendorController>/5
+								// PUT api/Vendors/5
 								[HttpPut("{vendorId}")]
 								public async Task<IActionResult> Put(string vendorId, PoppinVendorRequest newVendor)
 								{
@@ -187,7 +212,7 @@ namespace Poppin.Controllers
 												}
 								}
 
-								// DELETE api/<VendorController>/5
+								// DELETE api/Vendors/5
 								[HttpDelete("{vendorId}")]
 								public void Delete(string vendorId)
 								{

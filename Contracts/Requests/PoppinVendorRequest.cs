@@ -18,7 +18,10 @@ namespace Poppin.Contracts.Requests
 								public string OrganizationContactName { get; set; }
 								public string OrganizationContactEmail { get; set; }
 								public bool Active { get; set; }
-								public IEnumerable<string> LocationIds { get; set; }
-								public IEnumerable<string> MemberIds { get; set; }
+								public string[] LocationIds { get; set; }
+								public string[] MemberIds { get; set; }
+								public string[] SubVendorIds { get; set; }
+								public string[] AdminIds { get; set; }
+								public string ParentVendorId { get; set; }
 				}
 }

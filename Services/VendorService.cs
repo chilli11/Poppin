@@ -21,6 +21,8 @@ namespace Poppin.Services
 
 												_vendors = database.GetCollection<Vendor>("Vendors");
 								}
+
+								public Task<List<Vendor>> GetAll() => _vendors.Find(v => v.Id != null).ToListAsync();
 								
 								public Task<Vendor> GetVendorById(string vendorId)
 												=> _vendors.FindAsync(v => v.Id == vendorId).Result.FirstAsync();
