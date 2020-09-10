@@ -70,4 +70,28 @@ export default class VendorsService extends Service {
 			return Promise.reject();
 		}
 	}
+
+	addMember({ vendorId, email, role, userId }) {
+		try {
+			return this.apiService.request({
+				resource: HttpResources.addMember,
+				body: { vendorId, email, role, userId }
+			});
+		} catch (e) {
+			console.error(e);
+			return Promise.reject();
+		}
+	}
+
+	removeMember({ vendorId, email, role, userId }) {
+		try {
+			return this.apiService.request({
+				resource: HttpResources.removeMember,
+				body: { vendorId, email, role, userId }
+			});
+		} catch (e) {
+			console.error(e);
+			return Promise.reject();
+		}
+	}
 }

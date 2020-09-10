@@ -1,23 +1,23 @@
-<div class="col-md-6">
-	<div class="card">
-		<div class="card-header card-header-primary">
-			<h4 class="card-title">Add A Vendor</h4>
-			<p class="card-category">
-				<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
-			</p>
-		</div>
-		<div class="card-body">
-			<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
-				<form.element @controlType="text" @label="Org. Name" @placeholder="Org. Name" @property="organizationName" @required={{true}} />
-				<form.element @controlType="text" @label="Contact Name" @placeholder="Contact Name" @property="organizationContactName" @required={{true}} />
-				<form.element @controlType="text" @label="Contact Email" @placeholder="Contact Email" @property="organizationContactEmail" @required={{true}} />
-				<BsButton @type="primary" type="submit" @defaultText="Submit" />
-			</BsForm>
-		</div>
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h4 class="card-title">Add A Vendor</h4>
+		<p class="card-category">
+			<a href="javascript:void(0);" {{on "click" this.startAddAdmin}}>Add Admin</a> //
+			<a href="javascript:void(0);" {{on "click" this.startAddMember}}>Add Member</a> //
+			<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
+		</p>
+	</div>
+	<div class="card-body">
+		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+			<form.element @controlType="text" @label="Org. Name" @placeholder="Org. Name" @property="organizationName" @required={{true}} />
+			<form.element @controlType="text" @label="Contact Name" @placeholder="Contact Name" @property="organizationContactName" @required={{true}} />
+			<form.element @controlType="text" @label="Contact Email" @placeholder="Contact Email" @property="organizationContactEmail" @required={{true}} />
+			<BsButton @type="primary" type="submit" @defaultText="Submit" />
+		</BsForm>
 	</div>
 </div>
 
-<BsModal @open={{this.showLocationSearchModal}} as |modal|>
+<BsModal @open={{this.showLocationSearchModal}} @onHide={{this.closeLocationSearchModal}} as |modal|>
 	<modal.header>
 		<h4 class="modal-title">{{this.modalTitle}}</h4>
 	</modal.header>
@@ -27,7 +27,33 @@
 	</modal.footer>
 </BsModal>
 
-<BsModal @open={{this.showStatusModal}} as |modal|>
+<BsModal @open={{this.showMemberAddModal}} @onHide={{this.closeMemberAddModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">{{this.modalTitle}}</h4>
+	</modal.header>
+	<modal.body>
+		<BsAlert
+			@visible={{showMemberMsg}}
+			@fade={{true}}
+			@type={{memberMsgType}}
+			@dismissible={{true}}
+			@onDismissed={{fn this.hideMsg 'member'}}>
+			{{#each this.memberMsgs as |msg|}}
+				<p>{{msg}}</p>
+			{{/each}}
+		</BsAlert>
+		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.addMember this.newMemberEmail}} as |form|>
+			<form.element @controlType="text" @label="Email" @placeholder="Email" @property="newMemberEmail" @required={{true}} />
+			<form.element @controlType="text" @label="Role" @placeholder="Role" @property="newMemberRole" @required={{true}} />
+			<BsButton @type="primary" type="submit" @defaultText="Submit" />
+		</BsForm>
+	</modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>
+
+<BsModal @open={{this.showStatusModal}} @onHide={{this.closeStatusModal}} as |modal|>
 	<modal.header>
 		<h4 class="modal-title">{{this.modalTitle}}</h4>
 	</modal.header>

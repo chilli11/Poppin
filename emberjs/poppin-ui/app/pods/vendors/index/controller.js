@@ -30,6 +30,6 @@ export default class AdminLocationsController extends Controller {
 
 	@action
 	clickAction(vendor) {
-		return this.transitionToRoute('vendors.vendor', vendor);
+		return this.transitionToRoute('vendors.vendor', vendor.id);
 	}
 }

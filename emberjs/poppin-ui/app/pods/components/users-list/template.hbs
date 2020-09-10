@@ -1,0 +1,15 @@
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h4 class="card-title">{{@title}}</h4>
+	</div>
+	<div class="card-body">
+		{{#each @users as |u|}}
+			<div class="card">
+				<div class="card-body">
+					<span class="strong">{{u.username}}</span> //
+					<span>{{u.email}}</span>
+				</div>
+			</div>
+		{{/each}}
+	</div>
+</div>

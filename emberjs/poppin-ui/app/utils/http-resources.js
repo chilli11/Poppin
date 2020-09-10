@@ -98,6 +98,16 @@ const HttpResources = {
 	getVendorsBySearch: {
 		url: 'vendors/get-by-search',
 		method: POST
+	},
+	addMember: {
+		url: 'vendors/add-member/:vendorId',
+		method: POST,
+		params: ['vendorId']
+	},
+	removeMember: {
+		url: 'vendors/remove-member/:vendorId',
+		method: POST,
+		params: ['vendorId']
 	}
 };
 

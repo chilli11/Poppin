@@ -1,6 +1,6 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
+import { action, set } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 import { states, actions } from './constants';
@@ -17,35 +17,58 @@ export default class VendorFormComponent extends StatefulComponent {
 		[states.IDLE]: {
 			[actions.SUBMIT_VENDOR]: states.SUBMITTING_VENDOR,
 			[actions.ADD_MEMBER]: states.ADDING_MEMBER,
+			[actions.REMOVE_MEMBER]: states.REMOVING_MEMBER,
 			[actions.GET_LOCATION_ID]: states.GETTING_LOCATION_ID,
-			[actions.ADD_LOCATION]: states.ADDING_LOCATION
+			[actions.ADD_LOCATION]: states.ADDING_LOCATION,
+			[actions.REMOVE_LOCATION]: states.REMOVING_LOCATION
 		},
 		[states.SUBMITTING_VENDOR]: {
 			[actions.RESOLVE_SUBMIT_VENDOR]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
 		[states.ADDING_MEMBER]: {
-			[actions.RESOLVE_ADD_MEMBER]: states.IDLE,
+			[actions.RESOLVE_MEMBER]: states.IDLE,
+			[actions.REJECT_ACTION]: states.IDLE
+		},
+		[states.REMOVING_MEMBER]: {
+			[actions.RESOLVE_MEMBER]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
 		[states.GETTING_LOCATION_ID]: {
 			[actions.RESOLVE_GET_LOCATION_ID]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
-		[states.ADDING_MEMBER]: {
-			[actions.RESOLVE_ADD_LOCATION]: states.IDLE,
+		[states.ADDING_LOCATION]: {
+			[actions.RESOLVE_LOCATION]: states.IDLE,
+			[actions.REJECT_ACTION]: states.IDLE
+		},
+		[states.REMOVING_LOCATION]: {
+			[actions.RESOLVE_LOCATION]: states.IDLE,
 			[actions.REJECT_ACTION]: states.IDLE
 		},
 	};
 
 	@tracked showLocationFormModal;
+	@tracked showMemberAddModal;
 	@tracked showStatusModal;
+
+	@tracked showMemberMsg;
+	@tracked memberMsgType = "success";
+	memberMsgs = [];
+
+	@tracked showMsg = false;
+	@tracked msgType = "success";
+	msgs = [];
+
 
 	@tracked vendorId;
 	@tracked parentVendorId;
 	@tracked organizationName;
 	@tracked organizationContactName;
 	@tracked organizationContactEmail;
+
+	@tracked newMemberEmail;
+	@tracked newMemberRole;
 
 	_adminIds = [];
 	_memberIds = [];
@@ -158,18 +181,49 @@ export default class VendorFormComponent extends StatefulComponent {
 	}
 
 	[actions.ADD_LOCATION](id) {
-		return this._locationIds.indexOf(id) == -1 ? this._locationIds.push(id) : true;
+		this._locationIds.indexOf(id) == -1 ? this._locationIds.push(id) : true;
+	}
+
+	[actions.ADD_MEMBER]() {
+		return this.vendorsService.addMember({
+			vendorId: this.vendorId,
+			email: this.newMemberEmail,
+			role: this.newMemberRole,
+			userId: null,
+		}).then(() => this.dispatch(actions.RESOLVE_MEMBER))
+			.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors, context: 'member' }));
+	}
+
+	[actions.REMOVE_MEMBER]() {
+		return this.vendorsService.removeMember({
+			vendorId: this.vendorId,
+			email: this.newMemberEmail,
+			role: this.newMemberRole,
+			userId: null,
+		}).then(() => this.dispatch(actions.RESOLVE_MEMBER))
+			.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors, context: 'member' }));
 	}
 
 	[actions.GET_LOCATION_ID]() {
 		this.showLocationFormModal = true;
 	}
 
-	[actions.REJECT_ACTION](data) {
-		this.modalText = data.toString();
-		this.modalTitle = "Error!";
-		this.showModal = true;
-		return console.error(data);
+	[actions.RESOLVE_MEMBER]() {
+		set(this, 'memberMsgs', ['Success!']);
+		this.memberMsgType = 'success';
+		this.showMemberMsg = true;
+	}
+
+	[actions.REJECT_ACTION]({ msgs, context }) {
+		if (context && context == 'member') {
+			set(this, 'memberMsgs', msgs || []);
+			this.memberMsgType = 'danger';
+			this.showMemberMsg = true;
+		} else {
+			set(this, 'msgs',  msgs || []);
+			this.msgType = 'danger';
+			this.showMsg = true;
+		}
 	}
 
 
@@ -184,7 +238,40 @@ export default class VendorFormComponent extends StatefulComponent {
 	}
 
 	@action
-	addMember(email) {
-		this.dispatch(actions.ADD_MEMBER, email);
+	addMember() {
+		this.dispatch(actions.ADD_MEMBER);
+	}
+
+	@action
+	startAddMember() {
+		this.showMemberAddModal = true;
+		this.newMemberRole = 'Member';
+	}
+
+	@action
+	startAddAdmin() {
+		this.showMemberAddModal = true;
+		this.newMemberRole = 'Admin';
+	}
+
+	@action
+	closeStatusModal() {
+		this.showStatusModal = false;
+	}
+
+	@action
+	closeMemberAddModal() {
+		this.showMemberAddModal = false;
+	}
+
+	@action
+	closeLocationSearchModal() {
+		this.showLocationSearchModal = false;
+	}
+
+	@action
+	hideMsg(context) {
+		this.showMsg = false;
+		set(this, context == 'member' ? 'memberMsgs' : 'msgs', []);
 	}
 }
