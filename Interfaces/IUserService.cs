@@ -6,11 +6,13 @@ namespace Poppin.Interfaces
 {
 				public interface IUserService
 				{
+								public Task<PoppinUser> GetUser(string id);
 								public Task<PoppinUser> GetUserById(string id);
+								public Task<PoppinUser> GetUserByEmail(string email);
 								public Task<List<PoppinUser>> GetUsersById(IEnumerable<string> ids);
 								public Task AddUser(PoppinUser poppinUser);
 								public Task UpdateUser(PoppinUser poppinUser);
-								public Task UpdateUser(string poppinUserId, PoppinUser poppinUser);
+								public Task UpdateUser(string identityUserId, PoppinUser poppinUser);
 								public Task<PoppinUser> CheckExists(PoppinUser poppinUser);
 
 								public Task AddFavorite(string userId, string locationId);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Poppin.Contracts.Requests;
@@ -23,14 +24,16 @@ namespace Poppin.Controllers
 								private readonly IVendorService _vendorService;
         private readonly ILocationService _locationService;
         private readonly IUserService _userService;
+								private readonly IIdentityService _identityService;
 
 								private List<Vendor> _vendors = new List<Vendor>();
 
-								public VendorsController(IVendorService vendorService, ILocationService locationService, IUserService userService)
+								public VendorsController(IVendorService vendorService, ILocationService locationService, IUserService userService, IIdentityService identityService)
 								{
 												_vendorService = vendorService;
 												_locationService = locationService;
 												_userService = userService;
+												_identityService = identityService;
 								}
 
 								// GET: api/Vendors/5
@@ -210,6 +213,121 @@ namespace Poppin.Controllers
 																				Errors = errors
 																});
 												}
+								}
+
+								//POST api/Vendors/5
+								[HttpPost("add-member/{vendorId}")]
+								public async Task<IActionResult> AddMember(string vendorId, VendorMemberRequest newMember)
+								{
+												var user = await GetUserProfile(newMember);
+												var vendor = _vendors.Find(v => v.Id == vendorId);
+												if (vendor == null)
+												{
+																vendor = await _vendorService.GetVendorById(vendorId);
+												}
+												if (vendor == null || user == null)
+												{
+																var errors = new List<string>();
+																errors.Add("Vendor or User ID is invalid");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+
+												try
+												{
+																if (newMember.Role == RoleTypes.Admin)
+																{
+																				vendor.AdminIds.Add(user.UserId);
+																				vendor.MemberIds.Remove(user.UserId);
+																}
+																else
+																{
+																				vendor.MemberIds.Add(user.UserId);
+																}
+																if (user.VendorIds == null)
+																{
+																				user.VendorIds = new HashSet<string>();
+																}
+																user.VendorIds.Add(vendorId);
+
+																await _vendorService.UpdateVendor(vendor);
+																await _userService.UpdateUser(user.UserId, user);
+																return Ok();
+												}
+												catch (Exception e)
+												{
+																var errors = new List<string>();
+																errors.Add(e.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+								}
+
+								//POST api/Vendors/5
+								[HttpPost("remove-member/{vendorId}")]
+								public async Task<IActionResult> RemoveMember(string vendorId, VendorMemberRequest newMember)
+								{
+												var user = await GetUserProfile(newMember);
+												var vendor = _vendors.Find(v => v.Id == vendorId);
+												if (vendor == null)
+												{
+																vendor = await _vendorService.GetVendorById(vendorId);
+												}
+												if (vendor == null || user == null)
+												{
+																var errors = new List<string>();
+																errors.Add("Vendor or User ID is invalid");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+
+												try
+												{
+																if (newMember.Role == RoleTypes.Admin)
+																{
+																				vendor.AdminIds.Remove(newMember.UserId);
+																				vendor.MemberIds.Add(newMember.UserId);
+																				user.VendorIds.Remove(vendorId);
+																}
+																else
+																{
+																				vendor.AdminIds.Remove(newMember.UserId);
+																				vendor.MemberIds.Remove(newMember.UserId);
+																}
+																await _vendorService.UpdateVendor(vendor);
+																await _userService.UpdateUser(user.UserId, user);
+																return Ok();
+												}
+												catch (Exception e)
+												{
+																var errors = new List<string>();
+																errors.Add(e.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+								}
+
+								private async Task<PoppinUser> GetUserProfile(VendorMemberRequest req)
+								{
+												var user = await _userService.GetUserByEmail(req.Email);
+												if (user == null)
+												{
+																var u = await _identityService.GetUserByEmail(req.Email);
+																if (u != null)
+																{
+																				user = new PoppinUser(u.User);
+																				_userService.AddUser(user);
+																}
+												}
+												return user;
 								}
 
 								// DELETE api/Vendors/5

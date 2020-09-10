@@ -21,14 +21,18 @@ namespace Poppin.Services
 
 												_poppinUsers = database.GetCollection<PoppinUser>("PoppinUsers");
 								}
-								public Task<PoppinUser> GetUserById(string id) =>
-												_poppinUsers.FindAsync(p => p.UserId == id).Result.FirstOrDefaultAsync();
+								public Task<PoppinUser> GetUser(string id) =>
+												_poppinUsers.FindAsync(p => p.Id == id).Result.FirstOrDefaultAsync();
+								public Task<PoppinUser> GetUserById(string userId) =>
+												_poppinUsers.FindAsync(p => p.UserId == userId).Result.FirstOrDefaultAsync();
+								public Task<PoppinUser> GetUserByEmail(string email) =>
+												_poppinUsers.FindAsync(p => p.Email == email).Result.FirstOrDefaultAsync();
 								public Task<List<PoppinUser>> GetUsersById(IEnumerable<string> ids) =>
 												_poppinUsers.FindAsync(p => ids.Contains(p.UserId)).Result.ToListAsync();
 
 								public Task AddUser(PoppinUser poppinUser) => _poppinUsers.InsertOneAsync(poppinUser);
 								public Task UpdateUser(PoppinUser poppinUser) => _poppinUsers.ReplaceOneAsync(v => v.Id == poppinUser.Id, poppinUser);
-								public Task UpdateUser(string poppinUserId, PoppinUser poppinUser) => _poppinUsers.ReplaceOneAsync(v => v.Id == poppinUserId, poppinUser);
+								public Task UpdateUser(string identityUserId, PoppinUser poppinUser) => _poppinUsers.ReplaceOneAsync(v => v.UserId == identityUserId, poppinUser);
 
 								public Task<PoppinUser> CheckExists(PoppinUser poppinUser)
 								{
@@ -52,7 +56,7 @@ namespace Poppin.Services
 												var profile = GetUserById(userId).Result;
 												if (profile.Favorites.Contains(locationId))
 												{
-																profile.Favorites = profile.Favorites.Where(l => l != locationId);
+																profile.Favorites = profile.Favorites.Where(l => l != locationId).ToHashSet();
 																return UpdateUser(profile);
 												}
 												return Task.FromResult(0);
@@ -74,7 +78,7 @@ namespace Poppin.Services
 												var profile = GetUserById(userId).Result;
 												if (profile.Hidden.Contains(locationId))
 												{
-																profile.Hidden = profile.Hidden.Where(l => l != locationId);
+																profile.Hidden = profile.Hidden.Where(l => l != locationId).ToHashSet();
 																return UpdateUser(profile);
 												}
 												return Task.FromResult(0);

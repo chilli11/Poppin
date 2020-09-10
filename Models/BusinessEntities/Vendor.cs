@@ -17,10 +17,10 @@ namespace Poppin.Models.BusinessEntities
 												OrganizationContactName = v.OrganizationContactName;
 												OrganizationContactEmail = v.OrganizationContactEmail;
 												Active = v.Active;
-												LocationIds = v.LocationIds.ToList();
-												MemberIds = v.MemberIds.ToList();
-												SubVendorIds = v.SubVendorIds.ToList();
-												AdminIds = v.AdminIds.ToList();
+												LocationIds = v.LocationIds.ToHashSet();
+												MemberIds = v.MemberIds.ToHashSet();
+												SubVendorIds = v.SubVendorIds.ToHashSet();
+												AdminIds = v.AdminIds.ToHashSet();
 												ParentVendorId = v.ParentVendorId;
 								}
 
@@ -33,10 +33,10 @@ namespace Poppin.Models.BusinessEntities
 								public string OrganizationContactName { get; set; }
 								public string OrganizationContactEmail { get; set; }
 								public bool Active { get; set; }
-								public List<string> AdminIds { get; set; }
-								public List<string> MemberIds { get; set; }
-								public List<string> SubVendorIds { get; set; }
-								public List<string> LocationIds { get; set; }
+								public HashSet<string> AdminIds { get; set; }
+								public HashSet<string> MemberIds { get; set; }
+								public HashSet<string> SubVendorIds { get; set; }
+								public HashSet<string> LocationIds { get; set; }
 								public string ParentVendorId { get; set; }
 								public DateTime LastUpdate { get; set; }
 
