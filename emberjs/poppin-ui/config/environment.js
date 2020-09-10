@@ -6,7 +6,7 @@ module.exports = function(environment) {
     podModulePrefix: 'poppin-ui/pods',
     environment,
 		rootURL: '/',
-		hostURL: '/',
+		hostURL: '',
 		apiURL: '/api/',
 		locationType: 'auto',
 		
@@ -42,9 +42,9 @@ module.exports = function(environment) {
     ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
 		ENV.APP.LOG_VIEW_LOOKUPS = true;
 		
-		ENV.hostURL = 'https://localhost:44367';
+		// ENV.hostURL = 'https://localhost:44367';
 		// ENV.hostURL = 'http://poppindev2-env.eba-zygausnr.us-west-2.elasticbeanstalk.com';
-		ENV.apiURL = ENV.hostURL + '/api/';
+		// ENV.apiURL = ENV.hostURL + '/api/';
   }
 
   if (environment === 'test') {

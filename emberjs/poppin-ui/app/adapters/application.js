@@ -1,3 +1,4 @@
+/* eslint-disable ember/no-mixins */
 import RESTAdapter from '@ember-data/adapter/rest';
 import environment from 'poppin-ui/config/environment';
 import { inject as service } from '@ember/service';
