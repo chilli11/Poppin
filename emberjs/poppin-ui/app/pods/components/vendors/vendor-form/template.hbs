@@ -2,7 +2,7 @@
 	<div class="card-header card-header-primary">
 		<h4 class="card-title">Add A Vendor</h4>
 		<p class="card-category">
-			<a href="javascript:void(0);" {{on "click" this.startAddAdmin}}>Add Admin</a> //
+			<a href="javascript:void(0);" {{on "click" this.startAddLocation}}>Add Location</a> //
 			<a href="javascript:void(0);" {{on "click" this.startAddMember}}>Add Member</a> //
 			<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
 		</p>
@@ -44,7 +44,10 @@
 		</BsAlert>
 		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.addMember this.newMemberEmail}} as |form|>
 			<form.element @controlType="text" @label="Email" @placeholder="Email" @property="newMemberEmail" @required={{true}} />
-			<form.element @controlType="text" @label="Role" @placeholder="Role" @property="newMemberRole" @required={{true}} />
+			<BsButtonGroup @value={{newMemberRole}} @type="radio" @onChange={{action (mut newMemberRole)}} @required={{true}} as |btnGrp|>
+				<btnGrp.button @value="Member">Member</btnGrp.button>
+				<btnGrp.button @value="Admin">Admin</btnGrp.button>
+			</BsButtonGroup>
 			<BsButton @type="primary" type="submit" @defaultText="Submit" />
 		</BsForm>
 	</modal.body>

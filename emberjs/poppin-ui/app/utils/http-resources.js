@@ -108,6 +108,16 @@ const HttpResources = {
 		url: 'vendors/remove-member/:vendorId',
 		method: POST,
 		params: ['vendorId']
+	},
+	addVendorLocation: {
+		url: 'vendors/add-location/:vendorId',
+		method: POST,
+		params: ['vendorId']
+	},
+	removeVendorLocation: {
+		url: 'vendors/remove-location/:vendorId',
+		method: POST,
+		params: ['vendorId']
 	}
 };
 

@@ -94,4 +94,28 @@ export default class VendorsService extends Service {
 			return Promise.reject();
 		}
 	}
+
+	addLocation({ vendorId, locId }) {
+		try {
+			return this.apiService.request({
+				resource: HttpResources.addVendorLocation,
+				body: { vendorId, locId }
+			});
+		} catch (e) {
+			console.error(e);
+			return Promise.reject();
+		}
+	}
+
+	removeLocation({ vendorId, locId }) {
+		try {
+			return this.apiService.request({
+				resource: HttpResources.removeVendorLocation,
+				body: { vendorId, locId }
+			});
+		} catch (e) {
+			console.error(e);
+			return Promise.reject();
+		}
+	}
 }

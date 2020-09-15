@@ -249,9 +249,8 @@ export default class VendorFormComponent extends StatefulComponent {
 	}
 
 	@action
-	startAddAdmin() {
-		this.showMemberAddModal = true;
-		this.newMemberRole = 'Admin';
+	startAddLocation() {
+		this.showLocationSearchModal = true;
 	}
 
 	@action
