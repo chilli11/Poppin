@@ -65,6 +65,11 @@ namespace Poppin
 																};
 												});
 
+												services.AddAuthorization(opts =>
+												{
+																opts.AddPolicy("Admin", policy => policy.RequireClaim("Role", RoleTypes.Admin));
+												});
+
 
 												// requires using Microsoft.Extensions.Options
 												services.Configure<MongoDBSettings>(

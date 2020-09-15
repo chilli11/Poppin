@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
@@ -7,6 +8,7 @@ using Poppin.Contracts.Responses;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
+using Poppin.Models.Tracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +30,11 @@ namespace Poppin.Controllers
 
 								private List<Vendor> _vendors = new List<Vendor>();
 
-								public VendorsController(IVendorService vendorService, ILocationService locationService, IUserService userService, IIdentityService identityService)
+								public VendorsController(
+												IVendorService vendorService,
+												ILocationService locationService,
+												IUserService userService,
+												IIdentityService identityService)
 								{
 												_vendorService = vendorService;
 												_locationService = locationService;
@@ -37,6 +43,7 @@ namespace Poppin.Controllers
 								}
 
 								// GET: api/Vendors/5
+								[Authorize(Policy = "Admin")]
 								[HttpGet]
 								public async Task<IActionResult> Get()
 								{
@@ -56,7 +63,7 @@ namespace Poppin.Controllers
 								// GET: api/Vendors/5
 								[HttpGet("{vendorId}")]
 								public async Task<IActionResult> Get(string vendorId)
-								{
+								{			
 												var vendor = _vendors.Find(v => v.Id == vendorId);
 												if (vendor == null)
 												{
@@ -72,19 +79,24 @@ namespace Poppin.Controllers
 																});
 												}
 
-												var vResult = new VendorResult
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendor);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId) || vendor.MemberIds.Contains(userId))
 												{
-																Vendor = vendor,
-																SubVendors = vendor.GetSubVendors(_vendorService),
-																Locations = vendor.GetLocations(_locationService),
-																Admins = vendor.GetAdmins(_userService),
-																Members = vendor.GetMembers(_userService)
-												};
-												if (vendor.ParentVendorId != null)
-												{
-																vResult.Parent = await _vendorService.GetVendorById(vendor.ParentVendorId);
+																var vResult = new VendorResult
+																{
+																				Vendor = vendor,
+																				SubVendors = vendor.GetSubVendors(_vendorService),
+																				Locations = vendor.GetLocations(_locationService),
+																				Admins = vendor.GetAdmins(_userService),
+																				Members = vendor.GetMembers(_userService)
+																};
+																if (vendor.ParentVendorId != null)
+																{
+																				vResult.Parent = await _vendorService.GetVendorById(vendor.ParentVendorId);
+																}
+																return Ok(vResult);
 												}
-												return Ok(vResult);
+												return Unauthorized();
 								}
 
 								// GET: api/Vendors/5
@@ -109,6 +121,7 @@ namespace Poppin.Controllers
 												}
 												else
 												{
+																var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
 																var vendors = await _vendorService.GetVendorsByIds(vendorIds);
 																if (vendors == null)
 																{
@@ -119,7 +132,12 @@ namespace Poppin.Controllers
 																								Errors = errors
 																				});
 																}
-																return Ok(vendors);
+
+																if (GetUserRole() == "Admin")
+																{
+																				return Ok(vendors);
+																}
+																return Ok(vendors.Where(v => v.AdminIds.Contains(userId) || v.MemberIds.Contains(userId)));
 												}
 								}
 
@@ -138,11 +156,18 @@ namespace Poppin.Controllers
 																});
 												}
 												var leftovers = vendors.Where(v => !_vendors.Any(_v => v.Id == _v.Id));
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
 												_vendors.AddRange(leftovers);
-												return Ok(vendors);
+
+												if (GetUserRole() == "Admin")
+												{
+																return Ok(vendors);
+												}
+												return Ok(vendors.Where(v => v.AdminIds.Contains(userId) || v.MemberIds.Contains(userId)));
 								}
 
 								// POST api/Vendors
+								[Authorize(Policy = "Admin")]
 								[HttpPost]
 								public async Task<IActionResult> Post(PoppinVendorRequest newVendor)
 								{
@@ -164,27 +189,32 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> Put(PoppinVendorRequest newVendor)
 								{
 												var vendor = new Vendor(newVendor);
-												try
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
 												{
-																vendor.LastUpdate = DateTime.UtcNow;
-																await _vendorService.UpdateVendor(vendor);
-																var ind = _vendors.FindIndex(v => v.Id == vendor.Id);
-																if (ind > -1)
+																try
 																{
-																				_vendors.RemoveAt(ind);
+																				vendor.LastUpdate = DateTime.UtcNow;
+																				await _vendorService.UpdateVendor(vendor);
+																				var ind = _vendors.FindIndex(v => v.Id == vendor.Id);
+																				if (ind > -1)
+																				{
+																								_vendors.RemoveAt(ind);
+																				}
+																				_vendors.Add(vendor);
+																				return Ok();
 																}
-																_vendors.Add(vendor);
-																return Ok();
-												}
-												catch (Exception e)
-												{
-																var errors = new List<string>();
-																errors.Add(e.Message);
-																return BadRequest(new GenericFailure
+																catch (Exception e)
 																{
-																				Errors = errors
-																});
+																				var errors = new List<string>();
+																				errors.Add(e.Message);
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
 												}
+												return Unauthorized();
 								}
 
 								// PUT api/Vendors/5
@@ -192,27 +222,32 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> Put(string vendorId, PoppinVendorRequest newVendor)
 								{
 												var vendor = new Vendor(newVendor);
-												try
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
 												{
-																vendor.LastUpdate = DateTime.UtcNow;
-																await _vendorService.UpdateVendor(vendorId, vendor);
-																var ind = _vendors.FindIndex(v => v.Id == vendorId);
-																if (ind > -1)
+																try
 																{
-																				_vendors.RemoveAt(ind);
+																				vendor.LastUpdate = DateTime.UtcNow;
+																				await _vendorService.UpdateVendor(vendorId, vendor);
+																				var ind = _vendors.FindIndex(v => v.Id == vendorId);
+																				if (ind > -1)
+																				{
+																								_vendors.RemoveAt(ind);
+																				}
+																				_vendors.Add(vendor);
+																				return Ok();
 																}
-																_vendors.Add(vendor);
-																return Ok();
-												}
-												catch (Exception e)
-												{
-																var errors = new List<string>();
-																errors.Add(e.Message);
-																return BadRequest(new GenericFailure
+																catch (Exception e)
 																{
-																				Errors = errors
-																});
+																				var errors = new List<string>();
+																				errors.Add(e.Message);
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
 												}
+												return Unauthorized();
 								}
 
 								//POST api/Vendors/5
@@ -235,36 +270,41 @@ namespace Poppin.Controllers
 																});
 												}
 
-												try
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
 												{
-																if (newMember.Role == RoleTypes.Admin)
+																try
 																{
-																				vendor.AdminIds.Add(user.UserId);
-																				vendor.MemberIds.Remove(user.UserId);
-																}
-																else
-																{
-																				vendor.MemberIds.Add(user.UserId);
-																}
-																if (user.VendorIds == null)
-																{
-																				user.VendorIds = new HashSet<string>();
-																}
-																user.VendorIds.Add(vendorId);
+																				if (newMember.Role == RoleTypes.Admin)
+																				{
+																								vendor.AdminIds.Add(user.UserId);
+																								vendor.MemberIds.Remove(user.UserId);
+																				}
+																				else
+																				{
+																								vendor.MemberIds.Add(user.UserId);
+																				}
+																				if (user.VendorIds == null)
+																				{
+																								user.VendorIds = new HashSet<string>();
+																				}
+																				user.VendorIds.Add(vendorId);
 
-																await _vendorService.UpdateVendor(vendor);
-																await _userService.UpdateUser(user.UserId, user);
-																return Ok();
-												}
-												catch (Exception e)
-												{
-																var errors = new List<string>();
-																errors.Add(e.Message);
-																return BadRequest(new GenericFailure
+																				await _vendorService.UpdateVendor(vendor);
+																				await _userService.UpdateUser(user.UserId, user);
+																				return Ok();
+																}
+																catch (Exception e)
 																{
-																				Errors = errors
-																});
+																				var errors = new List<string>();
+																				errors.Add(e.Message);
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
 												}
+												return Unauthorized();
 								}
 
 								//POST api/Vendors/5
@@ -287,32 +327,147 @@ namespace Poppin.Controllers
 																});
 												}
 
-												try
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
 												{
-																if (newMember.Role == RoleTypes.Admin)
+																try
 																{
-																				vendor.AdminIds.Remove(newMember.UserId);
-																				vendor.MemberIds.Add(newMember.UserId);
-																				user.VendorIds.Remove(vendorId);
+																				if (newMember.Role == RoleTypes.Admin)
+																				{
+																								vendor.AdminIds.Remove(newMember.UserId);
+																								vendor.MemberIds.Add(newMember.UserId);
+																								user.VendorIds.Remove(vendorId);
+																				}
+																				else
+																				{
+																								vendor.AdminIds.Remove(newMember.UserId);
+																								vendor.MemberIds.Remove(newMember.UserId);
+																				}
+																				await _vendorService.UpdateVendor(vendor);
+																				await _userService.UpdateUser(user.UserId, user);
+																				return Ok();
 																}
-																else
+																catch (Exception e)
 																{
-																				vendor.AdminIds.Remove(newMember.UserId);
-																				vendor.MemberIds.Remove(newMember.UserId);
+																				var errors = new List<string>();
+																				errors.Add(e.Message);
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
 																}
-																await _vendorService.UpdateVendor(vendor);
-																await _userService.UpdateUser(user.UserId, user);
-																return Ok();
 												}
-												catch (Exception e)
+												return Unauthorized();
+								}
+
+								//POST api/Vendors/5
+								[HttpPost("add-location/{vendorId}")]
+								public async Task<IActionResult> AddLocation(string vendorId, string locationId)
+								{
+												var loc = await _locationService.Get(locationId);
+												var vendor = _vendors.Find(v => v.Id == vendorId);
+												if (vendor == null)
+												{
+																vendor = await _vendorService.GetVendorById(vendorId);
+												}
+												if (vendor == null || loc == null)
 												{
 																var errors = new List<string>();
-																errors.Add(e.Message);
+																errors.Add("Vendor or Location ID is invalid");
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
 																});
 												}
+
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												{
+																try
+																{
+																				vendor.LocationIds.Add(locationId);
+																				loc.VendorId = vendorId;
+
+																				await _vendorService.UpdateVendor(vendor);
+																				await _locationService.Update(locationId, loc);
+																				return Ok();
+																}
+																catch (Exception e)
+																{
+																				var errors = new List<string>();
+																				errors.Add(e.Message);
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
+												}
+												return Unauthorized();
+								}
+
+								//POST api/Vendors/5
+								[HttpPost("remove-location/{vendorId}")]
+								public async Task<IActionResult> RemoveLocation(string vendorId, string locationId)
+								{
+												var loc = await _locationService.Get(locationId);
+												var vendor = _vendors.Find(v => v.Id == vendorId);
+												if (vendor == null)
+												{
+																vendor = await _vendorService.GetVendorById(vendorId);
+												}
+												if (vendor == null || loc == null)
+												{
+																var errors = new List<string>();
+																errors.Add("Vendor or Location ID is invalid");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												{
+																try
+																{
+																				vendor.LocationIds.Remove(locationId);
+																				loc.VendorId = null;
+
+																				await _vendorService.UpdateVendor(vendor);
+																				await _locationService.Update(locationId, loc);
+																				return Ok();
+																}
+																catch (Exception e)
+																{
+																				var errors = new List<string>();
+																				errors.Add(e.Message);
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
+												}
+												return Unauthorized();
+								}
+
+								private string GetUserId(string action)
+								{
+												if (this.User.Claims.Any())
+												{
+																var id = this.User.Claims.Single(u => u.Type == "Id").Value;
+																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
+																return id;
+												}
+												return string.Empty;
+								}
+
+								private string GetUserRole()
+								{
+												if (this.User.Claims.Any())
+												{
+																return this.User.Claims.Single(u => u.Type == "Role").Value;
+												}
+												return string.Empty;
 								}
 
 								private async Task<PoppinUser> GetUserProfile(VendorMemberRequest req)
