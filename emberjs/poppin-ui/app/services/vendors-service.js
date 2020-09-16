@@ -95,11 +95,11 @@ export default class VendorsService extends Service {
 		}
 	}
 
-	addLocation({ vendorId, locId }) {
+	addLocation({ vendorId, locationId }) {
 		try {
 			return this.apiService.request({
 				resource: HttpResources.addVendorLocation,
-				body: { vendorId, locId }
+				body: { vendorId, locationId }
 			});
 		} catch (e) {
 			console.error(e);
@@ -107,11 +107,11 @@ export default class VendorsService extends Service {
 		}
 	}
 
-	removeLocation({ vendorId, locId }) {
+	removeLocation({ vendorId, locationId }) {
 		try {
 			return this.apiService.request({
 				resource: HttpResources.removeVendorLocation,
-				body: { vendorId, locId }
+				body: { vendorId, locationId }
 			});
 		} catch (e) {
 			console.error(e);

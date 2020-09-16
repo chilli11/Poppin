@@ -10,6 +10,9 @@ export default class YelpSearchAndResultsComponent extends Component {
 
 	@tracked results;
 	@tracked isLoading;
+	get businesses() {
+		return this.results ? this.results.businesses : null;
+	}
 
 	@action
 	searchMethod(params) {

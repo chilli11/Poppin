@@ -9,6 +9,9 @@ export default class AdminLocationsController extends Controller {
 
 	@tracked results;
 	@tracked isLoading;
+	get businesses() {
+		return this.results ? this.results.businesses : null;
+	}
 
 	@action
 	searchMethod(params) {

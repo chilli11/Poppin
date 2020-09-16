@@ -48,7 +48,7 @@ export default class VendorFormComponent extends StatefulComponent {
 		},
 	};
 
-	@tracked showLocationFormModal;
+	@tracked showLocationSearchModal;
 	@tracked showMemberAddModal;
 	@tracked showStatusModal;
 
@@ -181,7 +181,11 @@ export default class VendorFormComponent extends StatefulComponent {
 	}
 
 	[actions.ADD_LOCATION](id) {
-		this._locationIds.indexOf(id) == -1 ? this._locationIds.push(id) : true;
+		return this.vendorsService.addLocation({
+			vendorId: this.vendorId,
+			locationId: id
+		}).then(() => this.dispatch(actions.RESOLVE_LOCATION))
+		.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors }));
 	}
 
 	[actions.ADD_MEMBER]() {
@@ -214,6 +218,12 @@ export default class VendorFormComponent extends StatefulComponent {
 		this.showMemberMsg = true;
 	}
 
+	[actions.RESOLVE_LOCATION]() {
+		set(this, 'msgs',  ['Location added successfully']);
+		this.msgType = 'success';
+		this.showMsg = true;
+	}
+
 	[actions.REJECT_ACTION]({ msgs, context }) {
 		if (context && context == 'member') {
 			set(this, 'memberMsgs', msgs || []);
@@ -234,6 +244,7 @@ export default class VendorFormComponent extends StatefulComponent {
 
 	@action
 	addLocation(loc) {
+		this.closeLocationSearchModal();
 		return this.dispatch(actions.ADD_LOCATION, loc.id);
 	}
 

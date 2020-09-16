@@ -7,9 +7,9 @@ export default class AdminRoute extends Route {
 		this.accountService.isAuthenticated()
 			.then((response) => {
 				if (response && !response.authorized) {
-					return this.transitionTo('account');
+					return this.transitionTo('account.login');
 				}
 				return true;
-			}).catch(() => this.transitionTo('account'));
+			}).catch(() => this.transitionTo('account.login'));
 	}
 }

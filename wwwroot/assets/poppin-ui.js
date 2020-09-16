@@ -3344,6 +3344,10 @@
       _initializerDefineProperty(this, "isLoading", _descriptor4, this);
     }
 
+    get businesses() {
+      return this.results ? this.results.businesses : null;
+    }
+
     searchMethod(params) {
       this.isLoading = true;
       this.vendorsService.getVendorsBySearch(params).then(data => this.results = data).catch(data => alert(data)).finally(() => this.isLoading = false);
@@ -3401,8 +3405,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "j/ELWZT5",
-    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\tChoose a vendor \"],[6,[37,0],[[32,0,[\"results\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"results\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,0,[\"results\"]],[32,0,[\"clickAction\"]]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\"]}",
+    "id": "XGlPQ/yp",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\tChoose a vendor \"],[6,[37,0],[[32,0,[\"results\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"results\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,0,[\"businesses\"]],[32,0,[\"clickAction\"]]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/admin/vendors/index/template.hbs"
     }
@@ -4616,8 +4620,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "wkQxS2Xy",
-    "block": "{\"symbols\":[\"loc\",\"@clickAction\",\"@locations\"],\"statements\":[[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3,[\"businesses\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[11,\"div\"],[24,0,\"card-body\"],[24,\"role\",\"button\"],[4,[38,1],[\"click\",[30,[36,0],[[32,2],[32,1]],null]],null],[12],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[14,0,\"strong\"],[12],[1,[32,1,[\"name\"]]],[13],[2,\" //\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"categories\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,1,[\"address\",\"city\"]]],[2,\", \"],[1,[32,1,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"on\",\"-track-array\",\"each\"]}",
+    "id": "YLhr/MpG",
+    "block": "{\"symbols\":[\"loc\",\"@clickAction\",\"@locations\"],\"statements\":[[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,3]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[11,\"div\"],[24,0,\"card-body\"],[24,\"role\",\"button\"],[4,[38,1],[\"click\",[30,[36,0],[[32,2],[32,1]],null]],null],[12],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[14,0,\"strong\"],[12],[1,[32,1,[\"name\"]]],[13],[2,\" //\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"categories\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[12],[1,[32,1,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,1,[\"address\",\"city\"]]],[2,\", \"],[1,[32,1,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"on\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-list/template.hbs"
     }
@@ -4654,6 +4658,10 @@
       _initializerDefineProperty(this, "results", _descriptor3, this);
 
       _initializerDefineProperty(this, "isLoading", _descriptor4, this);
+    }
+
+    get businesses() {
+      return this.results ? this.results.businesses : null;
     }
 
     searchMethod(params) {
@@ -4697,8 +4705,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "4tA9Wqhm",
-    "block": "{\"symbols\":[\"@clickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Poppin\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-search-form\",[],[[\"@searchMethod\",\"@populateResults\"],[[32,0,[\"searchMethod\"]],[32,0,[\"populateResults\"]]]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Results\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\tChoose a business \"],[6,[37,0],[[32,0,[\"results\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"results\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,0,[\"results\"]],[32,1]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\"]}",
+    "id": "aCrIODyr",
+    "block": "{\"symbols\":[\"@stacked\",\"@clickAction\"],\"statements\":[[10,\"div\"],[15,0,[31,[[30,[36,0],[[32,1],\"col-md-6\"],null]]]],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Poppin\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-search-form\",[],[[\"@searchMethod\",\"@populateResults\"],[[32,0,[\"searchMethod\"]],[32,0,[\"populateResults\"]]]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[15,0,[31,[[30,[36,0],[[32,1],\"col-md-6\"],null]]]],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Results\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\tChoose a business \"],[6,[37,1],[[32,0,[\"results\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"results\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,0,[\"businesses\"]],[32,2]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"unless\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/search-and-results/template.hbs"
     }
@@ -4922,8 +4930,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "iiR4Tt6T",
-    "block": "{\"symbols\":[\"@vendor\",\"@refresh\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"IDLE\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-display\",[],[[\"@vendor\",\"@startEdit\",\"@refresh\"],[[32,1],[32,0,[\"startEdit\"]],[32,2]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-form\",[],[[\"@vendor\",\"@resolveAction\"],[[32,1],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\\t\"]],\"parameters\":[]}]]]],\"parameters\":[]}]]],[2,\"\\t\"],[8,\"users-list\",[],[[\"@title\",\"@users\"],[\"Admins\",[32,1,[\"admins\"]]]],null],[2,\"\\n\\t\"],[8,\"users-list\",[],[[\"@title\",\"@users\"],[\"Members\",[32,1,[\"members\"]]]],null],[2,\"\\n\"],[13],[2,\"\\n\"]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\"]}",
+    "id": "eAgLVVXA",
+    "block": "{\"symbols\":[\"@vendor\",\"@refresh\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"IDLE\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-display\",[],[[\"@vendor\",\"@startEdit\",\"@refresh\"],[[32,1],[32,0,[\"startEdit\"]],[32,2]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-form\",[],[[\"@vendor\",\"@resolveAction\"],[[32,1],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\\t\"]],\"parameters\":[]}]]]],\"parameters\":[]}]]],[2,\"\\t\"],[8,\"users-list\",[],[[\"@title\",\"@users\"],[\"Admins\",[32,1,[\"admins\"]]]],null],[2,\"\\n\\t\"],[8,\"users-list\",[],[[\"@title\",\"@users\"],[\"Members\",[32,1,[\"members\"]]]],null],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Locations\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@title\",\"@locations\"],[\"Locations\",[32,1,[\"locations\"]]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/vendors/existing-vendor/template.hbs"
     }
@@ -4957,7 +4965,7 @@
   });
   _exports.default = void 0;
 
-  let _actions$SUBMIT_VENDO, _actions$ADD_LOCATION, _actions$ADD_MEMBER, _actions$REMOVE_MEMBE, _actions$GET_LOCATION, _actions$RESOLVE_MEMB, _actions$REJECT_ACTIO;
+  let _actions$SUBMIT_VENDO, _actions$ADD_LOCATION, _actions$ADD_MEMBER, _actions$REMOVE_MEMBE, _actions$GET_LOCATION, _actions$RESOLVE_MEMB, _actions$RESOLVE_LOCA, _actions$REJECT_ACTIO;
 
   var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _temp;
 
@@ -4969,7 +4977,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let VendorFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._tracked, _dec18 = Ember._tracked, _dec19 = Ember._tracked, _dec20 = Ember._tracked, _dec21 = Ember._tracked, _dec22 = Ember._action, _dec23 = Ember._action, _dec24 = Ember._action, _dec25 = Ember._action, _dec26 = Ember._action, _dec27 = Ember._action, _dec28 = Ember._action, _dec29 = Ember._action, _dec30 = Ember._action, _dec31 = Ember._action, (_class = (_temp = (_actions$SUBMIT_VENDO = _constants.actions.SUBMIT_VENDOR, _actions$ADD_LOCATION = _constants.actions.ADD_LOCATION, _actions$ADD_MEMBER = _constants.actions.ADD_MEMBER, _actions$REMOVE_MEMBE = _constants.actions.REMOVE_MEMBER, _actions$GET_LOCATION = _constants.actions.GET_LOCATION_ID, _actions$RESOLVE_MEMB = _constants.actions.RESOLVE_MEMBER, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class VendorFormComponent extends _statefulComponent.default {
+  let VendorFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._tracked, _dec18 = Ember._tracked, _dec19 = Ember._tracked, _dec20 = Ember._tracked, _dec21 = Ember._tracked, _dec22 = Ember._action, _dec23 = Ember._action, _dec24 = Ember._action, _dec25 = Ember._action, _dec26 = Ember._action, _dec27 = Ember._action, _dec28 = Ember._action, _dec29 = Ember._action, _dec30 = Ember._action, _dec31 = Ember._action, (_class = (_temp = (_actions$SUBMIT_VENDO = _constants.actions.SUBMIT_VENDOR, _actions$ADD_LOCATION = _constants.actions.ADD_LOCATION, _actions$ADD_MEMBER = _constants.actions.ADD_MEMBER, _actions$REMOVE_MEMBE = _constants.actions.REMOVE_MEMBER, _actions$GET_LOCATION = _constants.actions.GET_LOCATION_ID, _actions$RESOLVE_MEMB = _constants.actions.RESOLVE_MEMBER, _actions$RESOLVE_LOCA = _constants.actions.RESOLVE_LOCATION, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class VendorFormComponent extends _statefulComponent.default {
     get adminIds() {
       return this._adminIds;
     }
@@ -5067,7 +5075,7 @@
         }
       });
 
-      _initializerDefineProperty(this, "showLocationFormModal", _descriptor5, this);
+      _initializerDefineProperty(this, "showLocationSearchModal", _descriptor5, this);
 
       _initializerDefineProperty(this, "showMemberAddModal", _descriptor6, this);
 
@@ -5167,7 +5175,12 @@
     }
 
     [_actions$ADD_LOCATION](id) {
-      this._locationIds.indexOf(id) == -1 ? this._locationIds.push(id) : true;
+      return this.vendorsService.addLocation({
+        vendorId: this.vendorId,
+        locationId: id
+      }).then(() => this.dispatch(_constants.actions.RESOLVE_LOCATION)).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, {
+        msgs: data.errors
+      }));
     }
 
     [_actions$ADD_MEMBER]() {
@@ -5204,6 +5217,12 @@
       this.showMemberMsg = true;
     }
 
+    [_actions$RESOLVE_LOCA]() {
+      Ember.set(this, 'msgs', ['Location added successfully']);
+      this.msgType = 'success';
+      this.showMsg = true;
+    }
+
     [_actions$REJECT_ACTIO]({
       msgs,
       context
@@ -5224,6 +5243,7 @@
     }
 
     addLocation(loc) {
+      this.closeLocationSearchModal();
       return this.dispatch(_constants.actions.ADD_LOCATION, loc.id);
     }
 
@@ -5277,7 +5297,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "showLocationFormModal", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "showLocationSearchModal", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -5414,8 +5434,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "AQrA/e7u",
-    "block": "{\"symbols\":[\"modal\",\"modal\",\"form\",\"btnGrp\",\"msg\",\"modal\",\"form\"],\"statements\":[[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Add A Vendor\"],[13],[2,\"\\n\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"startAddLocation\"]]],null],[12],[2,\"Add Location\"],[13],[2,\" //\\n\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"startAddMember\"]]],null],[12],[2,\"Add Member\"],[13],[2,\" //\\n\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,1],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[8,[32,7,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Org. Name\",\"Org. Name\",\"organizationName\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,[32,7,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Contact Name\",\"Contact Name\",\"organizationContactName\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,[32,7,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Contact Email\",\"Contact Email\",\"organizationContactEmail\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\"]],\"parameters\":[7]}]]],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showLocationSearchModal\"]],[32,0,[\"closeLocationSearchModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,6,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,6,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[8,\"locations/search-and-results\",[],[[\"@clickAction\"],[[32,0,[\"addLocation\"]]]],null]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,6,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,6,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[6]}]]],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showMemberAddModal\"]],[32,0,[\"closeMemberAddModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,2,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,2,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,3],true,[34,4],true,[30,[36,1],[[32,0,[\"hideMsg\"]],\"member\"],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,6],[[30,[36,5],[[30,[36,5],[[32,0,[\"memberMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,5]],[13],[2,\"\\n\"]],\"parameters\":[5]}]]],[2,\"\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,1],[[32,0,[\"addMember\"]],[32,0,[\"newMemberEmail\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[8,[32,3,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Email\",\"Email\",\"newMemberEmail\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,\"bs-button-group\",[],[[\"@value\",\"@type\",\"@onChange\",\"@required\"],[[34,7],\"radio\",[30,[36,2],[[32,0],[30,[36,8],[[35,7]],null]],null],true]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"button\"]],[],[[\"@value\"],[\"Member\"]],[[\"default\"],[{\"statements\":[[2,\"Member\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"button\"]],[],[[\"@value\"],[\"Admin\"]],[[\"default\"],[{\"statements\":[[2,\"Admin\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[4]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,2,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,2,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showStatusModal\"]],[32,0,[\"closeStatusModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"on\",\"fn\",\"action\",\"showMemberMsg\",\"memberMsgType\",\"-track-array\",\"each\",\"newMemberRole\",\"mut\"]}",
+    "id": "c//RCG1n",
+    "block": "{\"symbols\":[\"modal\",\"modal\",\"form\",\"btnGrp\",\"msg\",\"modal\",\"form\"],\"statements\":[[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Add A Vendor\"],[13],[2,\"\\n\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"startAddLocation\"]]],null],[12],[2,\"Add Location\"],[13],[2,\" //\\n\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"startAddMember\"]]],null],[12],[2,\"Add Member\"],[13],[2,\" //\\n\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,1],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[8,[32,7,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Org. Name\",\"Org. Name\",\"organizationName\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,[32,7,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Contact Name\",\"Contact Name\",\"organizationContactName\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,[32,7,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Contact Email\",\"Contact Email\",\"organizationContactEmail\",true]],null],[2,\"\\n\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\"]],\"parameters\":[7]}]]],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showLocationSearchModal\"]],[32,0,[\"closeLocationSearchModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,6,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[2,\"Add a Location\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,6,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[8,\"locations/search-and-results\",[],[[\"@stacked\",\"@clickAction\"],[true,[32,0,[\"addLocation\"]]]],null]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,6,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,6,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[6]}]]],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showMemberAddModal\"]],[32,0,[\"closeMemberAddModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,2,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[2,\"Add a Member\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,2,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,3],true,[34,4],true,[30,[36,1],[[32,0,[\"hideMsg\"]],\"member\"],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,6],[[30,[36,5],[[30,[36,5],[[32,0,[\"memberMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,5]],[13],[2,\"\\n\"]],\"parameters\":[5]}]]],[2,\"\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,1],[[32,0,[\"addMember\"]],[32,0,[\"newMemberEmail\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[8,[32,3,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Email\",\"Email\",\"newMemberEmail\",true]],null],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"span\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\"],[8,\"bs-button-group\",[],[[\"@value\",\"@type\",\"@onChange\",\"@required\"],[[34,7],\"radio\",[30,[36,2],[[32,0],[30,[36,8],[[35,7]],null]],null],true]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"button\"]],[],[[\"@value\"],[\"Member\"]],[[\"default\"],[{\"statements\":[[2,\"Member\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"button\"]],[],[[\"@value\"],[\"Admin\"]],[[\"default\"],[{\"statements\":[[2,\"Admin\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[4]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,2,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,2,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showStatusModal\"]],[32,0,[\"closeStatusModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"on\",\"fn\",\"action\",\"showMemberMsg\",\"memberMsgType\",\"-track-array\",\"each\",\"newMemberRole\",\"mut\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/vendors/vendor-form/template.hbs"
     }
@@ -6212,11 +6232,11 @@
     beforeModel() {
       this.accountService.isAuthenticated().then(response => {
         if (response && !response.authorized) {
-          return this.transitionTo('account');
+          return this.transitionTo('account.login');
         }
 
         return true;
-      }).catch(() => this.transitionTo('account'));
+      }).catch(() => this.transitionTo('account.login'));
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -6389,6 +6409,9 @@
     }
 
     me() {
+      if (!this.authInfo || !this.authInfo.authorized) return Ember.RSVP.Promise.reject({
+        errors: ['Unauthorized']
+      });
       return this.apiService.request({
         resource: _httpResources.default.myAccount
       }).then(({
@@ -6397,6 +6420,9 @@
     }
 
     myProfile() {
+      if (!this.authInfo || !this.authInfo.authorized) return Ember.RSVP.Promise.reject({
+        errors: ['Unauthorized']
+      });
       return this.apiService.request({
         resource: _httpResources.default.myProfile
       }).then(({
@@ -6950,14 +6976,14 @@
 
     addLocation({
       vendorId,
-      locId
+      locationId
     }) {
       try {
         return this.apiService.request({
           resource: _httpResources.default.addVendorLocation,
           body: {
             vendorId,
-            locId
+            locationId
           }
         });
       } catch (e) {
@@ -6968,14 +6994,14 @@
 
     removeLocation({
       vendorId,
-      locId
+      locationId
     }) {
       try {
         return this.apiService.request({
           resource: _httpResources.default.removeVendorLocation,
           body: {
             vendorId,
-            locId
+            locationId
           }
         });
       } catch (e) {
@@ -7526,7 +7552,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+e62cc83a"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+3230df6e"});
           }
         
 //# sourceMappingURL=poppin-ui.map

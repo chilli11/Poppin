@@ -19,9 +19,9 @@
 
 <BsModal @open={{this.showLocationSearchModal}} @onHide={{this.closeLocationSearchModal}} as |modal|>
 	<modal.header>
-		<h4 class="modal-title">{{this.modalTitle}}</h4>
+		<h4 class="modal-title">Add a Location</h4>
 	</modal.header>
-	<modal.body><Locations::SearchAndResults @clickAction={{this.addLocation}} /></modal.body>
+	<modal.body><Locations::SearchAndResults @stacked={{true}} @clickAction={{this.addLocation}} /></modal.body>
 	<modal.footer>
 		<BsButton @onClick={{action modal.close}}>Close</BsButton>
 	</modal.footer>
@@ -29,7 +29,7 @@
 
 <BsModal @open={{this.showMemberAddModal}} @onHide={{this.closeMemberAddModal}} as |modal|>
 	<modal.header>
-		<h4 class="modal-title">{{this.modalTitle}}</h4>
+		<h4 class="modal-title">Add a Member</h4>
 	</modal.header>
 	<modal.body>
 		<BsAlert
@@ -44,10 +44,13 @@
 		</BsAlert>
 		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.addMember this.newMemberEmail}} as |form|>
 			<form.element @controlType="text" @label="Email" @placeholder="Email" @property="newMemberEmail" @required={{true}} />
+			<hr>
+			<span>Role:</span>
 			<BsButtonGroup @value={{newMemberRole}} @type="radio" @onChange={{action (mut newMemberRole)}} @required={{true}} as |btnGrp|>
 				<btnGrp.button @value="Member">Member</btnGrp.button>
 				<btnGrp.button @value="Admin">Admin</btnGrp.button>
 			</BsButtonGroup>
+			<hr>
 			<BsButton @type="primary" type="submit" @defaultText="Submit" />
 		</BsForm>
 	</modal.body>

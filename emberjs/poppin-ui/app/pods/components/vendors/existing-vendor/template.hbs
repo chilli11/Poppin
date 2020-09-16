@@ -16,3 +16,16 @@
 		@title="Members"
 		@users={{@vendor.members}} />
 </div>
+
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Locations</h4>
+		</div>
+		<div class="card-body">
+			<Locations::LocationList
+				@title="Locations"
+				@locations={{@vendor.locations}} />
+		</div>
+	</div>
+</div>
