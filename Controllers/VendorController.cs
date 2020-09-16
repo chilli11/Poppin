@@ -362,8 +362,9 @@ namespace Poppin.Controllers
 
 								//POST api/Vendors/5
 								[HttpPost("add-location/{vendorId}")]
-								public async Task<IActionResult> AddLocation(string vendorId, string locationId)
+								public async Task<IActionResult> AddLocation(string vendorId, IDictionary<string, string> kvp)
 								{
+												var locationId = kvp["locationId"];
 												var loc = await _locationService.Get(locationId);
 												var vendor = _vendors.Find(v => v.Id == vendorId);
 												if (vendor == null)
@@ -389,7 +390,7 @@ namespace Poppin.Controllers
 																				loc.VendorId = vendorId;
 
 																				await _vendorService.UpdateVendor(vendor);
-																				await _locationService.Update(locationId, loc);
+																				await _locationService.Update(loc);
 																				return Ok();
 																}
 																catch (Exception e)
@@ -407,8 +408,9 @@ namespace Poppin.Controllers
 
 								//POST api/Vendors/5
 								[HttpPost("remove-location/{vendorId}")]
-								public async Task<IActionResult> RemoveLocation(string vendorId, string locationId)
+								public async Task<IActionResult> RemoveLocation(string vendorId, IDictionary<string, string> kvp)
 								{
+												var locationId = kvp["locationId"];
 												var loc = await _locationService.Get(locationId);
 												var vendor = _vendors.Find(v => v.Id == vendorId);
 												if (vendor == null)

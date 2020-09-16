@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -20,6 +21,7 @@ using Poppin.Models.Identity;
 using Poppin.Services;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Poppin
@@ -178,6 +180,17 @@ namespace Poppin
 																.AllowCredentials();
 												});
 
+												//app.Use(async (context, next) =>
+												//{
+												//				var url = context.Request.Path.Value;
+												//				var paths = new List<string>() { "/search", "/locations", "/vendors", "/account" };
+
+												//				if (!url.Contains("/api/") && paths.Any(p => url.Contains(p)))
+												//				{
+												//								context.Request.Path = "/";
+												//				}
+												//				await next();
+												//});
 
 												app.UseEndpoints(endpoints =>
 												{
@@ -185,6 +198,13 @@ namespace Poppin
 																				name: "default",
 																				pattern: "{controller=Home}/{action=Index}/{id?}");
 																endpoints.MapRazorPages();
+												});
+
+												//handle client side routes
+												app.Run(async (context) =>
+												{
+																context.Response.ContentType = "text/html";
+																await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
 												});
 								}
 				}
