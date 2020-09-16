@@ -1,19 +1,34 @@
 <div class="col-md-6">
-	{{#if (eq this.machineState 'IDLE')}}
+	<BsAlert
+		@visible={{this.showStatusMsg}}
+		@fade={{true}}
+		@type={{this.statusType}}
+		@dismissible={{true}}
+		@onDismissed={{fn this.hideMsg}}>
+		{{#each this.statusMsgs as |msg|}}
+			<p>{{msg}}</p>
+		{{/each}}
+	</BsAlert>
+	{{#if this.isEdit}}
+		<Vendors::VendorForm
+			@vendor={{@vendor}}
+			@refresh={{@refresh}}
+			@isEdit={{true}}
+			@cancelAction={{this.endEdit}}
+			@resolveAction={{this.endEdit}} />
+	{{else}}
 		<Vendors::VendorDisplay
 			@vendor={{@vendor}}
 			@startEdit={{this.startEdit}}
 			@refresh={{@refresh}} />
-	{{else if (eq this.machineState 'EDIT_LOCATION')}}
-		<Vendors::VendorForm
-			@vendor={{@vendor}}
-			@resolveAction={{this.endEdit}} />
 	{{/if}}
 	<UsersList
 		@title="Admins"
+		@clickAction={{this.openMemberModal}}
 		@users={{@vendor.admins}} />
 	<UsersList
 		@title="Members"
+		@clickAction={{this.openMemberModal}}
 		@users={{@vendor.members}} />
 </div>
 
@@ -25,7 +40,62 @@
 		<div class="card-body">
 			<Locations::LocationList
 				@title="Locations"
-				@locations={{@vendor.locations}} />
+				@locations={{@vendor.locations}}
+				@clickAction={{this.openLocationModal}} />
 		</div>
 	</div>
 </div>
+
+<BsModal @open={{this.showLocationModal}} @onHide={{this.closeLocationModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">Options</h4>
+	</modal.header>
+	<modal.body>
+		<BsAlert
+			@visible={{this.showModalMsg}}
+			@fade={{true}}
+			@type={{this.statusType}}
+			@dismissible={{true}}
+			@onDismissed={{fn this.hideMsg}}>
+			{{#each this.statusMsgs as |msg|}}
+				<p>{{msg}}</p>
+			{{/each}}
+		</BsAlert>
+		<LinkTo class="btn btn-primary btn-block" @route="locations.location" @model={{this.modalLoc}}>
+			View {{this.modalLoc.name}}
+		</LinkTo>
+		<hr>
+		<BsButton @class="btn-block" @type="outline-danger" @onClick={{fn this.removeLocation this.modalLoc}}>Remove This Location</BsButton>
+	</modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>
+
+<BsModal @open={{this.showMemberModal}} @onHide={{this.closeMemberModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">Options</h4>
+	</modal.header>
+	<modal.body>
+		<BsAlert
+			@visible={{this.showModalMsg}}
+			@fade={{true}}
+			@type={{this.statusType}}
+			@dismissible={{true}}
+			@onDismissed={{fn this.hideMsg}}>
+			{{#each this.statusMsgs as |msg|}}
+				<p>{{msg}}</p>
+			{{/each}}
+		</BsAlert>
+		<BsButton @class="btn-block" @type="primary" @onClick={{fn this.changeRole this.modalMember}}>
+			Make {{this.modalMember.email}} {{if this.memberIsAdmin 'a Member' 'an Admin'}}
+		</BsButton>
+		<hr>
+		<BsButton @class="btn-block" @type="outline-danger" @onClick={{fn this.removeMember this.modalMember}}>
+			Remove This {{if this.memberIsAdmin 'Admin' 'Member'}}
+		</BsButton>
+	</modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>

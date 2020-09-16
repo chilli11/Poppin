@@ -5,7 +5,7 @@
 	<div class="card-body">
 		{{#each @users as |u|}}
 			<div class="card">
-				<div class="card-body">
+				<div class="card-body" role="button" {{on "click" (fn @clickAction u)}}>
 					<span class="strong">{{u.username}}</span> //
 					<span>{{u.email}}</span>
 				</div>

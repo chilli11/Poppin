@@ -184,7 +184,7 @@ export default class VendorFormComponent extends StatefulComponent {
 		return this.vendorsService.addLocation({
 			vendorId: this.vendorId,
 			locationId: id
-		}).then(() => this.dispatch(actions.RESOLVE_LOCATION))
+		}).then((data) => this.dispatch(actions.RESOLVE_LOCATION, data))
 		.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors }));
 	}
 
@@ -198,30 +198,32 @@ export default class VendorFormComponent extends StatefulComponent {
 			.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors, context: 'member' }));
 	}
 
-	[actions.REMOVE_MEMBER]() {
-		return this.vendorsService.removeMember({
-			vendorId: this.vendorId,
-			email: this.newMemberEmail,
-			role: this.newMemberRole,
-			userId: null,
-		}).then(() => this.dispatch(actions.RESOLVE_MEMBER))
-			.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors, context: 'member' }));
-	}
-
 	[actions.GET_LOCATION_ID]() {
 		this.showLocationFormModal = true;
 	}
 
-	[actions.RESOLVE_MEMBER]() {
+	[actions.RESOLVE_MEMBER]({ admins, members, adminIds, memberIds }) {
 		set(this, 'memberMsgs', ['Success!']);
 		this.memberMsgType = 'success';
 		this.showMemberMsg = true;
+
+		const vendor = this.args.vendor;
+		vendor.admins = admins;
+		vendor.members = members;
+		vendor.adminIds = adminIds;
+		vendor.memberIds = memberIds;
+		this.args.refresh(vendor);
 	}
 
-	[actions.RESOLVE_LOCATION]() {
+	[actions.RESOLVE_LOCATION](data) {
 		set(this, 'msgs',  ['Location added successfully']);
 		this.msgType = 'success';
 		this.showMsg = true;
+
+		const vendor = this.args.vendor;
+		vendor.locations = data.locations;
+		vendor.locationIds = data.vendor.locationIds;
+		this.args.refresh(vendor);
 	}
 
 	[actions.REJECT_ACTION]({ msgs, context }) {

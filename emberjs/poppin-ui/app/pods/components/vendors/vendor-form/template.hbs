@@ -1,18 +1,34 @@
 <div class="card">
 	<div class="card-header card-header-primary">
-		<h4 class="card-title">Add A Vendor</h4>
-		<p class="card-category">
-			<a href="javascript:void(0);" {{on "click" this.startAddLocation}}>Add Location</a> //
-			<a href="javascript:void(0);" {{on "click" this.startAddMember}}>Add Member</a> //
-			<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
-		</p>
+		<h4 class="card-title">{{if @isEdit 'Edit ' 'Add A '}}Vendor</h4>
 	</div>
 	<div class="card-body">
+		<BsAlert
+			@visible={{showMsg}}
+			@fade={{true}}
+			@type={{msgType}}
+			@dismissible={{true}}
+			@onDismissed={{fn this.hideMsg 'member'}}>
+			{{#each this.msgs as |msg|}}
+				<p>{{msg}}</p>
+			{{/each}}
+		</BsAlert>
+		<BsButtonGroup @class="btn-group-block" as |bg|>
+			{{#if @isEdit}}
+				<bg.button @type="outline-primary" @onClick={{this.startAddLocation}}>Add Location</bg.button>
+				<bg.button @type="outline-primary" @onClick={{this.startAddMember}}>Add Member</bg.button>
+			{{/if}}
+			<bg.button @type="outline-danger" @onclick={{this.clearForm}}>Clear Form</bg.button>
+		</BsButtonGroup>
 		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
 			<form.element @controlType="text" @label="Org. Name" @placeholder="Org. Name" @property="organizationName" @required={{true}} />
 			<form.element @controlType="text" @label="Contact Name" @placeholder="Contact Name" @property="organizationContactName" @required={{true}} />
 			<form.element @controlType="text" @label="Contact Email" @placeholder="Contact Email" @property="organizationContactEmail" @required={{true}} />
+		
 			<BsButton @type="primary" type="submit" @defaultText="Submit" />
+			{{#if @cancelAction}}
+				<BsButton @type="outline-secondary" @onClick={{@cancelAction}} @defaultText="Cancel" />
+			{{/if}}
 		</BsForm>
 	</div>
 </div>
@@ -45,16 +61,15 @@
 		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.addMember this.newMemberEmail}} as |form|>
 			<form.element @controlType="text" @label="Email" @placeholder="Email" @property="newMemberEmail" @required={{true}} />
 			<hr>
-			<span>Role:</span>
+			<h5>Role:</h5>
 			<BsButtonGroup @value={{newMemberRole}} @type="radio" @onChange={{action (mut newMemberRole)}} @required={{true}} as |btnGrp|>
-				<btnGrp.button @value="Member">Member</btnGrp.button>
-				<btnGrp.button @value="Admin">Admin</btnGrp.button>
+				<btnGrp.button @type="primary" @value="Member">Member</btnGrp.button>
+				<btnGrp.button @type="primary" @value="Admin">Admin</btnGrp.button>
 			</BsButtonGroup>
-			<hr>
-			<BsButton @type="primary" type="submit" @defaultText="Submit" />
 		</BsForm>
 	</modal.body>
 	<modal.footer>
+		<BsButton @type="primary" type="submit" @defaultText="Submit" />
 		<BsButton @onClick={{action modal.close}}>Close</BsButton>
 	</modal.footer>
 </BsModal>
