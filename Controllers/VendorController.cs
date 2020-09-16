@@ -292,7 +292,12 @@ namespace Poppin.Controllers
 
 																				await _vendorService.UpdateVendor(vendor);
 																				await _userService.UpdateUser(user.UserId, user);
-																				return Ok();
+																				return Ok(new VendorResult
+																				{
+																								Vendor = vendor,
+																								Members = vendor.GetMembers(_userService),
+																								Admins = vendor.GetAdmins(_userService)
+																				});
 																}
 																catch (Exception e)
 																{
@@ -327,25 +332,40 @@ namespace Poppin.Controllers
 																});
 												}
 
+												var authRole = GetUserRole();
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												if (authRole == RoleTypes.Admin || vendor.AdminIds.Contains(userId))
 												{
 																try
 																{
 																				if (newMember.Role == RoleTypes.Admin)
 																				{
+																								if (userId == newMember.UserId && authRole != RoleTypes.Admin)
+																								{
+																												var errors = new List<string>();
+																												errors.Add("You can't remove your own Admin privileges!");
+																												return BadRequest(new GenericFailure
+																												{
+																																Errors = errors
+																												});
+																								}
 																								vendor.AdminIds.Remove(newMember.UserId);
 																								vendor.MemberIds.Add(newMember.UserId);
-																								user.VendorIds.Remove(vendorId);
 																				}
 																				else
 																				{
 																								vendor.AdminIds.Remove(newMember.UserId);
 																								vendor.MemberIds.Remove(newMember.UserId);
+																								user.VendorIds.Remove(vendorId);
 																				}
 																				await _vendorService.UpdateVendor(vendor);
 																				await _userService.UpdateUser(user.UserId, user);
-																				return Ok();
+																				return Ok(new VendorResult
+																				{
+																								Vendor = vendor,
+																								Members = vendor.GetMembers(_userService),
+																								Admins = vendor.GetAdmins(_userService)
+																				});
 																}
 																catch (Exception e)
 																{
@@ -360,21 +380,29 @@ namespace Poppin.Controllers
 												return Unauthorized();
 								}
 
-								//POST api/Vendors/5
+								//POST api/Vendors/add-location/5
+								/// <summary>
+								/// Adds location ID to `Vendor.LocationIds`
+								/// NEEDS: there's a null ref error when trying to update `PoppinLocation.VendorId`
+								/// from the Mongo service
+								/// </summary>
+								/// <param name="vendorId"></param>
+								/// <param name="kvp"></param>
+								/// <returns></returns>
 								[HttpPost("add-location/{vendorId}")]
 								public async Task<IActionResult> AddLocation(string vendorId, IDictionary<string, string> kvp)
 								{
 												var locationId = kvp["locationId"];
-												var loc = await _locationService.Get(locationId);
+												//var loc = await _locationService.Get(locationId);
 												var vendor = _vendors.Find(v => v.Id == vendorId);
 												if (vendor == null)
 												{
 																vendor = await _vendorService.GetVendorById(vendorId);
 												}
-												if (vendor == null || loc == null)
+												if (vendor == null)
 												{
 																var errors = new List<string>();
-																errors.Add("Vendor or Location ID is invalid");
+																errors.Add("Vendor ID is invalid");
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
@@ -387,11 +415,15 @@ namespace Poppin.Controllers
 																try
 																{
 																				vendor.LocationIds.Add(locationId);
-																				loc.VendorId = vendorId;
+																				//loc.VendorId = vendorId;
 
 																				await _vendorService.UpdateVendor(vendor);
-																				await _locationService.Update(loc);
-																				return Ok();
+																				//await _locationService.Update(loc);
+																				return Ok(new VendorResult
+																				{
+																								Vendor = vendor,
+																								Locations = vendor.GetLocations(_locationService)
+																				});
 																}
 																catch (Exception e)
 																{
@@ -406,21 +438,29 @@ namespace Poppin.Controllers
 												return Unauthorized();
 								}
 
-								//POST api/Vendors/5
+								//POST api/Vendors/remove-location/5
+								/// <summary>
+								/// Removes location ID from `Vendor.LocationIds`
+								/// NEEDS: there's a null ref error when trying to update `PoppinLocation.VendorId`
+								/// from the Mongo service
+								/// </summary>
+								/// <param name="vendorId"></param>
+								/// <param name="kvp"></param>
+								/// <returns></returns>
 								[HttpPost("remove-location/{vendorId}")]
 								public async Task<IActionResult> RemoveLocation(string vendorId, IDictionary<string, string> kvp)
 								{
 												var locationId = kvp["locationId"];
-												var loc = await _locationService.Get(locationId);
+												//var loc = await _locationService.Get(locationId);
 												var vendor = _vendors.Find(v => v.Id == vendorId);
 												if (vendor == null)
 												{
 																vendor = await _vendorService.GetVendorById(vendorId);
 												}
-												if (vendor == null || loc == null)
+												if (vendor == null)
 												{
 																var errors = new List<string>();
-																errors.Add("Vendor or Location ID is invalid");
+																errors.Add("Vendor ID is invalid");
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
@@ -433,11 +473,15 @@ namespace Poppin.Controllers
 																try
 																{
 																				vendor.LocationIds.Remove(locationId);
-																				loc.VendorId = null;
+																				//loc.VendorId = null;
 
 																				await _vendorService.UpdateVendor(vendor);
-																				await _locationService.Update(locationId, loc);
-																				return Ok();
+																				//await _locationService.Update(locationId, loc);
+																				return Ok(new VendorResult
+																				{
+																								Vendor = vendor,
+																								Locations = vendor.GetLocations(_locationService)
+																				});
 																}
 																catch (Exception e)
 																{
