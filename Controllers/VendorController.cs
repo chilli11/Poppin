@@ -28,7 +28,6 @@ namespace Poppin.Controllers
         private readonly IUserService _userService;
 								private readonly IIdentityService _identityService;
 
-								private List<Vendor> _vendors = new List<Vendor>();
 
 								public VendorsController(
 												IVendorService vendorService,
@@ -42,10 +41,28 @@ namespace Poppin.Controllers
 												_identityService = identityService;
 								}
 
-								// GET: api/Vendors/5
-								[Authorize(Policy = "Admin")]
 								[HttpGet]
 								public async Task<IActionResult> Get()
+								{
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												var profile = await GetCurrentUserProfile(userId);
+												var vendors = await _vendorService.GetVendorsByIds(profile.VendorIds);
+												if (vendors == null)
+												{
+																var errors = new List<string>();
+																errors.Add("No Results Found");
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
+												return Ok(vendors);
+								}
+
+								// GET: api/Vendors/5
+								[Authorize(Policy = RoleTypes.Admin)]
+								[HttpGet("all")]
+								public async Task<IActionResult> GetAll()
 								{
 												var vendors = await _vendorService.GetAll();
 												if (vendors == null)
@@ -64,11 +81,7 @@ namespace Poppin.Controllers
 								[HttpGet("{vendorId}")]
 								public async Task<IActionResult> Get(string vendorId)
 								{			
-												var vendor = _vendors.Find(v => v.Id == vendorId);
-												if (vendor == null)
-												{
-																vendor = await _vendorService.GetVendorById(vendorId);
-												}
+												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null)
 												{
 																var errors = new List<string>();
@@ -80,7 +93,7 @@ namespace Poppin.Controllers
 												}
 
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendor);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId) || vendor.MemberIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || vendor.MemberIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 												{
 																var vResult = new VendorResult
 																{
@@ -103,42 +116,24 @@ namespace Poppin.Controllers
 								[HttpPost("get-by-list")]
 								public async Task<IActionResult> GetByIds(IEnumerable<string> vendorIds)
 								{
-												if (_vendors.Count > 0)
+												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+												var vendors = await _vendorService.GetVendorsByIds(vendorIds);
+
+												if (vendors == null)
 												{
-																var vendors = _vendors.Where(v => vendorIds.Contains(v.Id)).ToList();
-																vendorIds = vendorIds.Where(id => !vendors.Any(v => v.Id == id));
-																vendors.AddRange(await _vendorService.GetVendorsByIds(vendorIds));
-																if (vendors == null)
+																var errors = new List<string>();
+																errors.Add("No Results Found");
+																return BadRequest(new GenericFailure
 																{
-																				var errors = new List<string>();
-																				errors.Add("No Results Found");
-																				return BadRequest(new GenericFailure
-																				{
-																								Errors = errors
-																				});
-																}
+																				Errors = errors
+																});
+												}
+
+												if (GetUserRole() == RoleTypes.Admin)
+												{
 																return Ok(vendors);
 												}
-												else
-												{
-																var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-																var vendors = await _vendorService.GetVendorsByIds(vendorIds);
-																if (vendors == null)
-																{
-																				var errors = new List<string>();
-																				errors.Add("No Results Found");
-																				return BadRequest(new GenericFailure
-																				{
-																								Errors = errors
-																				});
-																}
-
-																if (GetUserRole() == "Admin")
-																{
-																				return Ok(vendors);
-																}
-																return Ok(vendors.Where(v => v.AdminIds.Contains(userId) || v.MemberIds.Contains(userId)));
-												}
+												return Ok(vendors.Where(v => v.AdminIds.Contains(userId) || v.MemberIds.Contains(userId)));
 								}
 
 								// GET: api/Vendors/5
@@ -155,11 +150,9 @@ namespace Poppin.Controllers
 																				Errors = errors
 																});
 												}
-												var leftovers = vendors.Where(v => !_vendors.Any(_v => v.Id == _v.Id));
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												_vendors.AddRange(leftovers);
 
-												if (GetUserRole() == "Admin")
+												if (GetUserRole() == RoleTypes.Admin)
 												{
 																return Ok(vendors);
 												}
@@ -167,7 +160,7 @@ namespace Poppin.Controllers
 								}
 
 								// POST api/Vendors
-								[Authorize(Policy = "Admin")]
+								[Authorize(Policy = RoleTypes.Admin)]
 								[HttpPost]
 								public async Task<IActionResult> Post(PoppinVendorRequest newVendor)
 								{
@@ -178,7 +171,6 @@ namespace Poppin.Controllers
 												if (isExisting == null)
 												{
 																await _vendorService.AddVendor(vendor);
-																_vendors.Add(vendor);
 																return CreatedAtAction("Post", vendor);
 												}
 												return Ok(isExisting);
@@ -190,19 +182,13 @@ namespace Poppin.Controllers
 								{
 												var vendor = new Vendor(newVendor);
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 												{
 																try
 																{
 																				vendor.LastUpdate = DateTime.UtcNow;
 																				await _vendorService.UpdateVendor(vendor);
-																				var ind = _vendors.FindIndex(v => v.Id == vendor.Id);
-																				if (ind > -1)
-																				{
-																								_vendors.RemoveAt(ind);
-																				}
-																				_vendors.Add(vendor);
-																				return Ok();
+																				return Ok(vendor);
 																}
 																catch (Exception e)
 																{
@@ -223,19 +209,13 @@ namespace Poppin.Controllers
 								{
 												var vendor = new Vendor(newVendor);
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 												{
 																try
 																{
 																				vendor.LastUpdate = DateTime.UtcNow;
 																				await _vendorService.UpdateVendor(vendorId, vendor);
-																				var ind = _vendors.FindIndex(v => v.Id == vendorId);
-																				if (ind > -1)
-																				{
-																								_vendors.RemoveAt(ind);
-																				}
-																				_vendors.Add(vendor);
-																				return Ok();
+																				return Ok(vendor);
 																}
 																catch (Exception e)
 																{
@@ -255,11 +235,7 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> AddMember(string vendorId, VendorMemberRequest newMember)
 								{
 												var user = await GetUserProfile(newMember);
-												var vendor = _vendors.Find(v => v.Id == vendorId);
-												if (vendor == null)
-												{
-																vendor = await _vendorService.GetVendorById(vendorId);
-												}
+												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null || user == null)
 												{
 																var errors = new List<string>();
@@ -271,7 +247,7 @@ namespace Poppin.Controllers
 												}
 
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 												{
 																try
 																{
@@ -284,6 +260,7 @@ namespace Poppin.Controllers
 																				{
 																								vendor.MemberIds.Add(user.UserId);
 																				}
+
 																				if (user.VendorIds == null)
 																				{
 																								user.VendorIds = new HashSet<string>();
@@ -317,11 +294,7 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> RemoveMember(string vendorId, VendorMemberRequest newMember)
 								{
 												var user = await GetUserProfile(newMember);
-												var vendor = _vendors.Find(v => v.Id == vendorId);
-												if (vendor == null)
-												{
-																vendor = await _vendorService.GetVendorById(vendorId);
-												}
+												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null || user == null)
 												{
 																var errors = new List<string>();
@@ -334,7 +307,7 @@ namespace Poppin.Controllers
 
 												var authRole = GetUserRole();
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (authRole == RoleTypes.Admin || vendor.AdminIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || authRole == RoleTypes.Admin)
 												{
 																try
 																{
@@ -394,11 +367,7 @@ namespace Poppin.Controllers
 								{
 												var locationId = kvp["locationId"];
 												//var loc = await _locationService.Get(locationId);
-												var vendor = _vendors.Find(v => v.Id == vendorId);
-												if (vendor == null)
-												{
-																vendor = await _vendorService.GetVendorById(vendorId);
-												}
+												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null)
 												{
 																var errors = new List<string>();
@@ -410,7 +379,7 @@ namespace Poppin.Controllers
 												}
 
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 												{
 																try
 																{
@@ -452,11 +421,7 @@ namespace Poppin.Controllers
 								{
 												var locationId = kvp["locationId"];
 												//var loc = await _locationService.Get(locationId);
-												var vendor = _vendors.Find(v => v.Id == vendorId);
-												if (vendor == null)
-												{
-																vendor = await _vendorService.GetVendorById(vendorId);
-												}
+												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null)
 												{
 																var errors = new List<string>();
@@ -468,7 +433,7 @@ namespace Poppin.Controllers
 												}
 
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												if (GetUserRole() == "Admin" || vendor.AdminIds.Contains(userId))
+												if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 												{
 																try
 																{
@@ -522,6 +487,21 @@ namespace Poppin.Controllers
 												if (user == null)
 												{
 																var u = await _identityService.GetUserByEmail(req.Email);
+																if (u != null)
+																{
+																				user = new PoppinUser(u.User);
+																				_userService.AddUser(user);
+																}
+												}
+												return user;
+								}
+
+								private async Task<PoppinUser> GetCurrentUserProfile(string userId)
+								{
+												var user = await _userService.GetUserById(userId);
+												if (user == null)
+												{
+																var u = await _identityService.GetUserById(userId);
 																if (u != null)
 																{
 																				user = new PoppinUser(u.User);
