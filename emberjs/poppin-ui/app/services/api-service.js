@@ -1,5 +1,6 @@
 import Service, { inject } from '@ember/service';
 import Evented from '@ember/object/evented';
+import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
 import { Promise } from 'rsvp';
 import config from 'poppin-ui/config/environment';
@@ -56,7 +57,7 @@ export const paramsToSegments = (httpResource, fetchRequest) => {
  */
 export default class ApiService extends Service.extend(Evented) {
 	@inject router;
-	jwt = sessionStorage.getItem('poppin_jwt');
+	@tracked jwt = sessionStorage.getItem('poppin_jwt');
 
 	/**
 	 * @param {String} url

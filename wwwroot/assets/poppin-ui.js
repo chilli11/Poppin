@@ -6771,7 +6771,7 @@
   });
   _exports.default = _exports.paramsToSegments = void 0;
 
-  var _dec, _class, _descriptor, _temp;
+  var _dec, _dec2, _class, _descriptor, _descriptor2, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -6836,13 +6836,13 @@
 
 
   _exports.paramsToSegments = paramsToSegments;
-  let ApiService = (_dec = Ember.inject.service, (_class = (_temp = class ApiService extends Ember.Service.extend(Ember.Evented) {
+  let ApiService = (_dec = Ember.inject.service, _dec2 = Ember._tracked, (_class = (_temp = class ApiService extends Ember.Service.extend(Ember.Evented) {
     constructor(...args) {
       super(...args);
 
       _initializerDefineProperty(this, "router", _descriptor, this);
 
-      _defineProperty(this, "jwt", sessionStorage.getItem('poppin_jwt'));
+      _initializerDefineProperty(this, "jwt", _descriptor2, this);
     }
 
     /**
@@ -6930,6 +6930,13 @@
     enumerable: true,
     writable: true,
     initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "jwt", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return sessionStorage.getItem('poppin_jwt');
+    }
   })), _class));
   _exports.default = ApiService;
 });
