@@ -9,12 +9,14 @@
 				<nav.linkTo @route="locations.index">Locations</nav.linkTo>
 			</nav.item>
 			{{#if this.authorized}}
+				{{#if (or this.isAdmin this.accountService.vendors)}}
+					<nav.item>
+						<nav.linkTo @route="vendors.index">Vendors</nav.linkTo>
+					</nav.item>
+				{{/if}}
 				{{#if this.isAdmin}}
 					<nav.item>
 						<nav.linkTo @route="locations.add">Add a location</nav.linkTo>
-					</nav.item>
-					<nav.item>
-						<nav.linkTo @route="vendors.index">Vendors</nav.linkTo>
 					</nav.item>
 					<nav.item>
 						<nav.linkTo @route="vendors.add">Add a vendor</nav.linkTo>

@@ -5,9 +5,7 @@ import { action } from '@ember/object';
 
 export default class AdminLocationsController extends Controller {
 	@service vendorsService;
-	get results() {
-		return this.vendorsService.vendors;
-	}
+	@tracked results;
 	@tracked isLoading;
 
 	get vendorsList() {

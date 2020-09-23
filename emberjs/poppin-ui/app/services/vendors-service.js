@@ -23,6 +23,12 @@ export default class VendorsService extends Service {
 		});
 	}
 
+	getMyVendors() {
+		return this.apiService.request({
+			resource: HttpResources.getMyVendors
+		}).then(vendors => this.vendors = vendors);
+	}
+
 	getAllVendors() {
 		return this.apiService.request({
 			resource: HttpResources.getAllVendors

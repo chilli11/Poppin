@@ -83,8 +83,12 @@ const HttpResources = {
 		url: 'vendors',
 		method: PUT
 	},
-	getAllVendors: {
+	getMyVendors: {
 		url: 'vendors',
+		method: GET
+	},
+	getAllVendors: {
+		url: 'vendors/all',
 		method: GET
 	},
 	getVendorById: {
