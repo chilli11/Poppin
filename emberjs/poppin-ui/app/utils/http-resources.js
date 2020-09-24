@@ -76,24 +76,52 @@ const HttpResources = {
 
 	/* ===== VENDOR ===== */
 	createNewVendor: {
-		url: 'vendor',
+		url: 'vendors',
 		method: POST
 	},
 	updateVendor: {
-		url: 'vendor/:vendorId',
+		url: 'vendors',
 		method: PUT
 	},
+	getMyVendors: {
+		url: 'vendors',
+		method: GET
+	},
+	getAllVendors: {
+		url: 'vendors/all',
+		method: GET
+	},
 	getVendorById: {
-		url: 'vendor/:vendorId',
+		url: 'vendors/:vendorId',
 		method: GET
 	},
 	getVendorsByList: {
-		url: 'vendor/get-by-list',
+		url: 'vendors/get-by-list',
 		method: POST
 	},
 	getVendorsBySearch: {
-		url: 'vendor/get-by-search',
+		url: 'vendors/get-by-search',
 		method: POST
+	},
+	addMember: {
+		url: 'vendors/add-member/:vendorId',
+		method: POST,
+		params: ['vendorId']
+	},
+	removeMember: {
+		url: 'vendors/remove-member/:vendorId',
+		method: POST,
+		params: ['vendorId']
+	},
+	addVendorLocation: {
+		url: 'vendors/add-location/:vendorId',
+		method: POST,
+		params: ['vendorId']
+	},
+	removeVendorLocation: {
+		url: 'vendors/remove-location/:vendorId',
+		method: POST,
+		params: ['vendorId']
 	}
 };
 

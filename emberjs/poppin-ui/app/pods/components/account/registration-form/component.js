@@ -72,10 +72,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 			.then((response) => {
 				if (response.errors && response.errors.length) throw response;
 				return this.dispatch(actions.RESOLVE, ['Registrtaion success!']);
-			}).catch((response) => {
-				console.log(response);
-				return this.dispatch(actions.REJECT, response.errors);
-			});
+			}).catch((response) => this.dispatch(actions.REJECT, response.errors));
 	}
 
 	[actions.REJECT](msgs) {

@@ -5,8 +5,8 @@ import { inject as service } from '@ember/service';
 
 import { states, actions } from './constants';
 
-export default class 	RegistrationFormComponent extends StatefulComponent {
-	namespace = 'RegistrationForm';
+export default class 	LoginFormComponent extends StatefulComponent {
+	namespace = 'LoginForm';
 	@service accountService;
 	@service store;
 	@service router;
@@ -44,10 +44,7 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 			.then((response) => {
 				if (response.errors && response.errors.length) throw response;
 				return this.dispatch(actions.RESOLVE, ['Login success!']);
-			}).catch((response) => {
-				console.log(response);
-				return this.dispatch(actions.REJECT, response.errors);
-			});
+			}).catch((response) => this.dispatch(actions.REJECT, response.errors));
 	}
 
 	[actions.REJECT](msgs) {

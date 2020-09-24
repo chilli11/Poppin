@@ -142,6 +142,24 @@ namespace Poppin.Services
 												};
 								}
 
+								public async Task<UserDataResult> GetUserByEmail(string email)
+								{
+												var user = await _userManager.FindByEmailAsync(email);
+												if (user == null)
+												{
+																return new UserDataResult
+																{
+																				Success = false,
+																				Errors = new[] { "User does not exist." }
+																};
+												}
+												return new UserDataResult
+												{
+																User = user,
+																Success = true
+												};
+								}
+
 								public async Task<UserListResult> GetUsersById(IEnumerable<string> ids)
 								{
 												var list = new List<User>();

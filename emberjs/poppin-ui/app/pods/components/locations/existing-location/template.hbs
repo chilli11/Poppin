@@ -1,15 +1,16 @@
-{{#if (eq this.machineState 'IDLE')}}
+{{#if (eq this.machineState 'EDIT_LOCATION')}}
+	<Locations::LocationForm
+		@reverseOrder=true
+		@location={{@location}}
+		@resolveAction={{this.endEdit}} />
+{{else}}
 	<Locations::LocationDisplay
+		@isLoading={{eq this.machineState 'LOADING'}}
 		@location={{@location}}
 		@startEdit={{this.startEdit}}
 		@increment={{this.increment}}
 		@decrement={{this.decrement}}
 		@refresh={{@refresh}} />
-{{else if (eq this.machineState 'EDIT_LOCATION')}}
-	<Locations::LocationForm
-		@reverseOrder=true
-		@location={{@location}}
-		@resolveAction={{this.endEdit}} />
 {{/if}}
 
 <BsModal @open={{this.showModal}} as |modal|>

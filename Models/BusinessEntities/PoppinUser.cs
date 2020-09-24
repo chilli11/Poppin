@@ -14,22 +14,23 @@ namespace Poppin.Models.BusinessEntities
             UserId = user.Id;
             Username = user.UserName;
             Role = user.Role;
+            Email = user.Email;
 								}
 
         /// <summary>
         /// LocationIds saved by user
         /// </summary>
-        public IEnumerable<string> Favorites { get; set; }
+        public HashSet<string> Favorites { get; set; }
 
         /// <summary>
         /// LocationIds hidden by user
         /// </summary>
-        public IEnumerable<string> Hidden { get; set; }
+        public HashSet<string> Hidden { get; set; }
 
         /// <summary>
         /// Vendors that the user is a member of
         /// </summary>
-        public IEnumerable<string> VendorIds { get; set; }
+        public HashSet<string> VendorIds { get; set; }
 
         public async Task<List<Vendor>> GetVendors(IVendorService vs)
         {

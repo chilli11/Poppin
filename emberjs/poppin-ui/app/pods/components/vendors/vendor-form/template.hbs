@@ -1,0 +1,85 @@
+<div class="card">
+	<div class="card-header card-header-primary">
+		<h4 class="card-title">{{if @isEdit 'Edit ' 'Add A '}}Vendor</h4>
+	</div>
+	<div class="card-body">
+		<BsAlert
+			@visible={{showMsg}}
+			@fade={{true}}
+			@type={{msgType}}
+			@dismissible={{true}}
+			@onDismissed={{fn this.hideMsg 'member'}}>
+			{{#each this.msgs as |msg|}}
+				<p>{{msg}}</p>
+			{{/each}}
+		</BsAlert>
+		<BsButtonGroup @class="btn-group-block" as |bg|>
+			{{#if @isEdit}}
+				<bg.button @type="outline-primary" @onClick={{this.startAddLocation}}>Add Location</bg.button>
+				<bg.button @type="outline-primary" @onClick={{this.startAddMember}}>Add Member</bg.button>
+			{{/if}}
+			<bg.button @type="outline-danger" @onclick={{this.clearForm}}>Clear Form</bg.button>
+		</BsButtonGroup>
+		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+			<form.element @controlType="text" @label="Org. Name" @placeholder="Org. Name" @property="organizationName" @required={{true}} />
+			<form.element @controlType="text" @label="Contact Name" @placeholder="Contact Name" @property="organizationContactName" @required={{true}} />
+			<form.element @controlType="text" @label="Contact Email" @placeholder="Contact Email" @property="organizationContactEmail" @required={{true}} />
+		
+			<BsButton @type="primary" type="submit" @defaultText="Submit" />
+			{{#if @cancelAction}}
+				<BsButton @type="outline-secondary" @onClick={{@cancelAction}} @defaultText="Cancel" />
+			{{/if}}
+		</BsForm>
+	</div>
+</div>
+
+<BsModal @open={{this.showLocationSearchModal}} @onHide={{this.closeLocationSearchModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">Add a Location</h4>
+	</modal.header>
+	<modal.body><Locations::SearchAndResults @stacked={{true}} @clickAction={{this.addLocation}} /></modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>
+
+<BsModal @open={{this.showMemberAddModal}} @onHide={{this.closeMemberAddModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">Add a Member</h4>
+	</modal.header>
+	<modal.body>
+		<BsAlert
+			@visible={{showMemberMsg}}
+			@fade={{true}}
+			@type={{memberMsgType}}
+			@dismissible={{true}}
+			@onDismissed={{fn this.hideMsg 'member'}}>
+			{{#each this.memberMsgs as |msg|}}
+				<p>{{msg}}</p>
+			{{/each}}
+		</BsAlert>
+		<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.addMember this.newMemberEmail}} as |form|>
+			<form.element @controlType="text" @label="Email" @placeholder="Email" @property="newMemberEmail" @required={{true}} />
+			<hr>
+			<h5>Role:</h5>
+			<BsButtonGroup @value={{newMemberRole}} @type="radio" @onChange={{action (mut newMemberRole)}} @required={{true}} as |btnGrp|>
+				<btnGrp.button @type="primary" @value="Member">Member</btnGrp.button>
+				<btnGrp.button @type="primary" @value="Admin">Admin</btnGrp.button>
+			</BsButtonGroup>
+		</BsForm>
+	</modal.body>
+	<modal.footer>
+		<BsButton @type="primary" type="submit" @defaultText="Submit" />
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>
+
+<BsModal @open={{this.showStatusModal}} @onHide={{this.closeStatusModal}} as |modal|>
+	<modal.header>
+		<h4 class="modal-title">{{this.modalTitle}}</h4>
+	</modal.header>
+	<modal.body>{{this.modalText}}</modal.body>
+	<modal.footer>
+		<BsButton @onClick={{action modal.close}}>Close</BsButton>
+	</modal.footer>
+</BsModal>

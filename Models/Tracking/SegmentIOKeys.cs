@@ -20,7 +20,8 @@ namespace Poppin.Models.Tracking
 
 												public const string Search = "Search";
 												public const string ViewLocation = "ViewLocation";
-
+												public const string ViewVendor = "ViewVendor";
+												public const string ViewVendorList = "ViewVendorList";
 
 												public const string AddFavorite = "AddFavorite";
 												public const string RemoveFavorite = "RemoveFavorite";
@@ -31,12 +32,21 @@ namespace Poppin.Models.Tracking
 												public const string GetDirections = "GetDirections";
 
 												public const string AddVendor = "AddVendor";
-												public const string AddMember = "AddMember";
 												public const string AddLocation = "AddLocation";
+
 												public const string UpdateLocation = "UpdateLocation";
 												public const string DeleteLocation = "DeleteLocation";
 												public const string IncrementCrowd = "IncrementCrowd";
 												public const string DecrementCrowd = "DecrementCrowd";
+
+												public const string AddVendorMember = "AddVendorMember";
+												public const string AddVendorAdmin = "AddVendorAdmin";
+												public const string AddVendorLocation = "AddVendorLocation";
+												public const string AddSubVendor = "AddSubVendor";
+												public const string RemoveVendorMember = "RemoveVendorMember";
+												public const string RemoveVendorAdmin = "RemoveVendorAdmin";
+												public const string RemoveVendorLocation = "RemoveVendorLocation";
+												public const string RemoveSubVendor = "RemoveSubVendor";
 								}
 				}
 }

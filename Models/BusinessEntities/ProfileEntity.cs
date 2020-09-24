@@ -18,6 +18,8 @@ namespace Poppin.Models.BusinessEntities
         public User User { get; set; }
 
         [PersonalData]
+        public string Email { get; set; }
+        [PersonalData]
         public string FirstName { get; set; }
         [PersonalData]
         public string LastName { get; set; }

@@ -8,5 +8,7 @@ namespace Poppin.Models.BusinessEntities
 								public IEnumerable<PoppinUser> Admins { get; set; }
 								public IEnumerable<PoppinLocation> Locations { get; set; }
 								public IEnumerable<PoppinUser> Members { get; set; }
+								public IEnumerable<Vendor> SubVendors { get; set; }
+								public Vendor Parent { get; set; }
 				}
 }

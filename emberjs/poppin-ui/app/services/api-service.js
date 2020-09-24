@@ -1,5 +1,6 @@
 import Service, { inject } from '@ember/service';
 import Evented from '@ember/object/evented';
+import { tracked } from '@glimmer/tracking';
 import { fetch } from 'fetch';
 import { Promise } from 'rsvp';
 import config from 'poppin-ui/config/environment';
@@ -56,7 +57,7 @@ export const paramsToSegments = (httpResource, fetchRequest) => {
  */
 export default class ApiService extends Service.extend(Evented) {
 	@inject router;
-	jwt = sessionStorage.getItem('poppin_jwt');
+	@tracked jwt = sessionStorage.getItem('poppin_jwt');
 
 	/**
 	 * @param {String} url
@@ -117,8 +118,8 @@ export default class ApiService extends Service.extend(Evented) {
 		if (fetchRequest.method !== GET) {
 			fetchRequest.body = JSON.stringify(fetchRequest.body);
 		} else {
-			Object.keys(options.body || {})
-				.forEach(k => fetchRequest.url.searchParams.append(k, options.body[k]));
+			Object.keys(fetchRequest.body || {})
+				.forEach(k => fetchRequest.url.searchParams.append(k, fetchRequest.body[k]));
 			fetchRequest = _.omit(fetchRequest, 'body');
 		}
 		

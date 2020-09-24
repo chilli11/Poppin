@@ -46,13 +46,19 @@ export default class AccountService extends Service {
 	}
 
 	me() {
+		if (!this.authInfo || !this.authInfo.authorized)
+			return Promise.reject({ errors: ['Unauthorized'] });
+
 		return this.apiService.request({
 			resource: HttpResources.myAccount,
 		}).then(({ user }) => this.accountInfo = user);
 	}
 
 	myProfile() {
-		return this.apiService.request({
+		if (!this.authInfo || !this.authInfo.authorized)
+			return Promise.reject({ errors: ['Unauthorized'] });
+
+			return this.apiService.request({
 			resource: HttpResources.myProfile
 		}).then(({ user, vendors, favorites, hidden }) => {
 			this.profile = user;
@@ -63,9 +69,18 @@ export default class AccountService extends Service {
 	}
 
 	logout() {
+		this.clearUserData();
+		return Promise.resolve();
+	}
+
+	clearUserData() {
 		this.apiService.jwt = null;
 		this.authInfo = null;
+		this.accountInfo = null;
+		this.profile = null;
+		this.vendors = null;
+		this.favorites = null;
+		this.hidden = null;
 		sessionStorage.removeItem('poppin_jwt');
-		return Promise.resolve();
 	}
 }
