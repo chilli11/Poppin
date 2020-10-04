@@ -82,10 +82,7 @@ namespace Poppin
 												Configuration.Bind(nameof(SegmentSettings), segmentSettings);
 												Segment.Analytics.Initialize(segmentSettings.Key);
 
-												services.Configure<Office365Settings>(
-																Configuration.GetSection(nameof(Office365Settings)));
-												services.AddSingleton<IOffice365Settings, Office365Settings>(sp =>
-																sp.GetRequiredService<IOptions<Office365Settings>>().Value);
+												services.Configure<Office365Settings>(Configuration.GetSection(nameof(Office365Settings)));
 												services.AddSingleton<ISmtpService, SmtpService>();
 
 												services.AddSingleton<ILocationService, LocationService>();

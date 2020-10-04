@@ -19,7 +19,7 @@ namespace Poppin.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [ValidateAntiForgeryToken]
+    //[ValidateAntiForgeryToken]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -196,7 +196,7 @@ namespace Poppin.Controllers
                     return BadRequest();
                 }
 
-                if (!_identityService.IsValidPassword(request.Password).Result)
+                if (!_identityService.IsValidPassword(request.Password))
                 {
                     return BadRequest(new AuthFailedResponse
                     {

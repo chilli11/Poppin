@@ -1,5 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
 using Poppin.Configuration;
@@ -13,9 +14,9 @@ namespace Poppin.Services
     {
         private readonly Office365Settings _appSettings;
 
-        public SmtpService(Office365Settings settings)
+        public SmtpService(IOptions<Office365Settings> settings)
         {
-            _appSettings = settings;
+            _appSettings = settings.Value;
         }
 
         public void SendConfirmationEmail(User user, string token)
@@ -58,7 +59,7 @@ namespace Poppin.Services
             {
                 try
                 {
-                    client.Connect(_appSettings.SmtpServerAddress, 587, SecureSocketOptions.StartTls);
+                    client.Connect(_appSettings.SmtpServerAddress, _appSettings.SmtpServerPort, SecureSocketOptions.StartTls);
                     client.Authenticate(_appSettings.UserName, _appSettings.Password);
                     client.Send(mailMessage);
                 }

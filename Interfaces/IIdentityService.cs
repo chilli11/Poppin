@@ -22,6 +22,6 @@ namespace Poppin.Interfaces
 
 								Task<AuthenticationResult> RefreshToken(string token, string ipAddress);
 								Task<bool> RevokeToken(string token, string ipAddress);
-								Task<bool> IsValidPassword(string password);
+								bool IsValidPassword(string password);
 				}
 }
