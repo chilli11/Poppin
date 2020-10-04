@@ -124,7 +124,7 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/add/{locationid}")]
-								public IActionResult AddFavorite(string locationId)
+								public async Task<IActionResult> AddFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
 
@@ -137,7 +137,15 @@ namespace Poppin.Controllers
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
 
-												return Ok(_userService.AddFavorite(id, locationId));
+												try
+												{
+																await _userService.AddFavorite(id, locationId);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																return BadRequest(ex);
+												}
 								}
 
 								/// <summary>
@@ -145,7 +153,7 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/remove/{locationid}")]
-								public IActionResult RemoveFavorite(string locationId)
+								public async Task<IActionResult> RemoveFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
 
@@ -158,7 +166,15 @@ namespace Poppin.Controllers
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.RemoveFavorite);
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RemoveFavorite, action);
 
-												return Ok(_userService.RemoveFavorite(id, locationId));
+												try
+												{
+																await _userService.RemoveFavorite(id, locationId);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																return BadRequest(ex);
+												}
 								}
 
 								/// <summary>
