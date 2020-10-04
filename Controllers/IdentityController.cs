@@ -10,6 +10,7 @@ using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
+using RTools_NTS.Util;
 
 namespace Poppin.Controllers
 {
@@ -18,6 +19,7 @@ namespace Poppin.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    [ValidateAntiForgeryToken]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -76,6 +78,31 @@ namespace Poppin.Controllers
             });
         }
 
+        [HttpGet("confirm-email/{id}")]
+        public async Task<IActionResult> ConfirmEmail(string id, string t)
+								{
+            if (id == null || t == null)
+												{
+                return BadRequest();
+												}
+
+            var userResult = await _identityService.GetUserById(id);
+            if (!userResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = userResult.Errors
+                });
+            }
+
+            var result = await _identityService.ConfirmEmailAsync(userResult.User, t);
+            if (!result.Succeeded)
+												{
+                return BadRequest(result);
+												}
+            return Ok(result);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -89,8 +116,7 @@ namespace Poppin.Controllers
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
-                }
-                );
+                });
             }
 
             var loginResult = await _identityService.LoginAsync(request.Email, request.Password, GetIpAddress());
@@ -109,6 +135,99 @@ namespace Poppin.Controllers
                 Token = loginResult.Token,
                 RefreshToken = loginResult.RefreshToken
             });
+        }
+
+        /// <summary>
+        /// From https://code-maze.com/password-reset-aspnet-core-identity/
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+												if (!ModelState.IsValid)
+												{
+																return BadRequest(new AuthFailedResponse
+																{
+																				Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
+																}
+																);
+            }
+
+            var authResult = await _identityService.StartPasswordResetAsync(request.Email, GetIpAddress());
+
+            if (!authResult.Success)
+            {
+                return BadRequest(authResult);
+            }
+
+            return Ok(authResult);
+        }
+
+        [HttpGet("reset-password/{id}")]
+        public async Task<IActionResult> ResetPassword(string id, string t)
+        {
+            if (id == null || t == null)
+            {
+                return BadRequest();
+            }
+
+            var userResult = await _identityService.GetUserById(id);
+            if (!userResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = userResult.Errors
+                });
+            }
+
+            return Ok(new
+            {
+                Token = t
+            });
+        }
+
+        [HttpPost("reset-password/{id}")]
+        public async Task<IActionResult> ResetPassword(string id, [FromBody] ResetPasswordRequest request)
+        {
+            {
+                if (id == null || request.Token == null)
+                {
+                    return BadRequest();
+                }
+
+                if (!_identityService.IsValidPassword(request.Password).Result)
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = new[] { "Password does not meet requirements." }
+                    });
+                }
+
+                if (request.Password != request.Password2)
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = new[] { "Passwords do not match." }
+                    });
+                }
+
+                var userResult = await _identityService.GetUserById(id);
+                if (!userResult.Success)
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = userResult.Errors
+                    });
+                }
+
+                var result = await _identityService.ResetPasswordAsync(userResult.User, request.Token, request.Password);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
         }
 
         /// <summary>

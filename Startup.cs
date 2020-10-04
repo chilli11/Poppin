@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -21,7 +19,6 @@ using Poppin.Models.Identity;
 using Poppin.Services;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Poppin
@@ -41,7 +38,8 @@ namespace Poppin
 												services.AddDbContext<ApplicationDbContext>(options =>
 																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-																.AddEntityFrameworkStores<ApplicationDbContext>();
+																.AddEntityFrameworkStores<ApplicationDbContext>()
+																.AddDefaultTokenProviders();
 
 												// JWT
 												var jwtSettings = new JwtSettings();
@@ -83,6 +81,12 @@ namespace Poppin
 												var segmentSettings = new SegmentSettings();
 												Configuration.Bind(nameof(SegmentSettings), segmentSettings);
 												Segment.Analytics.Initialize(segmentSettings.Key);
+
+												services.Configure<Office365Settings>(
+																Configuration.GetSection(nameof(Office365Settings)));
+												services.AddSingleton<IOffice365Settings, Office365Settings>(sp =>
+																sp.GetRequiredService<IOptions<Office365Settings>>().Value);
+												services.AddSingleton<ISmtpService, SmtpService>();
 
 												services.AddSingleton<ILocationService, LocationService>();
 												services.AddSingleton<IVendorService, VendorService>();
