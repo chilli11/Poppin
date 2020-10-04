@@ -42,7 +42,7 @@ export default class AccountService extends Service {
 			this.apiService.jwt = response.token;
 			this.authInfo = { authorized: true }
 			return response.token;
-		});
+		}).then(() => this.myProfile());
 	}
 
 	me() {
@@ -65,6 +65,23 @@ export default class AccountService extends Service {
 			this.vendors = vendors;
 			this.favorites = favorites;
 			this.hidden = hidden;
+		});
+	}
+
+	addFavorite(locId) {
+		return this.apiService.request({
+			resource: HttpResources.addFavorite,
+			body: { locId }
+		}).then(() => {
+			this.profile.favorites.push(locId);
+			return this.profile;
+		});
+	}
+
+	removeFavorite(locId) {
+		return this.apiService.request({
+			resource: HttpResources.removeFavorite,
+			body: { locId }
 		});
 	}
 

@@ -5,6 +5,11 @@
 		@resolveAction={{this.endEdit}} />
 {{else}}
 	<Locations::LocationDisplay
+		@isAdmin={{this.isAdmin}}
+		@isVendor={{this.isVendor}}
+		@isFavorite={{this.isFavorite}}
+		@favAction={{this.favAction}}
+		@profile={{this.accountService.profile}}
 		@isLoading={{eq this.machineState 'LOADING'}}
 		@location={{@location}}
 		@startEdit={{this.startEdit}}
