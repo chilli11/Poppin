@@ -1,7 +1,7 @@
 <div class="col-md-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
-			<h4 class="card-title">Register</h4>
+			<h4 class="card-title">Sign Up</h4>
 			<p class="card-category">
 				<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
 			</p>
@@ -38,6 +38,7 @@
 					@required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
 			</BsForm>
+			Already have an account? <LinkTo @route="account.login">Sign in</LinkTo>.
 		</div>
 	</div>
 </div>

@@ -3,17 +3,24 @@
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">{{@location.name}}</h4>
 			<p class="address">{{@location.address.line1}} // {{@location.address.city}}, {{@location.address.state}}</p>
-			<p><a href="javascript:void(0)" class="text-light" {{on "click" @startEdit}}>Edit</a></p>
+			<p>
+				{{#if (or @isAdmin @isVendor)}}
+					<a href="javascript:void(0)" class="text-light" {{on "click" @startEdit}}>Edit</a> // 
+				{{/if}}
+				<a href="javascript:void(0)" class="text-light" {{on 'click' @favAction}}>{{if @isFavorite 'Unpin' 'Pin Location'}}</a>
+			</p>
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{@isLoading}}>
-				<div>
-					<h3>
-						<button {{on 'click' @decrement}}>-</button>
-						{{@location.crowdSize}}
-						<button {{on 'click' @increment}}>+</button>
-					</h3>
-				</div>
+				{{#if (or @isAdmin @isVendor)}}
+					<div>
+						<h3>
+							<button {{on 'click' @decrement}}>-</button>
+							{{@location.crowdSize}}
+							<button {{on 'click' @increment}}>+</button>
+						</h3>
+					</div>
+				{{/if}}
 				<dl>
 					<dt>Occupancy</dt>
 					<dd>{{@location.capacity}}</dd>

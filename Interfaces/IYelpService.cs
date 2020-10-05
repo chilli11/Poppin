@@ -8,7 +8,7 @@ namespace Poppin.Interfaces
 {
 				public interface IYelpService
 				{
-								public Task<List<YelpCategory>> GetCategory();
+								public Task<IEnumerable<YelpCategory>> GetCategory();
 								public Task<YelpCategory> GetCategory(string alias);
 								public Task<YelpBusiness> GetBusiness(string id);
 								public Task<YelpBusinessSearchResponse> GetBusinessSearch(YelpBusinessSearchParams searchParams);

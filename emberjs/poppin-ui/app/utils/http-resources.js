@@ -31,6 +31,16 @@ const HttpResources = {
 		method: GET,
 		params: ['locId']
 	},
+	addFavorite: {
+		url: 'profile/favorites/add/:locId',
+		method: GET,
+		params: ['locId']
+	},
+	removeFavorite: {
+		url: 'profile/favorites/remove/:locId',
+		method: GET,
+		params: ['locId']
+	},
 
 	/* ===== YELP =====*/
 	getYelpMatch: {
@@ -72,6 +82,10 @@ const HttpResources = {
 	myProfile: {
 		url: 'profile',
 		method: GET
+	},
+	updateProfile: {
+		url: ['profile'],
+		method: PUT
 	},
 
 	/* ===== VENDOR ===== */

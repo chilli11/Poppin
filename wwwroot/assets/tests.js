@@ -118,6 +118,42 @@ define("poppin-ui/tests/integration/pods/components/account/my-account/component
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/account/my-profile/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | account/my-profile', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Account::MyProfile />
+      */
+      {
+        id: "IKR8KsGA",
+        block: "{\"symbols\":[],\"statements\":[[8,\"account/my-profile\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Account::MyProfile>
+              template block text
+            </Account::MyProfile>
+          
+      */
+      {
+        id: "K4npRifJ",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"account/my-profile\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/account/registration-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 

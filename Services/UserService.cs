@@ -43,45 +43,37 @@ namespace Poppin.Services
 								public Task AddFavorite(string userId, string locationId)
 								{
 												var profile = GetUserById(userId).Result;
-												if (!profile.Favorites.Contains(locationId))
+												if (profile.Favorites == null)
 												{
-																profile.Favorites.Append(locationId);
-																return UpdateUser(profile);
+																profile.Favorites = new HashSet<string>();
 												}
-												return Task.FromResult(0);
+												profile.Favorites.Add(locationId);
+												return UpdateUser(profile);
 								}
 
 								public Task RemoveFavorite(string userId, string locationId)
 								{
 												var profile = GetUserById(userId).Result;
-												if (profile.Favorites.Contains(locationId))
-												{
-																profile.Favorites = profile.Favorites.Where(l => l != locationId).ToHashSet();
-																return UpdateUser(profile);
-												}
-												return Task.FromResult(0);
+												profile.Favorites.Remove(locationId);
+												return UpdateUser(profile);
 								}
 
 								public Task HideLocation(string userId, string locationId)
 								{
 												var profile = GetUserById(userId).Result;
-												if (!profile.Hidden.Contains(locationId))
+												if (profile.Hidden == null)
 												{
-																profile.Hidden.Append(locationId);
-																return UpdateUser(profile);
+																profile.Hidden = new HashSet<string>();
 												}
-												return Task.FromResult(0);
+												profile.Hidden.Add(locationId);
+												return UpdateUser(profile);
 								}
 
 								public Task UnhideLocation(string userId, string locationId)
 								{
 												var profile = GetUserById(userId).Result;
-												if (profile.Hidden.Contains(locationId))
-												{
-																profile.Hidden = profile.Hidden.Where(l => l != locationId).ToHashSet();
-																return UpdateUser(profile);
-												}
-												return Task.FromResult(0);
+												profile.Hidden.Remove(locationId);
+												return UpdateUser(profile);
 								}
 				}
 }

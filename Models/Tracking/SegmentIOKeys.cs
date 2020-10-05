@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Poppin.Models.Tracking
+﻿namespace Poppin.Models.Tracking
 {
 				public static class SegmentIOKeys
 				{
 								public static class Categories
 								{
 												public const string Identity = "Identity";
+												public const string Profile = "Profile";
+												public const string Location = "Location";
+												public const string Vendor = "Vendor";
 								}
 								public static class Actions
 								{
@@ -17,6 +15,9 @@ namespace Poppin.Models.Tracking
 												public const string Login = "Login";
 												public const string UpdateProfile = "UpdateProfile";
 												public const string ViewUserProfile = "ViewUserProfile";
+												public const string ConfirmEmail = "ConfirmEmail";
+												public const string StartPasswordReset = "StartPassswordReset";
+												public const string CompletePasswordReset = "CompletePasswordReset";
 
 												public const string Search = "Search";
 												public const string ViewLocation = "ViewLocation";

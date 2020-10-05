@@ -21,4 +21,12 @@ namespace Poppin.Contracts.Requests
 								public string Email { get; set; }
 								public string Password { get; set; }
 				}
+
+				public class ResetPasswordRequest
+				{
+								[Required]
+								public string Token { get; set; }
+								public string Password { get; set; }
+								public string Password2 { get; set; }
+				}
 }

@@ -65,6 +65,24 @@ export default class AccountService extends Service {
 			this.vendors = vendors;
 			this.favorites = favorites;
 			this.hidden = hidden;
+			return { profile: user, favorites };
+		});
+	}
+
+	addFavorite(locId) {
+		return this.apiService.request({
+			resource: HttpResources.addFavorite,
+			body: { locId }
+		}).then(() => {
+			this.profile.favorites.push(locId);
+			return this.profile;
+		});
+	}
+
+	removeFavorite(locId) {
+		return this.apiService.request({
+			resource: HttpResources.removeFavorite,
+			body: { locId }
 		});
 	}
 

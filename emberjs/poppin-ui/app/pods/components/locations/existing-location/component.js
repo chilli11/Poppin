@@ -1,5 +1,5 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
-import { action } from '@ember/object';
+import { action, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { states, actions } from './constants';
 import { tracked } from '@glimmer/tracking';
@@ -7,14 +7,49 @@ import { tracked } from '@glimmer/tracking';
 export default class LocationFormComponent extends StatefulComponent {
 	@service store;
 	@service locationsService;
+	@service accountService;
 	
 	@tracked modalTitle;
 	@tracked modalText;
 	@tracked showModal = false;
 
+	@computed('accountService.authInfo')
+	get authInfo() {
+		return this.accountService.authInfo;
+	}
+	@computed('accountService.accountInfo')
+	get accountInfo() {
+		return this.accountService.accountInfo;
+	}
+	@computed('accountService.profile')
+	get profile() {
+		return this.accountService.profile;
+	}
+
+	get authorized() {
+		return this.authInfo && this.authInfo.authorized;
+	}
+	get isAdmin() {
+		const accAdmin = this.accountInfo && this.accountInfo.role == 'Admin';
+		const profAdmin = this.profile && this.profile.role == 'Admin';
+		return accAdmin || profAdmin;
+	}
+	get isVendor() {
+		const vendorId = this.args.location.vendorId;
+		return vendorId && (this.profile.vendorIds || []).indexOf(vendorId) !== -1;
+	}
+
+	// eslint-disable-next-line ember/require-computed-property-dependencies
+	@computed('accountService.profile.favorites')
+	get isFavorite() {
+		const locId = this.args.location.id;
+		return this.profile ? (this.profile.favorites || []).indexOf(locId) !== -1 : false;
+	}
+
 	transitions = {
 		[states.IDLE]: {
 			[actions.START_EDIT]: states.EDIT_LOCATION,
+			[actions.FAV_ACTION]: states.LOADING,
 			[actions.UPDATE_CROWD_SIZE]: states.LOADING
 		},
 		[states.EDIT_LOCATION]: {
@@ -33,6 +68,15 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	[actions.END_EDIT](data) {
 		this.args.refresh(data);
+	}
+
+	[actions.FAV_ACTION]() {
+		const method = this.isFavorite ? 'removeFavorite' : 'addFavorite';
+		return this.accountService[method](this.args.location.id)
+			.then(() => {
+				console.log(this.isFavorite);
+				return this.dispatch(actions.END_LOADING);
+			}).catch(({ errors }) => this.dispatch(actions.REJECT_ACTION, errors));
 	}
 
 	[actions.UPDATE_CROWD_SIZE](data) {
@@ -72,6 +116,11 @@ export default class LocationFormComponent extends StatefulComponent {
 	@action
 	decrement() {
 		return this.dispatch(actions.UPDATE_CROWD_SIZE, -1);
+	}
+
+	@action
+	favAction() {
+		return this.dispatch(actions.FAV_ACTION, this.args.location.id);
 	}
 
 }

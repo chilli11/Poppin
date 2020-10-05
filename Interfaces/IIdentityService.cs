@@ -10,7 +10,10 @@ namespace Poppin.Interfaces
 				public interface IIdentityService
 				{
 								Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress);
+								Task<IdentityResult> ConfirmEmailAsync(User user, string token);
 								Task<AuthenticationResult> LoginAsync(string email, string password, string ipAddress);
+								Task<AuthenticationResult> StartPasswordResetAsync(string email, string ipAddress);
+								Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
 								Task<UserDataResult> GetUserById(string identifier);
 								Task<UserDataResult> GetUserByEmail(string Email);
 								Task<UserListResult> GetUsersById(IEnumerable<string> ids);
@@ -19,5 +22,6 @@ namespace Poppin.Interfaces
 
 								Task<AuthenticationResult> RefreshToken(string token, string ipAddress);
 								Task<bool> RevokeToken(string token, string ipAddress);
+								bool IsValidPassword(string password);
 				}
 }
