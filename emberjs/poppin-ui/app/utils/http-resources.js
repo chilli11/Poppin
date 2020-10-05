@@ -83,6 +83,10 @@ const HttpResources = {
 		url: 'profile',
 		method: GET
 	},
+	updateProfile: {
+		url: ['profile'],
+		method: PUT
+	},
 
 	/* ===== VENDOR ===== */
 	createNewVendor: {

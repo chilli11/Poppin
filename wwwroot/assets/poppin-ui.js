@@ -3194,7 +3194,7 @@
     }
 
     model() {
-      return this.accountService.me();
+      return this.accountService.myProfile();
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -3214,8 +3214,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "6xHnBHfj",
-    "block": "{\"symbols\":[\"@model\"],\"statements\":[[8,\"account/my-account\",[],[[\"@user\"],[[32,1]]],null]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "CxTDF8lZ",
+    "block": "{\"symbols\":[\"@model\"],\"statements\":[[8,\"account/my-profile\",[],[[\"@profile\",\"@favorites\"],[[32,1,[\"profile\"]],[34,0,[\"favorites\"]]]],null]],\"hasEval\":false,\"upvars\":[\"model\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/account/me/template.hbs"
     }
@@ -3514,6 +3514,7 @@
         password
       }).then(response => {
         if (response.errors && response.errors.length) throw response;
+        this.accountService.myProfile();
         return this.dispatch(_constants.actions.RESOLVE, ['Login success!']);
       }).catch(response => this.dispatch(_constants.actions.REJECT, response.errors));
     }
@@ -3641,6 +3642,24 @@
     "block": "{\"symbols\":[\"@user\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Account\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"userName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/my-account/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/components/account/my-profile/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "F8lTH1pQ",
+    "block": "{\"symbols\":[\"@profile\",\"@favorites\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Account\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"firstName\"]]],[2,\" \"],[1,[32,1,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\"],[[32,2]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/components/account/my-profile/template.hbs"
     }
   });
 
@@ -3931,8 +3950,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "lQh+GGzO",
-    "block": "{\"symbols\":[\"navbar\",\"nav\"],\"statements\":[[8,\"bs-navbar\",[[24,0,\"navbar-dark bg-primary\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[10,\"div\"],[12],[2,\"\\n\\t\\t\"],[8,[32,1,[\"toggle\"]],[],[[],[]],null],[2,\"\\n\\t\\t\"],[10,\"a\"],[14,0,\"navbar-brand mr-0 mr-md-2 navbar-absolute-logo\"],[14,6,\"/\"],[12],[2,\"Poppin\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[8,[32,1,[\"content\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,[32,1,[\"nav\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"locations.index\"]],[[\"default\"],[{\"statements\":[[2,\"Locations\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[32,0,[\"authorized\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"isAdmin\"]],[32,0,[\"accountService\",\"vendors\"]]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"vendors.index\"]],[[\"default\"],[{\"statements\":[[2,\"Vendors\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[6,[37,1],[[32,0,[\"isAdmin\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"locations.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a location\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"vendors.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a vendor\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[[24,0,\"logout-button\"]],[[\"@route\"],[\"account\"]],[[\"default\"],[{\"statements\":[[2,\"My Profile\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[11,\"a\"],[24,0,\"nav-link\"],[24,\"role\",\"button\"],[4,[38,2],[\"click\",[32,0,[\"logout\"]]],null],[12],[2,\"Logout\"],[13],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[[24,0,\"logout-button\"]],[[\"@route\"],[\"account.login\"]],[[\"default\"],[{\"statements\":[[2,\"Login\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"or\",\"if\",\"on\"]}",
+    "id": "aceI5XVh",
+    "block": "{\"symbols\":[\"navbar\",\"nav\"],\"statements\":[[8,\"bs-navbar\",[[24,0,\"navbar-dark bg-primary\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[10,\"div\"],[12],[2,\"\\n\\t\\t\"],[8,[32,1,[\"toggle\"]],[],[[],[]],null],[2,\"\\n\\t\\t\"],[10,\"a\"],[14,0,\"navbar-brand mr-0 mr-md-2 navbar-absolute-logo\"],[14,6,\"/\"],[12],[2,\"Poppin\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[8,[32,1,[\"content\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,[32,1,[\"nav\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"locations.index\"]],[[\"default\"],[{\"statements\":[[2,\"Locations\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[32,0,[\"authorized\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"isAdmin\"]],[32,0,[\"accountService\",\"vendors\"]]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"vendors.index\"]],[[\"default\"],[{\"statements\":[[2,\"Vendors\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[6,[37,1],[[32,0,[\"isAdmin\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"locations.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a location\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[],[[\"@route\"],[\"vendors.add\"]],[[\"default\"],[{\"statements\":[[2,\"Add a vendor\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[[24,0,\"logout-button\"]],[[\"@route\"],[\"account.me\"]],[[\"default\"],[{\"statements\":[[2,\"My Profile\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[11,\"a\"],[24,0,\"nav-link\"],[24,\"role\",\"button\"],[4,[38,2],[\"click\",[32,0,[\"logout\"]]],null],[12],[2,\"Logout\"],[13],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,[32,2,[\"item\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,2,[\"linkTo\"]],[[24,0,\"logout-button\"]],[[\"@route\"],[\"account.login\"]],[[\"default\"],[{\"statements\":[[2,\"Login\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"or\",\"if\",\"on\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/admin/nav-bar/template.hbs"
     }
@@ -6716,7 +6735,7 @@
           authorized: true
         };
         return response.token;
-      }).then(() => this.myProfile());
+      });
     }
 
     me() {
@@ -6746,6 +6765,10 @@
         this.vendors = vendors;
         this.favorites = favorites;
         this.hidden = hidden;
+        return {
+          profile: user,
+          favorites
+        };
       });
     }
 
@@ -7834,6 +7857,10 @@
       url: 'profile',
       method: GET
     },
+    updateProfile: {
+      url: ['profile'],
+      method: PUT
+    },
 
     /* ===== VENDOR ===== */
     createNewVendor: {
@@ -7911,7 +7938,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+9902b82a"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+c10a6143"});
           }
         
 //# sourceMappingURL=poppin-ui.map

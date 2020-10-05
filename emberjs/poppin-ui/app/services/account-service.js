@@ -42,7 +42,7 @@ export default class AccountService extends Service {
 			this.apiService.jwt = response.token;
 			this.authInfo = { authorized: true }
 			return response.token;
-		}).then(() => this.myProfile());
+		});
 	}
 
 	me() {
@@ -65,6 +65,7 @@ export default class AccountService extends Service {
 			this.vendors = vendors;
 			this.favorites = favorites;
 			this.hidden = hidden;
+			return { profile: user, favorites };
 		});
 	}
 

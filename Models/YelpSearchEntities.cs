@@ -14,6 +14,11 @@ namespace Poppin.Models.Yelp
 								public IYelpSearchParams SearchParams { get; set; }
 				}
 
+				public class YelpCategoriesResponse
+				{
+								public IEnumerable<YelpCategory> Categories { get; set; }
+				}
+
 				public class YelpRegion
 				{
 								public Coord Center { get; set; }

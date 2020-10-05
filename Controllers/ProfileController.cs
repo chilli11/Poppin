@@ -50,6 +50,10 @@ namespace Poppin.Controllers
 
 
 								// GET: api/<ProfileController>
+								/// <summary>
+								/// Get current user's profile info
+								/// </summary>
+								/// <returns></returns>
 								[HttpGet]
 								public async Task<IActionResult> Get()
 								{
@@ -70,7 +74,12 @@ namespace Poppin.Controllers
 								}
 
 								// GET api/<ProfileController>/5
-								[Authorize(Roles = RoleTypes.Admin)]
+								/// <summary>
+								/// Get specific user profile info
+								/// Only for site Admins
+								/// </summary>
+								/// <param name="id"></param>
+								/// <returns></returns>
 								[HttpGet("{id}")]
 								public async Task<IActionResult> Get(string id)
 								{
@@ -144,7 +153,12 @@ namespace Poppin.Controllers
 												}
 												catch (Exception ex)
 												{
-																return BadRequest(ex);
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
 												}
 								}
 
@@ -173,7 +187,12 @@ namespace Poppin.Controllers
 												}
 												catch (Exception ex)
 												{
-																return BadRequest(ex);
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
 												}
 								}
 
@@ -220,7 +239,7 @@ namespace Poppin.Controllers
 
 								// PUT api/<ProfileController>/5
 								[HttpPut()]
-								public IActionResult Put(PoppinUser user)
+								public async Task<IActionResult> Put(PoppinUser user)
 								{
 												// Segment.io Analytics
 												_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
@@ -238,12 +257,25 @@ namespace Poppin.Controllers
 
 												// log specific changes with UserLog
 
-												return Ok(_userService.UpdateUser(user));
+												try
+												{
+																await _userService.UpdateUser(user);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 								}
 
 								// PUT api/<ProfileController>/5
 								[HttpPut("{id}")]
-								public IActionResult Put(string id, PoppinUser user)
+								public async Task<IActionResult> Put(string id, PoppinUser user)
 								{
 												// Segment.io Analytics
 												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
@@ -261,7 +293,20 @@ namespace Poppin.Controllers
 
 												// log specific changes with UserLog
 
-												return Ok(_userService.UpdateUser(id, user));
+												try
+												{
+																await _userService.UpdateUser(id, user);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 								}
 
 								// DELETE api/<ProfileController>/5
