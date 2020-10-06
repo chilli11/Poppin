@@ -43,7 +43,10 @@ namespace Poppin
 
 												// JWT
 												var jwtSettings = new JwtSettings();
+												var oauthSettings = new OauthSettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
+												Configuration.Bind(nameof(oauthSettings), oauthSettings);
+
 												services.AddSingleton(jwtSettings);
 												services.AddScoped<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
@@ -63,6 +66,10 @@ namespace Poppin
 																				RequireExpirationTime = false, // needs change eventually
 																				ValidateLifetime = true
 																};
+												}).AddGoogle(options =>
+												{
+																options.ClientId = oauthSettings.Google.ClientId;
+																options.ClientSecret = oauthSettings.Google.Secret;
 												});
 
 												services.AddAuthorization(opts =>
