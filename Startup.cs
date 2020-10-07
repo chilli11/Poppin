@@ -43,11 +43,17 @@ namespace Poppin
 
 												// JWT
 												var jwtSettings = new JwtSettings();
-												var oauthSettings = new OauthSettings();
+												var oAuthSettings = new OAuthSettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
-												Configuration.Bind(nameof(oauthSettings), oauthSettings);
+												Configuration.Bind(nameof(oAuthSettings), oAuthSettings);
 
 												services.AddSingleton(jwtSettings);
+												services.AddSingleton(oAuthSettings);
+												services.AddHttpClient<FBAuthService>();
+												services.AddHttpClient<GoogleAuthService>();
+												services.AddScoped<FBAuthService>();
+												services.AddScoped<GoogleAuthService>();
+												services.AddScoped<IOAuthHandler, OAuthHandler>();
 												services.AddScoped<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
 												{
@@ -66,10 +72,6 @@ namespace Poppin
 																				RequireExpirationTime = false, // needs change eventually
 																				ValidateLifetime = true
 																};
-												}).AddGoogle(options =>
-												{
-																options.ClientId = oauthSettings.Google.ClientId;
-																options.ClientSecret = oauthSettings.Google.Secret;
 												});
 
 												services.AddAuthorization(opts =>
@@ -187,18 +189,6 @@ namespace Poppin
 																.AllowAnyMethod()
 																.AllowCredentials();
 												});
-
-												//app.Use(async (context, next) =>
-												//{
-												//				var url = context.Request.Path.Value;
-												//				var paths = new List<string>() { "/search", "/locations", "/vendors", "/account" };
-
-												//				if (!url.Contains("/api/") && paths.Any(p => url.Contains(p)))
-												//				{
-												//								context.Request.Path = "/";
-												//				}
-												//				await next();
-												//});
 
 												app.UseEndpoints(endpoints =>
 												{

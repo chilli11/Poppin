@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 
 namespace Poppin.Configuration
 {
-				public class OauthSettings
+				public class OAuthSettings
 				{
-								public OauthKeySet Google { get; set; }
+								public OAuthKeySet Google { get; set; }
+								public OAuthKeySet Facebook { get; set; }
 				}
 
-				public class OauthKeySet
+				public class OAuthKeySet
 				{
 								public string Secret { get; set; }
 								public string ClientId { get; set; }

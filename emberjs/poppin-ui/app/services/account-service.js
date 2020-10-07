@@ -3,6 +3,8 @@ import HttpResources from '../utils/http-resources';
 import { tracked } from '@glimmer/tracking';
 import { Promise } from 'rsvp';
 
+const FB = window.FB;
+
 export default class AccountService extends Service {
 	@injectService apiService;
 	@injectService session;
@@ -14,11 +16,27 @@ export default class AccountService extends Service {
 	@tracked favorites = null;
 	@tracked hidden = null;
 
+	@tracked fbAuth = null;
+	@tracked googleAuth = null;
+
+	checkFBLoginState = () => {
+		return FB.getLoginStatus(function(response) {
+				this.fbAuth = response;
+		});
+	}
+
+	constructor() {
+		super();
+		window.checkFBLoginState = this.checkFBLoginState;
+	}
+
 	isAuthenticated() {
 		if (this.authInfo) {
 			if (this.authInfo.authorized) return this.myProfile();
 			return Promise.reject();
 		}
+
+		this.checkFBLoginState();
 		return this.apiService.request({
 			resource: HttpResources.isAuthenticated
 		}).then(() => this.authInfo = { authorized: true })
