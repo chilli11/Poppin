@@ -369,7 +369,7 @@ namespace Poppin.Controllers
             try
             {
                 var accessTokenResult = await handler.GetAccessTokenAsync(code, this.Url.Action(nameof(FacebookAuth), nameof(IdentityController), null, "https"));
-                return await FacebookLogin(accessTokenResult.AccessToken);
+                return await FacebookLogin(new OAuthLoginRequest { AccessToken = accessTokenResult.AccessToken });
             }
             catch (Exception ex)
             {
@@ -385,13 +385,14 @@ namespace Poppin.Controllers
         /// </summary>
         /// <param name="accessToken"></param>
         /// <returns cref="AuthSuccessResponse"></returns>
-        [HttpGet("facebook-login")]
-        public async Task<IActionResult> FacebookLogin(string accessToken)
+        [HttpPost("facebook-login")]
+        public async Task<IActionResult> FacebookLogin(OAuthLoginRequest request)
         {
             var handler = _oAuthHandler.Services["Facebook"];
+            var accessToken = request.AccessToken;
             var tokenValidation = await handler.ValidateAccessTokenAsync(accessToken);
 
-            if (!tokenValidation.Data.IsValid)
+            if (!tokenValidation.IsValid)
 												{
                 return BadRequest(new AuthFailedResponse
                 {
@@ -400,6 +401,13 @@ namespace Poppin.Controllers
 												}
 
             var userInfo = await handler.GetUserInfoAsync(accessToken);
+            if (userInfo.Email == null)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = new[] { "Something went wrong." }
+                });
+            }
             var loginResult = await _identityService.OAuthLoginAsync(userInfo.Email, GetIpAddress());
 
             if (!loginResult.Success)

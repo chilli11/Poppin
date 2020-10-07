@@ -24,7 +24,6 @@ namespace Poppin.Models.Identity.OAuth
         public bool IsValid { get; set; }
         public string UserId { get; set; }
         public string[] Permissions { get; set; }
-        public Dictionary<string, string> Context { get; set; }
     }
 
     public interface IUserInfoResult

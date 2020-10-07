@@ -13,7 +13,7 @@ namespace Poppin.Interfaces
 				{
 								Task<IAccessTokenResult> GetAccessTokenAsync(string authCode);
 								Task<IAccessTokenResult> GetAccessTokenAsync(string authCode, string redirectUri);
-								Task<ITokenValidationResult> ValidateAccessTokenAsync(string accessToken);
+								Task<IValidationData> ValidateAccessTokenAsync(string accessToken);
 								Task<IUserInfoResult> GetUserInfoAsync(string accessToken);
 				}
 }

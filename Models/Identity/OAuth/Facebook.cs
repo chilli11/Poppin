@@ -18,10 +18,10 @@ namespace Poppin.Models.Identity.OAuth
             [JsonProperty("expires_in")]
             public long Expires { get; set; }
         }
-        public class TokenValidationResult : ITokenValidationResult
+        public class TokenValidationResult
         {
             [JsonProperty("data")]
-            public IValidationData Data { get; set; }
+            public FacebookValidationData Data { get; set; }
         }
 
         public class FacebookValidationData : IValidationData
@@ -35,8 +35,11 @@ namespace Poppin.Models.Identity.OAuth
             [JsonProperty("application")]
             public string ApplicationName { get; set; }
 
-            [JsonProperty("data_access_expires_at")]
+            [JsonProperty("expires_at")]
             public long Expiration { get; set; }
+
+            [JsonProperty("data_access_expires_at")]
+            public long DataAccessExpiration { get; set; }
 
             [JsonProperty("is_valid")]
             public bool IsValid { get; set; }
@@ -47,14 +50,14 @@ namespace Poppin.Models.Identity.OAuth
             [JsonProperty("scopes")]
             public string[] Permissions { get; set; }
 
-            [JsonProperty("metadata")]
-            public Dictionary<string, string> Context { get; set; }
         }
 
         public class UserInfoResult : IUserInfoResult
 								{
             public string Email { get; set; }
+            [JsonProperty("first_name")]
             public string FirstName { get; set; }
+            [JsonProperty("last_name")]
             public string LastName { get; set; }
 								}
 				}

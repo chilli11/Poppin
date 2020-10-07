@@ -17,10 +17,10 @@ namespace Poppin.Models.Identity.OAuth
             [JsonProperty("expires_in")]
             public long Expires { get; set; }
         }
-        public class TokenValidationResult : ITokenValidationResult
+        public class TokenValidationResult
         {
             [JsonProperty("data")]
-            public IValidationData Data { get; set; }
+            public GoogleValidationData Data { get; set; }
         }
 
         public class GoogleValidationData : IValidationData

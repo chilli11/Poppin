@@ -10,6 +10,7 @@ namespace Poppin.Services
 				{
 								public OAuthHandler(FBAuthService fBAuthService, GoogleAuthService googleAuthService)
 								{
+												Services = new Dictionary<string, IOAuthService>();
 												Services.Add("Facebook", fBAuthService);
 												Services.Add("Google", googleAuthService);
 								}

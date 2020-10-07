@@ -51,8 +51,6 @@ namespace Poppin
 												services.AddSingleton(oAuthSettings);
 												services.AddHttpClient<FBAuthService>();
 												services.AddHttpClient<GoogleAuthService>();
-												services.AddScoped<FBAuthService>();
-												services.AddScoped<GoogleAuthService>();
 												services.AddScoped<IOAuthHandler, OAuthHandler>();
 												services.AddScoped<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
