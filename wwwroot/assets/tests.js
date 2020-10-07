@@ -1234,6 +1234,18 @@ define("poppin-ui/tests/unit/services/locations-service-test", ["qunit", "ember-
     });
   });
 });
+define("poppin-ui/tests/unit/services/oauth-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Service | oauth-service', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let service = this.owner.lookup('service:oauth-service');
+      assert.ok(service);
+    });
+  });
+});
 define("poppin-ui/tests/unit/services/vendors-service-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 

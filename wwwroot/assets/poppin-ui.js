@@ -3620,8 +3620,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "ZsM/GcrT",
-    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\tDon't have an account? \"],[8,\"link-to\",[],[[\"@route\"],[\"account.register\"]],[[\"default\"],[{\"statements\":[[2,\"Sign up\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "6DhVX4Nz",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"fb:login-button\"],[14,\"scope\",\"public_profile,email\"],[14,\"onlogin\",\"checkFBLoginState();\"],[12],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\tDon't have an account? \"],[8,\"link-to\",[],[[\"@route\"],[\"account.register\"]],[[\"default\"],[{\"statements\":[[2,\"Sign up\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/login-form/template.hbs"
     }
@@ -6671,7 +6671,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -6681,38 +6681,48 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let AccountService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, (_class = (_temp = class AccountService extends Ember.Service {
-    constructor(...args) {
-      super(...args);
+  let AccountService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, (_class = (_temp = class AccountService extends Ember.Service {
+    constructor() {
+      super(...arguments);
 
       _initializerDefineProperty(this, "apiService", _descriptor, this);
 
       _initializerDefineProperty(this, "session", _descriptor2, this);
 
-      _initializerDefineProperty(this, "authInfo", _descriptor3, this);
+      _initializerDefineProperty(this, "oauthService", _descriptor3, this);
 
-      _initializerDefineProperty(this, "accountInfo", _descriptor4, this);
+      _initializerDefineProperty(this, "authInfo", _descriptor4, this);
 
-      _initializerDefineProperty(this, "profile", _descriptor5, this);
+      _initializerDefineProperty(this, "accountInfo", _descriptor5, this);
 
-      _initializerDefineProperty(this, "vendors", _descriptor6, this);
+      _initializerDefineProperty(this, "profile", _descriptor6, this);
 
-      _initializerDefineProperty(this, "favorites", _descriptor7, this);
+      _initializerDefineProperty(this, "vendors", _descriptor7, this);
 
-      _initializerDefineProperty(this, "hidden", _descriptor8, this);
+      _initializerDefineProperty(this, "favorites", _descriptor8, this);
+
+      _initializerDefineProperty(this, "hidden", _descriptor9, this);
+
+      _initializerDefineProperty(this, "fbAuth", _descriptor10, this);
+
+      _initializerDefineProperty(this, "googleAuth", _descriptor11, this);
+
+      window.checkFBLoginState = () => this.oauthService.isOAuthenticated();
     }
 
     isAuthenticated() {
-      if (this.authInfo) {
-        if (this.authInfo.authorized) return this.myProfile();
-        return Ember.RSVP.Promise.reject();
-      }
-
+      if (this.authInfo && this.authInfo.authorized) return this.myProfile();
       return this.apiService.request({
         resource: _httpResources.default.isAuthenticated
       }).then(() => this.authInfo = {
         authorized: true
-      }).then(() => this.myProfile()).catch(() => this.authInfo = {
+      }).then(() => this.myProfile()).catch(() => {
+        return this.isOAuthenticated();
+      });
+    }
+
+    isOAuthenticated() {
+      return this.oauthService.isOAuthenticated().catch(() => this.authInfo = {
         authorized: false
       });
     }
@@ -6819,42 +6829,61 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "oauthService", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return null;
     }
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "accountInfo", [_dec4], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "accountInfo", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return null;
     }
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "profile", [_dec5], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "profile", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return null;
     }
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "vendors", [_dec6], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "vendors", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return null;
     }
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "favorites", [_dec7], {
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "favorites", [_dec8], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return null;
     }
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "hidden", [_dec8], {
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "hidden", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return null;
+    }
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "fbAuth", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return null;
+    }
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "googleAuth", [_dec11], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -7160,6 +7189,98 @@
   });
 
   _exports.default = _default;
+});
+;define("poppin-ui/services/oauth-service", ["exports", "poppin-ui/utils/http-resources"], function (_exports, _httpResources) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _dec3, _dec4, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  const checkFBLoginState = scope => () => {
+    return new Ember.RSVP.Promise(res => {
+      return window.FB ? window.FB.getLoginStatus(function (response) {
+        scope.fbAuth = response;
+        return res(response);
+      }) : res(false);
+    });
+  };
+
+  let OauthServiceService = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember._tracked, (_class = (_temp = class OauthServiceService extends Ember.Service {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "apiService", _descriptor, this);
+
+      _initializerDefineProperty(this, "accountService", _descriptor2, this);
+
+      _initializerDefineProperty(this, "router", _descriptor3, this);
+
+      _initializerDefineProperty(this, "fbAuth", _descriptor4, this);
+
+      _defineProperty(this, "checkFBLoginState", checkFBLoginState(this));
+    }
+
+    isOAuthenticated() {
+      return this.checkFBLoginState().then(data => {
+        if (data.status == 'connected') {
+          return this.authorizeFacebook(data.authResponse.accessToken);
+        }
+
+        return Ember.RSVP.Promise.reject();
+      });
+    }
+
+    authorizeFacebook(accessToken) {
+      return this.apiService.request({
+        resource: _httpResources.default.authorizeFacebook,
+        body: {
+          accessToken
+        }
+      }).then(response => {
+        sessionStorage.setItem('poppin_jwt', response.token);
+        this.apiService.jwt = response.token;
+        this.accountService.authInfo = {
+          authorized: true
+        };
+        this.router.transitionTo('account.me');
+        return response.token;
+      });
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "router", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "fbAuth", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = OauthServiceService;
 });
 ;define("poppin-ui/services/session", ["exports", "ember-simple-auth/services/session"], function (_exports, _session) {
   "use strict";
@@ -7910,6 +8031,12 @@
       url: 'vendors/remove-location/:vendorId',
       method: POST,
       params: ['vendorId']
+    },
+
+    /* ===== OAUTH ===== */
+    authorizeFacebook: {
+      url: 'identity/facebook-login',
+      method: POST
     }
   };
   var _default = HttpResources;
@@ -7938,7 +8065,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+c10a6143"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+bdcb5777"});
           }
         
 //# sourceMappingURL=poppin-ui.map
