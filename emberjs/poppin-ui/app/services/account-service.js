@@ -32,7 +32,6 @@ export default class AccountService extends Service {
 		return this.apiService.request({
 			resource: HttpResources.isAuthenticated
 		}).then(() => this.authInfo = { authorized: true })
-			.then(() => this.myProfile())
 			.catch(() => {
 				return this.isOAuthenticated();
 			});
