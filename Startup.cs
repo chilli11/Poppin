@@ -43,8 +43,15 @@ namespace Poppin
 
 												// JWT
 												var jwtSettings = new JwtSettings();
+												var oAuthSettings = new OAuthSettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
+												Configuration.Bind(nameof(oAuthSettings), oAuthSettings);
+
 												services.AddSingleton(jwtSettings);
+												services.AddSingleton(oAuthSettings);
+												services.AddHttpClient<FBAuthService>();
+												services.AddHttpClient<GoogleAuthService>();
+												services.AddScoped<IOAuthHandler, OAuthHandler>();
 												services.AddScoped<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
 												{
@@ -180,18 +187,6 @@ namespace Poppin
 																.AllowAnyMethod()
 																.AllowCredentials();
 												});
-
-												//app.Use(async (context, next) =>
-												//{
-												//				var url = context.Request.Path.Value;
-												//				var paths = new List<string>() { "/search", "/locations", "/vendors", "/account" };
-
-												//				if (!url.Contains("/api/") && paths.Any(p => url.Contains(p)))
-												//				{
-												//								context.Request.Path = "/";
-												//				}
-												//				await next();
-												//});
 
 												app.UseEndpoints(endpoints =>
 												{

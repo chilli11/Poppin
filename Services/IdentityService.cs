@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using Poppin.Configuration;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
+using Poppin.Models.Identity.OAuth;
 using Poppin.Models.Tracking;
 using Segment;
 using Segment.Model;
@@ -70,6 +71,7 @@ namespace Poppin.Services
 
 												var newUser = new User
 												{
+																Id = Guid.NewGuid().ToString(),
 																Email = email,
 																UserName = email,
 																Role = RoleTypes.User
@@ -139,6 +141,54 @@ namespace Poppin.Services
 												// Segment.io Analytics
 												Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
 												Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Login);
+
+												return GenerateAuthenticationResultForUser(user, ipAddress);
+								}
+
+								public async Task<AuthenticationResult> OAuthLoginAsync(string email, string ipAddress)
+								{
+												var user = await _userManager.FindByEmailAsync(email);
+												if (user == null)
+												{
+																user = new User
+																{
+																				Id = Guid.NewGuid().ToString(),
+																				Email = email,
+																				UserName = email,
+																				Role = RoleTypes.User
+																};
+																var createdUser = await _userManager.CreateAsync(user);
+
+																if (!createdUser.Succeeded)
+																{
+																				return new AuthenticationResult
+																				{
+																								Success = false,
+																								Errors = createdUser.Errors.Select(e => e.Description)
+																				};
+																}
+
+																// Segment.io Analytics
+																Analytics.Client.Identify(user.Id, new Traits
+																{
+																				{ "email", user.Email },
+																				{ "username", user.UserName },
+																				{ "category", SegmentIOKeys.Categories.Identity },
+																				{ "action", SegmentIOKeys.Actions.Register },
+																				{ "createdAt", DateTime.UtcNow }
+																});
+
+																Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Register, new Properties()
+																{
+																				{ "emailConfirmToken", "OAuth-register" }
+																});
+												}
+												else
+												{
+																// Segment.io Analytics
+																Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
+																Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Login);
+												}
 
 												return GenerateAuthenticationResultForUser(user, ipAddress);
 								}

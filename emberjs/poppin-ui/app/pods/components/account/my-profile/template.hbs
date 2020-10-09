@@ -22,7 +22,9 @@
 			<h4 class="card-title">My Favorites</h4>
 		</div>
 		<div class="card-body">
-			<Locations::LocationList @locations={{@favorites}} />
+			<Locations::LocationList
+			 @locations={{@favorites}}
+			 @clickAction={{@locationClickAction}}/>
 		</div>
 	</div>
 </div>

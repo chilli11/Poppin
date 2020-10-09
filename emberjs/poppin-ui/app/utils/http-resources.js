@@ -136,6 +136,12 @@ const HttpResources = {
 		url: 'vendors/remove-location/:vendorId',
 		method: POST,
 		params: ['vendorId']
+	},
+
+	/* ===== OAUTH ===== */
+	authorizeFacebook: {
+		url: 'identity/facebook-login',
+		method: POST
 	}
 };
 
