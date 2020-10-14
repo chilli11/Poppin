@@ -1,5 +1,7 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Configuration;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.Tracking;
@@ -14,6 +16,7 @@ namespace Poppin.Services
 				{
 								private readonly IMongoCollection<PoppinLocation> _locations;
 								private readonly IMongoCollection<Checkin> _checkins;
+								private readonly IMongoCollection<Category> _categories;
 
 								public LocationService(IMongoDBSettings settings)
 								{
@@ -22,6 +25,7 @@ namespace Poppin.Services
 
 												_locations = database.GetCollection<PoppinLocation>("Locations");
 												_checkins = database.GetCollection<Checkin>("Checkins");
+												_categories = database.GetCollection<Category>("Categories");
 								}
 
 								public Task<PoppinLocation> Get(string id) => _locations.Find(loc => loc.Id == id).FirstAsync();
@@ -33,6 +37,16 @@ namespace Poppin.Services
 
 								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<string> ids) =>
 												_locations.Find(loc => ids.Contains(loc.YelpId)).ToListAsync();
+
+								public Task<List<PoppinLocation>> GetBySearch(LocationSearchRequest request)
+								{
+												var x = new GeoJson2DGeographicCoordinates(request.Geo.Coordinates[0], request.Geo.Coordinates[1]);
+												var geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
+												var inRange = Builders<PoppinLocation>.Filter.Near("Address.Geo", geo, request.Radius);
+												var matchCat = Builders<PoppinLocation>.Filter.AnyEq("Categories", request.Categories);
+												var matchTerm = Builders<PoppinLocation>.Filter.Text(request.Term);
+												return _locations.Find(inRange & matchCat & matchTerm).ToListAsync();
+								}
 
 								public Task Add(PoppinLocation location)
 								{
@@ -82,6 +96,15 @@ namespace Poppin.Services
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId) =>
 												_checkins.Find(c => c.LocationId == locId && c.Timeout > DateTime.Now).ToListAsync();
 								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(c => c.UserId == uId).ToListAsync();
+
+
+							// ================ CATEGORIES ================== //
+								public Task<List<Category>> GetCategories() => _categories.Find(c => c != null).ToListAsync();
+
+								public Task AddCategory(Category category) => _categories.InsertOneAsync(category);
+								public Task UpdateCategory(Category category) => _categories.ReplaceOneAsync(c => c.Slug == category.Slug, category);
+								public Task UpdateCategory(string catSlug, Category category) => _categories.ReplaceOneAsync(c => c.Slug == catSlug, category);
+								public Task DeleteCategory(string catSlug) => _categories.DeleteOneAsync(c => c.Slug == catSlug);
 				}
 
 				public static class LocationExtensions

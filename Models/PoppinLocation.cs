@@ -6,7 +6,6 @@ using Poppin.Models.BusinessEntities;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,11 +42,11 @@ namespace Poppin.Models
 								public string Id { get; set; }
 								public string YelpId { get; set; }
 
-								[ForeignKey("Vendor")]
 								public string VendorId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public Address Address { get; set; }
+								public HashSet<string> Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
 

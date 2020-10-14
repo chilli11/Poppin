@@ -29,6 +29,7 @@ namespace Poppin.Configuration
 								private IMongoCollection<PoppinLocation> _locations;
 								private IMongoCollection<Checkin> _checkins;
 								private IMongoCollection<UserLog> _userLogs;
+								private IMongoCollection<Category> _categories;
 
 								public ConfigureMongoDbIndexesService(IMongoDBSettings settings)
 								{
@@ -40,20 +41,33 @@ namespace Poppin.Configuration
 												_locations = database.GetCollection<PoppinLocation>("Locations");
 												_checkins = database.GetCollection<Checkin>("Checkins");
 												_userLogs = database.GetCollection<UserLog>("UserLogs");
+												_categories = database.GetCollection<Category>("Categories");
 								}
 
 								public Task StartAsync(CancellationToken cancellationToken)
 								{
-												var lYelpIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Text(l => l.YelpId));
-												_locations.Indexes.CreateOneAsync(lYelpIndex);
+												var unique = new CreateIndexOptions()
+												{
+																Unique = true
+												};
+
+												var lYelpIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Text(l => l.YelpId), unique);
+												var lSpatialIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Geo2DSphere(l => l.Address.Geo));
+												var lCatsIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Ascending(l => l.Categories));
+												var lIndexes = new List<CreateIndexModel<PoppinLocation>>();
+												lIndexes.Add(lYelpIndex);
+												lIndexes.Add(lSpatialIndex);
+												_locations.Indexes.CreateManyAsync(lIndexes);
+												
 
 												var vOrgNameIndex = new CreateIndexModel<Vendor>(Builders<Vendor>.IndexKeys.Text(c => c.OrganizationName));
 												var vOrgEmailIndex = new CreateIndexModel<Vendor>(Builders<Vendor>.IndexKeys.Text(c => c.OrganizationContactEmail));
-												var vOrgContactIndex = new CreateIndexModel<Vendor>(Builders<Vendor>.IndexKeys.Text(c => c.OrganizationContactName));
+
+												var vOrgCombinedIndex = new CreateIndexModel<Vendor>(Builders<Vendor>.IndexKeys.Combine(vOrgEmailIndex.Keys, vOrgNameIndex.Keys), unique);
 												var vIndexes = new List<CreateIndexModel<Vendor>>();
 												vIndexes.Add(vOrgNameIndex);
 												vIndexes.Add(vOrgEmailIndex);
-												vIndexes.Add(vOrgContactIndex);
+												vIndexes.Add(vOrgCombinedIndex);
 												_vendors.Indexes.CreateManyAsync(vIndexes);
 
 												var cUserIndex = new CreateIndexModel<Checkin>(Builders<Checkin>.IndexKeys.Text(c => c.UserId));
@@ -61,8 +75,12 @@ namespace Poppin.Configuration
 												var cIndexes = new List<CreateIndexModel<Checkin>>();
 												cIndexes.Add(cUserIndex);
 												cIndexes.Add(cTimeoutIndex);
+												_checkins.Indexes.CreateManyAsync(cIndexes);
 
-												return _checkins.Indexes.CreateManyAsync(cIndexes);
+												var catIndex = new CreateIndexModel<Category>(Builders<Category>.IndexKeys.Ascending(c => c.Slug), unique);
+												_categories.Indexes.CreateOneAsync(catIndex);
+
+												return Task.CompletedTask;
 								}
 
 								public Task StopAsync(CancellationToken cancellationToken)
