@@ -21,32 +21,32 @@ namespace Poppin.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
         private readonly ILocationService _locationService;
         private readonly IYelpService _yelpService;
         private readonly IVendorService _vendorService;
         private readonly ILogActionService _logActionService;
         private readonly IIdentityService _identityService;
+        private readonly IHEREGeocoder _hereGeocoder;
 
-        private List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
+        private HashSet<PoppinLocation> _searchedLocations = new HashSet<PoppinLocation>(new PoppinLocComparer());
 
         public LocationsController(
-            IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
             IUserService userService,
             IYelpService yelpService,
             IVendorService vendorService,
             ILogActionService logActionService,
-            IIdentityService identityService)
+            IIdentityService identityService,
+            IHEREGeocoder hereGeocoder)
         {
-            _httpContextAccessor = httpContextAccessor;
             _userService = userService;
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
             _logActionService = logActionService;
             _identityService = identityService;
+            _hereGeocoder = hereGeocoder;
         }
 
         /// <summary>
@@ -119,25 +119,28 @@ namespace Poppin.Controllers
             return Ok(location);
         }
 
-        /// <summary>
-        /// Gets a list of Locations based on results of a Yelp search
-        /// </summary>
-        /// <param name="searchParams"></param>
-        /// <returns></returns>
-        // POST: api/Locations/yelp-search
-        [HttpPost("yelp-search")]
-        public async Task<IActionResult> GetByYelpSearch(YelpBusinessSearchParams searchParams)
-        {
+        [HttpPost("search")]
+        public async Task<IActionResult> Search(LocationSearchRequest search)
+								{
             try
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
-                var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
-                var locList = new List<PoppinLocation>();
+                if (search.Geo.Coordinates.Length == 0)
+																{
+                    if (string.IsNullOrEmpty(search.Location))
+																				{
+                        return BadRequest(new GenericFailure
+                        {
+                            Errors = new[] { "`location` or `geo` parameter required" }
+                        });
+																				}
+                    var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
+                    search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
+																}
+                var locList = await _locationService.GetBySearch(search);
 
-                if (yelpSearchResponse.Total > 0)
+                if (locList.Count > 0)
                 {
-                    locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
-
                     //Hidden locations: Implement in v2
                     //if (id != string.Empty)
                     //{
@@ -148,35 +151,34 @@ namespace Poppin.Controllers
                     //    }
                     //}
 
-                    locList.ForEach(l => l.YelpDetails = yelpSearchResponse.Businesses.FirstOrDefault(yb => yb.Id == l.YelpId));
-                    _searchedLocations.AddRange(locList.Where(l => !_searchedLocations.Any(sl => sl.Id == l.Id)));
-                    locList.ForEach(l => l.SetCrowdSize(_locationService).Wait());
+                    locList.ForEach((l) =>
+                    {
+                        _searchedLocations.Add(l);
+                        l.SetCrowdSize(_locationService).Wait();
+                    });
                 }
 
-                var action = new Dictionary<string, string>()
+                var action = new Dictionary<string, object>()
                 {
-                    { "SearchTerm", searchParams.term },
-                    { "SearchLocation", searchParams.location },
-                    { "SSearchCategories", searchParams.categories }
+                    { "SearchTerm", search.Term },
+                    { "SearchLocation", search.Geo },
+                    { "SearchCategories", search.Categories }
                 };
-                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action.AsStringDictionary());
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search, action);
 
                 return Ok(new PoppinSearchResponse()
                 {
                     Total = locList.Count,
                     Businesses = locList,
-                    Region = yelpSearchResponse.Region,
-                    SearchParams = yelpSearchResponse.SearchParams
+                    SearchParams = search
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                var errors = new List<string>();
-                errors.Add(e.Message);
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { e.Message }
                 });
             }
         }
@@ -430,9 +432,9 @@ namespace Poppin.Controllers
 
         private string GetUserId()
         {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            if (HttpContext.User.Claims.Any())
             {
-                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+                var id = HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
                 _identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
                 return id;
             }
@@ -441,9 +443,9 @@ namespace Poppin.Controllers
 
         private string GetUserId(string action)
         {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            if (HttpContext.User.Claims.Any())
             {
-                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+                var id = HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
                 _identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
                 return id;
             }
@@ -452,9 +454,9 @@ namespace Poppin.Controllers
 
         private string GetUserRole()
         {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            if (HttpContext.User.Claims.Any())
             {
-                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
+                return HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
             }
             return string.Empty;
         }
@@ -472,7 +474,7 @@ namespace Poppin.Controllers
 
         private PoppinLocation GetLocation(string locationId)
         {
-            var location = _searchedLocations.Find(l => l.Id == locationId);
+            var location = _searchedLocations.Single(l => l.Id == locationId);
             if (location == null)
             {
                 location = _locationService.Get(locationId).Result;

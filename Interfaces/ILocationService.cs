@@ -26,6 +26,8 @@ namespace Poppin.Interfaces
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId);
 								public Task<List<Checkin>> GetCheckinsForUser(string uId);
 								public Task<List<Category>> GetCategories();
+								public Task<Category> GetCategoryBySlug(string slug);
+								public Task<Category> GetCategoryByHereId(string hereId);
 								public Task AddCategory(Category category);
 								public Task UpdateCategory(Category category);
 								public Task UpdateCategory(string catSlug, Category category);

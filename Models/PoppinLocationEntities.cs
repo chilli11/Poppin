@@ -1,8 +1,10 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Contracts.Requests;
 using Poppin.Extensions;
 using Poppin.Models.Yelp;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Poppin.Models
 {
@@ -11,8 +13,7 @@ namespace Poppin.Models
 				{
 								public int Total { get; set; }
 								public List<PoppinLocation> Businesses { get; set; }
-								public YelpRegion Region { get; set; }
-								public IYelpSearchParams SearchParams { get; set; }
+								public LocationSearchRequest SearchParams { get; set; }
 				}
 
 				public class Address
@@ -21,11 +22,11 @@ namespace Poppin.Models
 
 								public Address(AddressDTO a)
 								{
+												Full = a.Full;
 												Line1 = a.Line1;
 												Line2 = a.Line2;
 												City = a.City;
 												State = a.State;
-
 												ZipCode = a.ZipCode;
 												if (a.Geo != null)
 												{
@@ -44,11 +45,24 @@ namespace Poppin.Models
 												Line2 = v.Address2;
 												City = v.City;
 												State = v.State;
-
 												ZipCode = v.ZipCode;
+												Full = v.Address1 + ", " + City + ", " + State + " " + ZipCode;
 												Geo = c.ToGeoJson();
 								}
 
+								public Address(Geocoding.HERE.Address a, Dictionary<string, double> pos)
+								{
+												Full = a.Full;
+												Line1 = !string.IsNullOrEmpty(a.Line1) ? a.Line1 : a.Full;
+												City = a.City;
+												State = a.StateCode;
+												ZipCode = a.ZipCode;
+
+												var x = new GeoJson2DGeographicCoordinates(pos["lng"], pos["lat"]);
+												Geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
+								}
+
+								public string Full { get; set; }
 								public string Line1 { get; set; }
 								public string Line2 { get; set; }
 								public string City { get; set; }
@@ -79,11 +93,24 @@ namespace Poppin.Models
 												Line2 = v.Address2;
 												City = v.City;
 												State = v.State;
-
 												ZipCode = v.ZipCode;
+												Full = v.Address1 + ", " + City + ", " + State + " " + ZipCode;
 												Coordinates = c;
 								}
 
+								public AddressDTO(Geocoding.HERE.Address a, Dictionary<string, double> pos)
+								{
+												Full = a.Full;
+												Line1 = !string.IsNullOrEmpty(a.Line1) ? a.Line1 : a.Full;
+												City = a.City;
+												State = a.StateCode;
+												ZipCode = a.ZipCode;
+
+												Geo = new GeoCoords { Type = "Point", Coordinates = new[] { pos["lng"], pos["lat"] } };
+								}
+
+
+								public string Full { get; set; }
 								public string Line1 { get; set; }
 								public string Line2 { get; set; }
 								public string City { get; set; }

@@ -32,6 +32,7 @@ namespace Poppin.Models
 								public string Slug { get; set; }
 								public string Name { get; set; }
 								public string Parent { get; set; }
+								public string HereId { get; set; }
 								public HashSet<string> Related { get; set; }
 								public HashSet<string> Children { get; set; }
 				}

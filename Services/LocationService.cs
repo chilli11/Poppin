@@ -100,6 +100,8 @@ namespace Poppin.Services
 
 							// ================ CATEGORIES ================== //
 								public Task<List<Category>> GetCategories() => _categories.Find(c => c != null).ToListAsync();
+								public Task<Category> GetCategoryBySlug(string slug) => _categories.Find(c => c.Slug == slug).FirstAsync();
+								public Task<Category> GetCategoryByHereId(string hereId) => _categories.Find(c => c.HereId == hereId).FirstAsync();
 
 								public Task AddCategory(Category category) => _categories.InsertOneAsync(category);
 								public Task UpdateCategory(Category category) => _categories.ReplaceOneAsync(c => c.Slug == category.Slug, category);

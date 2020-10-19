@@ -9,6 +9,7 @@ namespace Poppin.Contracts.Requests
 				public class LocationSearchRequest
 				{
 								public string Term { get; set; }
+								public string Location { get; set; }
 								public GeoCoords Geo { get; set; }
 								public double Radius { get; set; }
 								public HashSet<string> Categories { get; set; }

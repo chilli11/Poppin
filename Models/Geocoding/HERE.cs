@@ -61,11 +61,23 @@ namespace Poppin.Models.Geocoding.HERE
 
 								[JsonProperty("label")]
 								public string Full { get; set; }
+								public string HouseNumber { get; set; }
+								public string Street { get; set; }
+								public string District { get; set; }
 								public string City { get; set; }
 								[JsonProperty("postalCode")]
 								public string ZipCode { get; set; }
+								public string County { get; set; }
 								public string State { get; set; }
 								public string StateCode { get; set; }
+
+								public string Line1
+								{
+												get
+												{
+																return HouseNumber + " " + Street;
+												}
+								}
 				}
 
 				public class Category
