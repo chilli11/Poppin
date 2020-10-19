@@ -1,0 +1,20 @@
+<table class="table">
+	<thead>
+		<tr>
+			<th>Display Name</th>
+			<th>Slug</th>
+			<th>Parent</th>
+			<th># of Children</th>
+		</tr>
+	</thead>
+	<tbody>
+		{{#each categories as |cat|}}
+			<tr>
+				<td>{{cat.name}}</td>
+				<td>{{cat.slug}}</td>
+				<td>{{cat.parent}}</td>
+				<td>{{cat.children.length}}</td>
+			</tr>
+		{{/each}}
+	</tbody>
+</table>
