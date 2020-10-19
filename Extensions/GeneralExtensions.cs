@@ -51,5 +51,14 @@ namespace Poppin
 
             return output;
         }
+
+        private static string AddIfNotNull(this string str, string key, string val)
+        {
+            if (!string.IsNullOrEmpty(val))
+            {
+                str += key + "=" + val + ";";
+            }
+            return str;
+        }
     }
 }

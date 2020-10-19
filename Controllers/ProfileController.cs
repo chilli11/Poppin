@@ -115,11 +115,9 @@ namespace Poppin.Controllers
 												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 												if (id == null)
 												{
-																var errors = new List<string>();
-																errors.Add("User not found");
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { "User not found."}
 																});
 												}
 
@@ -135,29 +133,27 @@ namespace Poppin.Controllers
 								[HttpGet("favorites/add/{locationid}")]
 								public async Task<IActionResult> AddFavorite(string locationId)
 								{
-												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
-
-												var action = new Dictionary<string, string>()
-												{
-																{ "LocationId", locationId }
-												};
-
-												// Tracking
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
-												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
 
 												try
 												{
+																var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
+
+																var action = new Dictionary<string, string>()
+																{
+																				{ "LocationId", locationId }
+																};
+
+																// Tracking
+																Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+																_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
 																await _userService.AddFavorite(id, locationId);
 																return Ok();
 												}
 												catch (Exception ex)
 												{
-																var errors = new List<string>();
-																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { ex.Message }
 																});
 												}
 								}
@@ -187,11 +183,9 @@ namespace Poppin.Controllers
 												}
 												catch (Exception ex)
 												{
-																var errors = new List<string>();
-																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { ex.Message }
 																});
 												}
 								}
@@ -247,11 +241,9 @@ namespace Poppin.Controllers
 												var oldUser = GetUserProfile(user.UserId);
 												if (oldUser == null)
 												{
-																var errors = new List<string>();
-																errors.Add("User not found");
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { "User not found." }
 																});
 												}
 
@@ -264,11 +256,9 @@ namespace Poppin.Controllers
 												}
 												catch (Exception ex)
 												{
-																var errors = new List<string>();
-																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { ex.Message }
 																});
 												}
 								}
@@ -283,11 +273,9 @@ namespace Poppin.Controllers
 												var oldUser = GetUserProfile(id);
 												if (oldUser == null)
 												{
-																var errors = new List<string>();
-																errors.Add("User not found");
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { "User not found." }
 																});
 												}
 
@@ -300,11 +288,9 @@ namespace Poppin.Controllers
 												}
 												catch (Exception ex)
 												{
-																var errors = new List<string>();
-																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
-																				Errors = errors
+																				Errors = new[] { ex.Message }
 																});
 												}
 								}

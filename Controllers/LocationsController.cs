@@ -428,34 +428,6 @@ namespace Poppin.Controllers
             });
         }
 
-								[HttpGet("categories")]
-								public async Task<IActionResult> GetCategoryList()
-								{
-            var categories = await _locationService.GetCategories();
-
-            return Ok(categories);
-        }
-
-        [HttpPost("categories")]
-        public async Task<IActionResult> AddCategory(Category category)
-        {
-            await _locationService.AddCategory(category);
-            return Ok(category);
-        }
-
-        [HttpPut("categories/{slug}")]
-        public async Task<IActionResult> UpdateCategory(string slug, Category category)
-        {
-            await _locationService.UpdateCategory(slug, category);
-            return Ok(category);
-        }
-
-        [HttpDelete("categories/{slug}")]
-        public IActionResult UpdateCategory(string slug)
-        {
-            return Ok(_locationService.DeleteCategory(slug));
-        }
-
         private string GetUserId()
         {
             if (_httpContextAccessor.HttpContext.User.Claims.Any())
