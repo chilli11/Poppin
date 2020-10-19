@@ -21,6 +21,10 @@ const HttpResources = {
 		url: 'locations/yelp-search',
 		method: POST
 	},
+	getLocationsBySearch: {
+		url: 'locations/search',
+		method: POST
+	},
 	incrementCrowd: {
 		url: 'locations/incrementCrowd/:locId',
 		method: GET,

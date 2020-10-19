@@ -1,4 +1,4 @@
-import { merge } from '@ember/polyfills';
+import { assign } from '@ember/polyfills';
 
 /**
  * @class
@@ -56,7 +56,7 @@ export class YelpBusinessSearchParams {
 		if (!params.location && !params.longitude) {
 			throw '`location` or `longitude` and `latitude` required.'
 		}
-		self = merge(self, params);
+		assign(self, params);
 	}
 }
 
@@ -137,7 +137,7 @@ export class YelpBusinessMatchSearchParams {
 		if (missing.length) {
 			throw 'Missing required parameter(s) ' + missing.join(', ');
 		}
-		self = merge(self, params);
+		assign(self, params);
 	}
 }
 
