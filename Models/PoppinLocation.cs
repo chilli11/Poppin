@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
+				[BsonIgnoreExtraElements]
 				public class PoppinLocation
 				{
 
