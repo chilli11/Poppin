@@ -44,12 +44,10 @@ namespace Poppin.Models
 								public string Id { get; set; }
 								public string YelpId { get; set; }
 
-								public string HereId { get; set; }
 								public string VendorId { get; set; }
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public Address Address { get; set; }
-								public HashSet<string> Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
 
