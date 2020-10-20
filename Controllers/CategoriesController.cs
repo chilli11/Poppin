@@ -35,6 +35,13 @@ namespace Poppin.Controllers
             return Ok(category);
         }
 
+        [HttpPut()]
+        public async Task<IActionResult> UpdateCategory(Category category)
+        {
+            await _locationService.UpdateCategory(category.Slug, category);
+            return Ok(category);
+        }
+
         [HttpPut("{slug}")]
         public async Task<IActionResult> UpdateCategory(string slug, Category category)
         {
@@ -43,7 +50,7 @@ namespace Poppin.Controllers
         }
 
         [HttpDelete("{slug}")]
-        public IActionResult UpdateCategory(string slug)
+        public IActionResult DeleteCategory(string slug)
         {
             return Ok(_locationService.DeleteCategory(slug));
         }

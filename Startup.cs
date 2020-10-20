@@ -44,11 +44,14 @@ namespace Poppin
 												// JWT
 												var jwtSettings = new JwtSettings();
 												var oAuthSettings = new OAuthSettings();
+												var hereSettings = new HERESettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
 												Configuration.Bind(nameof(oAuthSettings), oAuthSettings);
+												Configuration.Bind(nameof(hereSettings), hereSettings);
 
 												services.AddSingleton(jwtSettings);
 												services.AddSingleton(oAuthSettings);
+												services.AddSingleton(hereSettings);
 												services.AddHttpClient<FBAuthService>();
 												services.AddHttpClient<GoogleAuthService>();
 												services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();

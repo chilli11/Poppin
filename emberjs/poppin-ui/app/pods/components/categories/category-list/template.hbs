@@ -8,8 +8,8 @@
 		</tr>
 	</thead>
 	<tbody>
-		{{#each categories as |cat|}}
-			<tr>
+		{{#each @categories as |cat|}}
+			<tr {{on 'click' (fn @clickAction cat)}}>
 				<td>{{cat.name}}</td>
 				<td>{{cat.slug}}</td>
 				<td>{{cat.parent}}</td>

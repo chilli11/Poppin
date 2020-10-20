@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Configuration;
 using Poppin.Contracts.Requests;
@@ -42,10 +43,9 @@ namespace Poppin.Services
 								{
 												var x = new GeoJson2DGeographicCoordinates(request.Geo.Coordinates[0], request.Geo.Coordinates[1]);
 												var geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
-												var inRange = Builders<PoppinLocation>.Filter.Near("Address.Geo", geo, request.Radius);
+												var inRange = Builders<PoppinLocation>.Filter.Near(a => a.Address.Geo, geo, request.Radius);
 												var matchCat = Builders<PoppinLocation>.Filter.AnyEq("Categories", request.Categories);
-												var matchTerm = Builders<PoppinLocation>.Filter.Text(request.Term);
-												return _locations.Find(inRange & matchCat & matchTerm).ToListAsync();
+												return _locations.Find(inRange).ToListAsync();
 								}
 
 								public Task Add(PoppinLocation location)
@@ -98,8 +98,8 @@ namespace Poppin.Services
 								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(c => c.UserId == uId).ToListAsync();
 
 
-							// ================ CATEGORIES ================== //
-								public Task<List<Category>> GetCategories() => _categories.Find(c => c != null).ToListAsync();
+								// ================ CATEGORIES ================== //
+								public Task<List<Category>> GetCategories() => _categories.Find(new BsonDocument()).ToListAsync();
 								public Task<Category> GetCategoryBySlug(string slug) => _categories.Find(c => c.Slug == slug).FirstAsync();
 								public Task<Category> GetCategoryByHereId(string hereId) => _categories.Find(c => c.HereId == hereId).FirstAsync();
 

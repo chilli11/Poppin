@@ -1,6 +1,7 @@
 const GET = 'GET';
 const POST = 'POST';
 const PUT = 'PUT';
+const DELETE = 'DELETE';
 
 const HttpResources = {
 	/* ===== LOCATIONS ===== */
@@ -44,6 +45,25 @@ const HttpResources = {
 		url: 'profile/favorites/remove/:locId',
 		method: GET,
 		params: ['locId']
+	},
+
+	/* ===== CATEGORIES ===== */
+	getCategories: {
+		url: 'categories',
+		method: GET
+	},
+	addCategory: {
+		url: 'categories',
+		method: POST
+	},
+	updateCategory: {
+		url: 'categories',
+		method: PUT
+	},
+	deleteCategory: {
+		url: 'categories/:slug',
+		method: DELETE,
+		params: ['slug']
 	},
 
 	/* ===== YELP =====*/

@@ -1,2 +1,6 @@
+<Categories::CategoryForm
+	@category={{this.activeCategory}}
+	@submit={{this.addOrUpdateCategory}} />
 <Categories::CategoryList
-	@categories={{model}} />
+	@categories={{this.model}}
+	@clickAction={{this.clickAction}} />

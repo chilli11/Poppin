@@ -19,10 +19,10 @@ namespace Poppin.Services
 								private HERESettings _hereSettings;
 								private string _apiUrl = "https://{0}.search.hereapi.com/v1/{0}";
 
-								public HEREGeocoder(HttpClient httpClient, IConfiguration configuration)
+								public HEREGeocoder(HttpClient httpClient, HERESettings hereSettings)
 								{
 												_httpClient = httpClient;
-												configuration.Bind(nameof(_hereSettings), _hereSettings);
+												_hereSettings = hereSettings;
 
 								}
 
@@ -38,6 +38,7 @@ namespace Poppin.Services
 								private async Task<T> RetrieveAndDeserialize<T>(string path, IDictionary<string, string> queryParams)
 								{
 												var endpoint = string.Format(_apiUrl, path);
+												queryParams.Add("apiKey", _hereSettings.ApiKey);
 												endpoint = QueryHelpers.AddQueryString(endpoint, queryParams);
 												var request = new HttpRequestMessage(HttpMethod.Get, endpoint);
 

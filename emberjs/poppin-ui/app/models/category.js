@@ -4,6 +4,7 @@ export default class CategoryModel extends Model {
 	@attr('string') slug;
 	@attr('string') name;
 	@attr('string') parent;
+	@attr('string') hereId;
 	@attr related;
 	@attr children;
 }
