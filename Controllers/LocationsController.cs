@@ -142,7 +142,10 @@ namespace Poppin.Controllers
 
                 if (locList.Count > 0)
                 {
-                    locList = locList.Where(l => CultureInfo.CurrentCulture.CompareInfo.IndexOf(l.Name, search.Term, CompareOptions.IgnoreCase) >= 0).ToList();
+                    if (!string.IsNullOrEmpty(search.Term))
+                    {
+                        locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
+                    }
                     locList.ForEach((l) =>
                     {
                         _searchedLocations.Add(l);

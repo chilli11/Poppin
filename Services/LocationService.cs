@@ -100,7 +100,7 @@ namespace Poppin.Services
 								}
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId) =>
 												_checkins.Find(Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Eq("LocationId", locId)).ToListAsync();
-								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(Builders<Checkin>.Filter.Eq("UserId", usId)).ToListAsync();
+								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(Builders<Checkin>.Filter.Eq("UserId", uId)).ToListAsync();
 
 
 								// ================ CATEGORIES ================== //
