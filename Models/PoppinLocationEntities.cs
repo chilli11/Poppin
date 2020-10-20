@@ -53,6 +53,7 @@ namespace Poppin.Models
 												Geo = c.ToGeoJson();
 								}
 
+								public string Full { get; set; }
 								public string Line1 { get; set; }
 								public string Line2 { get; set; }
 								public string City { get; set; }
@@ -89,6 +90,7 @@ namespace Poppin.Models
 												Coordinates = c;
 								}
 
+								public string Full { get; set; }
 								public string Line1 { get; set; }
 								public string Line2 { get; set; }
 								public string City { get; set; }
