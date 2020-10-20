@@ -1,6 +1,32 @@
-<Categories::CategoryForm
-	@category={{this.activeCategory}}
-	@submit={{this.addOrUpdateCategory}} />
-<Categories::CategoryList
-	@categories={{this.model}}
-	@clickAction={{this.clickAction}} />
+<div class="row">
+	<div class="col-xl-6">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title">{{if this.isUpdate 'Update' 'Add'}} Category</h4>
+			</div>
+			<div class="card-body">
+				<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.addOrUpdateCategory}} as |form|>
+					<div class="form-row">
+						<form.element class="col" @controlType="text" @label="Name" @placeholder="Name" @property="name" @required={{true}} />
+						<form.element class="col" @controlType="text" @label="Slug" @placeholder="Slug" @property="slug" @required={{true}} />
+					</div>
+					<div class="form-row">
+						<form.element class="col" @controlType="text" @label="Parent (slug)" @placeholder="Parent (slug)" @property="parent" />
+						<form.element class="col" @controlType="text" @label="HERE ID" @placeholder="HERE ID" @property="hereId" />
+					</div>
+					<form.element @controlType="text" @label="Related" @placeholder="[slug],[slug],[slug]..." @property="relatedCSV" />
+					<form.element @controlType="text" @label="Children" @placeholder="[slug],[slug],[slug]..." @property="childrenCSV" />
+					{{#if this.isUpdate}}
+						<BsButton @type="default-outline" {{on 'click' this.clearForm}} @defaultText="clear" />
+					{{/if}}
+					<BsButton @type="primary" type="submit" @defaultText="Submit" />
+				</BsForm>
+			</div>
+		</div>
+	</div>
+	<div class="col-xl-6">
+		<Categories::CategoryList
+			@categories={{this.model}}
+			@clickAction={{this.clickAction}} />
+	</div>
+</div>

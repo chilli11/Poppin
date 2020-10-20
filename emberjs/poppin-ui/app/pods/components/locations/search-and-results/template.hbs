@@ -1,18 +1,18 @@
-<div class="{{unless @stacked 'col-md-6'}}">
+<div class="{{unless @stacked 'col-xl-6'}}">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Search Poppin</h4>
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{this.isLoading}}>
-				<Yelp::YelpSearchForm
+				<Locations::NativeSearchForm
 					@searchMethod={{this.searchMethod}}
 					@populateResults={{this.populateResults}} />
 			</LoadingSpinner>
 		</div>
 	</div>
 </div>
-<div class="{{unless @stacked 'col-md-6'}}">
+<div class="{{unless @stacked 'col-xl-6'}}">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Search Results</h4>

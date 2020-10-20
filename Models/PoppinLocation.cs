@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
+				[BsonIgnoreExtraElements]
 				public class PoppinLocation
 				{
 
@@ -25,6 +26,7 @@ namespace Poppin.Models
 												Phone = v.Phone;
 												Address = new Address(v.Address);
 												Capacity = v.Capacity;
+												Categories = v.Categories.ToHashSet();
 												Hours = v.Hours;
 								}
 

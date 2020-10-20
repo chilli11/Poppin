@@ -1,5 +1,7 @@
-{{#if isAuthorized}}
-	<Account::MyAccount @user={{@model}} />
-{{else}}
-	<Account::LoginForm @refresh={{this.refreshRoute}} />
-{{/if}}
+<div class="row">
+	{{#if isAuthorized}}
+		<Account::MyAccount @user={{@model}} />
+	{{else}}
+		<Account::LoginForm @refresh={{this.refreshRoute}} />
+	{{/if}}
+</div>

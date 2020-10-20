@@ -20,10 +20,14 @@ export class LocationSearchRequest {
 	categories = [];
 
 	constructor(params) {
-		var self = this;
-		if (!params.geo.coordinates.length && !params.location) {
+		if ((!params.geo || !params.geo.coordinates || !params.geo.coordinates.length) && !params.location) {
 			throw '`location` or `geo.coordinates` required.'
 		}
-		assign(self, params);
+		this.term = params.term;
+		this.location = params.location;
+		if (params.geo && params.geo.coordinates && params.geo.coordinates.length)
+			this.geo = params.geo;
+		this.radius = !!params.radius || 40000;
+		this.categories = params.categories || [];
 	}
 }

@@ -34,7 +34,7 @@ export default class YelpService extends Service {
 		} catch (e) {
 			console.error(e);
 		}
- 	}
+	}
 
 	/**
 	 * @param {String} yelpId 

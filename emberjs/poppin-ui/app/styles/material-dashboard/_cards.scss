@@ -167,7 +167,11 @@
     &.bg-primary,
     &.card-rotate.bg-primary .front,
     &.card-rotate.bg-primary .back{
-      background: linear-gradient(60deg, $purple-400, $purple-600);
+			background: linear-gradient(60deg, $yellow-400, $yellow-600);
+			color: $black-color;
+			.card-title {
+				color: $black-color;
+			}
     }
     .card-header-info .card-icon,
     .card-header-info .card-text,
@@ -487,9 +491,9 @@
       padding: 0;
 
       .card-title + .card-category{
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(25, 25, 25, 0.8);
         a {
-          color: $white-color;
+          color: $black-color;
         }
       }
 

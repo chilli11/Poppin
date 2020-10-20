@@ -10,7 +10,7 @@ export default class AdminRoute extends Route {
 				if (response && !response.authorized && names.indexOf(this.routeName) === -1) {
 					return this.transitionTo('account.login');
 				}
-				return true;
+				return this.accountService.myProfile();
 			}).catch(() => names.indexOf(this.routeName) === -1 ? this.transitionTo('account.login') : true);
 	}
 }

@@ -1,10 +1,13 @@
 import Component from '@glimmer/component'
 import { inject as service } from '@ember/service';
 import { computed, action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class NavBarComponent extends Component {
 	@service accountService;
 	@service router;
+
+	@tracked collapsed = true;
 
 	@computed('accountService.authInfo')
 	get authInfo() {

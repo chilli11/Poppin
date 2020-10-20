@@ -1,15 +1,17 @@
-<div class="col-md-6">
-	<div class="card">
-		<div class="card-header card-header-primary">
-			<h4 class="card-title">Vendors</h4>
-			<p class="card-category">
-				Choose a vendor {{#if this.vendorsList.total}}({{this.vendorsList.total}} Result(s)){{/if}}
-			</p>
-		</div>
-		<div class="card-body">
-			<Vendors::VendorList
-				@vendors={{this.vendorsList}}
-				@clickAction={{this.clickAction}} />
+<div class="row justify-content-xl-center">
+	<div class="col-xl-6">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title">Vendors</h4>
+				<p class="card-category">
+					Choose a vendor {{#if this.vendorsList.total}}({{this.vendorsList.total}} Result(s)){{/if}}
+				</p>
+			</div>
+			<div class="card-body">
+				<Vendors::VendorList
+					@vendors={{this.vendorsList}}
+					@clickAction={{this.clickAction}} />
+			</div>
 		</div>
 	</div>
 </div>

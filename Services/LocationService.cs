@@ -57,12 +57,14 @@ namespace Poppin.Services
 								public Task Update(string id, PoppinLocation location)
 								{
 												location.YelpDetails = null;
-												return _locations.ReplaceOneAsync(l => l.Id.Equals(location.Id), location);
+												var filter = Builders<PoppinLocation>.Filter.Eq("Id", id);
+												_locations.FindOneAndDelete(filter);
+												return _locations.InsertOneAsync(location);
 								}
 								public Task Update(PoppinLocation location)
 								{
 												location.YelpDetails = null;
-												return _locations.ReplaceOneAsync(l => l.Id.Equals(location.Id), location);
+												return _locations.ReplaceOneAsync(l => l.Id == location.Id, location, new ReplaceOptions() { IsUpsert = true });
 								}
 								public Task Delete(PoppinLocation location) => _locations.DeleteOneAsync(loc => loc.Id == location.Id);
 								public Task Delete(string id) => _locations.DeleteOneAsync(loc => loc.Id == id);
@@ -77,13 +79,16 @@ namespace Poppin.Services
 
 								public UpdateResult InvalidateCheckin(string userId)
 								{
-												var filter = Builders<Checkin>.Filter.Eq("UserId", userId) & Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now);
+												var filter = Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Eq("UserId", userId);
 												var update = Builders<Checkin>.Update.Set("Timeout", DateTime.Now);
 												return _checkins.UpdateMany(filter, update);
 								}
 								public Task InvalidateVendorCheckin(string locId)
 								{
-												var checkins = _checkins.Find(c => c.LocationId == locId && c.UserId == null && c.Timeout > DateTime.Now).ToList();
+												var filter = Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now)
+																& Builders<Checkin>.Filter.Eq("LocationId", locId)
+																& Builders<Checkin>.Filter.Eq("UserId", BsonNull.Value);
+												var checkins = _checkins.Find(filter).ToList();
 												if (checkins.Count > 0)
 												{
 																checkins.Sort((a, b) => a.Timeout.CompareTo(b.Timeout));
@@ -94,8 +99,8 @@ namespace Poppin.Services
 												return null;
 								}
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId) =>
-												_checkins.Find(c => c.LocationId == locId && c.Timeout > DateTime.Now).ToListAsync();
-								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(c => c.UserId == uId).ToListAsync();
+												_checkins.Find(Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Eq("LocationId", locId)).ToListAsync();
+								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(Builders<Checkin>.Filter.Eq("UserId", usId)).ToListAsync();
 
 
 								// ================ CATEGORIES ================== //

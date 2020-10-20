@@ -16,6 +16,7 @@ namespace Poppin.Models
 								public LocationSearchRequest SearchParams { get; set; }
 				}
 
+				[BsonIgnoreExtraElements]
 				public class Address
 				{
 								public Address() { }
@@ -83,6 +84,7 @@ namespace Poppin.Models
 								public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
 				}
 
+				[BsonIgnoreExtraElements]
 				public class AddressDTO
 				{
 								public AddressDTO() { }

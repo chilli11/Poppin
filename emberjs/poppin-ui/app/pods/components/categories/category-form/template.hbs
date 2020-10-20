@@ -1,9 +1,0 @@
-<BsForm @formLayout="horizontal" @model={{@category}} @onSubmit={{fn this.submit}} as |form|>
-	<form.element @controlType="text" @label="Name" @placeholder="Name" @property="name" @required={{true}} />
-	<form.element @controlType="text" @label="Slug" @placeholder="Slug" @property="slug" @required={{true}} />
-	<form.element @controlType="text" @label="Parent (slug)" @placeholder="Parent (slug)" @property="parent" />
-	<form.element @controlType="text" @label="HERE ID" @placeholder="HERE ID" @property="hereId" />
-	<form.element @controlType="text" @label="Related" @placeholder="[slug],[slug],[slug]..." @property="relatedCSV" />
-	<form.element @controlType="text" @label="Children" @placeholder="[slug],[slug],[slug]..." @property="childrenCSV" />
-	<BsButton @type="primary" type="submit" @defaultText="Submit" />
-</BsForm>

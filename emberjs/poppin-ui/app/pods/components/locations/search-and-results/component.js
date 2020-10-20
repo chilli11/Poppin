@@ -17,6 +17,7 @@ export default class YelpSearchAndResultsComponent extends Component {
 	@action
 	searchMethod(params) {
 		this.isLoading = true;
+		params.radius = parseFloat(params.radius);
 		this.locationsService.getLocationsBySearch(params)
 			.then(data => this.results = data)
 			.catch(data => alert(data))

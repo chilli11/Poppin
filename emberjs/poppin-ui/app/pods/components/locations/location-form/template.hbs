@@ -1,5 +1,5 @@
 {{#unless @reverseOrder}}
-	<div class="col-md-6">
+	<div class="col-xl-6">
 		<div class="card">
 			<div class="card-header card-header-primary">
 				<h4 class="card-title">Search Yelp</h4>
@@ -17,7 +17,7 @@
 		</div>
 	</div>
 {{/unless}}
-<div class="col-md-6">
+<div class="col-xl-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Review Business Details</h4>
@@ -32,7 +32,21 @@
 				<form.element @controlType="text" @label="" @placeholder="Line 2" @property="addressLine2" />
 				<form.element @controlType="text" @label="City" @placeholder="City" @property="city" @required={{true}} />
 				<form.element @controlType="text" @label="State" @placeholder="State" @property="state" @required={{true}} />
-				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />
+				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />				
+				<form.group>
+					<label class="col-form-label col-md-4">Categories</label>
+					<div class="col-md-8">
+						<PowerSelectMultiple
+							@searchEnabled={{true}}
+							@options={{this.poppinCategories}}
+							@placeholder="Search..."
+							@searchField="title"
+							@selected={{this.categories}}
+							@onChange={{fn (mut this.categories)}} as |cat|>
+							{{cat.name}}
+						</PowerSelectMultiple>
+					</div>
+				</form.group>
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
 				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
@@ -41,7 +55,7 @@
 	</div>
 </div>
 {{#if @reverseOrder}}
-	<div class="col-md-6">
+	<div class="col-xl-6">
 		<div class="card">
 			<div class="card-header card-header-primary">
 				<h4 class="card-title">Search Yelp</h4>

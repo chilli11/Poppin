@@ -1,13 +1,13 @@
-<div class="col-md-4">
+<div class="col-xl-4">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">{{@location.name}}</h4>
 			<p class="address">{{@location.address.line1}} // {{@location.address.city}}, {{@location.address.state}}</p>
 			<p>
 				{{#if (or @isAdmin @isVendor)}}
-					<a href="javascript:void(0)" class="text-light" {{on "click" @startEdit}}>Edit</a> // 
+					<a href="javascript:void(0)" class="text-dark" {{on "click" @startEdit}}>Edit</a> // 
 				{{/if}}
-				<a href="javascript:void(0)" class="text-light" {{on 'click' @favAction}}>{{if @isFavorite 'Unpin' 'Pin Location'}}</a>
+				<a href="javascript:void(0)" class="text-dark" {{on 'click' @favAction}}>{{if @isFavorite 'Unpin' 'Pin Location'}}</a>
 			</p>
 		</div>
 		<div class="card-body">
@@ -36,7 +36,7 @@
 	</div>
 </div>
 
-<div class="col-md-8">
+<div class="col-xl-8">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Yelp Details {{unless @location.yelpDetails '(unavailable...check back later)'}}</h4>

@@ -12,6 +12,7 @@ using Poppin.Models.Yelp;
 using Segment;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -141,16 +142,7 @@ namespace Poppin.Controllers
 
                 if (locList.Count > 0)
                 {
-                    //Hidden locations: Implement in v2
-                    //if (id != string.Empty)
-                    //{
-                    //    var profile = GetUserProfile(id);
-                    //    if (profile.Hidden != null && profile.Hidden.Any())
-                    //    {
-                    //        locList = locList.Where(l => !profile.Hidden.Contains(l.Id)).ToList();
-                    //    }
-                    //}
-
+                    locList = locList.Where(l => CultureInfo.CurrentCulture.CompareInfo.IndexOf(l.Name, search.Term, CompareOptions.IgnoreCase) >= 0).ToList();
                     locList.ForEach((l) =>
                     {
                         _searchedLocations.Add(l);
@@ -158,14 +150,21 @@ namespace Poppin.Controllers
                     });
                 }
 
-                var action = new Dictionary<string, object>()
+                var actionStr = new Dictionary<string, string>()
+                {
+                    { "SearchTerm", search.Term },
+                    { "SearchLocation", search.Geo.Coordinates.ToString() },
+                    { "SearchCategories", search.Categories.ToString() }
+                };
+
+                var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
                     { "SearchCategories", search.Categories }
                 };
-                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action.AsStringDictionary());
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search, action);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search, actionObj);
 
                 return Ok(new PoppinSearchResponse()
                 {
@@ -233,7 +232,7 @@ namespace Poppin.Controllers
             try
             {
                 location.LastUpdate = DateTime.UtcNow;
-                await _locationService.Update(location);
+                await _locationService.Update(location.Id, location);
 
                 var action = new Dictionary<string, string>()
                 {
@@ -474,7 +473,7 @@ namespace Poppin.Controllers
 
         private PoppinLocation GetLocation(string locationId)
         {
-            var location = _searchedLocations.Single(l => l.Id == locationId);
+            var location = _searchedLocations.SingleOrDefault(l => l.Id == locationId);
             if (location == null)
             {
                 location = _locationService.Get(locationId).Result;

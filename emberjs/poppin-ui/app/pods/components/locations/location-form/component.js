@@ -1,6 +1,6 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
-import { action, set } from '@ember/object';
+import { action, set, computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import _ from 'lodash';
 
@@ -21,8 +21,14 @@ const defHours = [
 export default class LocationFormComponent extends StatefulComponent {
 	namespace = 'LocationForm';
 	@service locationsService;
+	@service categoriesService;
 	@service yelpService;
 	@service store;
+
+	@computed('categoriesService.categories')
+	get poppinCategories() {
+		return this.categoriesService.categories;
+	}
 
 	days = days;
 
@@ -58,6 +64,10 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked addressLine2;
 	@tracked city;
 	@tracked state;
+	@tracked categories;
+	get categoryList() {
+		return (this.categories || []).map(c => c.slug);
+	}
 
 	@tracked zip;	
 	get zipCode() {
@@ -85,10 +95,10 @@ export default class LocationFormComponent extends StatefulComponent {
 				line2: this.addressLine2,
 				city: this.city,
 				state: this.state,
-				zipCode: parseInt(this.zipCode, 10),
+				zipCode: this.zipCode,
 				geo: this.geo
 			},
-			categories: [],
+			categories: this.categoryList,
 			capacity: parseInt(capacity, 10),
 			crowdSize: parseInt(crowdSize, 10),
 			hours,
@@ -102,7 +112,8 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	constructor() {
 		super(...arguments);
-		this.populateFromPoppin();
+		this.categoriesService.getCategories()
+			.finally(() => this.populateFromPoppin());
 		this.initMachine();
 	}
 
@@ -116,6 +127,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = null;
 		this.state = null;
 		this.zipCode = null;
+		this.categories = [];
 		this.capacity = 0;
 		this.hours = _.merge(defHours);
 	}
@@ -136,6 +148,10 @@ export default class LocationFormComponent extends StatefulComponent {
 				type: 'Point',
 				coordinates: loc.address.geo.coordinates.values
 			};
+			this.categories = loc.categories.map((c) => {
+				var matches = this.poppinCategories.filter(pc => pc.slug == c);
+				if (matches.length) return matches[0];
+			});
 			this.capacity = loc.capacity;
 			this.hours = loc.hours || _.merge(defHours);
 			this.visitLength = loc.visitLength;

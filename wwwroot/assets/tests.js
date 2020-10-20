@@ -514,6 +514,42 @@ define("poppin-ui/tests/integration/pods/components/locations/location-list/comp
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/locations/native-search-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | locations/native-search-form', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Locations::NativeSearchForm />
+      */
+      {
+        id: "10J0VU0w",
+        block: "{\"symbols\":[],\"statements\":[[8,\"locations/native-search-form\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Locations::NativeSearchForm>
+              template block text
+            </Locations::NativeSearchForm>
+          
+      */
+      {
+        id: "APNIcg9i",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"locations/native-search-form\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/locations/search-and-results/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
