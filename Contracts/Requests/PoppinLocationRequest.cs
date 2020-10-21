@@ -25,6 +25,7 @@ namespace Poppin.Contracts.Requests
 								public string[] Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
+								public int VisitLength { get; set; }
 								public IList<HourSet> Hours { get; set; }
 				}
 }

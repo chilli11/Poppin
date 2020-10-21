@@ -26698,4 +26698,13 @@ body {
   z-index: 100;
 }
 
+.ember-power-select-trigger-multiple-input::placeholder {
+  line-height: 1.75;
+}
+
+#siteContentWrapper.wrapper {
+  height: auto;
+  min-height: 100vh;
+}
+
 /*# sourceMappingURL=poppin-ui.css.map */

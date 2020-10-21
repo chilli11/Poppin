@@ -38,7 +38,11 @@ namespace Poppin.Controllers
 												{
                 var parent = await _locationService.GetCategoryBySlug(category.Parent);
                 if (parent != null)
-																{
+                {
+                    if (parent.Children == null)
+                    {
+                        parent.Children = new HashSet<string>();
+                    }
                     parent.Children.Add(category.Slug);
 																}
                 updated.Add(parent);
@@ -68,6 +72,10 @@ namespace Poppin.Controllers
                 var parent = await _locationService.GetCategoryBySlug(request.Category.Parent);
                 if (parent != null)
                 {
+                    if (parent.Children == null)
+																				{
+                        parent.Children = new HashSet<string>();
+																				}
                     parent.Children.Add(request.Category.Slug);
                 }
                 updated.Add(parent);

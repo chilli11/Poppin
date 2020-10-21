@@ -11,11 +11,50 @@
 						<form.element class="col" @controlType="text" @label="Slug" @placeholder="Slug" @property="slug" @required={{true}} />
 					</div>
 					<div class="form-row">
-						<form.element class="col" @controlType="text" @label="Parent (slug)" @placeholder="Parent (slug)" @property="parent" />
+						<form.group class="col">
+							<label class="col-form-label col-md-4">Parent</label>
+							<div class="col-md-8">
+								<PowerSelect
+									@searchEnabled={{true}}
+									@options={{this.model}}
+									@placeholder="Search..."
+									@searchField="name"
+									@selected={{this.parent}}
+									@onChange={{fn (mut this.parent)}} as |cat|>
+									{{cat.name}}
+								</PowerSelect>
+							</div>
+						</form.group>
 						<form.element class="col" @controlType="text" @label="HERE ID" @placeholder="HERE ID" @property="hereId" />
 					</div>
-					<form.element @controlType="text" @label="Related" @placeholder="[slug],[slug],[slug]..." @property="relatedCSV" />
-					<form.element @controlType="text" @label="Children" @placeholder="[slug],[slug],[slug]..." @property="childrenCSV" />
+					<form.group>
+						<label class="col-form-label col-md-4">Related</label>
+						<div class="col-md-8">
+							<PowerSelectMultiple
+								@searchEnabled={{true}}
+								@options={{this.model}}
+								@placeholder="Search..."
+								@searchField="name"
+								@selected={{this.related}}
+								@onChange={{fn (mut this.related)}} as |cat|>
+								{{cat.name}}
+							</PowerSelectMultiple>
+						</div>
+					</form.group>
+					<form.group>
+						<label class="col-form-label col-md-4">Chilren</label>
+						<div class="col-md-8">
+							<PowerSelectMultiple
+								@searchEnabled={{true}}
+								@options={{this.model}}
+								@placeholder="Search..."
+								@searchField="name"
+								@selected={{this.children}}
+								@onChange={{fn (mut this.children)}} as |cat|>
+								{{cat.name}}
+							</PowerSelectMultiple>
+						</div>
+					</form.group>
 					{{#if this.isUpdate}}
 						<BsButton @type="default-outline" {{on 'click' this.clearForm}} @defaultText="clear" />
 					{{/if}}

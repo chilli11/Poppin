@@ -24,6 +24,7 @@ namespace Poppin.Interfaces
 								public UpdateResult InvalidateCheckin(string userId);
 								public Task InvalidateVendorCheckin(string locId);
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId);
+								public Task<List<Checkin>> GetCheckinsForLocations(IEnumerable<string> locIds);
 								public Task<List<Checkin>> GetCheckinsForUser(string uId);
 								public Task<List<Category>> GetCategories();
 								public Task<Category> GetCategoryBySlug(string slug);

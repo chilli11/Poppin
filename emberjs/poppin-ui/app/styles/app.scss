@@ -6,3 +6,9 @@
 @import "material-dashboard";
 
 @import "loading-spinner.scss";
+@import "form-fixes.scss";
+
+#siteContentWrapper.wrapper {
+	height: auto;
+	min-height: 100vh;
+}

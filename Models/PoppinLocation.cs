@@ -4,6 +4,7 @@ using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Geocoding.HERE;
+using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace Poppin.Models
 												Website = v.Website;
 												Capacity = v.Capacity;
 												Categories = v.Categories.ToHashSet();
+												VisitLength = v.VisitLength;
 												Hours = v.Hours;
 								}
 
@@ -98,6 +100,9 @@ namespace Poppin.Models
 												CrowdSize = (int)Math.Round(s.Select(c => c.ReliabilityScore).Sum());
 												return;
 								}
+
+								public void SetCrowdSize(IEnumerable<Checkin> checkins) =>
+												CrowdSize = (int)Math.Round(checkins.Select(c => c.ReliabilityScore).Sum());
 				}
 
 				public class PoppinLocComparer : IEqualityComparer<PoppinLocation>

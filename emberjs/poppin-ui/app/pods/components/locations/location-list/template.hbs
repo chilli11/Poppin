@@ -2,7 +2,9 @@
 	<div class="card">
 		<div class="card-body" role="button" {{on "click" (fn @clickAction loc)}}>
 			<span class="strong">{{loc.name}}</span> //
-			<span>{{loc.categories}}</span>
+			<span>
+				{{#each loc.categories as |cat i|}}{{if (gt i 0) ', '}}{{cat}}{{/each}}
+			</span>
 			<hr>
 			<span>{{loc.address.line1}} // {{loc.address.city}}, {{loc.address.state}}</span>
 		</div>

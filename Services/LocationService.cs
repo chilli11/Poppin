@@ -44,7 +44,14 @@ namespace Poppin.Services
 												var x = new GeoJson2DGeographicCoordinates(request.Geo.Coordinates[0], request.Geo.Coordinates[1]);
 												var geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
 												var inRange = Builders<PoppinLocation>.Filter.Near(a => a.Address.Geo, geo, request.Radius);
-												var matchCat = Builders<PoppinLocation>.Filter.AnyEq("Categories", request.Categories);
+												var cats = request.Categories.SelectMany(c => c.Children);
+												cats = cats.Concat(request.Categories.Select(c => c.Slug));
+
+												var matchCat = Builders<PoppinLocation>.Filter.AnyIn("Categories", cats);
+												if (cats != null && cats.Count() > 0)
+												{
+																return _locations.Find(inRange & matchCat).ToListAsync();
+												}
 												return _locations.Find(inRange).ToListAsync();
 								}
 
@@ -100,6 +107,8 @@ namespace Poppin.Services
 								}
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId) =>
 												_checkins.Find(Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Eq("LocationId", locId)).ToListAsync();
+								public Task<List<Checkin>> GetCheckinsForLocations(IEnumerable<string> locIds) =>
+												_checkins.Find(Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Where(c => locIds.Contains(c.LocationId))).ToListAsync();
 								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(Builders<Checkin>.Filter.Eq("UserId", uId)).ToListAsync();
 
 

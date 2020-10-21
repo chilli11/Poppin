@@ -3,14 +3,14 @@
 		<table class="table table-responsive-md table-hover">
 			<thead class="thead-light">
 				<tr>
-					<th>Display Name</th>
-					<th>Slug</th>
-					<th>Parent</th>
+					<th role="button" {{on 'click' (fn this.sortBy 'name')}}>Display Name</th>
+					<th role="button" {{on 'click' (fn this.sortBy 'slug')}}>Slug</th>
+					<th role="button" {{on 'click' (fn this.sortBy 'parent')}}>Parent</th>
 					<th># of Children</th>
 				</tr>
 			</thead>
 			<tbody>
-				{{#each @categories as |cat|}}
+				{{#each this.sortedCategories as |cat|}}
 					<tr role="button" {{on 'click' (fn @clickAction cat)}}>
 						<td>{{cat.name}}</td>
 						<td>{{cat.slug}}</td>

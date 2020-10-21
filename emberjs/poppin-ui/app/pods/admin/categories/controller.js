@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import Controller from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 import { action, set } from '@ember/object';
@@ -15,15 +16,20 @@ export default class AdminCategoriesController extends Controller {
 	@tracked relatedCSV;
 	@tracked childrenCSV
 
+	get categories() {
+		return this.categoriesService.categories;
+	}
+
 	populateForm(cat) {
+		const parCatArr = this.categories.filter(c => c.slug == cat.parent);
 		set(this, 'cleanCategory', cat);
 		set(this, 'id', cat.id);
 		set(this, 'name', cat.name);
 		set(this, 'slug', cat.slug);
-		set(this, 'parent', cat.parent);
+		set(this, 'parent', parCatArr.length ? parCatArr[0] : null);
 		set(this, 'hereId', cat.hereId);
-		set(this, 'relatedCSV', (cat.related || []).join(','));
-		set(this, 'childrenCSV', (cat.children || []).join(','));
+		set(this, 'related', this.categories.filter(c => (cat.related || []).indexOf(c.slug) > -1) || []);
+		set(this, 'children', this.categories.filter(c => (cat.children || []).indexOf(c.slug) > -1) || []);
 	}
 
 	@action
@@ -33,10 +39,10 @@ export default class AdminCategoriesController extends Controller {
 			id: this.id,
 			name: this.name,
 			slug: this.slug,
-			parent: this.parent,
+			parent: this.parent ? this.parent.slug : null,
 			hereId: this.hereId,
-			related: this.relatedCSV ? this.relatedCSV.split(',').map(r => r.trim()) : null,
-			children: this.childrenCSV ? this.childrenCSV.split(',').map(r => r.trim()) : null
+			related: (this.related || []).map(r => r.slug),
+			children: (this.children || []).map(c => c.slug)
 		}
 		const params = {
 			category,

@@ -1,4 +1,5 @@
 ﻿using Poppin.Models;
+using Poppin.Models.Tracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,11 @@ namespace Poppin.Extensions
 												{
 																loc.CrowdSize = 0;
 												}
+								}
+
+								public static void UpdateCrowdSizes(this List<PoppinLocation> locs, IEnumerable<Checkin> checkins)
+								{
+												locs.ForEach(l => l.SetCrowdSize(checkins.Where(c => c.LocationId == l.Id)));
 								}
 				}
 }

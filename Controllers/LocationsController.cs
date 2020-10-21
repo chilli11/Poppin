@@ -8,6 +8,7 @@ using Poppin.Models;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
+using Poppin.Extensions;
 using Poppin.Models.Yelp;
 using Segment;
 using System;
@@ -146,28 +147,28 @@ namespace Poppin.Controllers
                     {
                         locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
                     }
-                    locList.ForEach((l) =>
-                    {
-                        _searchedLocations.Add(l);
-                        l.SetCrowdSize(_locationService).Wait();
-                    });
+
+                    locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                 }
 
                 var actionStr = new Dictionary<string, string>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo.Coordinates.ToString() },
-                    { "SearchCategories", search.Categories.ToString() }
+                    { "SearchCategories", search.Categories.Select(c => c.Slug).ToString() }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", search.Categories }
+                    { "SearchCategories", search.Categories.Select(c => c.Slug) }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search, actionObj);
+                if (!string.IsNullOrEmpty(id))
+                {
+                    Analytics.Client.Track(id, SegmentIOKeys.Actions.Search, actionObj);
+                }
 
                 return Ok(new PoppinSearchResponse()
                 {

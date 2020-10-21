@@ -27,7 +27,7 @@ export class LocationSearchRequest {
 		this.location = params.location;
 		if (params.geo && params.geo.coordinates && params.geo.coordinates.length)
 			this.geo = params.geo;
-		this.radius = !!params.radius || 40000;
+		this.radius = params.radius || 40000;
 		this.categories = params.categories || [];
 	}
 }

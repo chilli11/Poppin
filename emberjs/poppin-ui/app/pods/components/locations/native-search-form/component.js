@@ -12,7 +12,7 @@ export default class NativeSearchFormComponent extends Component {
 	@tracked term;
 	@tracked _radius;
 	get radius() {
-		return parseInt(parseInt(this._radius || 0, 10) * 1609.34, 10).toString();
+		return parseInt(parseInt(this._radius || 0, 10) * 1609.34, 10);
 	}
 	@tracked poppinCategories;
 
@@ -35,6 +35,6 @@ export default class NativeSearchFormComponent extends Component {
 	@action
 	search() {
 		const { term, location, categories, radius } = this;
-		return this.args.searchMethod({ term, location, radius, categories: categories.map(c => c.slug).join(',') });
+		return this.args.searchMethod({ term, location, radius, categories });
 	}
 }
