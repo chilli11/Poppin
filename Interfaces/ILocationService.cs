@@ -27,10 +27,13 @@ namespace Poppin.Interfaces
 								public Task<List<Checkin>> GetCheckinsForUser(string uId);
 								public Task<List<Category>> GetCategories();
 								public Task<Category> GetCategoryBySlug(string slug);
+								public Task<List<Category>> GetCategoriesBySlug(IEnumerable<string> slugs);
 								public Task<Category> GetCategoryByHereId(string hereId);
 								public Task AddCategory(Category category);
+								public Task AddCategories(IEnumerable<Category> categories);
 								public Task UpdateCategory(Category category);
 								public Task UpdateCategory(string catSlug, Category category);
+								public void UpdateCategories(IEnumerable<Category> categories);
 								public Task DeleteCategory(string catSlug);
 				}
 }

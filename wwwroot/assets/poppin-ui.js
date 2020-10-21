@@ -3449,7 +3449,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -3459,7 +3459,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let AdminCategoriesController = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = (_temp = class AdminCategoriesController extends Ember.Controller {
+  let AdminCategoriesController = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._action, _dec11 = Ember._action, _dec12 = Ember._action, (_class = (_temp = class AdminCategoriesController extends Ember.Controller {
     constructor(...args) {
       super(...args);
 
@@ -3467,20 +3467,23 @@
 
       _initializerDefineProperty(this, "isUpdate", _descriptor2, this);
 
-      _initializerDefineProperty(this, "name", _descriptor3, this);
+      _initializerDefineProperty(this, "cleanCategory", _descriptor3, this);
 
-      _initializerDefineProperty(this, "slug", _descriptor4, this);
+      _initializerDefineProperty(this, "name", _descriptor4, this);
 
-      _initializerDefineProperty(this, "parent", _descriptor5, this);
+      _initializerDefineProperty(this, "slug", _descriptor5, this);
 
-      _initializerDefineProperty(this, "hereId", _descriptor6, this);
+      _initializerDefineProperty(this, "parent", _descriptor6, this);
 
-      _initializerDefineProperty(this, "relatedCSV", _descriptor7, this);
+      _initializerDefineProperty(this, "hereId", _descriptor7, this);
 
-      _initializerDefineProperty(this, "childrenCSV", _descriptor8, this);
+      _initializerDefineProperty(this, "relatedCSV", _descriptor8, this);
+
+      _initializerDefineProperty(this, "childrenCSV", _descriptor9, this);
     }
 
     populateForm(cat) {
+      Ember.set(this, 'cleanCategory', cat);
       Ember.set(this, 'id', cat.id);
       Ember.set(this, 'name', cat.name);
       Ember.set(this, 'slug', cat.slug);
@@ -3491,17 +3494,21 @@
     }
 
     addOrUpdateCategory() {
-      const method = this.isUpdate ? 'updateCategory' : 'addCategory';
+      let method = this.isUpdate ? 'updateCategory' : 'addCategory';
       const category = {
         id: this.id,
         name: this.name,
         slug: this.slug,
         parent: this.parent,
         hereId: this.hereId,
-        related: (this.relatedCSV || '').split(',').map(r => r.trim()),
-        children: (this.childrenCSV || '').split(',').map(r => r.trim())
+        related: this.relatedCSV ? this.relatedCSV.split(',').map(r => r.trim()) : null,
+        children: this.childrenCSV ? this.childrenCSV.split(',').map(r => r.trim()) : null
       };
-      return this.categoriesService[method](category).then(() => {
+      const params = {
+        category,
+        original: this.cleanCategory
+      };
+      return this.categoriesService[method](this.isUpdate ? params : category).then(() => {
         this.clearForm();
         this.send('reload');
       }).catch(e => console.error(e));
@@ -3527,37 +3534,42 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "cleanCategory", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "slug", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "name", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "parent", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "slug", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "hereId", [_dec6], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "parent", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "relatedCSV", [_dec7], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "hereId", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "childrenCSV", [_dec8], {
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "relatedCSV", [_dec8], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "addOrUpdateCategory", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "addOrUpdateCategory"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "clickAction", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "clickAction"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype)), _class));
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "childrenCSV", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "addOrUpdateCategory", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "addOrUpdateCategory"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "clickAction", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "clickAction"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype)), _class));
   _exports.default = AdminCategoriesController;
 });
 ;define("poppin-ui/pods/admin/categories/route", ["exports"], function (_exports) {
@@ -8616,7 +8628,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+280502e0"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+49ac7b15"});
           }
         
 //# sourceMappingURL=poppin-ui.map

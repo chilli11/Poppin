@@ -7,6 +7,7 @@ export default class AdminCategoriesController extends Controller {
 	@service categoriesService;
 	@tracked isUpdate;
 
+	@tracked cleanCategory;
 	@tracked name;
 	@tracked slug;
 	@tracked parent;
@@ -15,6 +16,7 @@ export default class AdminCategoriesController extends Controller {
 	@tracked childrenCSV
 
 	populateForm(cat) {
+		set(this, 'cleanCategory', cat);
 		set(this, 'id', cat.id);
 		set(this, 'name', cat.name);
 		set(this, 'slug', cat.slug);
@@ -26,17 +28,22 @@ export default class AdminCategoriesController extends Controller {
 
 	@action
 	addOrUpdateCategory() {
-		const method = this.isUpdate ? 'updateCategory' : 'addCategory';
+		let method = this.isUpdate ? 'updateCategory' : 'addCategory';
 		const category = {
 			id: this.id,
 			name: this.name,
 			slug: this.slug,
 			parent: this.parent,
 			hereId: this.hereId,
-			related: (this.relatedCSV || '').split(',').map(r => r.trim()),
-			children: (this.childrenCSV || '').split(',').map(r => r.trim())
+			related: this.relatedCSV ? this.relatedCSV.split(',').map(r => r.trim()) : null,
+			children: this.childrenCSV ? this.childrenCSV.split(',').map(r => r.trim()) : null
 		}
-		return this.categoriesService[method](category).then(() => {
+		const params = {
+			category,
+			original: this.cleanCategory
+		};
+
+		return this.categoriesService[method](this.isUpdate ? params : category).then(() => {
 			this.clearForm();
 			this.send('reload');
 		}).catch(e => console.error(e));

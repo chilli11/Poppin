@@ -106,11 +106,14 @@ namespace Poppin.Services
 								// ================ CATEGORIES ================== //
 								public Task<List<Category>> GetCategories() => _categories.Find(new BsonDocument()).ToListAsync();
 								public Task<Category> GetCategoryBySlug(string slug) => _categories.Find(c => c.Slug == slug).FirstAsync();
+								public Task<List<Category>> GetCategoriesBySlug(IEnumerable<string> slugs) => _categories.Find(c => slugs.Contains(c.Slug)).ToListAsync();
 								public Task<Category> GetCategoryByHereId(string hereId) => _categories.Find(c => c.HereId == hereId).FirstAsync();
 
 								public Task AddCategory(Category category) => _categories.InsertOneAsync(category);
+								public Task AddCategories(IEnumerable<Category> categories) => _categories.InsertManyAsync(categories);
 								public Task UpdateCategory(Category category) => _categories.ReplaceOneAsync(c => c.Slug == category.Slug, category);
 								public Task UpdateCategory(string catSlug, Category category) => _categories.ReplaceOneAsync(c => c.Slug == catSlug, category);
+								public void UpdateCategories(IEnumerable<Category> categories) => categories.ToList().ForEach(c => UpdateCategory(c));
 								public Task DeleteCategory(string catSlug) => _categories.DeleteOneAsync(c => c.Slug == catSlug);
 				}
 
