@@ -17,10 +17,14 @@ namespace Poppin.Models.BusinessEntities
             Email = user.Email;
 								}
 
-        /// <summary>
-        /// LocationIds saved by user
-        /// </summary>
-        public HashSet<string> Favorites { get; set; }
+								public string ProfilePhoto { get; set; }
+								public int Age { get; set; }
+								public Gender Gender { get; set; }
+
+								/// <summary>
+								/// LocationIds saved by user
+								/// </summary>
+								public HashSet<string> Favorites { get; set; }
 
         /// <summary>
         /// LocationIds hidden by user
@@ -52,4 +56,10 @@ namespace Poppin.Models.BusinessEntities
             return await las.GetUserActivity(Id);
         }
     }
+
+    public enum Gender
+				{
+        Male,
+        Female
+				}
 }
