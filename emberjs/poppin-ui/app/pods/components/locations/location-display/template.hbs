@@ -25,8 +25,8 @@
 					<dt>Occupancy</dt>
 					<dd>{{@location.capacity}}</dd>
 					<dt>Categories:</dt>
-					{{#each @location.yelpDetails.categories as |category|}}
-						<dd>{{category.title}}</dd>
+					{{#each @categories as |category|}}
+						<dd>{{category.name}}</dd>
 					{{/each}}
 					<dt>Visit Length:</dt>
 					<dd>{{@location.visitLength}}</dd>

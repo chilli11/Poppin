@@ -16,7 +16,7 @@ export default class CategoriesServiceService extends Service {
 		return this.apiService.request({
 			resource: HttpResources.getCategories
 		}).then((response) => {
-			this._categories = response;
+			this._categories = response || [];
 			return response;
 		});
 	}
@@ -33,7 +33,7 @@ export default class CategoriesServiceService extends Service {
 			resource: HttpResources.updateCategory,
 			body: category
 		}).then(() => {
-			this._categories = this._categories.map(c => c.slug == category.slug ? category : c);
+			this._categories = (this._categories || []).map(c => c.slug == category.slug ? category : c);
 		});
 	}
 }

@@ -1,3 +1,7 @@
+{{#if @location.mainPhotoUrl}}
+	<div class="col-xl-12 main-photo" style="background: url({{@location.mainPhotoUrl}}) center center / cover; height: 500px; margin-bottom: -150px;"></div>
+{{/if}}
+
 {{#if (eq this.machineState 'EDIT_LOCATION')}}
 	<Locations::LocationForm
 		@reverseOrder=true
@@ -12,6 +16,7 @@
 		@profile={{this.accountService.profile}}
 		@isLoading={{eq this.machineState 'LOADING'}}
 		@location={{@location}}
+		@categories={{this.fullCategories}}
 		@startEdit={{this.startEdit}}
 		@increment={{this.increment}}
 		@decrement={{this.decrement}}

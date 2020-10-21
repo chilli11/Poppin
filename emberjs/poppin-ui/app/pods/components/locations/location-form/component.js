@@ -74,6 +74,8 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.zip ? this.zip.toString().substr(0, 5) : null;
 	}
 
+	@tracked mainPhotoUrl;
+	@tracked website;
 	@tracked geo;
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
@@ -85,7 +87,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked showModal = false;
 
 	get locationDTO() {
-		const { locationId, name, yelpId,  capacity, crowdSize, hours, visitLength } = this;
+		const { locationId, name, yelpId,  capacity, crowdSize, hours, visitLength, mainPhotoUrl, website } = this;
 		return  {
 			id: locationId,
 			yelpId: yelpId,
@@ -98,6 +100,8 @@ export default class LocationFormComponent extends StatefulComponent {
 				zipCode: this.zipCode,
 				geo: this.geo
 			},
+			mainPhotoUrl,
+			website,
 			categories: this.categoryList,
 			capacity: parseInt(capacity, 10),
 			crowdSize: parseInt(crowdSize, 10),
@@ -127,6 +131,8 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = null;
 		this.state = null;
 		this.zipCode = null;
+		this.mainPhotoUrl = null;
+		this.website = null;
 		this.categories = [];
 		this.capacity = 0;
 		this.hours = _.merge(defHours);
@@ -144,11 +150,13 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.city = loc.address.city;
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
+			this.mainPhotoUrl = loc.mainPhotoUrl;
+			this.website = loc.website;
 			this.geo = {
 				type: 'Point',
 				coordinates: loc.address.geo.coordinates.values
 			};
-			this.categories = loc.categories.map((c) => {
+			this.categories = (loc.categories || []).map((c) => {
 				var matches = this.poppinCategories.filter(pc => pc.slug == c);
 				if (matches.length) return matches[0];
 			});
@@ -167,6 +175,8 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = loc.location.city;
 		this.state = loc.location.state;
 		this.zip = loc.location.zip || this.zip;
+		this.mainPhotoUrl = null;
+		this.website = null;
 		this.geo = {
 			type: 'Point',
 			coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]

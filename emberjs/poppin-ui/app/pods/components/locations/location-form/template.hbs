@@ -47,6 +47,8 @@
 						</PowerSelectMultiple>
 					</div>
 				</form.group>
+				<form.element @controlType="text" @label="Main Photo URL" @placeholder="https://awesomebiz.com/photos/my-epic-banner.jpg" @property="mainPhotoUrl" />
+				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
 				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />

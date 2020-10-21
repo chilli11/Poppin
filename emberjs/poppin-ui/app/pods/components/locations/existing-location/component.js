@@ -7,6 +7,7 @@ import { tracked } from '@glimmer/tracking';
 export default class LocationFormComponent extends StatefulComponent {
 	@service store;
 	@service locationsService;
+	@service categoriesService;
 	@service accountService;
 	
 	@tracked modalTitle;
@@ -24,6 +25,13 @@ export default class LocationFormComponent extends StatefulComponent {
 	@computed('accountService.profile')
 	get profile() {
 		return this.accountService.profile;
+	}
+
+	// eslint-disable-next-line ember/require-computed-property-dependencies
+	@computed('categoriesService.categories')
+	get fullCategories() {
+		const cats = this.categoriesService.categories;
+		return cats.filter(c => (this.args.location.categories || []).indexOf(c.slug) > -1);
 	}
 
 	get authorized() {

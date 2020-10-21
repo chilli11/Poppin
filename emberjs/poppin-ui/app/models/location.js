@@ -4,7 +4,9 @@ export default class LocationModel extends Model {
   @attr('string') yelpId;
   @attr('string') name;
   @attr('string') phone;
-  @attr address;
+	@attr address;
+	@attr('string') mainPhotoUrl;
+	@attr('string') website;
   @attr categories;
   @attr('number') capacity;
   @attr('number') crowdSize;

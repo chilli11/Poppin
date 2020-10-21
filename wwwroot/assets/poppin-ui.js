@@ -2655,7 +2655,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -2665,7 +2665,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let LocationModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('number'), _dec5 = (0, _model.attr)('number'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.attr)('date'), _dec8 = (0, _model.attr)('boolean'), (_class = (_temp = class LocationModel extends _model.default {
+  let LocationModel = (_dec = (0, _model.attr)('string'), _dec2 = (0, _model.attr)('string'), _dec3 = (0, _model.attr)('string'), _dec4 = (0, _model.attr)('string'), _dec5 = (0, _model.attr)('string'), _dec6 = (0, _model.attr)('number'), _dec7 = (0, _model.attr)('number'), _dec8 = (0, _model.attr)('number'), _dec9 = (0, _model.attr)('date'), _dec10 = (0, _model.attr)('boolean'), (_class = (_temp = class LocationModel extends _model.default {
     constructor(...args) {
       super(...args);
 
@@ -2677,21 +2677,25 @@
 
       _initializerDefineProperty(this, "address", _descriptor4, this);
 
-      _initializerDefineProperty(this, "categories", _descriptor5, this);
+      _initializerDefineProperty(this, "mainPhotoUrl", _descriptor5, this);
 
-      _initializerDefineProperty(this, "capacity", _descriptor6, this);
+      _initializerDefineProperty(this, "website", _descriptor6, this);
 
-      _initializerDefineProperty(this, "crowdSize", _descriptor7, this);
+      _initializerDefineProperty(this, "categories", _descriptor7, this);
 
-      _initializerDefineProperty(this, "visitLength", _descriptor8, this);
+      _initializerDefineProperty(this, "capacity", _descriptor8, this);
 
-      _initializerDefineProperty(this, "hours", _descriptor9, this);
+      _initializerDefineProperty(this, "crowdSize", _descriptor9, this);
 
-      _initializerDefineProperty(this, "lastUpdate", _descriptor10, this);
+      _initializerDefineProperty(this, "visitLength", _descriptor10, this);
 
-      _initializerDefineProperty(this, "atCapacity", _descriptor11, this);
+      _initializerDefineProperty(this, "hours", _descriptor11, this);
 
-      _initializerDefineProperty(this, "yelpDetails", _descriptor12, this);
+      _initializerDefineProperty(this, "lastUpdate", _descriptor12, this);
+
+      _initializerDefineProperty(this, "atCapacity", _descriptor13, this);
+
+      _initializerDefineProperty(this, "yelpDetails", _descriptor14, this);
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "yelpId", [_dec], {
@@ -2714,42 +2718,52 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "categories", [_model.attr], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "mainPhotoUrl", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "capacity", [_dec4], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "website", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "crowdSize", [_dec5], {
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "categories", [_model.attr], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "visitLength", [_dec6], {
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "capacity", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "hours", [_model.attr], {
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "crowdSize", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "lastUpdate", [_dec7], {
+  }), _descriptor10 = _applyDecoratedDescriptor(_class.prototype, "visitLength", [_dec8], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "atCapacity", [_dec8], {
+  }), _descriptor11 = _applyDecoratedDescriptor(_class.prototype, "hours", [_model.attr], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "yelpDetails", [_model.attr], {
+  }), _descriptor12 = _applyDecoratedDescriptor(_class.prototype, "lastUpdate", [_dec9], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor13 = _applyDecoratedDescriptor(_class.prototype, "atCapacity", [_dec10], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor14 = _applyDecoratedDescriptor(_class.prototype, "yelpDetails", [_model.attr], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -4196,7 +4210,7 @@
 
   let _actions$END_EDIT, _actions$FAV_ACTION, _actions$UPDATE_CROWD, _actions$REJECT_ACTIO;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4206,7 +4220,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember.computed('accountService.authInfo'), _dec8 = Ember.computed('accountService.accountInfo'), _dec9 = Ember.computed('accountService.profile'), _dec10 = Ember.computed('accountService.profile.favorites'), _dec11 = Ember._action, _dec12 = Ember._action, _dec13 = Ember._action, _dec14 = Ember._action, _dec15 = Ember._action, (_class = (_temp = (_actions$END_EDIT = _constants.actions.END_EDIT, _actions$FAV_ACTION = _constants.actions.FAV_ACTION, _actions$UPDATE_CROWD = _constants.actions.UPDATE_CROWD_SIZE, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
+  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember.computed('accountService.authInfo'), _dec9 = Ember.computed('accountService.accountInfo'), _dec10 = Ember.computed('accountService.profile'), _dec11 = Ember.computed('categoriesService.categories'), _dec12 = Ember.computed('accountService.profile.favorites'), _dec13 = Ember._action, _dec14 = Ember._action, _dec15 = Ember._action, _dec16 = Ember._action, _dec17 = Ember._action, (_class = (_temp = (_actions$END_EDIT = _constants.actions.END_EDIT, _actions$FAV_ACTION = _constants.actions.FAV_ACTION, _actions$UPDATE_CROWD = _constants.actions.UPDATE_CROWD_SIZE, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
     get authInfo() {
       return this.accountService.authInfo;
     }
@@ -4217,6 +4231,12 @@
 
     get profile() {
       return this.accountService.profile;
+    } // eslint-disable-next-line ember/require-computed-property-dependencies
+
+
+    get fullCategories() {
+      const cats = this.categoriesService.categories;
+      return cats.filter(c => (this.args.location.categories || []).indexOf(c.slug) > -1);
     }
 
     get authorized() {
@@ -4247,13 +4267,15 @@
 
       _initializerDefineProperty(this, "locationsService", _descriptor2, this);
 
-      _initializerDefineProperty(this, "accountService", _descriptor3, this);
+      _initializerDefineProperty(this, "categoriesService", _descriptor3, this);
 
-      _initializerDefineProperty(this, "modalTitle", _descriptor4, this);
+      _initializerDefineProperty(this, "accountService", _descriptor4, this);
 
-      _initializerDefineProperty(this, "modalText", _descriptor5, this);
+      _initializerDefineProperty(this, "modalTitle", _descriptor5, this);
 
-      _initializerDefineProperty(this, "showModal", _descriptor6, this);
+      _initializerDefineProperty(this, "modalText", _descriptor6, this);
+
+      _initializerDefineProperty(this, "showModal", _descriptor7, this);
 
       _defineProperty(this, "transitions", {
         [_constants.states.IDLE]: {
@@ -4336,29 +4358,34 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "categoriesService", [_dec3], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "modalTitle", [_dec4], {
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "modalText", [_dec5], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "modalTitle", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "showModal", [_dec6], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "modalText", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "showModal", [_dec7], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return false;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "authInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "accountInfo", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "accountInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "profile", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "profile"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "isFavorite", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "isFavorite"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "increment", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "increment"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "decrement", [_dec14], Object.getOwnPropertyDescriptor(_class.prototype, "decrement"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "favAction", [_dec15], Object.getOwnPropertyDescriptor(_class.prototype, "favAction"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "authInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "accountInfo", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "accountInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "profile", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "profile"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fullCategories", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "fullCategories"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "isFavorite", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "isFavorite"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec14], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "increment", [_dec15], Object.getOwnPropertyDescriptor(_class.prototype, "increment"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "decrement", [_dec16], Object.getOwnPropertyDescriptor(_class.prototype, "decrement"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "favAction", [_dec17], Object.getOwnPropertyDescriptor(_class.prototype, "favAction"), _class.prototype)), _class));
   _exports.default = LocationFormComponent;
 });
 ;define("poppin-ui/pods/components/locations/existing-location/constants", ["exports"], function (_exports) {
@@ -4393,8 +4420,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "OKnOF8qa",
-    "block": "{\"symbols\":[\"modal\",\"@location\",\"@refresh\"],\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"locations/location-form\",[],[[\"@reverseOrder\",\"@location\",\"@resolveAction\"],[\"true\",[32,2],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\"],[8,\"locations/location-display\",[],[[\"@isAdmin\",\"@isVendor\",\"@isFavorite\",\"@favAction\",\"@profile\",\"@isLoading\",\"@location\",\"@startEdit\",\"@increment\",\"@decrement\",\"@refresh\"],[[32,0,[\"isAdmin\"]],[32,0,[\"isVendor\"]],[32,0,[\"isFavorite\"]],[32,0,[\"favAction\"]],[32,0,[\"accountService\",\"profile\"]],[30,[36,0],[[32,0,[\"machineState\"]],\"LOADING\"],null],[32,2],[32,0,[\"startEdit\"]],[32,0,[\"increment\"]],[32,0,[\"decrement\"]],[32,3]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\",\"action\"]}",
+    "id": "37cDZYMO",
+    "block": "{\"symbols\":[\"modal\",\"@location\",\"@refresh\"],\"statements\":[[6,[37,1],[[32,2,[\"mainPhotoUrl\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-12 main-photo\"],[15,5,[31,[\"background: url(\",[32,2,[\"mainPhotoUrl\"]],\") center center / cover; height: 500px; margin-bottom: -150px;\"]]],[12],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"locations/location-form\",[],[[\"@reverseOrder\",\"@location\",\"@resolveAction\"],[\"true\",[32,2],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\"],[8,\"locations/location-display\",[],[[\"@isAdmin\",\"@isVendor\",\"@isFavorite\",\"@favAction\",\"@profile\",\"@isLoading\",\"@location\",\"@categories\",\"@startEdit\",\"@increment\",\"@decrement\",\"@refresh\"],[[32,0,[\"isAdmin\"]],[32,0,[\"isVendor\"]],[32,0,[\"isFavorite\"]],[32,0,[\"favAction\"]],[32,0,[\"accountService\",\"profile\"]],[30,[36,0],[[32,0,[\"machineState\"]],\"LOADING\"],null],[32,2],[32,0,[\"fullCategories\"]],[32,0,[\"startEdit\"]],[32,0,[\"increment\"]],[32,0,[\"decrement\"]],[32,3]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\",\"action\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/existing-location/template.hbs"
     }
@@ -4411,8 +4438,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "90pz7gHk",
-    "block": "{\"symbols\":[\"category\",\"@decrement\",\"@location\",\"@increment\",\"@startEdit\",\"@isVendor\",\"@isAdmin\",\"@favAction\",\"@isFavorite\",\"@isLoading\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,3,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,3,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,3,[\"address\",\"city\"]]],[2,\", \"],[1,[32,3,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[32,7],[32,6]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-dark\"],[4,[38,0],[\"click\",[32,5]],null],[12],[2,\"Edit\"],[13],[2,\" // \\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-dark\"],[4,[38,0],[\"click\",[32,8]],null],[12],[1,[30,[36,2],[[32,9],\"Unpin\",\"Pin Location\"],null]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,10]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[32,7],[32,6]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"div\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"h3\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\"],[4,[38,0],[\"click\",[32,2]],null],[12],[2,\"-\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"crowdSize\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\"],[4,[38,0],[\"click\",[32,4]],null],[12],[2,\"+\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\"],[6,[37,4],[[30,[36,3],[[30,[36,3],[[32,3,[\"yelpDetails\",\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"title\"]]],[13],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Visit Length:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"visitLength\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-xl-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details \"],[1,[30,[36,5],[[32,3,[\"yelpDetails\"]],\"(unavailable...check back later)\"],null]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[32,3,[\"yelpDetails\",\"url\"]]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"or\",\"if\",\"-track-array\",\"each\",\"unless\"]}",
+    "id": "D1kH6WKT",
+    "block": "{\"symbols\":[\"category\",\"@decrement\",\"@location\",\"@increment\",\"@startEdit\",\"@isVendor\",\"@isAdmin\",\"@favAction\",\"@isFavorite\",\"@isLoading\",\"@categories\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,3,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,3,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,3,[\"address\",\"city\"]]],[2,\", \"],[1,[32,3,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[32,7],[32,6]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-dark\"],[4,[38,0],[\"click\",[32,5]],null],[12],[2,\"Edit\"],[13],[2,\" // \\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-dark\"],[4,[38,0],[\"click\",[32,8]],null],[12],[1,[30,[36,2],[[32,9],\"Unpin\",\"Pin Location\"],null]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,10]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[32,7],[32,6]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"div\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"h3\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\"],[4,[38,0],[\"click\",[32,2]],null],[12],[2,\"-\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"crowdSize\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"button\"],[4,[38,0],[\"click\",[32,4]],null],[12],[2,\"+\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\"],[6,[37,4],[[30,[36,3],[[30,[36,3],[[32,11]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"name\"]]],[13],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Visit Length:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,3,[\"visitLength\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-xl-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details \"],[1,[30,[36,5],[[32,3,[\"yelpDetails\"]],\"(unavailable...check back later)\"],null]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[32,3,[\"yelpDetails\",\"url\"]]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"or\",\"if\",\"-track-array\",\"each\",\"unless\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-display/template.hbs"
     }
@@ -4430,7 +4457,7 @@
 
   let _actions$SUBMIT_LOCAT, _actions$GET_MATCHES, _actions$GET_FULL_MAT, _actions$SUBMIT_MATCH, _actions$RESOLVE_SUBM, _actions$REJECT_ACTIO;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4470,7 +4497,7 @@
     closing: null,
     day: days[6]
   }];
-  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.computed('categoriesService.categories'), _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._tracked, _dec18 = Ember._tracked, _dec19 = Ember._tracked, _dec20 = Ember._tracked, _dec21 = Ember._tracked, _dec22 = Ember._tracked, _dec23 = Ember._tracked, _dec24 = Ember._action, _dec25 = Ember._action, _dec26 = Ember._action, _dec27 = Ember._action, (_class = (_temp = (_actions$SUBMIT_LOCAT = _constants.actions.SUBMIT_LOCATION, _actions$GET_MATCHES = _constants.actions.GET_MATCHES, _actions$GET_FULL_MAT = _constants.actions.GET_FULL_MATCH, _actions$SUBMIT_MATCH = _constants.actions.SUBMIT_MATCH, _actions$RESOLVE_SUBM = _constants.actions.RESOLVE_SUBMIT_MATCH, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
+  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.computed('categoriesService.categories'), _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._tracked, _dec18 = Ember._tracked, _dec19 = Ember._tracked, _dec20 = Ember._tracked, _dec21 = Ember._tracked, _dec22 = Ember._tracked, _dec23 = Ember._tracked, _dec24 = Ember._tracked, _dec25 = Ember._tracked, _dec26 = Ember._action, _dec27 = Ember._action, _dec28 = Ember._action, _dec29 = Ember._action, (_class = (_temp = (_actions$SUBMIT_LOCAT = _constants.actions.SUBMIT_LOCATION, _actions$GET_MATCHES = _constants.actions.GET_MATCHES, _actions$GET_FULL_MAT = _constants.actions.GET_FULL_MATCH, _actions$SUBMIT_MATCH = _constants.actions.SUBMIT_MATCH, _actions$RESOLVE_SUBM = _constants.actions.RESOLVE_SUBMIT_MATCH, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
     get poppinCategories() {
       return this.categoriesService.categories;
     }
@@ -4491,7 +4518,9 @@
         capacity,
         crowdSize,
         hours,
-        visitLength
+        visitLength,
+        mainPhotoUrl,
+        website
       } = this;
       return {
         id: locationId,
@@ -4505,6 +4534,8 @@
           zipCode: this.zipCode,
           geo: this.geo
         },
+        mainPhotoUrl,
+        website,
         categories: this.categoryList,
         capacity: parseInt(capacity, 10),
         crowdSize: parseInt(crowdSize, 10),
@@ -4576,21 +4607,25 @@
 
       _initializerDefineProperty(this, "zip", _descriptor14, this);
 
-      _initializerDefineProperty(this, "geo", _descriptor15, this);
+      _initializerDefineProperty(this, "mainPhotoUrl", _descriptor15, this);
 
-      _initializerDefineProperty(this, "capacity", _descriptor16, this);
+      _initializerDefineProperty(this, "website", _descriptor16, this);
 
-      _initializerDefineProperty(this, "crowdSize", _descriptor17, this);
+      _initializerDefineProperty(this, "geo", _descriptor17, this);
 
-      _initializerDefineProperty(this, "hours", _descriptor18, this);
+      _initializerDefineProperty(this, "capacity", _descriptor18, this);
 
-      _initializerDefineProperty(this, "visitLength", _descriptor19, this);
+      _initializerDefineProperty(this, "crowdSize", _descriptor19, this);
 
-      _initializerDefineProperty(this, "modalTitle", _descriptor20, this);
+      _initializerDefineProperty(this, "hours", _descriptor20, this);
 
-      _initializerDefineProperty(this, "modalText", _descriptor21, this);
+      _initializerDefineProperty(this, "visitLength", _descriptor21, this);
 
-      _initializerDefineProperty(this, "showModal", _descriptor22, this);
+      _initializerDefineProperty(this, "modalTitle", _descriptor22, this);
+
+      _initializerDefineProperty(this, "modalText", _descriptor23, this);
+
+      _initializerDefineProperty(this, "showModal", _descriptor24, this);
 
       this.categoriesService.getCategories().finally(() => this.populateFromPoppin());
       this.initMachine();
@@ -4605,6 +4640,8 @@
       this.city = null;
       this.state = null;
       this.zipCode = null;
+      this.mainPhotoUrl = null;
+      this.website = null;
       this.categories = [];
       this.capacity = 0;
       this.hours = _lodash.default.merge(defHours);
@@ -4623,11 +4660,13 @@
         this.city = loc.address.city;
         this.state = loc.address.state;
         this.zip = loc.address.zipCode;
+        this.mainPhotoUrl = loc.mainPhotoUrl;
+        this.website = loc.website;
         this.geo = {
           type: 'Point',
           coordinates: loc.address.geo.coordinates.values
         };
-        this.categories = loc.categories.map(c => {
+        this.categories = (loc.categories || []).map(c => {
           var matches = this.poppinCategories.filter(pc => pc.slug == c);
           if (matches.length) return matches[0];
         });
@@ -4646,6 +4685,8 @@
       this.city = loc.location.city;
       this.state = loc.location.state;
       this.zip = loc.location.zip || this.zip;
+      this.mainPhotoUrl = null;
+      this.website = null;
       this.geo = {
         type: 'Point',
         coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
@@ -4824,57 +4865,67 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, "geo", [_dec16], {
+  }), _descriptor15 = _applyDecoratedDescriptor(_class.prototype, "mainPhotoUrl", [_dec16], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, "capacity", [_dec17], {
+  }), _descriptor16 = _applyDecoratedDescriptor(_class.prototype, "website", [_dec17], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor17 = _applyDecoratedDescriptor(_class.prototype, "geo", [_dec18], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor18 = _applyDecoratedDescriptor(_class.prototype, "capacity", [_dec19], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return '0';
     }
-  }), _descriptor17 = _applyDecoratedDescriptor(_class.prototype, "crowdSize", [_dec18], {
+  }), _descriptor19 = _applyDecoratedDescriptor(_class.prototype, "crowdSize", [_dec20], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return '0';
     }
-  }), _descriptor18 = _applyDecoratedDescriptor(_class.prototype, "hours", [_dec19], {
+  }), _descriptor20 = _applyDecoratedDescriptor(_class.prototype, "hours", [_dec21], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return _lodash.default.merge(defHours);
     }
-  }), _descriptor19 = _applyDecoratedDescriptor(_class.prototype, "visitLength", [_dec20], {
+  }), _descriptor21 = _applyDecoratedDescriptor(_class.prototype, "visitLength", [_dec22], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return '45';
     }
-  }), _descriptor20 = _applyDecoratedDescriptor(_class.prototype, "modalTitle", [_dec21], {
+  }), _descriptor22 = _applyDecoratedDescriptor(_class.prototype, "modalTitle", [_dec23], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor21 = _applyDecoratedDescriptor(_class.prototype, "modalText", [_dec22], {
+  }), _descriptor23 = _applyDecoratedDescriptor(_class.prototype, "modalText", [_dec24], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor22 = _applyDecoratedDescriptor(_class.prototype, "showModal", [_dec23], {
+  }), _descriptor24 = _applyDecoratedDescriptor(_class.prototype, "showModal", [_dec25], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return false;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec24], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec25], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "acceptMatch", [_dec26], Object.getOwnPropertyDescriptor(_class.prototype, "acceptMatch"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillData", [_dec27], Object.getOwnPropertyDescriptor(_class.prototype, "fillData"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec26], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec27], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "acceptMatch", [_dec28], Object.getOwnPropertyDescriptor(_class.prototype, "acceptMatch"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillData", [_dec29], Object.getOwnPropertyDescriptor(_class.prototype, "fillData"), _class.prototype)), _class));
   _exports.default = LocationFormComponent;
 });
 ;define("poppin-ui/pods/components/locations/location-form/constants", ["exports"], function (_exports) {
@@ -4913,8 +4964,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "EFnP96ji",
-    "block": "{\"symbols\":[\"modal\",\"form\",\"cat\",\"@reverseOrder\"],\"statements\":[[6,[37,0],[[32,4]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Review Business Details\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,1],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Address\",\"Line 1\",\"addressLine1\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"\",\"Line 2\",\"addressLine2\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"City\",\"City\",\"city\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"State\",\"State\",\"state\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Zip Code\",\"xxxxx-xxxx\",\"zip\"]],null],[2,\"\\t\\t\\t\\t\\n\\t\\t\\t\\t\"],[8,[32,2,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"poppinCategories\"]],\"Search...\",\"title\",[32,0,[\"categories\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Capacity\",\"Capacity\",\"capacity\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Visit Length\",\"Visit Length\",\"visitLength\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[6,[37,4],[[32,4]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,5],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"unless\",\"on\",\"fn\",\"mut\",\"if\",\"action\"]}",
+    "id": "X8cmTlpT",
+    "block": "{\"symbols\":[\"modal\",\"form\",\"cat\",\"@reverseOrder\"],\"statements\":[[6,[37,0],[[32,4]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Review Business Details\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,1],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Address\",\"Line 1\",\"addressLine1\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"\",\"Line 2\",\"addressLine2\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"City\",\"City\",\"city\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"State\",\"State\",\"state\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Zip Code\",\"xxxxx-xxxx\",\"zip\"]],null],[2,\"\\t\\t\\t\\t\\n\\t\\t\\t\\t\"],[8,[32,2,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"poppinCategories\"]],\"Search...\",\"title\",[32,0,[\"categories\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Main Photo URL\",\"https://awesomebiz.com/photos/my-epic-banner.jpg\",\"mainPhotoUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Website\",\"https://awesomebiz.com/\",\"website\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Capacity\",\"Capacity\",\"capacity\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Visit Length\",\"Visit Length\",\"visitLength\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[6,[37,4],[[32,4]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,5],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"unless\",\"on\",\"fn\",\"mut\",\"if\",\"action\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-form/template.hbs"
     }
@@ -6548,8 +6599,35 @@
   });
   _exports.default = void 0;
 
-  class AdminLocationsRoute extends Ember.Route {}
+  var _dec, _class, _descriptor, _temp;
 
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AdminLocationsRoute = (_dec = Ember.inject.service, (_class = (_temp = class AdminLocationsRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "categoriesService", _descriptor, this);
+    }
+
+    beforeModel() {
+      if (!this.categoriesService.categories || !this.categoriesService.categories.length) {
+        return this.categoriesService.getCategories();
+      }
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "categoriesService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
   _exports.default = AdminLocationsRoute;
 });
 ;define("poppin-ui/pods/locations/template", ["exports"], function (_exports) {
@@ -7464,7 +7542,7 @@
       return this.apiService.request({
         resource: _httpResources.default.getCategories
       }).then(response => {
-        this._categories = response;
+        this._categories = response || [];
         return response;
       });
     }
@@ -7481,7 +7559,7 @@
         resource: _httpResources.default.updateCategory,
         body: category
       }).then(() => {
-        this._categories = this._categories.map(c => c.slug == category.slug ? category : c);
+        this._categories = (this._categories || []).map(c => c.slug == category.slug ? category : c);
       });
     }
 
@@ -8538,7 +8616,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+d31fa087"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+280502e0"});
           }
         
 //# sourceMappingURL=poppin-ui.map

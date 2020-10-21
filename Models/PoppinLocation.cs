@@ -25,6 +25,8 @@ namespace Poppin.Models
 												YelpId = v.YelpId;
 												Phone = v.Phone;
 												Address = new Address(v.Address);
+												MainPhotoUrl = v.MainPhotoUrl;
+												Website = v.Website;
 												Capacity = v.Capacity;
 												Categories = v.Categories.ToHashSet();
 												Hours = v.Hours;
@@ -53,10 +55,16 @@ namespace Poppin.Models
 								public string YelpId { get; set; }
 								public string HereId { get; set; }
 								public string VendorId { get; set; }
+
 								public string Name { get; set; }
 								public string Phone { get; set; }
+								public string MainPhotoUrl { get; set; }
+								public string Website { get; set; }
+								public string MenuUrl { get; set; }
+
 								public Address Address { get; set; }
 								public HashSet<string> Categories { get; set; }
+
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
 
@@ -64,7 +72,6 @@ namespace Poppin.Models
 								/// VisitLength is in minutes
 								/// </summary>
 								public int VisitLength { get; set; }
-								public string MenuUrl { get; set; }
 								public IList<HourSet> Hours { get; set; }
 
 								[BsonDateTimeOptions]
