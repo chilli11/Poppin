@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MongoDB.Bson.Serialization.Attributes;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models.BusinessEntities
 {
-				public class PoppinUser : ProfileEntity
+    [BsonIgnoreExtraElements]
+    public class PoppinUser : ProfileEntity
     {
         public PoppinUser(User user)
 								{
