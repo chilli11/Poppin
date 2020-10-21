@@ -50,6 +50,10 @@ namespace Poppin.Controllers
 
 
 								// GET: api/<ProfileController>
+								/// <summary>
+								/// Get current user's profile info
+								/// </summary>
+								/// <returns></returns>
 								[HttpGet]
 								public async Task<IActionResult> Get()
 								{
@@ -70,7 +74,12 @@ namespace Poppin.Controllers
 								}
 
 								// GET api/<ProfileController>/5
-								[Authorize(Roles = RoleTypes.Admin)]
+								/// <summary>
+								/// Get specific user profile info
+								/// Only for site Admins
+								/// </summary>
+								/// <param name="id"></param>
+								/// <returns></returns>
 								[HttpGet("{id}")]
 								public async Task<IActionResult> Get(string id)
 								{
@@ -124,7 +133,7 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/add/{locationid}")]
-								public IActionResult AddFavorite(string locationId)
+								public async Task<IActionResult> AddFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
 
@@ -137,7 +146,20 @@ namespace Poppin.Controllers
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
 
-												return Ok(_userService.AddFavorite(id, locationId));
+												try
+												{
+																await _userService.AddFavorite(id, locationId);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 								}
 
 								/// <summary>
@@ -145,7 +167,7 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("favorites/remove/{locationid}")]
-								public IActionResult RemoveFavorite(string locationId)
+								public async Task<IActionResult> RemoveFavorite(string locationId)
 								{
 												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
 
@@ -158,7 +180,20 @@ namespace Poppin.Controllers
 												Analytics.Client.Track(id, SegmentIOKeys.Actions.RemoveFavorite);
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RemoveFavorite, action);
 
-												return Ok(_userService.RemoveFavorite(id, locationId));
+												try
+												{
+																await _userService.RemoveFavorite(id, locationId);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 								}
 
 								/// <summary>
@@ -204,7 +239,7 @@ namespace Poppin.Controllers
 
 								// PUT api/<ProfileController>/5
 								[HttpPut()]
-								public IActionResult Put(PoppinUser user)
+								public async Task<IActionResult> Put(PoppinUser user)
 								{
 												// Segment.io Analytics
 												_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
@@ -222,12 +257,25 @@ namespace Poppin.Controllers
 
 												// log specific changes with UserLog
 
-												return Ok(_userService.UpdateUser(user));
+												try
+												{
+																await _userService.UpdateUser(user);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 								}
 
 								// PUT api/<ProfileController>/5
 								[HttpPut("{id}")]
-								public IActionResult Put(string id, PoppinUser user)
+								public async Task<IActionResult> Put(string id, PoppinUser user)
 								{
 												// Segment.io Analytics
 												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
@@ -245,7 +293,20 @@ namespace Poppin.Controllers
 
 												// log specific changes with UserLog
 
-												return Ok(_userService.UpdateUser(id, user));
+												try
+												{
+																await _userService.UpdateUser(id, user);
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																var errors = new List<string>();
+																errors.Add(ex.Message);
+																return BadRequest(new GenericFailure
+																{
+																				Errors = errors
+																});
+												}
 								}
 
 								// DELETE api/<ProfileController>/5

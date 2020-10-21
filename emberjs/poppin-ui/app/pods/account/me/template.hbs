@@ -1,1 +1,4 @@
-<Account::MyAccount @user={{@model}} />
+<Account::MyProfile
+	@profile={{@model.profile}}
+	@favorites={{model.favorites}}
+	@locationClickAction={{this.clickAction}}/>

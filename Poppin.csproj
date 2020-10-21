@@ -9,7 +9,13 @@
     <PackageReference Include="Analytics" Version="3.0.0" />
     <PackageReference Include="EWSoftware.SHFB" Version="2020.3.6" />
     <PackageReference Include="EWSoftware.SHFB.NETFramework" Version="4.8.0" />
+    <PackageReference Include="MailChimp.Net.V3" Version="4.2.1" />
+    <PackageReference Include="mailkit" Version="2.9.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.1.8" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
@@ -25,6 +31,11 @@
     <PackageReference Include="NetTopologySuite" Version="2.1.0" />
     <PackageReference Include="ProjNet" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".ebextensions\https-instance-dotnet.config" />
+    <None Include=".ebextensions\https-instance-single.config" />
   </ItemGroup>
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">

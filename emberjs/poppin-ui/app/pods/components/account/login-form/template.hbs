@@ -32,6 +32,11 @@
 					@required={{true}}/>
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
 			</BsForm>
+			<fb:login-button 
+				scope="public_profile,email"
+				onlogin="checkFBLoginState();">
+			</fb:login-button>
+			Don't have an account? <LinkTo @route="account.register">Sign up</LinkTo>.
 		</div>
 	</div>
 </div>

@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Driver;
 using Poppin.Configuration;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
+using Poppin.Models.Identity.OAuth;
 using Poppin.Models.Tracking;
 using Segment;
+using Segment.Model;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -26,11 +29,13 @@ namespace Poppin.Services
 				{
 								private readonly JwtSettings _jwtSettings;
 								private readonly UserManager<User> _userManager;
+								private readonly ISmtpService _smtpService;
 
-								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings)
+								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings, ISmtpService smtpService)
 								{
 												_jwtSettings = jwtSettings;
 												_userManager = userMgr;
+												_smtpService = smtpService;
 								}
 
 								public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress)
@@ -66,6 +71,7 @@ namespace Poppin.Services
 
 												var newUser = new User
 												{
+																Id = Guid.NewGuid().ToString(),
 																Email = email,
 																UserName = email,
 																Role = RoleTypes.User
@@ -82,7 +88,7 @@ namespace Poppin.Services
 												}
 
 												// Segment.io Analytics
-												Analytics.Client.Identify(newUser.Id, new Segment.Model.Traits
+												Analytics.Client.Identify(newUser.Id, new Traits
 												{
 																{ "email", newUser.Email },
 																{ "username", newUser.UserName },
@@ -90,9 +96,24 @@ namespace Poppin.Services
 																{ "action", SegmentIOKeys.Actions.Register },
 																{ "createdAt", DateTime.UtcNow }
 												});
-												Analytics.Client.Track(newUser.Id, SegmentIOKeys.Actions.Register);
 
+												var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+												Analytics.Client.Track(newUser.Id, SegmentIOKeys.Actions.Register, new Properties()
+												{
+																{ "emailConfirmToken", confirmationToken }
+												});
+
+												_smtpService.SendConfirmationEmail(newUser, confirmationToken);
 												return GenerateAuthenticationResultForUser(newUser, ipAddress);
+								}
+
+								public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
+								{
+												// Segment.io Analytics
+												Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.ConfirmEmail);
+												Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.ConfirmEmail);
+
+												return await _userManager.ConfirmEmailAsync(user, token);
 								}
 
 								public async Task<AuthenticationResult> LoginAsync(string email, string password, string ipAddress)
@@ -122,6 +143,86 @@ namespace Poppin.Services
 												Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Login);
 
 												return GenerateAuthenticationResultForUser(user, ipAddress);
+								}
+
+								public async Task<AuthenticationResult> OAuthLoginAsync(string email, string ipAddress)
+								{
+												var user = await _userManager.FindByEmailAsync(email);
+												if (user == null)
+												{
+																user = new User
+																{
+																				Id = Guid.NewGuid().ToString(),
+																				Email = email,
+																				UserName = email,
+																				Role = RoleTypes.User
+																};
+																var createdUser = await _userManager.CreateAsync(user);
+
+																if (!createdUser.Succeeded)
+																{
+																				return new AuthenticationResult
+																				{
+																								Success = false,
+																								Errors = createdUser.Errors.Select(e => e.Description)
+																				};
+																}
+
+																// Segment.io Analytics
+																Analytics.Client.Identify(user.Id, new Traits
+																{
+																				{ "email", user.Email },
+																				{ "username", user.UserName },
+																				{ "category", SegmentIOKeys.Categories.Identity },
+																				{ "action", SegmentIOKeys.Actions.Register },
+																				{ "createdAt", DateTime.UtcNow }
+																});
+
+																Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Register, new Properties()
+																{
+																				{ "emailConfirmToken", "OAuth-register" }
+																});
+												}
+												else
+												{
+																// Segment.io Analytics
+																Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
+																Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.Login);
+												}
+
+												return GenerateAuthenticationResultForUser(user, ipAddress);
+								}
+
+								public async Task<AuthenticationResult> StartPasswordResetAsync(string email, string ipAddress)
+								{
+												var user = await _userManager.FindByEmailAsync(email);
+												if (user == null)
+												{
+																return new AuthenticationResult
+																{
+																				Success = false,
+																				Errors = new[] { "User does not exist." }
+																};
+												}
+
+												var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+												// Segment.io Analytics
+												Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.StartPasswordReset);
+												Analytics.Client.Track(user.Id, SegmentIOKeys.Actions.StartPasswordReset, new Properties()
+												{
+																{ "passwordResetToken", resetToken }
+												});
+
+												_smtpService.SendPasswordResetEmail(user, resetToken);
+												return new AuthenticationResult
+												{
+																Success = true
+												};
+								}
+
+								public async Task<IdentityResult> ResetPasswordAsync(User user, string token, string password)
+								{
+												return await _userManager.ResetPasswordAsync(user, token, password);
 								}
 
 								public async Task<UserDataResult> GetUserById(string identifier)
@@ -209,7 +310,7 @@ namespace Poppin.Services
 								}
 								public void Identify(IdentityUser user, string category, string action)
 								{
-												Analytics.Client.Identify(user.Id, new Segment.Model.Traits
+												Analytics.Client.Identify(user.Id, new Traits
 												{
 																{ "email", user.Email },
 																{ "username", user.UserName },
@@ -296,7 +397,7 @@ namespace Poppin.Services
 												}
 								}
 							
-								private bool IsValidPassword(string password)
+								public bool IsValidPassword(string password)
 								{
 												bool hasUpper = new Regex(@"[A-Z]+").IsMatch(password);
 												bool hasLower = new Regex(@"[a-z]+").IsMatch(password);

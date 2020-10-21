@@ -26,24 +26,24 @@ namespace Poppin.Services
 												_httpClient = httpClient;
 								}
 
-								public async Task<List<YelpCategory>> GetCategory()
+								public async Task<IEnumerable<YelpCategory>> GetCategory()
 								{
-												var endpoint = "/categories";
+												var endpoint = "/categories?locale=en_US";
 												var request = new HttpRequestMessage(HttpMethod.Get, _apiEndpoint + endpoint);
 												var response = await _httpClient.SendAsync(request);
-												List<YelpCategory> output = new List<YelpCategory>();
+												YelpCategoriesResponse output = new YelpCategoriesResponse();
 
 												try
 												{
 																var stream = await response.Content.ReadAsStringAsync();
-																output = JsonConvert.DeserializeObject<List<YelpCategory>>(stream);
+																output = JsonConvert.DeserializeObject<YelpCategoriesResponse>(stream);
 												}
 												catch (Exception e)
 												{
 																throw e;
 												}
 
-												return output;
+												return output.Categories;
 								}
 
 								public async Task<YelpCategory> GetCategory(string alias)

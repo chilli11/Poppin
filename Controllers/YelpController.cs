@@ -51,5 +51,11 @@ namespace Poppin.Controllers
             var searchParams = new YelpBusinessMatchParams(loc);
             return await _yelpService.GetBusinessMatch(searchParams);
         }
+
+        [HttpGet("categories")]
+        public async Task<IEnumerable<YelpCategory>> GetYelpCategories()
+								{
+            return await _yelpService.GetCategory();
+								}
     }
 }

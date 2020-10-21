@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -21,7 +19,6 @@ using Poppin.Models.Identity;
 using Poppin.Services;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace Poppin
@@ -41,12 +38,20 @@ namespace Poppin
 												services.AddDbContext<ApplicationDbContext>(options =>
 																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-																.AddEntityFrameworkStores<ApplicationDbContext>();
+																.AddEntityFrameworkStores<ApplicationDbContext>()
+																.AddDefaultTokenProviders();
 
 												// JWT
 												var jwtSettings = new JwtSettings();
+												var oAuthSettings = new OAuthSettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
+												Configuration.Bind(nameof(oAuthSettings), oAuthSettings);
+
 												services.AddSingleton(jwtSettings);
+												services.AddSingleton(oAuthSettings);
+												services.AddHttpClient<FBAuthService>();
+												services.AddHttpClient<GoogleAuthService>();
+												services.AddScoped<IOAuthHandler, OAuthHandler>();
 												services.AddScoped<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
 												{
@@ -83,6 +88,9 @@ namespace Poppin
 												var segmentSettings = new SegmentSettings();
 												Configuration.Bind(nameof(SegmentSettings), segmentSettings);
 												Segment.Analytics.Initialize(segmentSettings.Key);
+
+												services.Configure<Office365Settings>(Configuration.GetSection(nameof(Office365Settings)));
+												services.AddSingleton<ISmtpService, SmtpService>();
 
 												services.AddSingleton<ILocationService, LocationService>();
 												services.AddSingleton<IVendorService, VendorService>();
@@ -179,18 +187,6 @@ namespace Poppin
 																.AllowAnyMethod()
 																.AllowCredentials();
 												});
-
-												//app.Use(async (context, next) =>
-												//{
-												//				var url = context.Request.Path.Value;
-												//				var paths = new List<string>() { "/search", "/locations", "/vendors", "/account" };
-
-												//				if (!url.Contains("/api/") && paths.Any(p => url.Contains(p)))
-												//				{
-												//								context.Request.Path = "/";
-												//				}
-												//				await next();
-												//});
 
 												app.UseEndpoints(endpoints =>
 												{

@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Poppin.Configuration;
 using Poppin.Contracts;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
+using Poppin.Models.Identity.OAuth;
+using RTools_NTS.Util;
 
 namespace Poppin.Controllers
 {
@@ -18,15 +22,26 @@ namespace Poppin.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
+    //[ValidateAntiForgeryToken]
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly OAuthSettings _oAuthSettings;
+        private readonly IOAuthHandler _oAuthHandler;
+        private readonly string stateGuid = "8d97a48c-c825-47e0-862b-3103fbd0382d";
 
-        public IdentityController(IIdentityService idService, IHttpContextAccessor httpContextAccessor)
+        public IdentityController(
+            IIdentityService idService,
+            IHttpContextAccessor httpContextAccessor,
+            OAuthSettings oAuthSettings,
+            IOAuthHandler oAuthHandler
+        )
         {
             _identityService = idService;
             _httpContextAccessor = httpContextAccessor;
+            _oAuthSettings = oAuthSettings;
+            _oAuthHandler = oAuthHandler;
         }
 
         /// <summary>
@@ -76,6 +91,31 @@ namespace Poppin.Controllers
             });
         }
 
+        [HttpGet("confirm-email/{id}")]
+        public async Task<IActionResult> ConfirmEmail(string id, string t)
+								{
+            if (id == null || t == null)
+												{
+                return BadRequest();
+												}
+
+            var userResult = await _identityService.GetUserById(id);
+            if (!userResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = userResult.Errors
+                });
+            }
+
+            var result = await _identityService.ConfirmEmailAsync(userResult.User, t);
+            if (!result.Succeeded)
+												{
+                return BadRequest(result);
+												}
+            return Ok(result);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -89,8 +129,7 @@ namespace Poppin.Controllers
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
-                }
-                );
+                });
             }
 
             var loginResult = await _identityService.LoginAsync(request.Email, request.Password, GetIpAddress());
@@ -112,6 +151,99 @@ namespace Poppin.Controllers
         }
 
         /// <summary>
+        /// From https://code-maze.com/password-reset-aspnet-core-identity/
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+												if (!ModelState.IsValid)
+												{
+																return BadRequest(new AuthFailedResponse
+																{
+																				Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
+																}
+																);
+            }
+
+            var authResult = await _identityService.StartPasswordResetAsync(request.Email, GetIpAddress());
+
+            if (!authResult.Success)
+            {
+                return BadRequest(authResult);
+            }
+
+            return Ok(authResult);
+        }
+
+        [HttpGet("reset-password/{id}")]
+        public async Task<IActionResult> ResetPassword(string id, string t)
+        {
+            if (id == null || t == null)
+            {
+                return BadRequest();
+            }
+
+            var userResult = await _identityService.GetUserById(id);
+            if (!userResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = userResult.Errors
+                });
+            }
+
+            return Ok(new
+            {
+                Token = t
+            });
+        }
+
+        [HttpPost("reset-password/{id}")]
+        public async Task<IActionResult> ResetPassword(string id, [FromBody] ResetPasswordRequest request)
+        {
+            {
+                if (id == null || request.Token == null)
+                {
+                    return BadRequest();
+                }
+
+                if (!_identityService.IsValidPassword(request.Password))
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = new[] { "Password does not meet requirements." }
+                    });
+                }
+
+                if (request.Password != request.Password2)
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = new[] { "Passwords do not match." }
+                    });
+                }
+
+                var userResult = await _identityService.GetUserById(id);
+                if (!userResult.Success)
+                {
+                    return BadRequest(new AuthFailedResponse
+                    {
+                        Errors = userResult.Errors
+                    });
+                }
+
+                var result = await _identityService.ResetPasswordAsync(userResult.User, request.Token, request.Password);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result);
+                }
+                return Ok(result);
+            }
+        }
+
+        /// <summary>
         /// Refreshes user token through cookie
         /// </summary>
         /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
@@ -123,11 +255,9 @@ namespace Poppin.Controllers
 
             if (response == null)
             {
-                var errors = new List<string>();
-                errors.Add("Invalid token");
                 return Unauthorized(new AuthFailedResponse
                 {
-                    Errors = errors
+                    Errors = new[] { "Invalid token" }
                 });
             }
 
@@ -154,11 +284,9 @@ namespace Poppin.Controllers
 
             if (string.IsNullOrEmpty(token))
             {
-                var errors = new List<string>();
-                errors.Add("Token is required");
                 return BadRequest(new AuthFailedResponse
                 {
-                    Errors = errors
+                    Errors = new[] { "Token is required" }
                 });
             }
 
@@ -166,11 +294,9 @@ namespace Poppin.Controllers
 
             if (!response)
             {
-                var errors = new List<string>();
-                errors.Add("Token not found");
                 return NotFound(new AuthFailedResponse
                 {
-                    Errors = errors
+                    Errors = new[] { "Token not found" }
                 });
             }
 
@@ -198,7 +324,138 @@ namespace Poppin.Controllers
             {
                 User = userResult.User
             });
+        }
+
+        [HttpGet("{id}/refresh-tokens")]
+        public async Task<IActionResult> GetRefreshTokens(string id)
+        {
+            var userResult = await _identityService.GetUserById(id);
+            if (userResult.User == null) return NotFound();
+
+            return Ok(userResult.User.RefreshTokens);
+        }
+
+        // ====================== OAUTH STUFF ====================== //
+
+        // FACEBOOK
+        /// <summary>
+        /// Retrieve URL to FB login interface. Will redirect to /api/identity/facebook-auth with auth code
+        /// </summary>
+        /// <returns>{ fbLoginUri }</returns>
+        [HttpGet("facebook-login-uri")]
+        public IActionResult FacebookLoginUri()
+								{
+            var parameters = new NameValueCollection();
+            parameters["client_id"] = _oAuthSettings.Facebook.ClientId;
+            parameters["redirect_uri"] = this.Url.Action(nameof(FacebookAuth), nameof(IdentityController), null, "https");
+            parameters["state"] = stateGuid;
+
+            var uri = new UriBuilder("https", "www.facebook.com");
+            uri.Path = "v8.0/dialog/oauth";
+            uri.Query = parameters.ToString();
+            return Ok(new { fbLoginUri = uri.ToString() });
 								}
+
+        /// <summary>
+        /// Callback handler for FB login interface.
+        /// Will log user in if successful
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns cref="AuthSuccessResponse"></returns>
+        [HttpGet("facebook-auth")]
+        public async Task<IActionResult> FacebookAuth(string code)
+        {
+            var handler = _oAuthHandler.Services["Facebook"];
+            try
+            {
+                var accessTokenResult = await handler.GetAccessTokenAsync(code, this.Url.Action(nameof(FacebookAuth), nameof(IdentityController), null, "https"));
+                return await FacebookLogin(new OAuthLoginRequest { AccessToken = accessTokenResult.AccessToken });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = new[] { ex.Message }
+                });
+            }
+        }
+
+        /// <summary>
+        /// If access token is aqcuired elsewhere, or stored
+        /// </summary>
+        /// <param name="accessToken"></param>
+        /// <returns cref="AuthSuccessResponse"></returns>
+        [HttpPost("facebook-login")]
+        public async Task<IActionResult> FacebookLogin(OAuthLoginRequest request)
+        {
+            var handler = _oAuthHandler.Services["Facebook"];
+            var accessToken = request.AccessToken;
+            var tokenValidation = await handler.ValidateAccessTokenAsync(accessToken);
+
+            if (!tokenValidation.IsValid)
+												{
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = new[] { "Invalid Facebook token" }
+                });
+												}
+
+            var userInfo = await handler.GetUserInfoAsync(accessToken);
+            if (userInfo.Email == null)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = new[] { "Something went wrong." }
+                });
+            }
+            var loginResult = await _identityService.OAuthLoginAsync(userInfo.Email, GetIpAddress());
+
+            if (!loginResult.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = loginResult.Errors
+                });
+            }
+
+            SetTokenCookie(loginResult.RefreshToken);
+            return Ok(new AuthSuccessResponse
+            {
+                Token = loginResult.Token,
+                RefreshToken = loginResult.RefreshToken
+            });
+        }
+
+        [HttpGet("facebook-deauth")]
+        public async Task<IActionResult> FacebookDeauth(string token)
+        {
+            return Ok();
+        }
+
+        [HttpGet("facebook-delete")]
+        public async Task<IActionResult> FacebookDelete(string token)
+        {
+            return Ok();
+        }
+
+        // GOOGLE
+        [HttpGet("google-auth")]
+        public async Task<IActionResult> GoogleAuth(string token)
+        {
+            return Ok();
+        }
+
+        [HttpGet("google-deauth")]
+        public async Task<IActionResult> GoogleDeauth(string token)
+        {
+            return Ok();
+        }
+
+        [HttpGet("google-delete")]
+        public async Task<IActionResult> GoogleDelete(string token)
+        {
+            return Ok();
+        }
 
         /// <summary>
         /// Gets user id claim from current token
@@ -211,15 +468,6 @@ namespace Poppin.Controllers
                 return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
             }
             return string.Empty;
-        }
-
-        [HttpGet("{id}/refresh-tokens")]
-        public async Task<IActionResult> GetRefreshTokens(string id)
-        {
-            var userResult = await _identityService.GetUserById(id);
-            if (userResult.User == null) return NotFound();
-
-            return Ok(userResult.User.RefreshTokens);
         }
 
         // helper methods

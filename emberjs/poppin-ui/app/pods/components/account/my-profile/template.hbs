@@ -1,0 +1,30 @@
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">My Account</h4>
+		</div>
+		<div class="card-body">
+			<dl>
+				<dt>Name:</dt>
+				<dd>{{@profile.firstName}} {{@profile.lastName}}</dd>
+				<dt>Email:</dt>
+				<dd>{{@profile.email}}</dd>
+				<dt>Role:</dt>
+				<dd>{{@profile.role}}</dd>
+			</dl>
+		</div>
+	</div>
+</div>
+
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">My Favorites</h4>
+		</div>
+		<div class="card-body">
+			<Locations::LocationList
+			 @locations={{@favorites}}
+			 @clickAction={{@locationClickAction}}/>
+		</div>
+	</div>
+</div>
