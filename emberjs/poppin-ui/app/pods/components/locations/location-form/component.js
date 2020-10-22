@@ -68,7 +68,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
 	@tracked hours = _.merge(defHours);
-	@tracked visitLength = '45';
+	@tracked visitLength = 45;
 
 	@tracked modalTitle;
 	@tracked modalText;
@@ -85,14 +85,14 @@ export default class LocationFormComponent extends StatefulComponent {
 				line2: this.addressLine2,
 				city: this.city,
 				state: this.state,
-				zipCode: parseInt(this.zipCode, 10),
+				zipCode: this.zipCode,
 				geo: this.geo
 			},
 			categories: [],
 			capacity: parseInt(capacity, 10),
 			crowdSize: parseInt(crowdSize, 10),
 			hours,
-			visitLength
+			visitLength: parseInt(visitLength, 10)
 		};
 	}
 

@@ -280,7 +280,7 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -314,17 +314,50 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            var checkin = new Checkin(locationId, userId, location.VisitLength, ReliabilityScores.User);
+            var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
+            var checkin = new Checkin(locationId, userId, location.VisitLength, score);
+            await _locationService.NewCheckin(checkin);
+            await location.SetCrowdSize(_locationService);
 
             var action = new Dictionary<string, string>()
             {
                 { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin);
+            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
 
-            return Ok(_locationService.NewCheckin(checkin));
-								}
+            return Ok(location);
+        }
+
+        [HttpGet("geo-checkin/{locationId}")]
+        public async Task<IActionResult> GeoCheckIn(string locationId)
+        {
+            var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
+            var location = await _locationService.Get(locationId);
+
+            if (location == null)
+            {
+                var errors = new List<string>();
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
+
+            var checkin = new Checkin(locationId, userId, location.VisitLength, ReliabilityScores.Geo);
+            await _locationService.NewCheckin(checkin);
+            await location.SetCrowdSize(_locationService);
+
+            var action = new Dictionary<string, string>()
+            {
+                { "LocationId", location.Id }
+            };
+            _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
+            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+
+            return Ok(location);
+        }
 
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]

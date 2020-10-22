@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
+				[BsonIgnoreExtraElements]
 				public class PoppinLocation
 				{
 
@@ -26,6 +27,7 @@ namespace Poppin.Models
 												Address = new Address(v.Address);
 												Capacity = v.Capacity;
 												Hours = v.Hours;
+												VisitLength = v.VisitLength;
 								}
 
 								public PoppinLocation(YelpBusiness v)
