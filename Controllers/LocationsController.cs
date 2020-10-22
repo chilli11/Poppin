@@ -516,8 +516,8 @@ namespace Poppin.Controllers
             PoppinUser profile = _userService.GetUserById(id).Result;
             if (profile == null)
 												{
-                _userService.AddUser(new PoppinUser(_identityService.GetUserById(id).Result.User));
-                profile = _userService.GetUserById(id).Result;
+                profile = new PoppinUser(_identityService.GetUserById(id).Result.User);
+                _userService.AddUser(profile);
             }
             return profile;
 								}

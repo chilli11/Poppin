@@ -405,7 +405,7 @@ namespace Poppin.Controllers
                     Errors = new[] { "Something went wrong." }
                 });
             }
-            var loginResult = await _identityService.OAuthLoginAsync(userInfo.Email, GetIpAddress());
+            var loginResult = await _identityService.OAuthLoginAsync(userInfo, GetIpAddress());
 
             if (!loginResult.Success)
             {
