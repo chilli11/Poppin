@@ -17,7 +17,7 @@ namespace Poppin.Models.Tracking
 				{
 								public Checkin(string locationId, string userId, int visitLength, double reliabilityScore)
 								{
-												UserId = UserId;
+												UserId = userId;
 												LocationId = locationId;
 												Timestamp = DateTime.Now;
 												Timeout = DateTime.Now.AddMinutes(visitLength);

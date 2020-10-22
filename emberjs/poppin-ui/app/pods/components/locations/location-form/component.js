@@ -85,7 +85,7 @@ export default class LocationFormComponent extends StatefulComponent {
 				line2: this.addressLine2,
 				city: this.city,
 				state: this.state,
-				zipCode: parseInt(this.zipCode, 10),
+				zipCode: this.zipCode,
 				geo: this.geo
 			},
 			categories: [],
