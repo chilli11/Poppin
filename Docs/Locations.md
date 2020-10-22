@@ -27,9 +27,9 @@ Reference for `api/locations` endpoints
   crowdsize: int,
   visitLength: int,
   hours: [{
-  		opening: string, // 11:00
-  		closing: string, // 22:00
-  		day: string // "Monday"
+    opening: string, // 11:00
+    closing: string, // 22:00
+    day: string // "Monday"
   }],
   lastUpdate: Date,
   atCapacity: bool
@@ -40,29 +40,29 @@ Reference for `api/locations` endpoints
 #### PoppinLocationRequest Class
 ```
 {
- 	id: string,
- 	yelpId: string,
- 	name: string,
- 	phone: string,
- 	address: {
- 	  line1: string,
- 	  line2: string,
- 	  city: string,
- 	  state: string,
- 	  zipCode: string,
- 	  coordinates: {
- 	  		latitude: float,
- 	  		longitude: float
- 	  }
- 	  geo: GeoJsonPoint
- 	},
- 	capacity: int,
- 	visitLength: int,
- 	hours: [{
- 			opening: string, // 11:00
- 			closing: string, // 22:00
- 			day: string // "Monday"
- 	}],
+  id: string,
+  yelpId: string,
+  name: string,
+  phone: string,
+  address: {
+    line1: string,
+    line2: string,
+    city: string,
+    state: string,
+    zipCode: string,
+    coordinates: {
+    		latitude: float,
+    		longitude: float
+    }
+    geo: GeoJsonPoint
+  },
+  capacity: int,
+  visitLength: int,
+  hours: [{
+  		opening: string, // 11:00
+  		closing: string, // 22:00
+  		day: string // "Monday"
+  }],
 }
 ```
 
@@ -120,7 +120,8 @@ Redis integration. This will not be deprecated with `api/locations/yelp-search`
 ### POST api/locations/yelp-search (deprecated)
 Request: YelpBusinessSearchParams
 Response: 
-```{
+```
+{
   total: int,
   businesses: PoppinLocation[],
   region: {

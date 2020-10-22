@@ -6,13 +6,15 @@ Poppin app
 See API formats in Swagger docs @ /swagger in dev or local
 
 ## Locations
+[Reference](Docs/Locations.md)
 
-All location information can be found and updated from /locations APIs. These APIs use a basic cache. 
+All location information can be found and updated from /locations APIs. These APIs use a basic cache (TODO: Redis). 
 
 `GET /api/locations/{locationId}`: does not return Yelp data unless it's been previously retrieved and in cache; don't expect it.
 + use `GET /api/locations/with-yelp/{locationId}` instead
 
 ### Checkins
+[Reference](Docs/Locations.md#checkins)
 
 `​GET /api​/Locations​/checkin​/{locationId}`: Can be anonymous, represents a user initiated check in
 + Has a value of 1.5
