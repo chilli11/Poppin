@@ -381,7 +381,7 @@ namespace Poppin.Controllers
         }
 
         // GET: api/Locations/incrementCrowd/5
-        [HttpGet("incrementCrowd/{locationId}")]
+        [HttpGet("increment-crowd/{locationId}")]
         [Authorize]
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> IncrementCrowd(string locationId)
@@ -422,7 +422,7 @@ namespace Poppin.Controllers
         }
 
         // GET: api/Locations/decrementCrowd/5
-        [HttpGet("decrementCrowd/{locationId}")]
+        [HttpGet("decrement-crowd/{locationId}")]
         [Authorize]
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> DecrementCrowd(string locationId)
