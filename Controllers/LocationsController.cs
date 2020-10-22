@@ -241,10 +241,6 @@ namespace Poppin.Controllers
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
                 Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
                 return Ok(location);
             }
             catch(Exception e)
