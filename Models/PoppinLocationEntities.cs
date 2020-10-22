@@ -18,6 +18,7 @@ namespace Poppin.Models
 								public IYelpSearchParams SearchParams { get; set; }
 				}
 
+				[BsonIgnoreExtraElements]
 				public class Address
 				{
 								public Address() { }
