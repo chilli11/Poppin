@@ -97,7 +97,7 @@ namespace Poppin.Services
 												var builder = new UriBuilder(UserInfoUrl);
 												var parameters = HttpUtility.ParseQueryString(string.Empty);
 
-												parameters.Add("fields", "first_name,last_name,email");
+												parameters.Add("fields", "first_name,last_name,email,picture,gender");
 												parameters.Add("access_token", accessToken);
 
 												builder.Query = parameters.ToString();

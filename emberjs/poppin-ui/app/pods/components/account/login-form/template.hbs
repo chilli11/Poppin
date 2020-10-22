@@ -1,4 +1,4 @@
-<div class="col-md-6">
+<div class="col-xl-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Log In</h4>
@@ -32,10 +32,18 @@
 					@required={{true}}/>
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
 			</BsForm>
-			<fb:login-button 
+			<div class="fb-login-button"
+				data-size="medium"
+				data-button-type="login_with"
+				data-layout="rounded"
+				data-auto-logout-link="false"
+				data-use-continue-as="false"
+				data-onlogin="checkFBLoginState();"
+				data-width=""></div>
+			{{!-- <fb:login-button 
 				scope="public_profile,email"
 				onlogin="checkFBLoginState();">
-			</fb:login-button>
+			</fb:login-button> --}}
 			Don't have an account? <LinkTo @route="account.register">Sign up</LinkTo>.
 		</div>
 	</div>

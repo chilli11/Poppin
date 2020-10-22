@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Poppin.Configuration;
 using Poppin.Interfaces;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Identity.OAuth;
 using Poppin.Models.Tracking;
@@ -30,12 +31,14 @@ namespace Poppin.Services
 								private readonly JwtSettings _jwtSettings;
 								private readonly UserManager<User> _userManager;
 								private readonly ISmtpService _smtpService;
+								private readonly IUserService _userService;
 
-								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings, ISmtpService smtpService)
+								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings, ISmtpService smtpService, IUserService userService)
 								{
 												_jwtSettings = jwtSettings;
 												_userManager = userMgr;
 												_smtpService = smtpService;
+												_userService = userService;
 								}
 
 								public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress)
@@ -145,16 +148,16 @@ namespace Poppin.Services
 												return GenerateAuthenticationResultForUser(user, ipAddress);
 								}
 
-								public async Task<AuthenticationResult> OAuthLoginAsync(string email, string ipAddress)
+								public async Task<AuthenticationResult> OAuthLoginAsync(IUserInfoResult userInfo, string ipAddress)
 								{
-												var user = await _userManager.FindByEmailAsync(email);
+												var user = await _userManager.FindByEmailAsync(userInfo.Email);
 												if (user == null)
 												{
 																user = new User
 																{
 																				Id = Guid.NewGuid().ToString(),
-																				Email = email,
-																				UserName = email,
+																				Email = userInfo.Email,
+																				UserName = userInfo.Email,
 																				Role = RoleTypes.User
 																};
 																var createdUser = await _userManager.CreateAsync(user);
@@ -166,6 +169,22 @@ namespace Poppin.Services
 																								Success = false,
 																								Errors = createdUser.Errors.Select(e => e.Description)
 																				};
+																}
+
+																try
+																{
+
+																				var profile = new PoppinUser(user)
+																				{
+																								ProfilePhoto = userInfo.PictureUrl,
+																								FirstName = userInfo.FirstName,
+																								LastName = userInfo.LastName
+																				};
+																				await _userService.AddUser(profile);
+																}
+																catch (Exception ex)
+																{
+
 																}
 
 																// Segment.io Analytics

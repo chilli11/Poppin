@@ -31,6 +31,6 @@ export default class NavBarComponent extends Component {
 	@action
 	logout() {
 		return this.accountService.logout()
-			.then(this.router.transitionTo('account'));
+			.then(this.router.transitionTo('index'));
 	}
 }

@@ -11,7 +11,7 @@ namespace Poppin.Interfaces
 								Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress);
 								Task<IdentityResult> ConfirmEmailAsync(User user, string token);
 								Task<AuthenticationResult> LoginAsync(string email, string password, string ipAddress);
-								Task<AuthenticationResult> OAuthLoginAsync(string email, string ipAddress);
+								Task<AuthenticationResult> OAuthLoginAsync(IUserInfoResult userInfo, string ipAddress);
 								Task<AuthenticationResult> StartPasswordResetAsync(string email, string ipAddress);
 								Task<IdentityResult> ResetPasswordAsync(User user, string token, string password);
 								Task<UserDataResult> GetUserById(string identifier);

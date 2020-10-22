@@ -26,7 +26,6 @@ namespace Poppin.Controllers
 				[ApiController]
 				public class ProfileController : ControllerBase
 				{
-								private readonly IHttpContextAccessor _httpContextAccessor;
 								private readonly IUserService _userService;
 								private readonly IIdentityService _identityService;
 								private readonly ILogActionService _logActionService;
@@ -37,13 +36,11 @@ namespace Poppin.Controllers
 								public ProfileController(
 												IIdentityService identityService,
 												IUserService userService,
-												IHttpContextAccessor httpContextAccessor,
 												ILogActionService logActionService,
 												ILocationService locationService)
 								{
 												_identityService = identityService;
 												_userService = userService;
-												_httpContextAccessor = httpContextAccessor;
 												_logActionService = logActionService;
 												_locationService = locationService;
 								}
@@ -387,9 +384,9 @@ namespace Poppin.Controllers
 
 								private string GetUserId()
 								{
-												if (_httpContextAccessor.HttpContext.User.Claims.Any())
+												if (HttpContext.User.Claims.Any())
 												{
-																var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																var id = HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
 																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
 																return id;
 												}
@@ -398,9 +395,9 @@ namespace Poppin.Controllers
 
 								private string GetUserId(string action)
 								{
-												if (_httpContextAccessor.HttpContext.User.Claims.Any())
+												if (HttpContext.User.Claims.Any())
 												{
-																var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+																var id = HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
 																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
 																return id;
 												}
@@ -409,9 +406,9 @@ namespace Poppin.Controllers
 
 								private string GetUserRole()
 								{
-												if (_httpContextAccessor.HttpContext.User.Claims.Any())
+												if (HttpContext.User.Claims.Any())
 												{
-																return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
+																return HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
 												}
 												return string.Empty;
 								}
