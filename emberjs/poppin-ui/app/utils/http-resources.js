@@ -27,12 +27,12 @@ const HttpResources = {
 		method: POST
 	},
 	incrementCrowd: {
-		url: 'locations/incrementCrowd/:locId',
+		url: 'locations/increment-crowd/:locId',
 		method: GET,
 		params: ['locId']
 	},
 	decrementCrowd: {
-		url: 'locations/decrementCrowd/:locId',
+		url: 'locations/decrement-crowd/:locId',
 		method: GET,
 		params: ['locId']
 	},
