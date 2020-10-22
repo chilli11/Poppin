@@ -51,8 +51,8 @@ Reference for `api/locations` endpoints
  	  state: string,
  	  zipCode: string,
  	  coordinates: {
- 	  				latitude: float,
- 	  				longitude: float
+ 	  		latitude: float,
+ 	  		longitude: float
  	  }
  	  geo: GeoJsonPoint
  	},
@@ -70,20 +70,20 @@ Reference for `api/locations` endpoints
 All fields are strings, but represent other types for Yelp Fusion API
 ```
 {
-	  term: string,
-	  location: string, // required if no lat/lon,
-	  latitude: string, // lat/lon required if no location
-	  longitude: string,
-	  radius: string, // float, in meters
-	  categories: string, // comma separated list of aliases from Yelp category list
-	  locale: string,
-	  limit: string, // int, for pagination
-	  offset: string // int, for pagination
-	  sort_by: string,
-	  price: string,
-	  open_now: string, // bool
-	  open_at: string,
-	  attributes: string, // comma separated list
+  term: string,
+  location: string, // required if no lat/lon,
+  latitude: string, // lat/lon required if no location
+  longitude: string,
+  radius: string, // float, in meters
+  categories: string, // comma separated list of aliases from Yelp category list
+  locale: string,
+  limit: string, // int, for pagination
+  offset: string // int, for pagination
+  sort_by: string,
+  price: string,
+  open_now: string, // bool
+  open_at: string,
+  attributes: string, // comma separated list
 }
 ```
 
@@ -92,7 +92,7 @@ All fields are strings, but represent other types for Yelp Fusion API
 ### GET api/locations/{locationId}
 Return: `PoppinLocation` without `yelpDetails`
 
-### PUT api/locations` or `PUT api/locations/{locationId}
+### PUT api/locations or PUT api/locations/{locationId}
 *Requires Admin role*
 Request: PoppinLocationRequest
 Return: updated `PoppinLocation` without Yelp Details
