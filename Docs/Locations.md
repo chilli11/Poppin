@@ -93,21 +93,21 @@ All fields are strings, but represent other types for Yelp Fusion API
 Return: `PoppinLocation` without `yelpDetails`
 
 ### PUT api/locations or PUT api/locations/{locationId}
-*Requires Admin role*
-Request: PoppinLocationRequest
+*Requires Admin role*  
+Request: PoppinLocationRequest  
 Return: updated `PoppinLocation` without Yelp Details
 
 Updates existing PoppinLocation
 
 ### DELETE api/locations/{locationId}
-*Requires Admin role*
-Request: Empty
+*Requires Admin role*  
+Request: Empty  
 Return: Empty
 
 Deletes existing PoppinLocation
 
 ### GET api/locations/with-yelp/{locationId}
-Request: Empty
+Request: Empty  
 Return: `PoppinLocation`
 
 Due to the daily request limit on Yelp's Fusion API (5000), we have to limit the number of requests for their data,
@@ -118,7 +118,7 @@ TODO: Implement GraphAPI to get details as needed. Potentially higher usage limi
 Redis integration. This will not be deprecated with `api/locations/yelp-search`
 
 ### POST api/locations/yelp-search (deprecated)
-Request: YelpBusinessSearchParams
+Request: YelpBusinessSearchParams  
 Response: 
 ```
 {
@@ -141,11 +141,11 @@ results will be noisy because of results that aren't relevant to us.
 Native search is ready and being tested.
 
 ### POST api/locations
-Request: PoppinLocationRequest
+Request: PoppinLocationRequest  
 Response: PoppinLocation
 
 ## Checkins
-Each `Checkin` has a reliability score attached.
+Each `Checkin` has a reliability score attached.  
 - User direct checkin: 1.5
 - Vendor checkin (increment- or decrement-crowd): 1
 - User geogrpahic checkin: .5
@@ -154,25 +154,25 @@ Each `Checkin` has a reliability score attached.
 timed out or been invalidated)
 
 ### GET api/locations/checkin/{locationId}
-Request: Empty
+Request: Empty  
 Response: PoppinLocation with updated `crowdSize`
 
 User direct checkin (score 1.5)
 
 ### GET api/locations/geo-checkin/{locationId}
-Request: Empty
+Request: Empty  
 Response: PoppinLocation with updated `crowdSize`
 
 User geo checkin (score .5)
 
 ### GET api/locations/increment-crowd/{locationId}
-Request: Empty
+Request: Empty  
 Repsonse: PoppinLocation with updated `crowdSize
 
 Vendor checkin (score 1)
 
 ### GET api/locations/decrement-crowd/{locationId}
-Request: Empty
+Request: Empty  
 Repsonse: PoppinLocation with updated `crowdSize
 
 Invalidates *oldest* checkin at the location 
