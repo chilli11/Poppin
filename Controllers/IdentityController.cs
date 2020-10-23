@@ -198,7 +198,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            return Ok(new
+            return Ok(new AuthSuccessResponse
             {
                 Token = t
             });
