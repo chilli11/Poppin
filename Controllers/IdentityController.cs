@@ -168,10 +168,17 @@ namespace Poppin.Controllers
 
             if (!authResult.Success)
             {
-                return BadRequest(authResult);
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResult.Errors
+                });
             }
 
-            return Ok(authResult);
+            return Ok(new AuthSuccessResponse
+            {
+                Token = authResult.Token,
+                RefreshToken = authResult.RefreshToken
+            });
         }
 
         [HttpGet("reset-password/{id}")]
