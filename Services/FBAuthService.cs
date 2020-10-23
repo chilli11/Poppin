@@ -18,9 +18,9 @@ namespace Poppin.Services
 								private const string TokenValidationUrl = "https://graph.facebook.com/debug_token";
 								private const string UserInfoUrl = "https://graph.facebook.com/me";
 
-								private readonly OAuthSettings _oAuthSettings;
+								private readonly IOAuthSettings _oAuthSettings;
 
-								public FBAuthService(OAuthSettings oAuthSettings, HttpClient httpClient)
+								public FBAuthService(IOAuthSettings oAuthSettings, HttpClient httpClient)
 								{
 												_oAuthSettings = oAuthSettings;
 												_httpClient = httpClient;

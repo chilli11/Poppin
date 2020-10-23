@@ -27,11 +27,11 @@ namespace Poppin.Services
 				/// </summary>
 				public class IdentityService : IIdentityService
 				{
-								private readonly JwtSettings _jwtSettings;
+								private readonly IJwtSettings _jwtSettings;
 								private readonly UserManager<User> _userManager;
 								private readonly ISmtpService _smtpService;
 
-								public IdentityService(UserManager<User> userMgr, JwtSettings jwtSettings, ISmtpService smtpService)
+								public IdentityService(UserManager<User> userMgr, IJwtSettings jwtSettings, ISmtpService smtpService)
 								{
 												_jwtSettings = jwtSettings;
 												_userManager = userMgr;

@@ -5,7 +5,12 @@ using System.Threading.Tasks;
 
 namespace Poppin.Configuration
 {
-				public class JwtSettings
+				public class JwtSettings : IJwtSettings
+				{
+								public string Secret { get; set; }
+				}
+
+				public interface IJwtSettings
 				{
 								public string Secret { get; set; }
 				}

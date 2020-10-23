@@ -13,10 +13,9 @@ namespace Poppin.Services
 								private const string AccessTokenUrl = "";
 								private const string TokenValidationUrl = "";
 								private const string UserInfoUrl = "";
+								IOAuthSettings _oAuthSettings;
 
-								private readonly OAuthSettings _oAuthSettings;
-
-								public GoogleAuthService(OAuthSettings oAuthSettings, HttpClient httpClient)
+								public GoogleAuthService(IOAuthSettings oAuthSettings, HttpClient httpClient)
 								{
 												_oAuthSettings = oAuthSettings;
 												_httpClient = httpClient;

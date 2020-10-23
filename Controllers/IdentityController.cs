@@ -26,20 +26,17 @@ namespace Poppin.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly OAuthSettings _oAuthSettings;
+        private readonly IOAuthSettings _oAuthSettings;
         private readonly IOAuthHandler _oAuthHandler;
         private readonly string stateGuid = "8d97a48c-c825-47e0-862b-3103fbd0382d";
 
         public IdentityController(
             IIdentityService idService,
-            IHttpContextAccessor httpContextAccessor,
-            OAuthSettings oAuthSettings,
+            IOAuthSettings oAuthSettings,
             IOAuthHandler oAuthHandler
         )
         {
             _identityService = idService;
-            _httpContextAccessor = httpContextAccessor;
             _oAuthSettings = oAuthSettings;
             _oAuthHandler = oAuthHandler;
         }
@@ -463,9 +460,9 @@ namespace Poppin.Controllers
         /// <returns>String</returns>
         private string GetUserId()
         {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
+            if (HttpContext.User.Claims.Any())
             {
-                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
+                return HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
             }
             return string.Empty;
         }

@@ -43,20 +43,28 @@ namespace Poppin
 
 												// JWT
 												var jwtSettings = new JwtSettings();
-												var oAuthSettings = new OAuthSettings();
-												var hereSettings = new HERESettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
-												Configuration.Bind(nameof(oAuthSettings), oAuthSettings);
-												Configuration.Bind(nameof(hereSettings), hereSettings);
+												
+												services.Configure<JwtSettings>(
+																Configuration.GetSection(nameof(JwtSettings)));
+												services.AddTransient<IJwtSettings, JwtSettings>(sp =>
+																sp.GetRequiredService<IOptions<JwtSettings>>().Value);
 
-												services.AddSingleton(jwtSettings);
-												services.AddSingleton(oAuthSettings);
-												services.AddSingleton(hereSettings);
+												services.Configure<OAuthSettings>(
+																Configuration.GetSection(nameof(OAuthSettings)));
+												services.AddTransient<IOAuthSettings, OAuthSettings>(sp =>
+																sp.GetRequiredService<IOptions<OAuthSettings>>().Value);
+
+												services.Configure<HERESettings>(
+																Configuration.GetSection(nameof(HERESettings)));
+												services.AddTransient<IHERESettings, HERESettings>(sp =>
+																sp.GetRequiredService<IOptions<HERESettings>>().Value);
+
 												services.AddHttpClient<FBAuthService>();
 												services.AddHttpClient<GoogleAuthService>();
 												services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();
-												services.AddScoped<IOAuthHandler, OAuthHandler>();
-												services.AddScoped<IIdentityService, IdentityService>();
+												services.AddTransient<IOAuthHandler, OAuthHandler>();
+												services.AddTransient<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
 												{
 																a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -85,7 +93,7 @@ namespace Poppin
 												// requires using Microsoft.Extensions.Options
 												services.Configure<MongoDBSettings>(
 																Configuration.GetSection(nameof(MongoDBSettings)));
-												services.AddSingleton<IMongoDBSettings, MongoDBSettings>(sp =>
+												services.AddTransient<IMongoDBSettings, MongoDBSettings>(sp =>
 																sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 												services.AddHostedService<ConfigureMongoDbIndexesService>();
 
@@ -94,13 +102,12 @@ namespace Poppin
 												Segment.Analytics.Initialize(segmentSettings.Key);
 
 												services.Configure<Office365Settings>(Configuration.GetSection(nameof(Office365Settings)));
-												services.AddSingleton<ISmtpService, SmtpService>();
+												services.AddTransient<ISmtpService, SmtpService>();
 
-												services.AddSingleton<ILocationService, LocationService>();
-												services.AddSingleton<IVendorService, VendorService>();
-												services.AddSingleton<IUserService, UserService>();
-												services.AddSingleton<ILogActionService, LogActionService>(); 
-												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+												services.AddTransient<ILocationService, LocationService>();
+												services.AddTransient<IVendorService, VendorService>();
+												services.AddTransient<IUserService, UserService>();
+												services.AddTransient<ILogActionService, LogActionService>(); 
 												services.AddHttpClient<IYelpService, YelpService>();
 
 												services.AddControllersWithViews();

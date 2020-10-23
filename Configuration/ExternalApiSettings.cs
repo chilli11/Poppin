@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace Poppin.Configuration
 {
-				public class OAuthSettings
+				public class OAuthSettings : IOAuthSettings
+				{
+								public OAuthKeySet Google { get; set; }
+								public OAuthKeySet Facebook { get; set; }
+				}
+
+				public interface IOAuthSettings
 				{
 								public OAuthKeySet Google { get; set; }
 								public OAuthKeySet Facebook { get; set; }
@@ -17,13 +23,19 @@ namespace Poppin.Configuration
 								public string ClientId { get; set; }
 				}
 
-				public class HERESettings
+				public class HERESettings : IHERESettings
 				{
 								public string AppId { get; set; }
 								public string ApiKey { get; set; }
 				}
 
-    public class SegmentSettings
+				public interface IHERESettings
+				{
+								public string AppId { get; set; }
+								public string ApiKey { get; set; }
+				}
+
+				public class SegmentSettings
 				{
 								public string Key { get; set; }
 				}

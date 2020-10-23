@@ -16,10 +16,10 @@ namespace Poppin.Services
 				public class HEREGeocoder : IHEREGeocoder
 				{
 								private HttpClient _httpClient;
-								private HERESettings _hereSettings;
+								private IHERESettings _hereSettings;
 								private string _apiUrl = "https://{0}.search.hereapi.com/v1/{0}";
 
-								public HEREGeocoder(HttpClient httpClient, HERESettings hereSettings)
+								public HEREGeocoder(HttpClient httpClient, IHERESettings hereSettings)
 								{
 												_httpClient = httpClient;
 												_hereSettings = hereSettings;
