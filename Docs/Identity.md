@@ -35,7 +35,7 @@ Extends Microsoft.AspNetCore.Identity.IdentityUser
 Any failures will get a 400 or 404 with an `AuthFailedResponse`
 
 ### GET api/identity/is-authenticated
-Request: Empty
+Request: Empty  
 Response: 200/401
 
 Simple check for authentication. Include the most recent Bearer token in the headers
@@ -52,7 +52,7 @@ Request:
 Response: AuthSuccessResponse
 
 ### GET api/identity/confirm-email/{id}
-Request: `{ t: string }` // auth token
+Request: `{ t: string }` // auth token  
 Response: AuthSuccessResponse
 
 ### POST api/identity/login
@@ -66,13 +66,13 @@ Request:
 Response: AuthSuccessResponse
 
 ### POST api/identity/forgot-password
-Request: `{ email: string }`
+Request: `{ email: string }`  
 Response: AuthSuccessResponse
 
 Initiates password reset email to email address on file
 
 ### GET api/identity/reset-password/{id}
-Request: `{ t: string }` // auth token
+Request: `{ t: string }` // auth token  
 Response: AuthSuccessResponse
 
 This is the url that the UI will hit after the user click's the link in their email. It will validate
@@ -92,40 +92,40 @@ Response: AuthSuccessResponse
 The endpoint will validate the token again, then reset the password if it meets requirements.
 
 ### POST api/identity/refresh-token
-Request: Empty
+Request: Empty  
 Response: AuthSuccessResponse
 
 Checks the cookies for a valid refresh token
 
 ### POST api/identity/revoke-token
-Request: RevokeTokenRequest
+Request: RevokeTokenRequest  
 Response: `{ message: string }`
 
 ### POST api/identity/me
-Request: Empty
+Request: Empty  
 Response: UserSuccessResponse
 
 Returns Identity data, *not user profile data* (see [User Profiles](./UserProfiles.md))
 
 ### GET api/identity/{id}/refresh-tokens
-Request: Empty
+Request: Empty  
 Response: string[] // refresh tokens
 
 ### GET api/identity/facebook-login-uri
-Request: Empty
+Request: Empty  
 Response: `{ fbLoginUri: string }`
 
 Returns a url that will load a facebook login interface. Not currently in use.
 
 ### GET api/identity/facebook-auth
-Request: `{ code: string }`
+Request: `{ code: string }`  
 Response: AuthSuccessResponse
 
 Handles the callback from the Facebook login interface.
 Validates the code, then runs the FacebookLogin method implemented in `POST api/identity/facebook-login`
 
 ### POST api/identity/facebook-login
-Request: `{ accessToken: string }`
+Request: `{ accessToken: string }`  
 Response: AuthSuccessResponse
 
 ### Other OAuth endpoints to come
