@@ -6,15 +6,15 @@ Reference for `api/locations` endpoints. Contains OAuth;
 #### AuthSuccessResponse
 ```
 {
-	 token: string,
-		refreshToken: string
+  token: string,
+  refreshToken: string
 }
 ```
 
 #### AuthFailedResponse
 ```
 {
-	 errors: string[]
+  errors: string[]
 }
 ```
 
@@ -22,10 +22,10 @@ Reference for `api/locations` endpoints. Contains OAuth;
 Extends Microsoft.AspNetCore.Identity.IdentityUser
 ```
 {
-	 user: {
-		  role: string,
-		  refreshTokens: string[],
-		  roleIdentity: Microsoft.AspNetCore.Identity.IdentityRole
+  user: {
+    role: string,
+    refreshTokens: string[],
+    roleIdentity: Microsoft.AspNetCore.Identity.IdentityRole
   }
 }
 ```
@@ -44,9 +44,9 @@ Simple check for authentication. Include the most recent Bearer token in the hea
 Request:
 ```
 {
-	 email: string,
-		password: string,
-		password2: string
+  email: string,
+  password: string,
+  password2: string
 }
 ```
 Response: AuthSuccessResponse
@@ -59,8 +59,8 @@ Response: AuthSuccessResponse
 Request:
 ```
 {
-	 email: string,
-		password: string
+  email: string,
+  password: string
 }
 ```
 Response: AuthSuccessResponse
@@ -82,9 +82,9 @@ the token before loading the reset form
 Request: 
 ```
 {
-	 token: string, // received by email
-		password: string,
-		password2: string
+  token: string, // received by email
+  password: string,
+  password2: string
 }
 ```
 Response: AuthSuccessResponse
