@@ -5,6 +5,8 @@ Poppin app
 # API Basics
 See API formats in Swagger docs @ /swagger in dev or local
 
+This site uses standard bearer authorization with JWT. 
+
 ## Locations
 [Reference](Docs/Locations.md)
 
@@ -21,7 +23,7 @@ All location information can be found and updated from /locations APIs. These AP
 + Vendor Checkin has value of 1 (`incrementcrowd` and `decrementcrowd`)
 + Geo Checkin has value of .5
 
-`GET /api/locations/incrementcrowd` and `GET /api/locations/decrementcrowd` are for Vendor view only.
+`GET /api/locations/increment-crowd` and `GET /api/locations/decrement-crowd` are for Vendor view only.
 
 ### Yelp
 `GET /api/yelp/match/{locactionId}`: returns just the Yelp info for the location
@@ -70,24 +72,22 @@ All location information can be found and updated from /locations APIs. These AP
     ```
 
 ## Users
+[Reference](Docs/Identity.md)
 
 Data cannot be manipulated through /identity APIs
 
 Login: `/api/identity/login`
-
 Registration: `/api/identity/register`
 + Password requirements: 1 upper, 1 lower, 1 number, 1 symbol (_!@#$%^&*)
-
 Basic User info: `POST /api/identity/me` (contains user role)
-
-Validate Auth: `GET /api/identity/is-authenticated`
-  
+Validate Auth: `GET /api/identity/is-authenticated`  
 Refresh Token: `POST /api/identity/refresh-token`
 + Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
 
 Revoke Token: `POST /api/identity/revoke-token`
   
 ### Profiles
+[Reference](Docs/Profiles.md)
   
 User Profile: `/api/profile` (GET, PUT, POST)
 
