@@ -11,4 +11,35 @@
 #siteContentWrapper.wrapper {
 	height: auto;
 	min-height: 100vh;
+	box-sizing: border-box;
+	position: relative;
+	padding-bottom: 48px;
+	padding-top: 60px;
+}
+
+#mainNavbarHeader {
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+#mainSiteFooter {
+	width: 100%;
+	height: 48px;
+	padding: 12px;
+	position: absolute;
+	bottom: 4px;
+	left: 0;
+}
+
+#getPoppin {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	overflow: hidden;
+	overflow-y: auto;
+	top: 0;
+	left: 0;
+	border: none;
 }

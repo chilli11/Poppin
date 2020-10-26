@@ -6515,6 +6515,36 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/index/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class IndexRoute extends Ember.Route {}
+
+  _exports.default = IndexRoute;
+});
+;define("poppin-ui/pods/index/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "AHwSXxd2",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"iframe\"],[14,1,\"getPoppin\"],[14,\"src\",\"http://get-poppin.com\"],[12],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/index/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/loading/route", ["exports"], function (_exports) {
   "use strict";
 
@@ -7088,14 +7118,7 @@
     }
 
     beforeModel() {
-      const names = ['account.register', 'account.login', 'account.index'];
-      this.accountService.isAuthenticated().then(response => {
-        if (response && !response.authorized && names.indexOf(this.routeName) === -1) {
-          return this.transitionTo('account.login');
-        }
-
-        return this.accountService.myProfile();
-      }).catch(() => names.indexOf(this.routeName) === -1 ? this.transitionTo('account.login') : true);
+      this.accountService.isAuthenticated();
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -8263,8 +8286,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "8HB7Rw7h",
-    "block": "{\"symbols\":[],\"statements\":[[10,\"header\"],[12],[2,\"\\n\\t\"],[8,\"admin/nav-bar\",[],[[],[]],null],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[14,1,\"siteContentWrapper\"],[14,0,\"wrapper\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"ps-container ps-theme-default\"],[12],[2,\"\\n\\t\\t\"],[10,\"nav\"],[14,0,\"navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top\"],[12],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"content\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"container\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[1,[30,[36,1],[[30,[36,0],null,null]],null]],[2,\"\\t\\t\\t\\t\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"footer\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"container-fluid\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"col\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"p\"],[12],[2,\"© 2020, UNKNWN, LLC\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"-outlet\",\"component\"]}",
+    "id": "HTRj3uWE",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"header\"],[14,1,\"mainNavbarHeader\"],[12],[2,\"\\n\\t\"],[8,\"admin/nav-bar\",[],[[],[]],null],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[14,1,\"siteContentWrapper\"],[14,0,\"wrapper\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"ps-container ps-theme-default\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"content\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"container-fluid\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[1,[30,[36,1],[[30,[36,0],null,null]],null]],[2,\"\\t\\t\\t\\t\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"footer\"],[14,1,\"mainSiteFooter\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"container-fluid\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"col\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"p\"],[12],[2,\"© 2020, UNKNWN, LLC\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"-outlet\",\"component\"]}",
     "meta": {
       "moduleName": "poppin-ui/templates/application.hbs"
     }
@@ -8721,7 +8744,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+d004731d"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+6a5398a5"});
           }
         
 //# sourceMappingURL=poppin-ui.map
