@@ -60,9 +60,12 @@ namespace Poppin.Models
 
 								public string Name { get; set; }
 								public string Phone { get; set; }
+								public string LogoUrl { get; set; }
 								public string MainPhotoUrl { get; set; }
+								public HashSet<string> AddlPhotoUrls { get; set; }
 								public string Website { get; set; }
 								public string MenuUrl { get; set; }
+								public string YelpUrl { get; set; }
 
 								public Address Address { get; set; }
 								public HashSet<string> Categories { get; set; }

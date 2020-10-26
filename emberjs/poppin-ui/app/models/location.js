@@ -5,8 +5,12 @@ export default class LocationModel extends Model {
   @attr('string') name;
   @attr('string') phone;
 	@attr address;
+	@attr('string') logoUrl;
 	@attr('string') mainPhotoUrl;
+	@attr addlPhotoUrls;
 	@attr('string') website;
+	@attr('string') menuUrl;
+	@attr('string') yelpUrl;
   @attr categories;
   @attr('number') capacity;
   @attr('number') crowdSize;

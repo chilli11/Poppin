@@ -87,7 +87,20 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked showModal = false;
 
 	get locationDTO() {
-		const { locationId, name, yelpId,  capacity, crowdSize, hours, visitLength, mainPhotoUrl, website } = this;
+		const {
+			locationId,
+			name,
+			yelpId,
+			capacity,
+			crowdSize,
+			hours,
+			visitLength,
+			logoUrl,
+			mainPhotoUrl,
+			addlPhotoUrls,
+			website,
+			yelpUrl,
+		} = this;
 		return  {
 			id: locationId,
 			yelpId: yelpId,
@@ -100,8 +113,11 @@ export default class LocationFormComponent extends StatefulComponent {
 				zipCode: this.zipCode,
 				geo: this.geo
 			},
+			logoUrl,
 			mainPhotoUrl,
+			addlPhotoUrls,
 			website,
+			yelpUrl,
 			categories: this.categoryList,
 			capacity: parseInt(capacity, 10),
 			crowdSize: parseInt(crowdSize, 10),
@@ -131,8 +147,11 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = null;
 		this.state = null;
 		this.zipCode = null;
-		this.mainPhotoUrl = null;
-		this.website = null;
+		this.logoUrl = null,
+		this.mainPhotoUrl = null,
+		this.addlPhotoUrls = [],
+		this.website = null,
+		this.yelpUrl = null,
 		this.categories = [];
 		this.capacity = 0;
 		this.hours = _.merge(defHours);
@@ -150,8 +169,11 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.city = loc.address.city;
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
+			this.logoUrl = loc.logoUrl;
 			this.mainPhotoUrl = loc.mainPhotoUrl;
+			this.addlPhotoUrls = loc.addlPhotoUrls;
 			this.website = loc.website;
+			this.yelpUrl = loc.yelpUrl;
 			this.geo = {
 				type: 'Point',
 				coordinates: loc.address.geo.coordinates.values
@@ -175,14 +197,12 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = loc.location.city;
 		this.state = loc.location.state;
 		this.zip = loc.location.zip || this.zip;
-		this.mainPhotoUrl = null;
-		this.website = null;
-		this.geo = {
+		this.yelpUrl = loc.url;
+		this.geo = this.geo || {
 			type: 'Point',
 			coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
 		};
-		this.capacity = 0;
-		this.visitLength = 45;
+		this.visitLength = this.visitLength > 0 ? this.visitLength : 45;
 		
 		const _hours = _.merge(defHours);
 		if (loc.hours && loc.hours.length) {

@@ -2,20 +2,18 @@
 	<Admin::NavBar />
 </header>
 <div id="siteContentWrapper" class="wrapper">
-	<div class="ps-container ps-theme-default">
-		<div class="content">
-			<div class="container-fluid">
-				{{outlet}}				
-			</div>
-		</div>
-	</div>
-</div>
-<footer id="mainSiteFooter">
-	<div class="">
+	<div id="mainContent" class="content">
 		<div class="container-fluid">
-			<div class="col">
-				<p>&copy; 2020, UNKNWN, LLC</p>
-			</div>
+			{{outlet}}				
 		</div>
 	</div>
-</footer>
+	<footer id="mainSiteFooter">
+		<div class="">
+			<div class="container-fluid">
+				<div class="col">
+					<p>&copy; 2020, UNKNWN, LLC</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+</div>
