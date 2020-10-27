@@ -1,24 +1,21 @@
-<header>
+<header id="mainNavbarHeader">
 	<Admin::NavBar />
 </header>
-<div class="wrapper">
-<div class="ps-container ps-theme-default">
-		<nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top"></nav>
-		<div class="content">
+<div id="siteContentWrapper" class="wrapper">
+	<div id="mainContent" class="content">
+		<div class="container-fluid">
+			<div class="row">
+				{{outlet}}				
+			</div>
+		</div>
+	</div>
+	<footer id="mainSiteFooter">
+		<div class="">
 			<div class="container-fluid">
-				<div class="row">
-					{{outlet}}						
+				<div class="col">
+					<p>&copy; 2020, UNKNWN, LLC</p>
 				</div>
 			</div>
 		</div>
-	</div>
+	</footer>
 </div>
-<footer>
-	<div class="">
-		<div class="container-fluid">
-			<div class="col">
-				<p>&copy; 2020, UNKNWN, LLC</p>
-			</div>
-		</div>
-	</div>
-</footer>

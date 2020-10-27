@@ -4,5 +4,42 @@
 @import "ember-power-select/themes/bootstrap";
 @import "ember-power-select";
 @import "material-dashboard";
-
 @import "loading-spinner.scss";
+
+#siteContentWrapper.wrapper {
+	height: auto;
+	min-height: 100vh;
+	position: relative;
+	.container, .container-fluid {
+		position: relative;
+	}
+	.content#mainContent {
+		position: relative;
+		padding-top: 90px;
+	}
+	#getPoppin {
+		width: 100%;
+		height: 100vh;
+		position: absolute;
+		overflow: hidden;
+		overflow-y: auto;
+		top: -138px;
+		left: 0;
+		border: none;
+	}
+	#mainSiteFooter {
+		width: 100%;
+		height: 48px;
+		padding: 12px;
+		position: absolute;
+		bottom: 4px;
+		left: 0;
+	}
+}
+
+#mainNavbarHeader {
+	z-index: 100;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
