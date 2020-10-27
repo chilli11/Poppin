@@ -400,7 +400,7 @@ namespace Poppin.Controllers
             var id = GetUserId(SegmentIOKeys.Actions.IncrementCrowd);
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
-                var c = new Checkin(locationId, id, location.VisitLength, ReliabilityScores.Vendor);
+                var c = new Checkin(locationId, null, location.VisitLength, ReliabilityScores.Vendor);
                 await _locationService.NewCheckin(c);
 
                 var action = new Dictionary<string, string>()
@@ -441,17 +441,27 @@ namespace Poppin.Controllers
             var id = GetUserId(SegmentIOKeys.Actions.DecrementCrowd);
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
-                await _locationService.InvalidateVendorCheckin(locationId);
-
-                var action = new Dictionary<string, string>()
+                try
                 {
-                    { "LocationId", locationId }
-                };
-                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+                    await _locationService.InvalidateVendorCheckin(locationId);
 
-                await location.SetCrowdSize(_locationService);
-                return Ok(location);
+                    var action = new Dictionary<string, string>()
+                    {
+                        { "LocationId", locationId }
+                    };
+                    _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
+                    Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+
+                    await location.SetCrowdSize(_locationService);
+                    return Ok(location);
+                }
+                catch (Exception ex)
+																{
+                    return BadRequest(new GenericFailure
+                    {
+                        Errors = new[] { "No eligible checkins to remove" }
+                    });
+																}
             }
 
             errors.Add("You don't have permission.");

@@ -15,7 +15,9 @@
 				{{#if (or @isAdmin @isVendor)}}
 					<div>
 						<h3>
-							<button {{on 'click' @decrement}}>-</button>
+							{{#if (gt @location.crowdSize 0)}}
+								<button {{on 'click' @decrement}}>-</button>
+							{{/if}}
 							{{@location.crowdSize}}
 							<button {{on 'click' @increment}}>+</button>
 						</h3>
