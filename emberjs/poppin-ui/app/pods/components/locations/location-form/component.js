@@ -1,6 +1,7 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
 import { action, set, computed } from '@ember/object';
+import { A as eArray } from '@ember/array';
 import { inject as service } from '@ember/service';
 import _ from 'lodash';
 
@@ -74,8 +75,11 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.zip ? this.zip.toString().substr(0, 5) : null;
 	}
 
+	addlPhotoUrls = eArray(['']);
+	@tracked logoUrl;
 	@tracked mainPhotoUrl;
 	@tracked website;
+	@tracked yelpUrl;
 	@tracked geo;
 	@tracked capacity = '0';
 	@tracked crowdSize = '0';
@@ -115,7 +119,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			},
 			logoUrl,
 			mainPhotoUrl,
-			addlPhotoUrls,
+			addlPhotoUrls: addlPhotoUrls.filter(p => !!p),
 			website,
 			yelpUrl,
 			categories: this.categoryList,
@@ -149,7 +153,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.zipCode = null;
 		this.logoUrl = null,
 		this.mainPhotoUrl = null,
-		this.addlPhotoUrls = [],
+		set(this, 'addlPhotoUrls', eArray([''])),
 		this.website = null,
 		this.yelpUrl = null,
 		this.categories = [];
@@ -157,8 +161,20 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.hours = _.merge(defHours);
 	}
 
+	@action
+	cancel() {
+		this.clearForm();
+		this.args.endEdit();
+	}
+
+	@action
+	addImg() {
+		this.addlPhotoUrls.pushObject("");
+	}
+
 	populateFromPoppin(location) {
 		const loc = location || this.args.location
+		const coordinates = loc.address.geo.coordinates;
 		if (loc) {
 			this.yelpEntity = loc.yelpDetails;
 			this.locationId = loc.id;
@@ -171,12 +187,12 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.zip = loc.address.zipCode;
 			this.logoUrl = loc.logoUrl;
 			this.mainPhotoUrl = loc.mainPhotoUrl;
-			this.addlPhotoUrls = loc.addlPhotoUrls;
+			set(this, 'addlPhotoUrls', loc.addlPhotoUrls || eArray(['']));
 			this.website = loc.website;
 			this.yelpUrl = loc.yelpUrl;
 			this.geo = {
 				type: 'Point',
-				coordinates: loc.address.geo.coordinates.values
+				coordinates: coordinates.values.length ? coordinates.values : coordinates
 			};
 			this.categories = (loc.categories || []).map((c) => {
 				var matches = this.poppinCategories.filter(pc => pc.slug == c);

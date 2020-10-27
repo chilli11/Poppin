@@ -20,8 +20,9 @@
 				Choose a business {{#if this.results.total}}({{this.results.total}} Result(s)){{/if}}
 			</p>
 		</div>
-		<div class="card-body">
+		<div class="card-body location-list">
 			<Locations::LocationList
+				@vendorId={{@vendorId}}
 				@locations={{this.businesses}}
 				@joinCategories={{this.joinCategories}}
 				@clickAction={{@clickAction}} />

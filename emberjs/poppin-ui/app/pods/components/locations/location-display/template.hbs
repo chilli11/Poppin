@@ -18,11 +18,11 @@
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{@isLoading}}>
 				{{#if (or @isAdmin @isVendor)}}
-					<div>
-						<h3>
-							<button {{on 'click' @decrement}}>-</button>
+					<div class="row text-center">
+						<h3 class="col-md-12">
+							<img src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
 							{{@location.crowdSize}}
-							<button {{on 'click' @increment}}>+</button>
+							<img src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
 						</h3>
 					</div>
 				{{/if}}
@@ -30,9 +30,11 @@
 					<dt>Occupancy</dt>
 					<dd>{{@location.capacity}}</dd>
 					<dt>Categories:</dt>
-					{{#each @categories as |category|}}
-						<dd>{{category.name}}</dd>
-					{{/each}}
+					<dd>
+						{{#each @categories as |category|}}
+							{{category.name}}{{unless (eq category @categories.lastObject) ' //'}}
+						{{/each}}
+					</dd>
 					<dt>Visit Length:</dt>
 					<dd>{{@location.visitLength}}</dd>
 				</dl>

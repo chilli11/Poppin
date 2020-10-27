@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 export default class AdminRoute extends Route {
 	@service accountService;
 	beforeModel() {
-		this.accountService.isAuthenticated();
+		this.accountService.isAuthenticated()
+			.then(() => this.accountService.myProfile());
 	}
 }

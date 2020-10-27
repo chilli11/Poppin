@@ -37,7 +37,7 @@
 	<modal.header>
 		<h4 class="modal-title">Add a Location</h4>
 	</modal.header>
-	<modal.body><Locations::SearchAndResults @stacked={{true}} @clickAction={{this.addLocation}} /></modal.body>
+	<modal.body><Locations::SearchAndResults @stacked={{true}} @clickAction={{this.addLocation}} @vendorId={{this.vendorId}} /></modal.body>
 	<modal.footer>
 		<BsButton @onClick={{action modal.close}}>Close</BsButton>
 	</modal.footer>

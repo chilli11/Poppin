@@ -1,5 +1,6 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { action, computed } from '@ember/object';
+import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { states, actions } from './constants';
 import { tracked } from '@glimmer/tracking';
@@ -31,7 +32,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	@computed('categoriesService.categories')
 	get fullCategories() {
 		const cats = this.categoriesService.categories;
-		return cats.filter(c => (this.args.location.categories || []).indexOf(c.slug) > -1);
+		return A(cats.filter(c => (this.args.location.categories || []).indexOf(c.slug) > -1));
 	}
 
 	get authorized() {

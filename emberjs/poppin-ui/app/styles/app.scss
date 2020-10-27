@@ -5,25 +5,28 @@
 @import "ember-power-select";
 @import "material-dashboard";
 
-@import "loading-spinner.scss";
-@import "form-fixes.scss";
-@import "location-display.scss";
+@import "loading-spinner";
+@import "bootstrap-overrides/styles";
+@import "locations/styles";
 
 #siteContentWrapper.wrapper {
 	height: auto;
 	min-height: 100vh;
 	position: relative;
+	.container, .container-fluid {
+		position: relative;
+	}
 	.content#mainContent {
 		position: relative;
-		margin-top: 90px;
+		padding-top: 90px;
 	}
 	#getPoppin {
 		width: 100%;
-		height: calc(100vh - 48px);
+		height: 100vh;
 		position: absolute;
 		overflow: hidden;
 		overflow-y: auto;
-		top: -90px;
+		top: -138px;
 		left: 0;
 		border: none;
 	}

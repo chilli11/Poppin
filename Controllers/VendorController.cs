@@ -366,7 +366,7 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> AddLocation(string vendorId, IDictionary<string, string> kvp)
 								{
 												var locationId = kvp["locationId"];
-												//var loc = await _locationService.Get(locationId);
+												var loc = await _locationService.Get(locationId);
 												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null)
 												{
@@ -384,10 +384,10 @@ namespace Poppin.Controllers
 																try
 																{
 																				vendor.LocationIds.Add(locationId);
-																				//loc.VendorId = vendorId;
+																				loc.VendorId = vendorId;
 
 																				await _vendorService.UpdateVendor(vendor);
-																				//await _locationService.Update(loc);
+																				await _locationService.Update(loc);
 																				return Ok(new VendorResult
 																				{
 																								Vendor = vendor,

@@ -250,6 +250,8 @@ namespace Poppin.Controllers
                 {
                     location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
                 }
+                _searchedLocations.Remove(location);
+                _searchedLocations.Add(location);
                 return Ok(location);
             }
             catch(Exception e)
@@ -291,6 +293,8 @@ namespace Poppin.Controllers
                 {
                     location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
                 }
+                _searchedLocations.Remove(location);
+                _searchedLocations.Add(location);
                 return Ok(location);
             }
             catch (Exception e)

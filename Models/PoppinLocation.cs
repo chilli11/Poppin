@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models
 {
-				[BsonIgnoreExtraElements]
 				public class PoppinLocation
 				{
 
@@ -26,8 +25,11 @@ namespace Poppin.Models
 												YelpId = v.YelpId;
 												Phone = v.Phone;
 												Address = new Address(v.Address);
+												LogoUrl = v.LogoUrl;
 												MainPhotoUrl = v.MainPhotoUrl;
+												AddlPhotoUrls = v.AddlPhotoUrls != null ? v.AddlPhotoUrls.ToHashSet() : null;
 												Website = v.Website;
+												YelpUrl = v.YelpUrl;
 												Capacity = v.Capacity;
 												Categories = v.Categories.ToHashSet();
 												VisitLength = v.VisitLength;
@@ -106,6 +108,21 @@ namespace Poppin.Models
 
 								public void SetCrowdSize(IEnumerable<Checkin> checkins) =>
 												CrowdSize = (int)Math.Round(checkins.Select(c => c.ReliabilityScore).Sum());
+
+								public override bool Equals(Object obj)
+								{
+												var loc1 = this;
+												var loc2 = obj as PoppinLocation;
+												if (loc1 == null && loc2 == null) { return true; }
+												if (loc1 == null | loc2 == null) { return false; }
+												if (loc1.Id == loc2.Id) { return true; }
+												return false;
+								}
+								public override int GetHashCode()
+								{
+												string code = Id;
+												return code.GetHashCode();
+								}
 				}
 
 				public class PoppinLocComparer : IEqualityComparer<PoppinLocation>
