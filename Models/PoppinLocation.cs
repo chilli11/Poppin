@@ -30,6 +30,7 @@ namespace Poppin.Models
 												MainPhotoUrl = v.MainPhotoUrl;
 												AddlPhotoUrls = v.AddlPhotoUrls != null ? v.AddlPhotoUrls.ToHashSet() : null;
 												Website = v.Website;
+												MenuUrls = v.MenuUrls;
 												YelpUrl = v.YelpUrl;
 												Capacity = v.Capacity;
 												Categories = v.Categories.ToHashSet();
@@ -67,7 +68,7 @@ namespace Poppin.Models
 								public string MainPhotoUrl { get; set; }
 								public HashSet<string> AddlPhotoUrls { get; set; }
 								public string Website { get; set; }
-								public string MenuUrl { get; set; }
+								public HashSet<string> MenuUrls { get; set; }
 								public string YelpUrl { get; set; }
 
 								public Address Address { get; set; }

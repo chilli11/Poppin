@@ -24,7 +24,7 @@ namespace Poppin.Contracts.Requests
 								public string MainPhotoUrl { get; set; }
 								public string[] AddlPhotoUrls { get; set; }
 								public string Website { get; set; }
-								public string MenuUrl { get; set; }
+								public HashSet<string> MenuUrls { get; set; }
 								public string YelpUrl { get; set; }
 								public string[] Categories { get; set; }
 								public int Capacity { get; set; }

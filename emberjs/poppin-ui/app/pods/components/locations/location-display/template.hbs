@@ -39,6 +39,25 @@
 					</dd>
 					<dt>Visit Length:</dt>
 					<dd>{{@location.visitLength}}</dd>
+					{{#if @location.menuUrls}}
+						<dt>Menu(s)</dt>
+						{{#each @location.menuUrls as |menu|}}
+							<a href={{menu}} target="_blank" class="btn btn-default btn-small">{{menu}}</a>
+						{{/each}}
+					{{/if}}
+
+					{{#if @location.addlPhotoUrls}}
+						<dt>Photo(s)</dt>
+						{{#each @location.addlPhotoUrls as |pic|}}
+							<dd>
+								<a href={{pic}} target="_blank">
+									<img style="width: 100%;" src={{pic}} />
+								</a>
+								<hr>
+							</dd>
+						{{/each}}
+					{{/if}}
+
 				</dl>
 			</LoadingSpinner>
 		</div>

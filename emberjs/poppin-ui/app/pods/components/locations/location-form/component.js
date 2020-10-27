@@ -75,11 +75,13 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.zip ? this.zip.toString().substr(0, 5) : null;
 	}
 
-	addlPhotoUrls = [];
+  addlPhotoUrls = [];
+  menuUrls = []
 	@tracked addlPhotoUrl;
 	@tracked logoUrl;
 	@tracked mainPhotoUrl;
 	@tracked website;
+	@tracked menuUrl;
 	@tracked yelpUrl;
 	@tracked geo;
 	@tracked capacity = '0';
@@ -102,9 +104,11 @@ export default class LocationFormComponent extends StatefulComponent {
 			visitLength,
 			logoUrl,
 			mainPhotoUrl,
-			_addlPhotoUrls,
+			addlPhotoUrls,
 			addlPhotoUrl,
 			website,
+			menuUrls,
+			menuUrl,
 			yelpUrl,
 		} = this;
 		return  {
@@ -121,8 +125,9 @@ export default class LocationFormComponent extends StatefulComponent {
 			},
 			logoUrl,
 			mainPhotoUrl,
-			addlPhotoUrls: _addlPhotoUrls.concat(addlPhotoUrl),
+			addlPhotoUrls: addlPhotoUrls.concat(addlPhotoUrl).filter(p => !!p),
 			website,
+			menuUrls: menuUrls.concat(menuUrl).filter(m => !!m),
 			yelpUrl,
 			categories: this.categoryList,
 			capacity: parseInt(capacity, 10),
@@ -155,9 +160,11 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.zipCode = null;
 		this.logoUrl = null;
 		this.mainPhotoUrl = null;
-		this._addlPhotoUrls = [];
+		this.addlPhotoUrls = [];
 		this.addlPhotoUrl = null;
 		this.website = null;
+		this.menuUrls = [];
+		this.menuUrl = null;
 		this.yelpUrl = null;
 		this.categories = [];
 		this.capacity = 0;
@@ -189,9 +196,11 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
 			this.logoUrl = loc.logoUrl;
+			this.menuUrls = loc.menuUrls || [];
 			this.mainPhotoUrl = loc.mainPhotoUrl;
-			this._addlPhotoUrls = loc.addlPhotoUrls || [];
+			this.addlPhotoUrls = loc.addlPhotoUrls || [];
 			this.addlPhotoUrl = null;
+			this.menuUrl = null;
 			this.website = loc.website;
 			this.yelpUrl = loc.yelpUrl;
 			this.geo = {

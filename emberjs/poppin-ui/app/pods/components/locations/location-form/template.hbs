@@ -55,7 +55,8 @@
 					<BsButton @onClick={{this.addImg}}><img src="/images/add_circle-24px.svg" /> Add an image</BsButton>
 				</div> --}}
 				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
-				<form.element @controlType="text" @label="Yelp Url" @placeholder="https://awesomebiz.com/" @property="yelpUrl" />
+				<form.element @controlType="text" @label="Menu URL" @placeholder="https://awesomebiz.com/" @property="menuUrl" />
+				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://awesomebiz.com/" @property="yelpUrl" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
 				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
