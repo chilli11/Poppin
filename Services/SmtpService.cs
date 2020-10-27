@@ -25,7 +25,7 @@ namespace Poppin.Services
             mailMessage.Sender = MailboxAddress.Parse(_appSettings.Sender);
             mailMessage.To.Add(MailboxAddress.Parse(user.Email));
             mailMessage.Subject = "Confirm Your Poppin Account";
-            mailMessage.Body = new TextPart(TextFormat.Html) { Text = "Click here to confirm: <a href=\"https://getpopp.in/api/identity/confirm-email/" + user.Id + "?t=" + token + "\">CONFIRM</a>"};
+            mailMessage.Body = new TextPart(TextFormat.Html) { Text = "Click here to confirm: <a href=\"https://getpopp.in/account/confirm-email/" + user.Id + "?t=" + token + "\">CONFIRM</a>"};
 
             using (var client = new SmtpClient())
             {
@@ -53,7 +53,7 @@ namespace Poppin.Services
             mailMessage.Sender = MailboxAddress.Parse(_appSettings.Sender);
             mailMessage.To.Add(MailboxAddress.Parse(user.Email));
             mailMessage.Subject = "Reset Your Poppin Password";
-            mailMessage.Body = new TextPart(TextFormat.Html) { Text = "Click here to reset your password: <a href=\"https://getpopp.in/api/identity/reset-password/" + user.Id + "?t=" + token + "\">RESET PASSWORD</a>" };
+            mailMessage.Body = new TextPart(TextFormat.Html) { Text = "Click here to reset your password: <a href=\"https://getpopp.in/account/reset-password/" + user.Id + "?t=" + token + "\">RESET PASSWORD</a>" };
 
             using (var client = new SmtpClient())
             {
