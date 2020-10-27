@@ -35,7 +35,6 @@ namespace Poppin.Models
 												Categories = v.Categories.ToHashSet();
 												VisitLength = v.VisitLength;
 												Hours = v.Hours;
-												VisitLength = v.VisitLength;
 								}
 
 								public PoppinLocation(YelpBusiness v)
