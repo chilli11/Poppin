@@ -64,14 +64,12 @@ namespace Poppin.Services
 								public Task Update(string id, PoppinLocation location)
 								{
 												location.YelpDetails = null;
-												var filter = Builders<PoppinLocation>.Filter.Eq("Id", id);
-												_locations.FindOneAndDelete(filter);
-												return _locations.InsertOneAsync(location);
+												return _locations.ReplaceOneAsync(l => l.Id == location.Id, location);
 								}
 								public Task Update(PoppinLocation location)
 								{
 												location.YelpDetails = null;
-												return _locations.ReplaceOneAsync(l => l.Id == location.Id, location, new ReplaceOptions() { IsUpsert = true });
+												return _locations.ReplaceOneAsync(l => l.Id == location.Id, location);
 								}
 								public Task Delete(PoppinLocation location) => _locations.DeleteOneAsync(loc => loc.Id == location.Id);
 								public Task Delete(string id) => _locations.DeleteOneAsync(loc => loc.Id == id);

@@ -287,7 +287,7 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
+                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -323,17 +323,50 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            var checkin = new Checkin(locationId, userId, location.VisitLength, ReliabilityScores.User);
+            var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
+            var checkin = new Checkin(locationId, userId, location.VisitLength, score);
+            await _locationService.NewCheckin(checkin);
+            await location.SetCrowdSize(_locationService);
 
             var action = new Dictionary<string, string>()
             {
                 { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin);
+            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
 
-            return Ok(_locationService.NewCheckin(checkin));
-								}
+            return Ok(location);
+        }
+
+        [HttpGet("geo-checkin/{locationId}")]
+        public async Task<IActionResult> GeoCheckIn(string locationId)
+        {
+            var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
+            var location = await _locationService.Get(locationId);
+
+            if (location == null)
+            {
+                var errors = new List<string>();
+                errors.Add("Location ID is invalid");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
+
+            var checkin = new Checkin(locationId, userId, location.VisitLength, ReliabilityScores.Geo);
+            await _locationService.NewCheckin(checkin);
+            await location.SetCrowdSize(_locationService);
+
+            var action = new Dictionary<string, string>()
+            {
+                { "LocationId", location.Id }
+            };
+            _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
+            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+
+            return Ok(location);
+        }
 
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]
@@ -376,7 +409,7 @@ namespace Poppin.Controllers
             var id = GetUserId(SegmentIOKeys.Actions.IncrementCrowd);
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
-                var c = new Checkin(locationId, id, location.VisitLength, ReliabilityScores.Vendor);
+                var c = new Checkin(locationId, null, location.VisitLength, ReliabilityScores.Vendor);
                 await _locationService.NewCheckin(c);
 
                 var action = new Dictionary<string, string>()
@@ -417,17 +450,27 @@ namespace Poppin.Controllers
             var id = GetUserId(SegmentIOKeys.Actions.DecrementCrowd);
             if (GetUserRole() == RoleTypes.Admin || await UserHasLocationPermissions(location, id))
             {
-                await _locationService.InvalidateVendorCheckin(locationId);
-
-                var action = new Dictionary<string, string>()
+                try
                 {
-                    { "LocationId", locationId }
-                };
-                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+                    await _locationService.InvalidateVendorCheckin(locationId);
 
-                await location.SetCrowdSize(_locationService);
-                return Ok(location);
+                    var action = new Dictionary<string, string>()
+                    {
+                        { "LocationId", locationId }
+                    };
+                    _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
+                    Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+
+                    await location.SetCrowdSize(_locationService);
+                    return Ok(location);
+                }
+                catch (Exception ex)
+																{
+                    return BadRequest(new GenericFailure
+                    {
+                        Errors = new[] { "No eligible checkins to remove" }
+                    });
+																}
             }
 
             errors.Add("You don't have permission.");

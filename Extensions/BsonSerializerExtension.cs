@@ -18,14 +18,8 @@ namespace Poppin.Extensions
 
         public void Serialize(BsonSerializationContext context, BsonSerializationArgs args, object value)
         {
-            if (value != null)
-            {
-                context.Writer.WriteString(value as string);
-            }
-            else
-												{
-                context.Writer.WriteString(string.Empty);
-												}
+            if (value != null) context.Writer.WriteString(value as string);
+            else context.Writer.WriteString(string.Empty);
         }
 
         private static object GetNumberValue(BsonDeserializationContext context)
