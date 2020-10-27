@@ -234,7 +234,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	}
 
 	[actions.REJECT_ACTION](data) {
-		this.modalText = data.toString();
+		this.modalText = data.errors.toString();
 		this.modalTitle = "Error!";
 		this.showModal = true;
 		return console.error(data);

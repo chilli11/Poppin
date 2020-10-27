@@ -88,11 +88,11 @@ export default class LocationFormComponent extends StatefulComponent {
 				location.yelpDetails = this.args.location.yelpDetails;
 				this.args.refresh(location);
 				return this.dispatch(actions.END_LOADING);
-			}).catch(({ errors }) => this.dispatch(actions.REJECT_ACTION, errors));
+			}).catch(() => this.dispatch(actions.REJECT_ACTION, { errors: data < 0 ? 'There were no eligible checkins to remove.' : 'Something went wrong...'}));
 	}
 
 	[actions.REJECT_ACTION](data) {
-		this.modalText = data.toString();
+		this.modalText = data.errors.toString();
 		this.modalTitle = "Error!";
 		this.showModal = true;
 		return console.error(data);
