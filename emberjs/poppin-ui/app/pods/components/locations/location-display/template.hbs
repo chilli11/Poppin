@@ -21,10 +21,10 @@
 					<div class="row text-center">
 						<h3 class="col-md-12">
 							{{#if (gt @location.crowdSize 0)}}
-								<img src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
+								<img width="40" role="button" src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
 							{{/if}}
 							{{@location.crowdSize}}
-							<img src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
+							<img width="40" role="button" src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
 						</h3>
 					</div>
 				{{/if}}

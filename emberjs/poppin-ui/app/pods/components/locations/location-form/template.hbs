@@ -50,12 +50,10 @@
 				</form.group>
 				<form.element @controlType="text" @label="Logo URL" @placeholder="https://awesomebiz.com/photos/my-logo.jpg" @property="logoUrl" />
 				<form.element @controlType="text" @label="Main Photo URL" @placeholder="https://awesomebiz.com/photos/my-epic-banner.jpg" @property="mainPhotoUrl" />
-				{{#each this.addlPhotoUrls as |img|}}
-					<form.element @controlType="text" @label="Add'l Photo URL" @placeholder="https://awesomebiz.com/photos/my-epic-pic.jpg" @property={{img}} />
-				{{/each}}
-				<div class="form-group row justify-content-md-center">
+				<form.element @controlType="text" @label="Add'l Photo URL" @placeholder="https://awesomebiz.com/photos/my-epic-pic.jpg" @property="addlPhotoUrl" />
+				{{!-- <div class="form-group row justify-content-md-center">
 					<BsButton @onClick={{this.addImg}}><img src="/images/add_circle-24px.svg" /> Add an image</BsButton>
-				</div>
+				</div> --}}
 				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
 				<form.element @controlType="text" @label="Yelp Url" @placeholder="https://awesomebiz.com/" @property="yelpUrl" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />

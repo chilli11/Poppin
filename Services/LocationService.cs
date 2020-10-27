@@ -92,7 +92,7 @@ namespace Poppin.Services
 								{
 												var filter = Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now)
 																& Builders<Checkin>.Filter.Eq("LocationId", locId)
-																& Builders<Checkin>.Filter.Eq("UserId", BsonNull.Value);
+																& Builders<Checkin>.Filter.Eq<string>("UserId", null);
 												var checkins = _checkins.Find(filter).ToList();
 												if (checkins.Count > 0)
 												{

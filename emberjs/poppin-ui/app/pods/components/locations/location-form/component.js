@@ -75,7 +75,8 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.zip ? this.zip.toString().substr(0, 5) : null;
 	}
 
-	addlPhotoUrls = eArray(['']);
+	addlPhotoUrls = [];
+	@tracked addlPhotoUrl;
 	@tracked logoUrl;
 	@tracked mainPhotoUrl;
 	@tracked website;
@@ -101,7 +102,8 @@ export default class LocationFormComponent extends StatefulComponent {
 			visitLength,
 			logoUrl,
 			mainPhotoUrl,
-			addlPhotoUrls,
+			_addlPhotoUrls,
+			addlPhotoUrl,
 			website,
 			yelpUrl,
 		} = this;
@@ -119,7 +121,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			},
 			logoUrl,
 			mainPhotoUrl,
-			addlPhotoUrls: addlPhotoUrls.filter(p => !!p),
+			addlPhotoUrls: _addlPhotoUrls.concat(addlPhotoUrl),
 			website,
 			yelpUrl,
 			categories: this.categoryList,
@@ -151,11 +153,12 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.city = null;
 		this.state = null;
 		this.zipCode = null;
-		this.logoUrl = null,
-		this.mainPhotoUrl = null,
-		set(this, 'addlPhotoUrls', eArray([''])),
-		this.website = null,
-		this.yelpUrl = null,
+		this.logoUrl = null;
+		this.mainPhotoUrl = null;
+		this._addlPhotoUrls = [];
+		this.addlPhotoUrl = null;
+		this.website = null;
+		this.yelpUrl = null;
 		this.categories = [];
 		this.capacity = 0;
 		this.hours = _.merge(defHours);
@@ -187,7 +190,8 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.zip = loc.address.zipCode;
 			this.logoUrl = loc.logoUrl;
 			this.mainPhotoUrl = loc.mainPhotoUrl;
-			set(this, 'addlPhotoUrls', loc.addlPhotoUrls || eArray(['']));
+			this._addlPhotoUrls = loc.addlPhotoUrls || [];
+			this.addlPhotoUrl = null;
 			this.website = loc.website;
 			this.yelpUrl = loc.yelpUrl;
 			this.geo = {

@@ -26698,6 +26698,16 @@ body {
   z-index: 100;
 }
 
+.loading-spinner {
+  height: 100%;
+  width: 100%;
+  background: #FFF url(/images/ajax-loader.gif) center center no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
 .ember-power-select-trigger-multiple-input::placeholder {
   line-height: 1.75;
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
@@ -103,6 +104,11 @@ namespace Poppin.Controllers
 																				Admins = vendor.GetAdmins(_userService),
 																				Members = vendor.GetMembers(_userService)
 																};
+																if (vResult.Locations.Count() > 0)
+																{
+																				var checkins = await _locationService.GetCheckinsForLocations(vResult.Locations.Select(l => l.Id));
+																				vResult.Locations.ToList().UpdateCrowdSizes(checkins);
+																}
 																if (vendor.ParentVendorId != null)
 																{
 																				vResult.Parent = await _vendorService.GetVendorById(vendor.ParentVendorId);
