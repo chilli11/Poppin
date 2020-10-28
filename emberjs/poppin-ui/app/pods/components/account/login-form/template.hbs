@@ -17,21 +17,23 @@
 					<p>{{msg}}</p>
 				{{/each}}
 			</BsAlert>
-			<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
-				<form.element
-					@controlType="email"
-					@label="Email Address"
-					@placeholder="xxxxxxxxxxx@xxxxx.xx"
-					@property="email"
-					@required={{true}} />
-				<form.element
-					@controlType="password"
-					@label="Password"
-					@placeholder="********"
-					@property="password"
-					@required={{true}}/>
-				<BsButton @type="primary" type="submit" @defaultText="Submit" />
-			</BsForm>
+			<LoadingSpinner @isLoading={{this.isLoading}}>
+				<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+					<form.element
+						@controlType="email"
+						@label="Email Address"
+						@placeholder="xxxxxxxxxxx@xxxxx.xx"
+						@property="email"
+						@required={{true}} />
+					<form.element
+						@controlType="password"
+						@label="Password"
+						@placeholder="********"
+						@property="password"
+						@required={{true}}/>
+					<BsButton @type="primary" type="submit" @defaultText="Submit" />
+				</BsForm>
+			</LoadingSpinner>
 			<hr>
 			<h5>Social Login</h5>
 			<fb:login-button 

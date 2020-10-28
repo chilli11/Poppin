@@ -26718,11 +26718,34 @@ body {
 }
 
 .location-banner {
-  height: 600px;
-  width: 100%;
-  margin: -50px 0 -200px;
   background-position: center center;
   background-size: cover;
+  height: 300px;
+  width: 100%;
+}
+@media (min-width: 576px) {
+  .location-banner {
+    height: 600px;
+    margin: -50px 0 -500px;
+  }
+}
+@media (min-width: 768px) {
+  .location-banner {
+    margin-bottom: -400px;
+  }
+  .location-banner.edit {
+    margin-bottom: -450px;
+  }
+}
+@media (min-width: 992px) {
+  .location-banner {
+    margin-bottom: -350px;
+  }
+}
+@media (min-width: 1200px) {
+  .location-banner {
+    margin-bottom: -300px;
+  }
 }
 
 .location-list .location.vendor-match {
@@ -26739,6 +26762,10 @@ div.add-img-button img {
   width: 16px;
 }
 
+body * {
+  transition: all 0.25s ease-out;
+}
+
 #siteContentWrapper.wrapper {
   height: auto;
   min-height: 100vh;
@@ -26750,6 +26777,7 @@ div.add-img-button img {
 #siteContentWrapper.wrapper .content#mainContent {
   position: relative;
   padding-top: 90px;
+  padding-bottom: 48px;
 }
 #siteContentWrapper.wrapper #getPoppin {
   width: 100%;
