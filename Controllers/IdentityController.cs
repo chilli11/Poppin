@@ -23,7 +23,7 @@ namespace Poppin.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[ValidateAntiForgeryToken]
-    public class IdentityController : ControllerBase
+    public class IdentityController : PoppinBaseController
     {
         private readonly IIdentityService _identityService;
         private readonly IOAuthSettings _oAuthSettings;
@@ -49,11 +49,7 @@ namespace Poppin.Controllers
         public IActionResult IsAuthenticated()
 								{
             var userId = GetUserId();
-            if (userId == string.Empty)
-												{
-                return Unauthorized();
-												}
-            return Ok();
+            return Ok(new { authorized = !string.IsNullOrEmpty(userId) });
 								}
 
         /// <summary>

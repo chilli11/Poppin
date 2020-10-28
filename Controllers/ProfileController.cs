@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver.GeoJsonObjectModel;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
+using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
@@ -15,6 +16,7 @@ using Segment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,25 +26,22 @@ namespace Poppin.Controllers
 				[Authorize]
 				[Route("api/[controller]")]
 				[ApiController]
-				public class ProfileController : ControllerBase
+				public class ProfileController : PoppinBaseController
 				{
-								private readonly IUserService _userService;
-								private readonly IIdentityService _identityService;
-								private readonly ILogActionService _logActionService;
-								private readonly ILocationService _locationService;
-
 								private readonly GeometryFactory geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
 								public ProfileController(
 												IIdentityService identityService,
 												IUserService userService,
 												ILogActionService logActionService,
-												ILocationService locationService)
+												ILocationService locationService,
+												IVendorService vendorService)
 								{
 												_identityService = identityService;
 												_userService = userService;
 												_logActionService = logActionService;
 												_locationService = locationService;
+												_vendorService = vendorService;
 								}
 
 
@@ -66,7 +65,7 @@ namespace Poppin.Controllers
 												}
 												var user = await GetUserProfile(id);
                         
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+												Track(id, SegmentIOKeys.Actions.AddFavorite);
 												return Ok(await GetPoppinUserResult(user));
 								}
 
@@ -98,7 +97,7 @@ namespace Poppin.Controllers
 																});
 												}
 
-												Analytics.Client.Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
+												Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
 												return Ok(GetPoppinUserResult(user));
 								}
 
@@ -119,7 +118,7 @@ namespace Poppin.Controllers
 												}
 
 												var recentLocations = GetRecentLocationList(id, -1, 0);
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+												Track(id, SegmentIOKeys.Actions.AddFavorite);
 												return Ok(recentLocations);
 								}
 
@@ -130,18 +129,24 @@ namespace Poppin.Controllers
 								[HttpGet("favorites/add/{locationid}")]
 								public async Task<IActionResult> AddFavorite(string locationId)
 								{
+												if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+												{
+																return BadRequest(new GenericFailure
+																{
+																				Errors = new[] { "The location ID was invalid." }
+																});
+												}
 
-												try
+												try 
 												{
 																var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
-
 																var action = new Dictionary<string, string>()
 																{
 																				{ "LocationId", locationId }
 																};
 
 																// Tracking
-																Analytics.Client.Track(id, SegmentIOKeys.Actions.AddFavorite);
+																Track(id, SegmentIOKeys.Actions.AddFavorite);
 																_logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddFavorite, action);
 																await _userService.AddFavorite(id, locationId);
 																return Ok();
@@ -162,20 +167,27 @@ namespace Poppin.Controllers
 								[HttpGet("favorites/remove/{locationid}")]
 								public async Task<IActionResult> RemoveFavorite(string locationId)
 								{
-												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
+												if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+												{
+																return BadRequest(new GenericFailure
+																{
+																				Errors = new[] { "The location ID was invalid." }
+																});
+												}
 
+												var id = GetUserId(SegmentIOKeys.Actions.RemoveFavorite);
 												var action = new Dictionary<string, string>()
 												{
 																{ "LocationId", locationId }
 												};
 
-												// Segment.io Analytics
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.RemoveFavorite);
-												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RemoveFavorite, action);
 
 												try
 												{
 																await _userService.RemoveFavorite(id, locationId);
+																// Segment.io Analytics
+																Track(id, SegmentIOKeys.Actions.RemoveFavorite);
+																_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RemoveFavorite, action);
 																return Ok();
 												}
 												catch (Exception ex)
@@ -192,20 +204,38 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("hide/{locationid}")]
-								public IActionResult HideLocation(string locationId)
+								public async Task<IActionResult> HideLocation(string locationId)
 								{
-												var id = GetUserId(SegmentIOKeys.Actions.HideLocation);
+												if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+												{
+																return BadRequest(new GenericFailure
+																{
+																				Errors = new[] { "The location ID was invalid." }
+																});
+												}
 
+												var id = GetUserId(SegmentIOKeys.Actions.HideLocation);
 												var action = new Dictionary<string, string>()
 												{
 																{ "LocationId", locationId }
 												};
 
-												// Segment.io Analytics
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.HideLocation);
-												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.HideLocation, action);
+												try
+												{
+																await _userService.HideLocation(id, locationId);
+																// Segment.io Analytics
+																Track(id, SegmentIOKeys.Actions.HideLocation);
+																_logActionService.LogUserAction(id, SegmentIOKeys.Actions.HideLocation, action);
 
-												return Ok(_userService.HideLocation(id, locationId));
+																return Ok();
+												}
+												catch (Exception ex)
+												{
+																return BadRequest(new GenericFailure
+																{
+																				Errors = new[] { ex.Message }
+																});
+												}
 								}
 
 								/// <summary>
@@ -213,42 +243,29 @@ namespace Poppin.Controllers
 								/// </summary>
 								/// <param name="locationId"></param>
 								[HttpGet("unhide/{locationid}")]
-								public IActionResult UnhideLocation(string locationId)
+								public async Task<IActionResult> UnhideLocation(string locationId)
 								{
+												if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+												{
+																return BadRequest(new GenericFailure
+																{
+																				Errors = new[] { "The location ID was invalid." }
+																});
+												}
+
 												var id = GetUserId(SegmentIOKeys.Actions.UnhideLocation);
 												var action = new Dictionary<string, string>()
 												{
 																{ "LocationId", locationId }
 												};
 
-												// Segment.io Analytics
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.UnhideLocation);
-												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UnhideLocation, action);
-
-												return Ok(_userService.UnhideLocation(id, locationId));
-								}
-
-								// PUT api/<ProfileController>/5
-								[HttpPut()]
-								public async Task<IActionResult> Put(PoppinUser user)
-								{
-												// Segment.io Analytics
-												_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-												Analytics.Client.Track(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
-												var oldUser = GetUserProfile(user.UserId);
-												if (oldUser == null)
-												{
-																return BadRequest(new GenericFailure
-																{
-																				Errors = new[] { "User not found." }
-																});
-												}
-
-												// log specific changes with UserLog
-
 												try
 												{
-																await _userService.UpdateUser(user);
+																await _userService.UnhideLocation(id, locationId);
+																// Segment.io Analytics
+																Track(id, SegmentIOKeys.Actions.UnhideLocation);
+																_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UnhideLocation, action);
+
 																return Ok();
 												}
 												catch (Exception ex)
@@ -261,14 +278,11 @@ namespace Poppin.Controllers
 								}
 
 								// PUT api/<ProfileController>/5
-								[HttpPut("{id}")]
-								public async Task<IActionResult> Put(string id, PoppinUser user)
+								[HttpPut()]
+								public async Task<IActionResult> Put(PoppinUserRequest request)
 								{
-												// Segment.io Analytics
-												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
-												var oldUser = GetUserProfile(id);
-												if (oldUser == null)
+												var user = await GetUserProfile(request.UserId);
+												if (user == null)
 												{
 																return BadRequest(new GenericFailure
 																{
@@ -280,8 +294,12 @@ namespace Poppin.Controllers
 
 												try
 												{
-																await _userService.UpdateUser(id, user);
-																return Ok();
+																user.Merge(request);
+																await _userService.UpdateUser(user);
+																// Segment.io Analytics
+																_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+																Track(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
+																return Ok(user);
 												}
 												catch (Exception ex)
 												{
@@ -298,7 +316,7 @@ namespace Poppin.Controllers
 								{
 												// Segment.io Analytics
 												_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateProfile);
+												Track(id, SegmentIOKeys.Actions.UpdateProfile);
 								}
 
 								/// <summary>
@@ -311,7 +329,7 @@ namespace Poppin.Controllers
 												var coords = new GeoJson2DGeographicCoordinates(geoJson.Coordinates[0], geoJson.Coordinates[1]);
 												var action = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords).AsStringDictionary();
 												_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, (Dictionary<string,string>)action);
-												Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateGeo);
+												Track(id, SegmentIOKeys.Actions.UpdateGeo);
 
 												var recent = GetRecentLocationList(id, 0, -2);
 												if (recent.Count > 0)
@@ -330,11 +348,11 @@ namespace Poppin.Controllers
 																				{
 																								{ "LocationId", closest.Id }
 																				};
-																				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.Checkin, checkinAction);
-																				Analytics.Client.Track(id, SegmentIOKeys.Actions.Checkin);
 
 																				var checkin = new Checkin(closest.Id, id, closest.VisitLength, ReliabilityScores.Geo);
 																				_locationService.NewCheckin(checkin);
+																				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.Checkin, checkinAction);
+																				Track(id, SegmentIOKeys.Actions.Checkin);
 																}
 												}
 
@@ -368,52 +386,6 @@ namespace Poppin.Controllers
 												return pointA.Distance(pointB);
 								}
 
-								private string GetUserId()
-								{
-												if (HttpContext.User.Claims.Any())
-												{
-																var id = HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
-																return id;
-												}
-												return string.Empty;
-								}
-
-								private string GetUserId(string action)
-								{
-												if (HttpContext.User.Claims.Any())
-												{
-																var id = HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
-																return id;
-												}
-												return string.Empty;
-								}
-
-								private string GetUserRole()
-								{
-												if (HttpContext.User.Claims.Any())
-												{
-																return HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
-												}
-												return string.Empty;
-								}
-
-								private async Task<PoppinUser> GetUserProfile(string id)
-								{
-												var user = await _userService.GetUserById(id);
-												if (user == null)
-												{
-																var u = await _identityService.GetUserById(id);
-																if (u != null)
-																{
-																				user = new PoppinUser(u.User);
-																				_userService.AddUser(user);
-																}
-												}
-												return user;
-								}
-
 								private async Task<PoppinUserResult> GetPoppinUserResult(PoppinUser user)
 								{
 												return new PoppinUserResult()
@@ -421,6 +393,7 @@ namespace Poppin.Controllers
 																User = user,
 																Favorites = await user.GetFavorites(_locationService),
 																Hidden = await user.GetHidden(_locationService),
+																Vendors = await user.GetVendors(_vendorService)
 												};
 								}
 

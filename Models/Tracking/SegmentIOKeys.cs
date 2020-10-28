@@ -2,6 +2,7 @@
 {
 				public static class SegmentIOKeys
 				{
+								public const string AnonId = "000";
 								public static class Categories
 								{
 												public const string Identity = "Identity";
