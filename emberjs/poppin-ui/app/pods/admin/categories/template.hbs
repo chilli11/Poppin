@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-xl-6">
+	<div class="col-md-6">
 		<div class="card">
 			<div class="card-header card-header-primary">
 				<h4 class="card-title">{{if this.isUpdate 'Update' 'Add'}} Category</h4>
@@ -63,7 +63,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xl-6">
+	<div class="col-md-6">
 		<Categories::CategoryList
 			@categories={{this.model}}
 			@clickAction={{this.clickAction}} />

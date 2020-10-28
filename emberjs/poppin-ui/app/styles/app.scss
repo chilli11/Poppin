@@ -10,6 +10,10 @@
 @import "bootstrap-overrides/styles";
 @import "locations/styles";
 
+body * {
+	transition: all 0.25s ease-out;
+}
+
 #siteContentWrapper.wrapper {
 	height: auto;
 	min-height: 100vh;
@@ -20,6 +24,7 @@
 	.content#mainContent {
 		position: relative;
 		padding-top: 90px;
+		padding-bottom: 48px;
 	}
 	#getPoppin {
 		width: 100%;

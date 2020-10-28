@@ -172,7 +172,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.addressLine2 = null;
 		this.city = null;
 		this.state = null;
-		this.zipCode = null;
+		this.zip = null;
 		this.logoUrl = null;
 		this.mainPhotoUrl = null;
 		set(this, 'addlPhotoUrls', []);
@@ -189,8 +189,7 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	@action
 	cancel() {
-		this.clearForm();
-		this.args.endEdit();
+		this.args.resolveAction();
 	}
 
 	@action
