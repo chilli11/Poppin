@@ -9,7 +9,7 @@ export default class AccountMeController extends Controller {
 	
 	@action
 	vendorClickAction(vendor) {
-		return this.transitionToRoute('vendors.vendor', vendor);
+		return this.transitionToRoute('vendors.vendor', vendor.id);
 	}
 
 	@action

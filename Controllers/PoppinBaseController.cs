@@ -21,6 +21,7 @@ namespace Poppin.Controllers
         protected ILocationService _locationService;
         protected IVendorService _vendorService;
         protected ILogActionService _logActionService;
+        protected IHEREGeocoder _hereGeocoder;
 
         protected string GetUserId()
         {

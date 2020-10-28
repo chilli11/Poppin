@@ -12,7 +12,9 @@
 	<div class="card">
 		<div class="card-header card-header-primary">
 			{{#if @profile.profilePhoto}}
-				<img src={{@profile.profilePhoto}} class="profile-photo" style="max-height: 100px;" />
+				<div class="text-center">
+					<img src={{@profile.profilePhoto}} class="profile-photo" style="max-height: 100px;" />
+				</div>
 			{{/if}}
 			<h4 class="card-title">
 				<span>My Profile</span>

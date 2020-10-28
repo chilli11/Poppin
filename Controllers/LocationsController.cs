@@ -173,8 +173,9 @@ namespace Poppin.Controllers
                     { "SearchLocation", search.Geo },
                     { "SearchCategories", search.Categories.Select(c => c.Slug) }
                 };
-                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
-                Track(id, SegmentIOKeys.Actions.Search);
+
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
+                Track(id, SegmentIOKeys.Actions.Search, actionObj);
 
                 return Ok(new PoppinSearchResponse()
                 {

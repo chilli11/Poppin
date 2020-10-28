@@ -39,12 +39,6 @@ namespace Poppin.Configuration
 				{
 								public string Key { get; set; }
 				}
-				public class SwaggerOptions
-				{
-								public string JsonRoute { get; set; }
-								public string Description { get; set; }
-								public string UIEndpoint { get; set; }
-				}
 
 				public class Office365Settings : IOffice365Settings
 				{
