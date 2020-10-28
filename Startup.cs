@@ -105,6 +105,7 @@ namespace Poppin
 												services.AddSwaggerGen(s =>
 												{
 																s.SwaggerDoc("v1", new OpenApiInfo() { Title = "Poppin API", Version = "v1" });
+																s.OperationFilter<SwaggerOperationFilter>();
 
 																var scheme = new OpenApiSecurityScheme
 																{

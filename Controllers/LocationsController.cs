@@ -13,26 +13,18 @@ using Segment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Poppin.Controllers
 {
 				[Route("api/[controller]")]
     [ApiController]
-    public class LocationsController : ControllerBase
+    public class LocationsController : PoppinBaseController
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUserService _userService;
-        private readonly ILocationService _locationService;
-        private readonly IYelpService _yelpService;
-        private readonly IVendorService _vendorService;
-        private readonly ILogActionService _logActionService;
-        private readonly IIdentityService _identityService;
-
         private List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
 
         public LocationsController(
-            IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
             IUserService userService,
             IYelpService yelpService,
@@ -40,7 +32,6 @@ namespace Poppin.Controllers
             ILogActionService logActionService,
             IIdentityService identityService)
         {
-            _httpContextAccessor = httpContextAccessor;
             _userService = userService;
             _locationService = locationService;
             _yelpService = yelpService;
@@ -58,6 +49,14 @@ namespace Poppin.Controllers
         [HttpGet("{locationId}")]
         public IActionResult Get(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = GetLocation(locationId);
             if (location == null)
             {
@@ -89,6 +88,14 @@ namespace Poppin.Controllers
         [HttpGet("with-yelp/{locationId}")]
         public async Task<IActionResult> GetWithYelp(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = GetLocation(locationId);
             if (location == null)
             {
@@ -160,7 +167,7 @@ namespace Poppin.Controllers
                     { "SSearchCategories", searchParams.categories }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search);
+                Track(id, SegmentIOKeys.Actions.Search);
 
                 return Ok(new PoppinSearchResponse()
                 {
@@ -206,7 +213,7 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.AddLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.AddLocation);
+                Track(id, SegmentIOKeys.Actions.AddLocation);
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -239,7 +246,7 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
+                Track(id, SegmentIOKeys.Actions.UpdateLocation);
 
                 return Ok(location);
             }
@@ -260,6 +267,14 @@ namespace Poppin.Controllers
         //[AuthorizeRoles()]
         public async Task<IActionResult> Put(string locationId, PoppinLocationRequest _location)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             if (GetUserRole() != RoleTypes.Admin)
             {
                 return Unauthorized();
@@ -276,7 +291,7 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
+                Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
 
                 if (!string.IsNullOrEmpty(location.YelpId))
                 {
@@ -297,7 +312,15 @@ namespace Poppin.Controllers
 
         [HttpGet("checkin/{locationId}")]
         public async Task<IActionResult> UserCheckIn(string locationId)
-								{
+        {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
             var location = await _locationService.Get(locationId);
 
@@ -320,7 +343,7 @@ namespace Poppin.Controllers
                 { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+            Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
 
             return Ok(location);
         }
@@ -328,6 +351,14 @@ namespace Poppin.Controllers
         [HttpGet("geo-checkin/{locationId}")]
         public async Task<IActionResult> GeoCheckIn(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
             var location = await _locationService.Get(locationId);
 
@@ -350,7 +381,7 @@ namespace Poppin.Controllers
                 { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+            Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
 
             return Ok(location);
         }
@@ -359,7 +390,16 @@ namespace Poppin.Controllers
         [HttpDelete("{locationId}")]
         [Authorize]
 								//[AuthorizeRoles()]
-								public IActionResult Delete(string locationId) {
+								public IActionResult Delete(string locationId)
+        {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             if (GetUserRole() != RoleTypes.Admin)
 												{
                 return Unauthorized();
@@ -372,7 +412,7 @@ namespace Poppin.Controllers
             };
             var id = GetUserId(SegmentIOKeys.Actions.DeleteLocation);
             _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DeleteLocation, action);
-            Analytics.Client.Track(id, SegmentIOKeys.Actions.DeleteLocation);
+            Track(id, SegmentIOKeys.Actions.DeleteLocation);
             return Ok();
         }
 
@@ -382,6 +422,14 @@ namespace Poppin.Controllers
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> IncrementCrowd(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = GetLocation(locationId);
             var errors = new List<string>();
             if (location == null)
@@ -404,7 +452,7 @@ namespace Poppin.Controllers
                     { "LocationId", locationId }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.IncrementCrowd);
+                Track(id, SegmentIOKeys.Actions.IncrementCrowd);
 
                 await location.SetCrowdSize(_locationService);
                 return Ok(location);
@@ -423,6 +471,14 @@ namespace Poppin.Controllers
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> DecrementCrowd(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = await _locationService.Get(locationId);
             var errors = new List<string>();
             if (location == null)
@@ -446,7 +502,7 @@ namespace Poppin.Controllers
                         { "LocationId", locationId }
                     };
                     _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                    Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+                    Track(id, SegmentIOKeys.Actions.DecrementCrowd);
 
                     await location.SetCrowdSize(_locationService);
                     return Ok(location);
@@ -466,48 +522,6 @@ namespace Poppin.Controllers
                 Errors = errors
             });
         }
-
-        private string GetUserId()
-        {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
-            {
-                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-                _identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
-                return id;
-            }
-            return string.Empty;
-        }
-
-        private string GetUserId(string action)
-        {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
-            {
-                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-                _identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
-                return id;
-            }
-            return string.Empty;
-        }
-
-        private string GetUserRole()
-        {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
-            {
-                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
-            }
-            return string.Empty;
-        }
-
-        private PoppinUser GetUserProfile(string id)
-								{
-            PoppinUser profile = _userService.GetUserById(id).Result;
-            if (profile == null)
-												{
-                profile = new PoppinUser(_identityService.GetUserById(id).Result.User);
-                _userService.AddUser(profile);
-            }
-            return profile;
-								}
 
         private PoppinLocation GetLocation(string locationId)
         {
