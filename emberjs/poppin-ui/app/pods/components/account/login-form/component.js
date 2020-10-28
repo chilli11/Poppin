@@ -43,8 +43,8 @@ export default class 	LoginFormComponent extends StatefulComponent {
 		this.accountService.login({ email, password })
 			.then((response) => {
 				if (response.errors && response.errors.length) throw response;
-				this.accountService.myProfile();
-				return this.dispatch(actions.RESOLVE, ['Login success!']);
+				return this.accountService.myProfile()
+					.then(() => this.dispatch(actions.RESOLVE, ['Login success!']));
 			}).catch((response) => this.dispatch(actions.REJECT, response.errors));
 	}
 

@@ -1,0 +1,59 @@
+<BsAlert
+	@visible={{showMsg}}
+	@fade={{true}}
+	@type={{msgType}}
+	@dismissible={{true}}
+	@onDismissed={{this.hideMsg}}>
+	{{#each this.msgs as |msg|}}
+		<p>{{msg}}</p>
+	{{/each}}
+</BsAlert>
+<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+	<div class="row">
+		<form.element class="col-md-6" @label="First Name" @controlType="text" @property="firstName" />
+		<form.element class="col-md-6" @label="Last Name" @controlType="text" @property="lastName" />
+	</div>
+	<form.element @label="Profile Photo URL" @controlType="text" @placeholder="Profile Photo URL" @property="profilePhoto" />
+	<form.group>
+		<label class="col-md-4">Categories</label>
+		<div class="col-md-8">
+			<PowerSelect
+				@options={{@ageRanges}}
+				@placeholder="Age Range"
+				@selected={{this.ageRange}}
+				@onChange={{fn (mut this.ageRange)}} as |ar|>
+				{{ar.value}}
+			</PowerSelect>
+		</div>
+	</form.group>
+	<form.group>
+		<label class="col-md-4">Gender</label>
+		<div class="col-md-8">
+			<PowerSelect
+				@options={{@genders}}
+				@placeholder="Gender"
+				@selected={{this.gender}}
+				@onChange={{fn (mut this.gender)}} as |g|>
+				{{g.value}}
+			</PowerSelect>
+		</div>
+	</form.group>
+	<form.group>
+		<label class="col-md-4">Fav. Categories</label>
+		<div class="col-md-8">
+			<PowerSelectMultiple
+				@searchEnabled={{true}}
+				@options={{@yelpCategories}}
+				@placeholder="Search..."
+				@searchField="title"
+				@selected={{this.categories}}
+				@onChange={{fn (mut this.categories)}} as |cat|>
+				{{cat.title}}
+			</PowerSelectMultiple>
+		</div>
+	</form.group>
+	<BsButton @type="primary" type="submit" @defaultText="Submit" />
+	{{#if @cancelAction}}
+		<BsButton @type="outline-secondary" @onClick={{@cancelAction}} @defaultText="Cancel" />
+	{{/if}}
+</BsForm>

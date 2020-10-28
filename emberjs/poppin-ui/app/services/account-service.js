@@ -31,10 +31,13 @@ export default class AccountService extends Service {
 
 		return this.apiService.request({
 			resource: HttpResources.isAuthenticated
-		}).then(() => this.authInfo = { authorized: true })
-			.catch(() => {
-				return this.isOAuthenticated();
-			});
+		}).then((data) => {
+			this.authInfo = data;
+			if (!data.authorized) return this.isOAuthenticated();
+			return data;
+		}).catch(() => {
+			return this.isOAuthenticated();
+		});
 	}
 
 	isOAuthenticated() {
@@ -81,8 +84,20 @@ export default class AccountService extends Service {
 			this.vendors = vendors;
 			this.favorites = favorites;
 			this.hidden = hidden;
-			return { profile: user, favorites };
-		});
+			return { 
+				profile: user,
+				favorites,
+				vendors,
+				hidden
+			};
+		}).catch(({ errors }) => errors);
+	}
+
+	updateProfile(profile) {
+		return this.apiService.request({
+			resource: HttpResources.updateProfile,
+			body: profile
+		}).then((newProfile) => this.profile = newProfile);
 	}
 
 	addFavorite(locId) {
