@@ -1,5 +1,5 @@
 {{#if @location.mainPhotoUrl}}
-	<div class="col-xl-12 location-banner" style="background-image: url({{@location.mainPhotoUrl}})"></div>
+	<div class="col-md-12 location-banner{{if (eq this.machineState 'EDIT_LOCATION') ' edit'}}" style="background-image: url({{@location.mainPhotoUrl}})"></div>
 {{/if}}
 
 {{#if (eq this.machineState 'EDIT_LOCATION')}}

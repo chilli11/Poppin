@@ -50,10 +50,10 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	// eslint-disable-next-line ember/require-computed-property-dependencies
 	@computed('accountService.profile.favorites')
-	get isFavorite() {
+	@tracked isFavorite = (() => {
 		const locId = this.args.location.id;
 		return this.profile ? (this.profile.favorites || []).indexOf(locId) !== -1 : false;
-	}
+	})();
 
 	transitions = {
 		[states.IDLE]: {
@@ -83,9 +83,9 @@ export default class LocationFormComponent extends StatefulComponent {
 		const method = this.isFavorite ? 'removeFavorite' : 'addFavorite';
 		return this.accountService[method](this.args.location.id)
 			.then(() => {
-				console.log(this.isFavorite);
+				this.isFavorite = !this.isFavorite;
 				return this.dispatch(actions.END_LOADING);
-			}).catch(({ errors }) => this.dispatch(actions.REJECT_ACTION, errors));
+			}).catch(data => this.dispatch(actions.REJECT_ACTION, data.errors));
 	}
 
 	[actions.UPDATE_CROWD_SIZE](data) {

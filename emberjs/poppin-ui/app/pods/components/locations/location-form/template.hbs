@@ -1,10 +1,9 @@
-<div class="col-xl-6">
+<div class="col-md-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Review Business Details</h4>
 			<p class="card-category">
-				<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a> //
-				<a href="javascript:void(0);" {{on "click" this.cancel}}>Cancel</a>
+				<a href="javascript:void(0);" {{on "click" this.clearForm}}>Clear Form</a>
 			</p>
 		</div>
 		<div class="card-body">
@@ -39,17 +38,18 @@
 				<hr>
 				<h5>Add a Menu</h5>
 				<form.element @label="Name" @placeholder="Breakfast|Brunch|Lunch|Dinner|Cocktails|Wine|Beer" @controlType="text" @property="menuName" />
-				<form.element @label="URL" @placeholder="https://awesomebiz.com/" @controlType="text" @property="menuUrl" />
+				<form.element @label="URL" @placeholder="https://awesomebiz.com/menu" @controlType="text" @property="menuUrl" />
 				<hr>
-				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://awesomebiz.com/" @property="yelpUrl" />
+				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://www.yelp.com/biz/awesome-biz-2/" @property="yelpUrl" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
 				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
+				<span class="btn btn-default" {{on "click" this.cancel}}>Cancel</span>
 			</BsForm>
 		</div>
 	</div>
 </div>
-<div class="col-xl-6">
+<div class="col-md-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Photos and Menus</h4>
