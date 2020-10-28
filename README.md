@@ -91,7 +91,7 @@ Revoke Token: `POST /api/identity/revoke-token`
   
 User Profile: `/api/profile` (GET, PUT, POST)
 
-Track User Location: `POST /api/profile/updateGeo`
+Track User Location: `POST /api/profile/update-geo`
 + Uses GeoJson Point geometry type as body
     Example: 
     ```
@@ -105,12 +105,3 @@ Track User Location: `POST /api/profile/updateGeo`
     ```
 + If the nearest location searched in the previous 2 hours is within 50 meters, a Geo Checkin will be logged
 
-Other User's Profile: `/api/profile/{userId}` (GET, PUT, DELETE)
-+ only available to Admins as of 28-08-2020)
-
-User Locations:
-+ `GET /api/profile/recently-viewed` returns list of locations viewed today and yesterday
-+ `GET /api/profile/addfavorite/{locationId}`
-+ `GET /api/profile/hidefavorite/{locationId}`
-+ `GET /api/profile/hidelocation/{locationId}` (hides from search)
-+ `GET /api/profile/unhidelocation/{locationId}` (unhides from search)

@@ -122,6 +122,12 @@ namespace Poppin.Models
 								public GeoCoords Geo { get; set; }
 				}
 
+				public class Menu
+				{
+								public string Name { get; set; }
+								public string Url { get; set; }
+				}
+
 				/// <summary>
 				/// Uses GeoJson Point geometry type 
 				/// https://developer.here.com/documentation/studio/map_customization_suite_hlp/dev_guide/topics/geojson-basics.html

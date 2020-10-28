@@ -45,9 +45,9 @@ Also excludes `favorites`, `hidden`, and `vendorIds` as those are edited elsewhe
 ```
 {
   user: [PoppinUser](#poppinuserresult),
-  vendors: [Vendor](./Vendors.md)[],
-  favorites: [PoppinLocation](./Locations.md)[],
-  hidden: [PoppinLocation](./Locations.md)[]
+  vendors: [Vendor](./Vendors.md#vendor-class)[],
+  favorites: [PoppinLocation](./Locations.md#poppinlocation-class)[],
+  hidden: [PoppinLocation](./Locations.md#poppinlocation-class)[]
 }
 ```
 
@@ -67,7 +67,7 @@ For site admins to see user data. Probably not going to last long.
 
 ### GET api/profile/recently-viewed
 Request: Empty  
-Return: [PoppinLocation](./Locations.md)[]
+Return: [PoppinLocation](./Locations.md#poppinlocation-class)[]
 
 List of locations the user recently clicked to view. This does not pull recent search results.
 

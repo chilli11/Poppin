@@ -1,6 +1,9 @@
 ﻿# Locations
 Reference for `api/locations` endpoints
 
+NATIVE SEARCH: No more yelp search. A number of fields have been added to request and response  
+classes in order to support full location details from our own database.
+
 ## Request/Response Classes
 
 #### PoppinLocation Class
@@ -8,21 +11,18 @@ Reference for `api/locations` endpoints
 {
   id: string,
   yelpId: string,
+  hereId: string, // NEW :: not yet in use
   vendorId: string,
   name: string,
   phone: string,
-  address: {
-    line1: string,
-    line2: string,
-    city: string,
-    state: string,
-    zipCode: string,
-    coordinates: {
-      latitude: float,
-      longitude: float
-    }
-    geo: GeoJsonPoint
-  },
+  logoUrl: string, // NEW
+  mainPhotoUrl: string, // NEW
+  addlPhotoUrls: string[], // NEW
+  website: string, // NEW
+  menus: [Menu](#menu-class)[], // NEW 
+  yelpUrl: string, // NEW
+  address: [Address](#address-class),
+  categories: string[], // NEW
   capacity: int,
   crowdsize: int,
   visitLength: int,
@@ -44,18 +44,13 @@ Reference for `api/locations` endpoints
   yelpId: string,
   name: string,
   phone: string,
-  address: {
-    line1: string,
-    line2: string,
-    city: string,
-    state: string,
-    zipCode: string,
-    coordinates: {
-    		latitude: float,
-    		longitude: float
-    }
-    geo: GeoJsonPoint
-  },
+  mainPhotoUrl: string, // NEW
+  addlPhotoUrls: string[], // NEW
+  website: string, // NEW
+  menus: [Menu](#menu-class)[], // NEW 
+  yelpUrl: string, // NEW
+  address: [Address](#address-class),
+  categories: string[], // NEW
   capacity: int,
   visitLength: int,
   hours: [{
@@ -66,37 +61,51 @@ Reference for `api/locations` endpoints
 }
 ```
 
-#### YelpBusinessSearchParams Class
-All fields are strings, but represent other types for Yelp Fusion API
+#### LocationSearchRequest Class
 ```
 {
   term: string,
-  location: string, // required if no lat/lon,
-  latitude: string, // lat/lon required if no location
-  longitude: string,
+  location: string, // required if no geo,
+  geo: [GeoJsonPoint](https://docs.mongodb.com/manual/reference/geojson/#point),
   radius: string, // float, in meters
-  categories: string, // comma separated list of aliases from Yelp category list
-  locale: string,
-  limit: string, // int, for pagination
-  offset: string // int, for pagination
-  sort_by: string,
-  price: string,
-  open_now: string, // bool
-  open_at: string,
-  attributes: string, // comma separated list
+  categories: string // comma separated list of slugs from the category list
+}
+```
+
+#### Address Class
+```
+{
+  line1: string,
+  line2: string,
+  city: string,
+  state: string,
+  zipCode: string,
+  coordinates: {
+    latitude: float,
+    longitude: float
+  }
+  geo: GeoJsonPoint
+  }
+```
+
+#### Menu Class
+```
+{
+  name: string,
+  url: string
 }
 ```
 
 #### Checkin Class
 ```
 {
-    id: string,
-    userId: string,
-    locationId: string,
-    timestamp: date,
-    timeout: date,
-    reliabilityScore: float,
-    isValid: bool // if the timeout is in the future
+  id: string,
+  userId: string,
+  locationId: string,
+  timestamp: date,
+  timeout: date,
+  reliabilityScore: float,
+  isValid: bool // if the timeout is in the future
 }
 ```
 
@@ -130,28 +139,19 @@ and so it is not included in `api/locations/{locationId}. This API addresses tha
 TODO: Implement GraphAPI to get details as needed. Potentially higher usage limit, and will be a good candidate for 
 Redis integration. This will not be deprecated with `api/locations/yelp-search`
 
-### POST api/locations/yelp-search (deprecated)
-Request: [YelpBusinessSearchParams](#yelpbusinesssearchparams-class)  
+### POST api/locations/search
+Request: [LocationSearchRequest](#locationsearchrequest-class)  
 Response: 
 ```
 {
   total: int,
   businesses: [PoppinLocation](#poppinlocation-class)[],
-  region: {
-  	 center: {
-  	   latitude: float,
-  	   longitude: float
-  	 }
-  },
-  searchParams: [YelpBusinessSearchParams](#yelpbusinesssearchparams-class)
+  searchParams: [LocationSearchRequest](#locationsearchrequest-class)  
 }
 ```
 
-Initiates a proper Yelp search with the submitted query. Returns all locations in the `PoppinStore.Locations` collection that
-have YelpIds that are in the Yelp search results. This limits the number of results we can get back with generic searches, since Yelp's
-results will be noisy because of results that aren't relevant to us.
-
-Native search is ready and being tested.
+Initiates a native search with the submitted query. Returns all locations in the `PoppinStore.Locations` collection that
+are _within the radius_ => _have one of the selected categories (all, if none selected)_ => have the search term in the `name`.  
 
 ### POST api/locations
 Request: [PoppinLocationRequest](#poppinlocationrequest-class)  
