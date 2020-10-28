@@ -56,17 +56,26 @@ namespace Poppin.Controllers
 												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 												if (id == null)
 												{
+																return Unauthorized();
+												}
+
+												try
+												{
+																var user = await GetUserProfile(id);
+                        
+																Track(id, SegmentIOKeys.Actions.ViewUserProfile);
+																return Ok(await GetPoppinUserResult(user));
+
+												}
+												catch (Exception ex)
+												{
 																var errors = new List<string>();
-																errors.Add("User not found");
+																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
 																});
 												}
-												var user = await GetUserProfile(id);
-                        
-												Track(id, SegmentIOKeys.Actions.AddFavorite);
-												return Ok(await GetPoppinUserResult(user));
 								}
 
 								// GET api/<ProfileController>/5
@@ -86,19 +95,31 @@ namespace Poppin.Controllers
 																return Forbid();
 												}
 
-												var user = await GetUserProfile(id);
-												if (user == null)
+												try
+												{
+																var user = await GetUserProfile(id);
+																if (user == null)
+																{
+																				var errors = new List<string>();
+																				errors.Add("User not found");
+																				return BadRequest(new GenericFailure
+																				{
+																								Errors = errors
+																				});
+																}
+
+																Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
+																return Ok(GetPoppinUserResult(user));
+												}
+												catch (Exception ex)
 												{
 																var errors = new List<string>();
-																errors.Add("User not found");
+																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
 																});
 												}
-
-												Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
-												return Ok(GetPoppinUserResult(user));
 								}
 
 								/// <summary>
@@ -111,17 +132,29 @@ namespace Poppin.Controllers
 												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 												if (id == null)
 												{
+																return BadRequest(new GenericFailure
+																{
+																				Errors = new[] { "User not found" }
+																});
+												}
+
+												try
+												{
+																var recentLocations = GetRecentLocationList(id, -1, 0);
+																Track(id, SegmentIOKeys.Actions.AddFavorite);
+																return Ok(recentLocations);
+
+												}
+												catch (Exception ex)
+												{
 																var errors = new List<string>();
-																errors.Add("User not found");
+																errors.Add(ex.Message);
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
 																});
 												}
 
-												var recentLocations = GetRecentLocationList(id, -1, 0);
-												Track(id, SegmentIOKeys.Actions.AddFavorite);
-												return Ok(recentLocations);
 								}
 
 								/// <summary>

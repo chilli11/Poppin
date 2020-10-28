@@ -3176,16 +3176,30 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class;
+  var _dec, _dec2, _dec3, _class;
 
   function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
 
-  let AccountMeController = (_dec = Ember._action, (_class = class AccountMeController extends Ember.Controller {
-    clickAction(location) {
+  let AccountMeController = (_dec = Ember._action, _dec2 = Ember._action, _dec3 = Ember._action, (_class = class AccountMeController extends Ember.Controller {
+    locationClickAction(location) {
       return this.transitionToRoute('locations.location', location);
     }
 
-  }, (_applyDecoratedDescriptor(_class.prototype, "clickAction", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "clickAction"), _class.prototype)), _class));
+    vendorClickAction(vendor) {
+      return this.transitionToRoute('vendors.vendor', vendor);
+    }
+
+    refreshTheRoute(profile) {
+      const outModel = {
+        profile: profile,
+        vendors: this.model.vendors,
+        favorites: this.model.favorites,
+        hidden: this.model.hidden
+      };
+      return this.send('refreshRoute', outModel);
+    }
+
+  }, (_applyDecoratedDescriptor(_class.prototype, "locationClickAction", [_dec], Object.getOwnPropertyDescriptor(_class.prototype, "locationClickAction"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "vendorClickAction", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "vendorClickAction"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "refreshTheRoute", [_dec3], Object.getOwnPropertyDescriptor(_class.prototype, "refreshTheRoute"), _class.prototype)), _class));
   _exports.default = AccountMeController;
 });
 ;define("poppin-ui/pods/account/me/route", ["exports"], function (_exports) {
@@ -3196,7 +3210,7 @@
   });
   _exports.default = void 0;
 
-  var _dec, _class, _descriptor, _temp;
+  var _dec, _dec2, _class, _descriptor, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -3206,7 +3220,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let AccountIndexRoute = (_dec = Ember.inject.service, (_class = (_temp = class AccountIndexRoute extends Ember.Route {
+  let AccountIndexRoute = (_dec = Ember.inject.service, _dec2 = Ember._action, (_class = (_temp = class AccountIndexRoute extends Ember.Route {
     constructor(...args) {
       super(...args);
 
@@ -3214,7 +3228,22 @@
     }
 
     model() {
-      return this.accountService.myProfile();
+      return {
+        profile: this.accountService.profile,
+        vendors: this.accountService.vendors,
+        favorites: this.accountService.favorites,
+        hidden: this.accountService.hidden
+      };
+    }
+
+    afterModel() {
+      if (!this.accountService.authInfo || !this.accountService.authInfo.authorized) {
+        return this.transitionTo('account.login');
+      }
+    }
+
+    refreshRoute() {
+      return this.refresh();
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -3222,7 +3251,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  })), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "refreshRoute", [_dec2], Object.getOwnPropertyDescriptor(_class.prototype, "refreshRoute"), _class.prototype)), _class));
   _exports.default = AccountIndexRoute;
 });
 ;define("poppin-ui/pods/account/me/template", ["exports"], function (_exports) {
@@ -3234,8 +3263,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "AFvqZOfH",
-    "block": "{\"symbols\":[\"@model\"],\"statements\":[[8,\"account/my-profile\",[],[[\"@profile\",\"@favorites\",\"@locationClickAction\"],[[32,1,[\"profile\"]],[34,0,[\"favorites\"]],[32,0,[\"clickAction\"]]]],null]],\"hasEval\":false,\"upvars\":[\"model\"]}",
+    "id": "5B/urCVa",
+    "block": "{\"symbols\":[],\"statements\":[[8,\"account/my-profile\",[],[[\"@profile\",\"@favorites\",\"@vendors\",\"@refresh\",\"@locationClickAction\",\"@vendorClickAction\"],[[34,0,[\"profile\"]],[34,0,[\"favorites\"]],[34,0,[\"vendors\"]],[32,0,[\"refreshTheRoute\"]],[32,0,[\"locationClickAction\"]],[32,0,[\"vendorClickAction\"]]]],null]],\"hasEval\":false,\"upvars\":[\"model\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/account/me/template.hbs"
     }
@@ -3534,8 +3563,7 @@
         password
       }).then(response => {
         if (response.errors && response.errors.length) throw response;
-        this.accountService.myProfile();
-        return this.dispatch(_constants.actions.RESOLVE, ['Login success!']);
+        return this.accountService.myProfile().then(() => this.dispatch(_constants.actions.RESOLVE, ['Login success!']));
       }).catch(response => this.dispatch(_constants.actions.REJECT, response.errors));
     }
 
@@ -3640,8 +3668,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "6DhVX4Nz",
-    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"fb:login-button\"],[14,\"scope\",\"public_profile,email\"],[14,\"onlogin\",\"checkFBLoginState();\"],[12],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\tDon't have an account? \"],[8,\"link-to\",[],[[\"@route\"],[\"account.register\"]],[[\"default\"],[{\"statements\":[[2,\"Sign up\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "Jr6sXnqd",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"fb-login-button\"],[14,\"data-size\",\"medium\"],[14,\"data-button-type\",\"login_with\"],[14,\"data-layout\",\"rounded\"],[14,\"data-auto-logout-link\",\"false\"],[14,\"data-use-continue-as\",\"false\"],[14,\"data-onlogin\",\"checkFBLoginState();\"],[14,\"data-width\",\"\"],[12],[13],[2,\"\\n\"],[2,\"\\t\\t\\tDon't have an account? \"],[8,\"link-to\",[],[[\"@route\"],[\"account.register\"]],[[\"default\"],[{\"statements\":[[2,\"Sign up\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/login-form/template.hbs"
     }
@@ -3667,6 +3695,227 @@
 
   _exports.default = _default;
 });
+;define("poppin-ui/pods/components/account/my-profile/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/pods/components/account/my-profile/constants"], function (_exports, _statefulComponent, _constants) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  let _actions$START_EDIT, _actions$END_EDIT;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let Component = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember.computed('args.profile.categories', 'yelpCategories', 'yc'), _dec7 = Ember._action, _dec8 = Ember._action, _dec9 = Ember._action, (_class = (_temp = (_actions$START_EDIT = _constants.actions.START_EDIT, _actions$END_EDIT = _constants.actions.END_EDIT, class Component extends _statefulComponent.default {
+    get ageRange() {
+      var filter = this.ageRanges.filter(a => a.key == this.args.profile.ageRange);
+      return filter && filter.length ? filter[0] : null;
+    }
+
+    get gender() {
+      var filter = this.genders.filter(g => g.key == this.args.profile.gender);
+      return filter && filter.length ? filter[0] : null;
+    }
+
+    get categories() {
+      return (this.yelpCategories || []).filter(yc => (this.args.profile.categories || []).indexOf(yc.alias) > -1);
+    }
+
+    constructor() {
+      super(...arguments);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _initializerDefineProperty(this, "yelpService", _descriptor2, this);
+
+      _initializerDefineProperty(this, "isEdit", _descriptor3, this);
+
+      _initializerDefineProperty(this, "showStatusMsg", _descriptor4, this);
+
+      _initializerDefineProperty(this, "statusType", _descriptor5, this);
+
+      _defineProperty(this, "statusMsgs", []);
+
+      _defineProperty(this, "ageRanges", [{
+        key: "",
+        value: ""
+      }, {
+        key: "u18",
+        value: "Under 18"
+      }, {
+        key: "u26",
+        value: "18-25"
+      }, {
+        key: "u36",
+        value: "26-35"
+      }, {
+        key: "u46",
+        value: "36-45"
+      }, {
+        key: "u56",
+        value: "46-55"
+      }, {
+        key: "o55",
+        value: "Over 55"
+      }]);
+
+      _defineProperty(this, "genders", [{
+        key: "",
+        value: ""
+      }, {
+        key: "M",
+        value: "Male"
+      }, {
+        key: "F",
+        value: "Female"
+      }, {
+        key: "O",
+        value: "Other"
+      }, {
+        key: "D",
+        value: "Prefer Not to Say"
+      }]);
+
+      _defineProperty(this, "yelpCategories", void 0);
+
+      _defineProperty(this, "yc", void 0);
+
+      _defineProperty(this, "transitions", {
+        [_constants.states.IDLE]: {
+          [_constants.actions.START_EDIT]: _constants.states.EDIT_PROFILE
+        },
+        [_constants.states.EDIT_PROFILE]: {
+          [_constants.actions.END_EDIT]: _constants.states.IDLE
+        },
+        [_constants.states.LOADING]: {
+          [_constants.actions.END_LOADING]: _constants.states.IDLE
+        }
+      });
+
+      this.initMachine();
+      this.yelpService.getYelpCategories().then(data => Ember.set(this, 'yelpCategories', data));
+    }
+
+    [_actions$START_EDIT]() {
+      this.isEdit = true;
+    }
+
+    [_actions$END_EDIT](data) {
+      this.isEdit = false;
+      if (data) this.args.refresh(data);
+    }
+
+    showErrors(errors, isModal) {
+      Ember.set(this, 'statusMsgs', errors || ['Something went wrong...']);
+      this.statusType = 'danger';
+      if (isModal) this.showModalMsg = true;else this.showStatusMsg = true;
+    }
+
+    startEdit() {
+      return this.dispatch(_constants.actions.START_EDIT);
+    }
+
+    endEdit(data) {
+      return this.dispatch(_constants.actions.END_EDIT, data);
+    }
+
+    hideMsg() {
+      this.showModalMsg = false;
+      this.showStatusMsg = false;
+    }
+
+  }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "yelpService", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "isEdit", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return false;
+    }
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "showStatusMsg", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "statusType", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "categories", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "categories"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype)), _class));
+  _exports.default = Component;
+});
+;define("poppin-ui/pods/components/account/my-profile/constants copy", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.actions = _exports.states = void 0;
+  const states = {
+    IDLE: 'IDLE',
+    SUBMITTING_VENDOR: 'SUBMITTING_VENDOR',
+    ADDING_MEMBER: 'ADDING_MEMBER',
+    REMOVING_MEMBER: 'REMOVING_MEMBER',
+    GETTING_LOCATION_ID: 'GETTING_LOCATION_ID',
+    ADDING_LOCATION: 'ADDING_LOCATION',
+    REMOVING_LOCATION: 'REMOVING_LOCATION'
+  };
+  _exports.states = states;
+  const actions = {
+    SUBMIT_VENDOR: 'SUBMIT_VENDOR',
+    ADD_MEMBER: 'ADD_MEMBER',
+    REMOVE_MEMBER: 'REMOVE_MEMBER',
+    GET_LOCATION_ID: 'GET_LOCATION_ID',
+    ADD_LOCATION: 'ADD_LOCATION',
+    REMOVE_LOCATION: 'REMOVE_LOCATION',
+    RESOLVE_GET_LOCATION_ID: 'RESOLVE_GET_LOCATION_ID',
+    RESOLVE_MEMBER: 'RESOLVE_MEMBER',
+    RESOLVE_LOCATION: 'RESOLVE_LOCATION',
+    RESOLVE_SUBMIT_VENDOR: 'RESOLVE_SUBMIT_VENDOR',
+    REJECT_ACTION: 'REJECT_ACTION'
+  };
+  _exports.actions = actions;
+});
+;define("poppin-ui/pods/components/account/my-profile/constants", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.actions = _exports.states = void 0;
+  const states = {
+    IDLE: 'IDLE',
+    LOADING: 'LOADING',
+    EDIT_PROFILE: 'EDIT_PROFILE'
+  };
+  _exports.states = states;
+  const actions = {
+    START_EDIT: 'START_EDIT',
+    END_EDIT: 'END_EDIT',
+    REJECT_ACTION: 'REJECT_ACTION',
+    END_LOADING: 'END_LOADING'
+  };
+  _exports.actions = actions;
+});
 ;define("poppin-ui/pods/components/account/my-profile/template", ["exports"], function (_exports) {
   "use strict";
 
@@ -3676,10 +3925,244 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "/MBDfusU",
-    "block": "{\"symbols\":[\"@profile\",\"@favorites\",\"@locationClickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Account\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"firstName\"]]],[2,\" \"],[1,[32,1,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,2],[32,3]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "ILfSNdnF",
+    "block": "{\"symbols\":[\"cat\",\"msg\",\"@vendors\",\"@vendorClickAction\",\"@profile\",\"@refresh\",\"@favorites\",\"@locationClickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,4],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\"],[6,[37,5],[[32,5,[\"profilePhoto\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"img\"],[15,\"src\",[32,5,[\"profilePhoto\"]]],[14,0,\"profile-photo\"],[14,5,\"max-height: 100px;\"],[12],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"span\"],[12],[2,\"My Profile\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-sm btn-info\"],[24,5,\"margin:0\"],[24,\"role\",\"link\"],[4,[38,6],[\"click\",[32,0,[\"startEdit\"]]],null],[12],[2,\"Edit\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"firstName\"]]],[2,\" \"],[1,[32,5,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,\"account/profile-form\",[],[[\"@ageRanges\",\"@genders\",\"@yelpCategories\",\"@categories\",\"@profile\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,0,[\"ageRanges\"]],[32,0,[\"genders\"]],[32,0,[\"yelpCategories\"]],[32,0,[\"categories\"]],[32,5],[32,6],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Age:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"ageRange\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Gender:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"gender\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Favorite Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,1,[\"title\"]]],[1,[30,[36,1],[[30,[36,0],[[32,1],[32,0,[\"categories\",\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\t\\t\\t\\t\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,3],[32,4]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,7],[32,8]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"eq\",\"unless\",\"-track-array\",\"each\",\"fn\",\"if\",\"on\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/my-profile/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/components/account/profile-form/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/pods/components/account/profile-form/constants"], function (_exports, _statefulComponent, _constants) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  let _actions$SUBMIT_PROFI, _actions$REJECT_ACTIO;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let VendorFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = (_temp = (_actions$SUBMIT_PROFI = _constants.actions.SUBMIT_PROFILE, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class VendorFormComponent extends _statefulComponent.default {
+    get categoryList() {
+      return this.categories.map(c => c.alias);
+    }
+
+    get isLoading() {
+      return /ing/i.test(this.machineState);
+    }
+
+    get profileDTO() {
+      const profile = this.args.profile;
+      const {
+        firstName,
+        lastName,
+        profilePhoto,
+        ageRange,
+        gender,
+        categoryList
+      } = this;
+      return {
+        userId: profile.userId,
+        username: profile.username,
+        firstName,
+        lastName,
+        email: profile.email,
+        profilePhoto,
+        ageRange: ageRange ? ageRange.key : null,
+        gender: gender ? gender.key : null,
+        categories: categoryList
+      };
+    }
+
+    constructor() {
+      super(...arguments);
+
+      _defineProperty(this, "namespace", 'LocationForm');
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _defineProperty(this, "transitions", {
+        [_constants.states.IDLE]: {
+          [_constants.actions.SUBMIT_PROFILE]: _constants.states.SUBMITTING_PROFILE
+        },
+        [_constants.states.SUBMITTING_PROFILE]: {
+          [_constants.actions.RESOLVE_SUBMIT_PROFILE]: _constants.states.IDLE,
+          [_constants.actions.REJECT_ACTION]: _constants.states.IDLE
+        }
+      });
+
+      _initializerDefineProperty(this, "showMsg", _descriptor2, this);
+
+      _initializerDefineProperty(this, "msgType", _descriptor3, this);
+
+      _defineProperty(this, "msgs", []);
+
+      _defineProperty(this, "categories", []);
+
+      _initializerDefineProperty(this, "firstName", _descriptor4, this);
+
+      _initializerDefineProperty(this, "lastName", _descriptor5, this);
+
+      _initializerDefineProperty(this, "profilePhoto", _descriptor6, this);
+
+      _initializerDefineProperty(this, "ageRange", _descriptor7, this);
+
+      _initializerDefineProperty(this, "gender", _descriptor8, this);
+
+      this.populateFromPoppin();
+      this.initMachine();
+    }
+
+    clearForm() {
+      this.profilePhoto = null;
+      this.ageRange = null;
+      this.gender = null;
+      this.categories = [];
+    }
+
+    populateFromPoppin(profile) {
+      const p = profile || this.args.profile;
+
+      if (p) {
+        this.firstName = p.firstName;
+        this.lastName = p.lastName;
+        this.profilePhoto = p.profilePhoto;
+        const arMatch = this.args.ageRanges.filter(ar => ar.key == p.ageRange);
+        const gMatch = this.args.genders.filter(g => g.key == p.gender);
+        this.ageRange = arMatch && arMatch.length ? arMatch[0] : null;
+        this.gender = gMatch && gMatch.length ? gMatch[0] : null;
+        this.categories = this.args.categories;
+      }
+    }
+
+    [_actions$SUBMIT_PROFI]() {
+      return this.accountService.updateProfile(this.profileDTO).then(profile => {
+        if (typeof this.args.resolveAction == 'function') {
+          return this.args.resolveAction(profile);
+        }
+
+        this.modalText = "Your profile has been updated!";
+        this.modalTitle = "Success!";
+        this.showStatusModal = true;
+        return this.dispatch(_constants.actions.RESOLVE_SUBMIT_PROFILE);
+      }).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, data));
+    }
+
+    [_actions$REJECT_ACTIO]({
+      msgs,
+      context
+    }) {
+      if (context && context == 'member') {
+        Ember.set(this, 'memberMsgs', msgs || []);
+        this.memberMsgType = 'danger';
+        this.showMemberMsg = true;
+      } else {
+        Ember.set(this, 'msgs', msgs || []);
+        this.msgType = 'danger';
+        this.showMsg = true;
+      }
+    }
+
+    submit() {
+      return this.dispatch(_constants.actions.SUBMIT_PROFILE, null, true);
+    }
+
+    hideMsg() {
+      this.showMsg = false;
+      Ember.set(this, 'msgs', []);
+    }
+
+  }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "showMsg", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return false;
+    }
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "msgType", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return "success";
+    }
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "firstName", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "lastName", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "profilePhoto", [_dec6], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor7 = _applyDecoratedDescriptor(_class.prototype, "ageRange", [_dec7], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "gender", [_dec8], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype)), _class));
+  _exports.default = VendorFormComponent;
+});
+;define("poppin-ui/pods/components/account/profile-form/constants", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.actions = _exports.states = void 0;
+  const states = {
+    IDLE: 'IDLE',
+    SUBMITTING_PROFILE: 'SUBMITTING_PROFILE'
+  };
+  _exports.states = states;
+  const actions = {
+    SUBMIT_PROFILE: 'SUBMIT_PROFILE',
+    RESOLVE_SUBMIT_PROFILE: 'RESOLVE_SUBMIT_PROFILE',
+    REJECT_ACTION: 'REJECT_ACTION'
+  };
+  _exports.actions = actions;
+});
+;define("poppin-ui/pods/components/account/profile-form/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "zNPuDB7O",
+    "block": "{\"symbols\":[\"form\",\"cat\",\"g\",\"ar\",\"msg\",\"@cancelAction\",\"@ageRanges\",\"@genders\",\"@yelpCategories\"],\"statements\":[[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,0],true,[34,1],true,[32,0,[\"hideMsg\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\"],[10,\"p\"],[12],[1,[32,5]],[13],[2,\"\\n\"]],\"parameters\":[5]}]]]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,4],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col-md-6\"]],[[\"@label\",\"@controlType\",\"@property\"],[\"First Name\",\"text\",\"firstName\"]],null],[2,\"\\n\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col-md-6\"]],[[\"@label\",\"@controlType\",\"@property\"],[\"Last Name\",\"text\",\"lastName\"]],null],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[8,[32,1,[\"element\"]],[],[[\"@label\",\"@controlType\",\"@placeholder\",\"@property\"],[\"Profile Photo URL\",\"text\",\"Profile Photo URL\",\"profilePhoto\"]],null],[2,\"\\n\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"label\"],[14,0,\"col-md-4\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"power-select\",[],[[\"@options\",\"@placeholder\",\"@selected\",\"@onChange\"],[[32,7],\"Age Range\",[32,0,[\"ageRange\"]],[30,[36,4],[[30,[36,5],[[32,0,[\"ageRange\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[1,[32,4,[\"value\"]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[4]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"label\"],[14,0,\"col-md-4\"],[12],[2,\"Gender\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"power-select\",[],[[\"@options\",\"@placeholder\",\"@selected\",\"@onChange\"],[[32,8],\"Gender\",[32,0,[\"gender\"]],[30,[36,4],[[30,[36,5],[[32,0,[\"gender\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[1,[32,3,[\"value\"]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"label\"],[14,0,\"col-md-4\"],[12],[2,\"Fav. Categories\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,9],\"Search...\",\"title\",[32,0,[\"categories\"]],[30,[36,4],[[30,[36,5],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[1,[32,2,[\"title\"]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\"],[6,[37,6],[[32,6]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"bs-button\",[],[[\"@type\",\"@onClick\",\"@defaultText\"],[\"outline-secondary\",[32,6],\"Cancel\"]],null],[2,\"\\n\"]],\"parameters\":[]}]]]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"showMsg\",\"msgType\",\"-track-array\",\"each\",\"fn\",\"mut\",\"if\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/components/account/profile-form/template.hbs"
     }
   });
 
@@ -3945,7 +4428,7 @@
     }
 
     logout() {
-      return this.accountService.logout().then(this.router.transitionTo('account'));
+      return this.accountService.logout().then(this.router.transitionTo('index'));
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -6044,7 +6527,12 @@
   });
   _exports.default = void 0;
 
-  class IndexRoute extends Ember.Route {}
+  class IndexRoute extends Ember.Route {
+    model() {
+      return true;
+    }
+
+  }
 
   _exports.default = IndexRoute;
 });
@@ -6609,7 +7097,7 @@
     }
 
     beforeModel() {
-      this.accountService.isAuthenticated();
+      return this.accountService.isAuthenticated().then(authInfo => authInfo.authorized ? this.accountService.myProfile() : null);
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -6757,8 +7245,10 @@
       if (this.authInfo && this.authInfo.authorized) return this.myProfile();
       return this.apiService.request({
         resource: _httpResources.default.isAuthenticated
-      }).then(() => this.authInfo = {
-        authorized: true
+      }).then(data => {
+        this.authInfo = data;
+        if (!data.authorized) return this.isOAuthenticated();
+        return data;
       }).catch(() => {
         return this.isOAuthenticated();
       });
@@ -6820,9 +7310,20 @@
         this.hidden = hidden;
         return {
           profile: user,
-          favorites
+          favorites,
+          vendors,
+          hidden
         };
-      });
+      }).catch(({
+        errors
+      }) => errors);
+    }
+
+    updateProfile(profile) {
+      return this.apiService.request({
+        resource: _httpResources.default.updateProfile,
+        body: profile
+      }).then(newProfile => this.profile = newProfile);
     }
 
     addFavorite(locId) {
@@ -7960,12 +8461,12 @@
       method: POST
     },
     incrementCrowd: {
-      url: 'locations/incrementCrowd/:locId',
+      url: 'locations/increment-crowd/:locId',
       method: GET,
       params: ['locId']
     },
     decrementCrowd: {
-      url: 'locations/decrementCrowd/:locId',
+      url: 'locations/decrement-crowd/:locId',
       method: GET,
       params: ['locId']
     },
@@ -8108,7 +8609,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+cef52e5e"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+cdc1039d"});
           }
         
 //# sourceMappingURL=poppin-ui.map
