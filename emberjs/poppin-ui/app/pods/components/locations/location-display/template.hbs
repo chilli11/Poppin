@@ -39,10 +39,10 @@
 					</dd>
 					<dt>Visit Length:</dt>
 					<dd>{{@location.visitLength}}</dd>
-					{{#if @location.menuUrls}}
+					{{#if @location.menus}}
 						<dt>Menu(s)</dt>
-						{{#each @location.menuUrls as |menu|}}
-							<a href={{menu}} target="_blank" class="btn btn-default btn-small">{{menu}}</a>
+						{{#each @location.menus as |menu|}}
+							<a href={{menu.url}} target="_blank" class="btn btn-default btn-small">{{menu.name}}</a>
 						{{/each}}
 					{{/if}}
 

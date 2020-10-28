@@ -1,7 +1,7 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { tracked } from '@glimmer/tracking';
 import { action, set, computed } from '@ember/object';
-import { A as eArray } from '@ember/array';
+import { Menu } from 'poppin-ui/classes/location-entities';
 import { inject as service } from '@ember/service';
 import _ from 'lodash';
 
@@ -17,7 +17,6 @@ const defHours = [
 	{ opening: null, closing: null,  day: days[5] },
 	{ opening: null, closing: null,  day: days[6] },
 ];
-
 
 export default class LocationFormComponent extends StatefulComponent {
 	namespace = 'LocationForm';
@@ -76,11 +75,12 @@ export default class LocationFormComponent extends StatefulComponent {
 	}
 
   addlPhotoUrls = [];
-  menuUrls = []
+  menus = []
 	@tracked addlPhotoUrl;
 	@tracked logoUrl;
 	@tracked mainPhotoUrl;
 	@tracked website;
+	@tracked menuName;
 	@tracked menuUrl;
 	@tracked yelpUrl;
 	@tracked geo;
@@ -88,6 +88,15 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked crowdSize = '0';
 	@tracked hours = _.merge(defHours);
 	@tracked visitLength = 45;
+
+	@computed('addlPhotoUrls')
+	get photoUrls() {
+		return this.addlPhotoUrls;
+	}
+	@computed('menus')
+	get oldMenus() {
+		return this.menus;
+	}
 
 	@tracked modalTitle;
 	@tracked modalText;
@@ -107,11 +116,12 @@ export default class LocationFormComponent extends StatefulComponent {
 			addlPhotoUrls,
 			addlPhotoUrl,
 			website,
-			menuUrls,
+			menus,
+			menuName,
 			menuUrl,
 			yelpUrl,
 		} = this;
-		return  {
+		var output = {
 			id: locationId,
 			yelpId: yelpId,
 			name,
@@ -127,7 +137,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			mainPhotoUrl,
 			addlPhotoUrls: addlPhotoUrls.concat(addlPhotoUrl).filter(p => !!p),
 			website,
-			menuUrls: menuUrls.concat(menuUrl).filter(m => !!m),
+			menus,
 			yelpUrl,
 			categories: this.categoryList,
 			capacity: parseInt(capacity, 10),
@@ -135,6 +145,11 @@ export default class LocationFormComponent extends StatefulComponent {
 			hours,
 			visitLength: parseInt(visitLength, 10)
 		};
+		if (menuUrl) {
+			const newMenu = new Menu(menuUrl, menuName);
+			output.menus = menus.concat(newMenu).filter(m => !!m.url)
+		}
+		return output;
 	}
 
 	get canAcceptMatch() {
@@ -160,11 +175,12 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.zipCode = null;
 		this.logoUrl = null;
 		this.mainPhotoUrl = null;
-		this.addlPhotoUrls = [];
+		set(this, 'addlPhotoUrls', []);
 		this.addlPhotoUrl = null;
 		this.website = null;
-		this.menuUrls = [];
+		set(this, 'menus', []);
 		this.menuUrl = null;
+		this.menuName = null;
 		this.yelpUrl = null;
 		this.categories = [];
 		this.capacity = 0;
@@ -182,6 +198,16 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.addlPhotoUrls.pushObject("");
 	}
 
+	@action
+	removePic(url) {
+		this.addlPhotoUrls.removeObject(url);
+	}
+
+	@action
+	removeMenu(menu) {
+		this.menus.removeObject(menu);
+	}
+
 	populateFromPoppin(location) {
 		const loc = location || this.args.location
 		const coordinates = loc.address.geo.coordinates;
@@ -196,10 +222,11 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.state = loc.address.state;
 			this.zip = loc.address.zipCode;
 			this.logoUrl = loc.logoUrl;
-			this.menuUrls = loc.menuUrls || [];
 			this.mainPhotoUrl = loc.mainPhotoUrl;
-			this.addlPhotoUrls = loc.addlPhotoUrls || [];
+			set(this, 'addlPhotoUrls', loc.addlPhotoUrls || []);
 			this.addlPhotoUrl = null;
+			set(this, 'menus', (loc.menus || []).map(m => new Menu(m.url, m.name)));
+			this.menuName = null;
 			this.menuUrl = null;
 			this.website = loc.website;
 			this.yelpUrl = loc.yelpUrl;

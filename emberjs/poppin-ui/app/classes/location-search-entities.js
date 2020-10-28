@@ -1,5 +1,3 @@
-import { assign } from '@ember/polyfills';
-
 /**
  *
  * @export

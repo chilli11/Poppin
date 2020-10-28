@@ -1,22 +1,3 @@
-{{#unless @reverseOrder}}
-	<div class="col-xl-6">
-		<div class="card">
-			<div class="card-header card-header-primary">
-				<h4 class="card-title">Search Yelp</h4>
-			</div>
-			<div class="card-body">
-				<Yelp::YelpMatchForm
-					@term={{this.name}}
-					@location={{this.city}}
-					@yelpMatchId={{this.yelpId}}
-					@yelpMatches={{this.yelpMatches}}
-					@acceptMatch={{this.acceptMatch}}
-					@fillData={{this.fillData}}
-					@canAcceptMatch={{this.canAcceptMatch}} />
-			</div>
-		</div>
-	</div>
-{{/unless}}
 <div class="col-xl-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
@@ -55,7 +36,11 @@
 					<BsButton @onClick={{this.addImg}}><img src="/images/add_circle-24px.svg" /> Add an image</BsButton>
 				</div> --}}
 				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
-				<form.element @controlType="text" @label="Menu URL" @placeholder="https://awesomebiz.com/" @property="menuUrl" />
+				<hr>
+				<h5>Add a Menu</h5>
+				<form.element @label="Name" @placeholder="Breakfast|Brunch|Lunch|Dinner|Cocktails|Wine|Beer" @controlType="text" @property="menuName" />
+				<form.element @label="URL" @placeholder="https://awesomebiz.com/" @controlType="text" @property="menuUrl" />
+				<hr>
 				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://awesomebiz.com/" @property="yelpUrl" />
 				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
 				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
@@ -64,25 +49,23 @@
 		</div>
 	</div>
 </div>
-{{#if @reverseOrder}}
-	<div class="col-xl-6">
-		<div class="card">
-			<div class="card-header card-header-primary">
-				<h4 class="card-title">Search Yelp</h4>
-			</div>
-			<div class="card-body">
-				<Yelp::YelpMatchForm
-					@term={{this.name}}
-					@location={{this.city}}
-					@yelpMatchId={{this.yelpId}}
-					@yelpMatches={{this.yelpMatches}}
-					@acceptMatch={{this.acceptMatch}}
-					@fillData={{this.fillData}}
-					@canAcceptMatch={{this.canAcceptMatch}} />
-			</div>
+<div class="col-xl-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Photos and Menus</h4>
+			<p>Click to remove. It's not final til you hit submit!</p>
+		</div>
+		<div class="card-body">
+			{{#each this.photoUrls as |pic|}}
+				<img src={{pic}} class="col-sm-4" {{on "click" (fn this.removePic pic)}} />
+			{{/each}}
+			<hr>			
+			{{#each this.oldMenus as |menu|}}
+				<span href={{menu.url}} {{on "click" (fn this.removeMenu menu)}} class="btn btn-default btn-small">{{menu.name}}</span>
+			{{/each}}
 		</div>
 	</div>
-{{/if}}
+</div>
 
 <BsModal @open={{this.showModal}} as |modal|>
 	<modal.header>

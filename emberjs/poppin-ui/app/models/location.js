@@ -9,7 +9,7 @@ export default class LocationModel extends Model {
 	@attr('string') mainPhotoUrl;
 	@attr addlPhotoUrls;
 	@attr('string') website;
-	@attr menuUrls;
+	@attr menus;
 	@attr('string') yelpUrl;
   @attr categories;
   @attr('number') capacity;
