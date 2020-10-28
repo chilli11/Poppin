@@ -36,7 +36,7 @@ namespace Poppin.Models.Tracking
 								{
 												get
 												{
-																return Timeout > Timestamp;
+																return DateTime.Now > Timeout;
 												}
 								}
 				}

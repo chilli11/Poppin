@@ -36,9 +36,10 @@ Any failures will get a 400 or 404 with an `AuthFailedResponse`
 
 ### GET api/identity/is-authenticated
 Request: Empty  
-Response: 200/401
+Response: `{ authorized: bool }`
 
-Simple check for authentication. Include the most recent Bearer token in the headers
+Simple check for authentication. Always returns 200.  
+Include the most recent Bearer token in the headers.
 
 ### POST api/identity/register
 Request:

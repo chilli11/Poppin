@@ -40,7 +40,7 @@ Reference for `api/locations` endpoints
 #### PoppinLocationRequest Class
 ```
 {
-  id: string,
+  id: string, // validated as 24-digit alphanumeric
   yelpId: string,
   name: string,
   phone: string,
@@ -87,28 +87,41 @@ All fields are strings, but represent other types for Yelp Fusion API
 }
 ```
 
+#### Checkin Class
+```
+{
+    id: string,
+    userId: string,
+    locationId: string,
+    timestamp: date,
+    timeout: date,
+    reliabilityScore: float,
+    isValid: bool // if the timeout is in the future
+}
+```
+
 ## API Reference
 
 ### GET api/locations/{locationId}
-Return: `PoppinLocation` without `yelpDetails`
+Return: [PoppinLocation](#poppinlocation-class) without `yelpDetails`
 
 ### PUT api/locations or PUT api/locations/{locationId}
 *Requires Admin role*  
-Request: PoppinLocationRequest  
-Return: updated `PoppinLocation` without Yelp Details
+Request: [PoppinLocationRequest](#poppinlocationrequest-class)  
+Return: updated [PoppinLocation](#poppinlocation-class) without Yelp Details
 
-Updates existing PoppinLocation
+Updates existing [PoppinLocation](#poppinlocation-class)
 
 ### DELETE api/locations/{locationId}
 *Requires Admin role*  
 Request: Empty  
 Return: Empty
 
-Deletes existing PoppinLocation
+Deletes existing [PoppinLocation](#poppinlocation-class)
 
 ### GET api/locations/with-yelp/{locationId}
 Request: Empty  
-Return: `PoppinLocation`
+Return: [PoppinLocation](#poppinlocation-class)
 
 Due to the daily request limit on Yelp's Fusion API (5000), we have to limit the number of requests for their data,
 and so it is not included in `api/locations/{locationId}. This API addresses that need.
@@ -118,19 +131,19 @@ TODO: Implement GraphAPI to get details as needed. Potentially higher usage limi
 Redis integration. This will not be deprecated with `api/locations/yelp-search`
 
 ### POST api/locations/yelp-search (deprecated)
-Request: YelpBusinessSearchParams  
+Request: [YelpBusinessSearchParams](#yelpbusinesssearchparams-class)  
 Response: 
 ```
 {
   total: int,
-  businesses: PoppinLocation[],
+  businesses: [PoppinLocation](#poppinlocation-class)[],
   region: {
   	 center: {
   	   latitude: float,
   	   longitude: float
   	 }
   },
-  searchParams: YelpBusinessSearchParams
+  searchParams: [YelpBusinessSearchParams](#yelpbusinesssearchparams-class)
 }
 ```
 
@@ -141,11 +154,11 @@ results will be noisy because of results that aren't relevant to us.
 Native search is ready and being tested.
 
 ### POST api/locations
-Request: PoppinLocationRequest  
-Response: PoppinLocation
+Request: [PoppinLocationRequest](#poppinlocationrequest-class)  
+Response: [PoppinLocation](#poppinlocation-class)
 
 ## Checkins
-Each `Checkin` has a reliability score attached.  
+Each [Checkin](#checkin-class) has a reliability score attached.  
 - User direct checkin: 1.5
 - Vendor checkin (increment- or decrement-crowd): 1
 - User geogrpahic checkin: .5
@@ -155,24 +168,24 @@ timed out or been invalidated)
 
 ### GET api/locations/checkin/{locationId}
 Request: Empty  
-Response: PoppinLocation with updated `crowdSize`
+Response: [PoppinLocation](#poppinlocation-class) with updated `crowdSize`
 
 User direct checkin (score 1.5)
 
 ### GET api/locations/geo-checkin/{locationId}
 Request: Empty  
-Response: PoppinLocation with updated `crowdSize`
+Response: [PoppinLocation](#poppinlocation-class) with updated `crowdSize`
 
 User geo checkin (score .5)
 
 ### GET api/locations/increment-crowd/{locationId}
 Request: Empty  
-Repsonse: PoppinLocation with updated `crowdSize
+Repsonse: [PoppinLocation](#poppinlocation-class) with updated `crowdSize
 
 Vendor checkin (score 1)
 
 ### GET api/locations/decrement-crowd/{locationId}
 Request: Empty  
-Repsonse: PoppinLocation with updated `crowdSize
+Repsonse: [PoppinLocation](#poppinlocation-class) with updated `crowdSize
 
 Invalidates *oldest* checkin at the location 

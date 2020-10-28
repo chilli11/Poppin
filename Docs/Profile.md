@@ -24,141 +24,91 @@ Reference for `api/locations` endpoints
 ```
 
 #### PoppinUserRequest Class
+Used for updating profile info. Does not include `id`, as it is not editable.  
+Also excludes `favorites`, `hidden`, and `vendorIds` as those are edited elsewhere.
 ```
 {
-  id: string,
-  yelpId: string,
-  name: string,
-  phone: string,
-  address: {
-    line1: string,
-    line2: string,
-    city: string,
-    state: string,
-    zipCode: string,
-    coordinates: {
-    		latitude: float,
-    		longitude: float
-    }
-    geo: GeoJsonPoint
-  },
-  capacity: int,
-  visitLength: int,
-  hours: [{
-  		opening: string, // 11:00
-  		closing: string, // 22:00
-  		day: string // "Monday"
-  }],
+  userId: string,
+  username: string,
+  role: string,
+  email: string,
+  firstName: string,
+  lastName: string,
+  profilePhoto: string, // URL
+  ageRange: string, // see below for codes
+  gender: string, // see below for codes
+  categories: string[], // aliases to Yelp categories
 }
 ```
 
-#### YelpBusinessSearchParams Class
-All fields are strings, but represent other types for Yelp Fusion API
+#### PoppinUserResult Class
 ```
 {
-  term: string,
-  location: string, // required if no lat/lon,
-  latitude: string, // lat/lon required if no location
-  longitude: string,
-  radius: string, // float, in meters
-  categories: string, // comma separated list of aliases from Yelp category list
-  locale: string,
-  limit: string, // int, for pagination
-  offset: string // int, for pagination
-  sort_by: string,
-  price: string,
-  open_now: string, // bool
-  open_at: string,
-  attributes: string, // comma separated list
+  user: [PoppinUser](#poppinuserresult),
+  vendors: [Vendor](./Vendors.md)[],
+  favorites: [PoppinLocation](./Locations.md)[],
+  hidden: [PoppinLocation](./Locations.md)[]
 }
 ```
 
 ## API Reference
 
-### GET api/locations/{locationId}
-Return: `PoppinLocation` without `yelpDetails`
+### GET api/profile/
+Return: [PoppinUserResult](#poppinuserresult-class) / 401
 
-### PUT api/locations or PUT api/locations/{locationId}
-*Requires Admin role*  
-Request: PoppinLocationRequest  
-Return: updated `PoppinLocation` without Yelp Details
+Returns the currently logged in user's profile.
 
-Updates existing PoppinLocation
-
-### DELETE api/locations/{locationId}
+### GET api/profile/{id}
 *Requires Admin role*  
 Request: Empty  
-Return: Empty
+Return: [PoppinUserResult](#poppinuserresult-class) / 403 if not admin / 400 if user not found
 
-Deletes existing PoppinLocation
+For site admins to see user data. Probably not going to last long.
 
-### GET api/locations/with-yelp/{locationId}
+### GET api/profile/recently-viewed
 Request: Empty  
-Return: `PoppinLocation`
+Return: [PoppinLocation](./Locations.md)[]
 
-Due to the daily request limit on Yelp's Fusion API (5000), we have to limit the number of requests for their data,
-and so it is not included in `api/locations/{locationId}. This API addresses that need.
-`api/locations/yelp-search` returns yelp data with each result. 
+List of locations the user recently clicked to view. This does not pull recent search results.
 
-TODO: Implement GraphAPI to get details as needed. Potentially higher usage limit, and will be a good candidate for 
-Redis integration. This will not be deprecated with `api/locations/yelp-search`
-
-### POST api/locations/yelp-search (deprecated)
-Request: YelpBusinessSearchParams  
-Response: 
-```
-{
-  total: int,
-  businesses: PoppinLocation[],
-  region: {
-  	 center: {
-  	   latitude: float,
-  	   longitude: float
-  	 }
-  },
-  searchParams: YelpBusinessSearchParams
-}
-```
-
-Initiates a proper Yelp search with the submitted query. Returns all locations in the `PoppinStore.Locations` collection that
-have YelpIds that are in the Yelp search results. This limits the number of results we can get back with generic searches, since Yelp's
-results will be noisy because of results that aren't relevant to us.
-
-Native search is ready and being tested.
-
-### POST api/locations
-Request: PoppinLocationRequest  
-Response: PoppinLocation
-
-## Checkins
-Each `Checkin` has a reliability score attached.  
-- User direct checkin: 1.5
-- Vendor checkin (increment- or decrement-crowd): 1
-- User geogrpahic checkin: .5
-
-`crowdSize` = The sum of the reliability scores for valid checkins (those that haven't
-timed out or been invalidated)
-
-### GET api/locations/checkin/{locationId}
+### GET api/profile/favorites/add/{locationId}
 Request: Empty  
-Response: PoppinLocation with updated `crowdSize`
+Return: Empty / 400 if failed
 
-User direct checkin (score 1.5)
+Adds location to the favorites list
 
-### GET api/locations/geo-checkin/{locationId}
+### GET api/profile/favorites/remove/{locationId}
 Request: Empty  
-Response: PoppinLocation with updated `crowdSize`
+Return: Empty / 400 if failed
 
-User geo checkin (score .5)
+Removes location from the favorites list
 
-### GET api/locations/increment-crowd/{locationId}
+### GET api/profile/hide/{locationId}
 Request: Empty  
-Repsonse: PoppinLocation with updated `crowdSize
+Return: Empty / 400 if failed
 
-Vendor checkin (score 1)
+Adds location to the hidden list
 
-### GET api/locations/decrement-crowd/{locationId}
+### GET api/profile/unhide/{locationId}
 Request: Empty  
-Repsonse: PoppinLocation with updated `crowdSize
+Return: Empty / 400 if failed
 
-Invalidates *oldest* checkin at the location 
+Removes location from the hidden list
+
+__NOTE: Hidden locations are NOT hidden from search on the back end as of 2020-10-27. This may change at a later date.__
+
+### PUT api/profile
+Request: [PoppinUserRequest](#poppinuserrequest-class)  
+Response: [PoppinUser](#poppinuser-class) / 400 if failed
+
+Updates the user's profile info.
+
+### POST api/profile/update-geo
+*Experimental*  
+Request: [GeoJsonPoint](https://docs.mongodb.com/manual/reference/geojson/#point)  
+Response: Empty
+
+This is an attempt at server side geographic check in. It measures the user's location against the recently viewed  
+locations list. If the user is within 50 meters of any location in the list, it will create a Geo checkin (value: .5) at the nearest one.  
+
+Currently this would invalidate the user's previous check in.
