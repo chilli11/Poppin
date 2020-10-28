@@ -108,7 +108,7 @@ namespace Poppin.Controllers
 																				});
 																}
 
-																Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.AddFavorite);
+																Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.ViewUserProfile);
 																return Ok(GetPoppinUserResult(user));
 												}
 												catch (Exception ex)
@@ -129,7 +129,7 @@ namespace Poppin.Controllers
 								[HttpGet("recently-viewed")]
 								public IActionResult GetRecentlyViewed()
 								{
-												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
+												var id = GetUserId();
 												if (id == null)
 												{
 																return BadRequest(new GenericFailure
@@ -141,7 +141,6 @@ namespace Poppin.Controllers
 												try
 												{
 																var recentLocations = GetRecentLocationList(id, -1, 0);
-																Track(id, SegmentIOKeys.Actions.AddFavorite);
 																return Ok(recentLocations);
 
 												}
