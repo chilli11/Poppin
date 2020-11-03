@@ -129,6 +129,42 @@
   })), _class));
   _exports.default = PoppinAuthenticator;
 });
+;define("poppin-ui/classes/location-entities", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.Menu = void 0;
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  /**
+   *
+   * @export
+   * @class Menu
+   */
+  class Menu {
+    /**
+     *Creates an instance of Menu.
+     * @param {*} _url
+     * @param {*} _name
+     * @memberof Menu
+     */
+    constructor(_url, _name) {
+      _defineProperty(this, "url", null);
+
+      _defineProperty(this, "name", null);
+
+      if (!_url) throw "URL is required.";
+      this.url = _url;
+      this.name = _name || _url;
+    }
+
+  }
+
+  _exports.Menu = Menu;
+});
 ;define("poppin-ui/classes/location-search-entities", ["exports"], function (_exports) {
   "use strict";
 
@@ -2685,7 +2721,7 @@
 
       _initializerDefineProperty(this, "website", _descriptor8, this);
 
-      _initializerDefineProperty(this, "menuUrls", _descriptor9, this);
+      _initializerDefineProperty(this, "menus", _descriptor9, this);
 
       _initializerDefineProperty(this, "yelpUrl", _descriptor10, this);
 
@@ -2746,7 +2782,7 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "menuUrls", [_model.attr], {
+  }), _descriptor9 = _applyDecoratedDescriptor(_class.prototype, "menus", [_model.attr], {
     configurable: true,
     enumerable: true,
     writable: true,
@@ -3684,8 +3720,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "3aCVPrmm",
-    "block": "{\"symbols\":[\"form\",\"cat\",\"cat\",\"cat\"],\"statements\":[[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[30,[36,1],[[32,0,[\"isUpdate\"]],\"Update\",\"Add\"],null]],[2,\" Category\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"addOrUpdateCategory\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col\"]],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col\"]],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Slug\",\"Slug\",\"slug\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[[24,0,\"col\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Parent\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[8,\"power-select\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"model\"]],\"Search...\",\"name\",[32,0,[\"parent\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"parent\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,4,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[4]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col\"]],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"HERE ID\",\"HERE ID\",\"hereId\"]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Related\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"model\"]],\"Search...\",\"name\",[32,0,[\"related\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"related\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Chilren\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"model\"]],\"Search...\",\"name\",[32,0,[\"children\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"children\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,2,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[32,0,[\"isUpdate\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null]],[[\"@type\",\"@defaultText\"],[\"default-outline\",\"clear\"]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[8,\"categories/category-list\",[],[[\"@categories\",\"@clickAction\"],[[32,0,[\"model\"]],[32,0,[\"clickAction\"]]]],null],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"if\",\"fn\",\"mut\"]}",
+    "id": "xl0BxSOT",
+    "block": "{\"symbols\":[\"form\",\"cat\",\"cat\",\"cat\"],\"statements\":[[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[30,[36,1],[[32,0,[\"isUpdate\"]],\"Update\",\"Add\"],null]],[2,\" Category\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"addOrUpdateCategory\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col\"]],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col\"]],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Slug\",\"Slug\",\"slug\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"form-row\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[[24,0,\"col\"]],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Parent\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[8,\"power-select\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"model\"]],\"Search...\",\"name\",[32,0,[\"parent\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"parent\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,4,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[4]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[[24,0,\"col\"]],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"HERE ID\",\"HERE ID\",\"hereId\"]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Related\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"model\"]],\"Search...\",\"name\",[32,0,[\"related\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"related\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Chilren\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"model\"]],\"Search...\",\"name\",[32,0,[\"children\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"children\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,2,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[32,0,[\"isUpdate\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null]],[[\"@type\",\"@defaultText\"],[\"default-outline\",\"clear\"]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[8,\"categories/category-list\",[],[[\"@categories\",\"@clickAction\"],[[32,0,[\"model\"]],[32,0,[\"clickAction\"]]]],null],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"if\",\"fn\",\"mut\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/admin/categories/template.hbs"
     }
@@ -3714,6 +3750,10 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   let LoginFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = (_temp = (_actions$SUBMIT = _constants.actions.SUBMIT, _actions$REJECT = _constants.actions.REJECT, _actions$RESOLVE = _constants.actions.RESOLVE, class LoginFormComponent extends _statefulComponent.default {
+    get isLoading() {
+      return /ing/i.test(this.machineState);
+    }
+
     constructor() {
       super(...arguments);
 
@@ -3868,8 +3908,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "j7lWUVCK",
-    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Social Login\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"fb:login-button\"],[14,\"scope\",\"public_profile,email\"],[14,\"onlogin\",\"checkFBLoginState();\"],[12],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\tDon't have an account? \"],[8,\"link-to\",[],[[\"@route\",\"@class\"],[\"account.register\",\"btn btn-primary btn-sm\"]],[[\"default\"],[{\"statements\":[[2,\"Sign up\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "6fmUNHzo",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Log In\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Social Login\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"fb:login-button\"],[14,\"scope\",\"public_profile,email\"],[14,\"onlogin\",\"checkFBLoginState();\"],[12],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\tDon't have an account? \"],[8,\"link-to\",[],[[\"@route\",\"@class\"],[\"account.register\",\"btn btn-primary btn-sm\"]],[[\"default\"],[{\"statements\":[[2,\"Sign up\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/login-form/template.hbs"
     }
@@ -3886,8 +3926,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "zW+TzCJU",
-    "block": "{\"symbols\":[\"@user\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Account\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"userName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "RMoGFBti",
+    "block": "{\"symbols\":[\"@user\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Account\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"userName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,1,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/my-account/template.hbs"
     }
@@ -4125,8 +4165,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "Qfp8MK/C",
-    "block": "{\"symbols\":[\"cat\",\"msg\",\"@vendors\",\"@vendorClickAction\",\"@profile\",\"@refresh\",\"@favorites\",\"@locationClickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,4],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\"],[6,[37,5],[[32,5,[\"profilePhoto\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"text-center\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"img\"],[15,\"src\",[32,5,[\"profilePhoto\"]]],[14,0,\"profile-photo\"],[14,5,\"max-height: 100px;\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"span\"],[12],[2,\"My Profile\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-sm btn-info\"],[24,5,\"margin:0\"],[24,\"role\",\"link\"],[4,[38,6],[\"click\",[32,0,[\"startEdit\"]]],null],[12],[2,\"Edit\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"firstName\"]]],[2,\" \"],[1,[32,5,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,\"account/profile-form\",[],[[\"@ageRanges\",\"@genders\",\"@yelpCategories\",\"@categories\",\"@profile\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,0,[\"ageRanges\"]],[32,0,[\"genders\"]],[32,0,[\"yelpCategories\"]],[32,0,[\"categories\"]],[32,5],[32,6],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Age:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"ageRange\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Gender:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"gender\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Favorite Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,1,[\"title\"]]],[1,[30,[36,1],[[30,[36,0],[[32,1],[32,0,[\"categories\",\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\t\\t\\t\\t\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,3],[32,4]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,7],[32,8]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"eq\",\"unless\",\"-track-array\",\"each\",\"fn\",\"if\",\"on\"]}",
+    "id": "p4OKKCG5",
+    "block": "{\"symbols\":[\"cat\",\"msg\",\"@vendors\",\"@vendorClickAction\",\"@profile\",\"@refresh\",\"@favorites\",\"@locationClickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,4],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\"],[6,[37,5],[[32,5,[\"profilePhoto\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"text-center\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"img\"],[15,\"src\",[32,5,[\"profilePhoto\"]]],[14,0,\"profile-photo\"],[14,5,\"max-height: 100px;\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"span\"],[12],[2,\"My Profile\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-sm btn-info\"],[24,5,\"margin:0\"],[24,\"role\",\"link\"],[4,[38,6],[\"click\",[32,0,[\"startEdit\"]]],null],[12],[2,\"Edit\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"firstName\"]]],[2,\" \"],[1,[32,5,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,\"account/profile-form\",[],[[\"@ageRanges\",\"@genders\",\"@yelpCategories\",\"@categories\",\"@profile\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,0,[\"ageRanges\"]],[32,0,[\"genders\"]],[32,0,[\"yelpCategories\"]],[32,0,[\"categories\"]],[32,5],[32,6],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Age:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"ageRange\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Gender:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"gender\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Favorite Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,1,[\"title\"]]],[1,[30,[36,1],[[30,[36,0],[[32,1],[32,0,[\"categories\",\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\t\\t\\t\\t\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,3],[32,4]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,7],[32,8]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"eq\",\"unless\",\"-track-array\",\"each\",\"fn\",\"if\",\"on\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/my-profile/template.hbs"
     }
@@ -4569,8 +4609,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "tFXUWI3K",
-    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Sign Up\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Confirm Password\",\"********\",\"password2\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\tAlready have an account? \"],[8,\"link-to\",[],[[\"@route\",\"@class\"],[\"account.login\",\"btn btn-primary btn-sm\"]],[[\"default\"],[{\"statements\":[[2,\"Sign in\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "GMh7H4wR",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Sign Up\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Confirm Password\",\"********\",\"password2\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\tAlready have an account? \"],[8,\"link-to\",[],[[\"@route\",\"@class\"],[\"account.login\",\"btn btn-primary btn-sm\"]],[[\"default\"],[{\"statements\":[[2,\"Sign in\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/registration-form/template.hbs"
     }
@@ -4805,7 +4845,7 @@
 
   let _actions$END_EDIT, _actions$FAV_ACTION, _actions$UPDATE_CROWD, _actions$REJECT_ACTIO;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4815,7 +4855,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember.computed('accountService.authInfo'), _dec9 = Ember.computed('accountService.accountInfo'), _dec10 = Ember.computed('accountService.profile'), _dec11 = Ember.computed('categoriesService.categories'), _dec12 = Ember.computed('accountService.profile.favorites'), _dec13 = Ember._action, _dec14 = Ember._action, _dec15 = Ember._action, _dec16 = Ember._action, _dec17 = Ember._action, (_class = (_temp = (_actions$END_EDIT = _constants.actions.END_EDIT, _actions$FAV_ACTION = _constants.actions.FAV_ACTION, _actions$UPDATE_CROWD = _constants.actions.UPDATE_CROWD_SIZE, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
+  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember.computed('accountService.authInfo'), _dec9 = Ember.computed('accountService.accountInfo'), _dec10 = Ember.computed('accountService.profile'), _dec11 = Ember.computed('categoriesService.categories'), _dec12 = Ember.computed('accountService.profile.favorites'), _dec13 = Ember._tracked, _dec14 = Ember._action, _dec15 = Ember._action, _dec16 = Ember._action, _dec17 = Ember._action, _dec18 = Ember._action, (_class = (_temp = (_actions$END_EDIT = _constants.actions.END_EDIT, _actions$FAV_ACTION = _constants.actions.FAV_ACTION, _actions$UPDATE_CROWD = _constants.actions.UPDATE_CROWD_SIZE, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
     get authInfo() {
       return this.accountService.authInfo;
     }
@@ -4850,11 +4890,6 @@
     } // eslint-disable-next-line ember/require-computed-property-dependencies
 
 
-    get isFavorite() {
-      const locId = this.args.location.id;
-      return this.profile ? (this.profile.favorites || []).indexOf(locId) !== -1 : false;
-    }
-
     constructor() {
       super(...arguments);
 
@@ -4871,6 +4906,8 @@
       _initializerDefineProperty(this, "modalText", _descriptor6, this);
 
       _initializerDefineProperty(this, "showModal", _descriptor7, this);
+
+      _initializerDefineProperty(this, "isFavorite", _descriptor8, this);
 
       _defineProperty(this, "transitions", {
         [_constants.states.IDLE]: {
@@ -4897,11 +4934,9 @@
     [_actions$FAV_ACTION]() {
       const method = this.isFavorite ? 'removeFavorite' : 'addFavorite';
       return this.accountService[method](this.args.location.id).then(() => {
-        console.log(this.isFavorite);
+        this.isFavorite = !this.isFavorite;
         return this.dispatch(_constants.actions.END_LOADING);
-      }).catch(({
-        errors
-      }) => this.dispatch(_constants.actions.REJECT_ACTION, errors));
+      }).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, data.errors));
     }
 
     [_actions$UPDATE_CROWD](data) {
@@ -4980,7 +5015,17 @@
     initializer: function () {
       return false;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "authInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "accountInfo", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "accountInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "profile", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "profile"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fullCategories", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "fullCategories"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "isFavorite", [_dec12], Object.getOwnPropertyDescriptor(_class.prototype, "isFavorite"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec13], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec14], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "increment", [_dec15], Object.getOwnPropertyDescriptor(_class.prototype, "increment"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "decrement", [_dec16], Object.getOwnPropertyDescriptor(_class.prototype, "decrement"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "favAction", [_dec17], Object.getOwnPropertyDescriptor(_class.prototype, "favAction"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "authInfo", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "authInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "accountInfo", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "accountInfo"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "profile", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "profile"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fullCategories", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "fullCategories"), _class.prototype), _descriptor8 = _applyDecoratedDescriptor(_class.prototype, "isFavorite", [_dec12, _dec13], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: function () {
+      return (() => {
+        const locId = this.args.location.id;
+        return this.profile ? (this.profile.favorites || []).indexOf(locId) !== -1 : false;
+      })();
+    }
+  }), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec14], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec15], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "increment", [_dec16], Object.getOwnPropertyDescriptor(_class.prototype, "increment"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "decrement", [_dec17], Object.getOwnPropertyDescriptor(_class.prototype, "decrement"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "favAction", [_dec18], Object.getOwnPropertyDescriptor(_class.prototype, "favAction"), _class.prototype)), _class));
   _exports.default = LocationFormComponent;
 });
 ;define("poppin-ui/pods/components/locations/existing-location/constants", ["exports"], function (_exports) {
@@ -5015,8 +5060,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "+q5QdMCu",
-    "block": "{\"symbols\":[\"modal\",\"@location\",\"@refresh\"],\"statements\":[[6,[37,1],[[32,2,[\"mainPhotoUrl\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-12 location-banner\"],[15,5,[31,[\"background-image: url(\",[32,2,[\"mainPhotoUrl\"]],\")\"]]],[12],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"locations/location-form\",[],[[\"@reverseOrder\",\"@location\",\"@resolveAction\"],[\"true\",[32,2],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\"],[8,\"locations/location-display\",[],[[\"@isAdmin\",\"@isVendor\",\"@isFavorite\",\"@favAction\",\"@profile\",\"@isLoading\",\"@location\",\"@categories\",\"@startEdit\",\"@increment\",\"@decrement\",\"@refresh\"],[[32,0,[\"isAdmin\"]],[32,0,[\"isVendor\"]],[32,0,[\"isFavorite\"]],[32,0,[\"favAction\"]],[32,0,[\"accountService\",\"profile\"]],[30,[36,0],[[32,0,[\"machineState\"]],\"LOADING\"],null],[32,2],[32,0,[\"fullCategories\"]],[32,0,[\"startEdit\"]],[32,0,[\"increment\"]],[32,0,[\"decrement\"]],[32,3]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\",\"action\"]}",
+    "id": "gdcBq9qK",
+    "block": "{\"symbols\":[\"modal\",\"@location\",\"@refresh\"],\"statements\":[[6,[37,1],[[32,2,[\"mainPhotoUrl\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[15,0,[31,[\"col-md-12 location-banner\",[30,[36,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null],\" edit\"],null]]]],[15,5,[31,[\"background-image: url(\",[32,2,[\"mainPhotoUrl\"]],\")\"]]],[12],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[32,0,[\"machineState\"]],\"EDIT_LOCATION\"],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"locations/location-form\",[],[[\"@reverseOrder\",\"@location\",\"@resolveAction\"],[\"true\",[32,2],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\"],[8,\"locations/location-display\",[],[[\"@isAdmin\",\"@isVendor\",\"@isFavorite\",\"@favAction\",\"@profile\",\"@isLoading\",\"@location\",\"@categories\",\"@startEdit\",\"@increment\",\"@decrement\",\"@refresh\"],[[32,0,[\"isAdmin\"]],[32,0,[\"isVendor\"]],[32,0,[\"isFavorite\"]],[32,0,[\"favAction\"]],[32,0,[\"accountService\",\"profile\"]],[30,[36,0],[[32,0,[\"machineState\"]],\"LOADING\"],null],[32,2],[32,0,[\"fullCategories\"]],[32,0,[\"startEdit\"]],[32,0,[\"increment\"]],[32,0,[\"decrement\"]],[32,3]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,2],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"eq\",\"if\",\"action\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/existing-location/template.hbs"
     }
@@ -5033,8 +5078,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "UGKLodSA",
-    "block": "{\"symbols\":[\"pic\",\"menu\",\"category\",\"@location\",\"@categories\",\"@decrement\",\"@increment\",\"@startEdit\",\"@isVendor\",\"@isAdmin\",\"@favAction\",\"@isFavorite\",\"@isLoading\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,4,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,4,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,4,[\"address\",\"city\"]]],[2,\", \"],[1,[32,4,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\"],[6,[37,6],[[30,[36,7],[[32,10],[32,9]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-dark\"],[4,[38,4],[\"click\",[32,8]],null],[12],[2,\"Edit\"],[13],[2,\" // \\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0)\"],[24,0,\"text-dark\"],[4,[38,4],[\"click\",[32,11]],null],[12],[1,[30,[36,6],[[32,12],\"Unpin\",\"Pin Location\"],null]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\"],[6,[37,6],[[32,4,[\"website\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"a\"],[15,6,[31,[[32,4,[\"website\"]]]]],[14,0,\"text-dark\"],[14,\"target\",\"_blank\"],[12],[1,[32,4,[\"website\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,13]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,6],[[30,[36,7],[[32,10],[32,9]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"row text-center\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"h3\"],[14,0,\"col-md-12\"],[12],[2,\"\\n\"],[6,[37,6],[[30,[36,5],[[32,4,[\"crowdSize\"]],0],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"img\"],[24,\"width\",\"40\"],[24,\"role\",\"button\"],[24,\"src\",\"/images/arrow_circle_down-24px.svg\"],[4,[38,4],[\"click\",[32,6]],null],[12],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,4,[\"crowdSize\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"img\"],[24,\"width\",\"40\"],[24,\"role\",\"button\"],[24,\"src\",\"/images/arrow_circle_up-24px.svg\"],[4,[38,4],[\"click\",[32,7]],null],[12],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,4,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[30,[36,0],[[32,5]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[1,[30,[36,3],[[30,[36,2],[[32,3],[32,5,[\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[3]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Visit Length:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,4,[\"visitLength\"]]],[13],[2,\"\\n\"],[6,[37,6],[[32,4,[\"menuUrls\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Menu(s)\"],[13],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[30,[36,0],[[32,4,[\"menuUrls\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[10,\"a\"],[15,6,[32,2]],[14,\"target\",\"_blank\"],[14,0,\"btn btn-default btn-small\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,6],[[32,4,[\"addlPhotoUrls\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Photo(s)\"],[13],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[30,[36,0],[[32,4,[\"addlPhotoUrls\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[10,\"a\"],[15,6,[32,1]],[14,\"target\",\"_blank\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[10,\"img\"],[14,5,\"width: 100%;\"],[15,\"src\",[32,1]],[12],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-xl-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details \"],[1,[30,[36,3],[[30,[36,7],[[32,4,[\"yelpUrl\"]],[32,4,[\"yelpDetails\"]]],null],\"(unavailable...check back later)\"],null]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[30,[36,6],[[32,4,[\"yelpUrl\"]],[32,4,[\"yelpUrl\"]],[32,4,[\"yelpDetails\",\"url\"]]],null]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"-track-array\",\"each\",\"eq\",\"unless\",\"on\",\"gt\",\"if\",\"or\"]}",
+    "id": "Mfoi6Gyl",
+    "block": "{\"symbols\":[\"pic\",\"menu\",\"category\",\"@location\",\"@categories\",\"@decrement\",\"@increment\",\"@startEdit\",\"@isVendor\",\"@isAdmin\",\"@isFavorite\",\"@favAction\",\"@isLoading\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-4\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[1,[32,4,[\"name\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"address\"],[12],[1,[32,4,[\"address\",\"line1\"]]],[2,\" // \"],[1,[32,4,[\"address\",\"city\"]]],[2,\", \"],[1,[32,4,[\"address\",\"state\"]]],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\"],[6,[37,6],[[30,[36,7],[[32,10],[32,9]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-info btn-sm\"],[4,[38,4],[\"click\",[32,8]],null],[12],[2,\"Edit\"],[13],[2,\" // \\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[11,\"span\"],[16,0,[31,[\"btn btn-\",[30,[36,6],[[32,11],\"success\",\"info\"],null],\" btn-sm\"]]],[4,[38,4],[\"click\",[32,12]],null],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[1,[30,[36,6],[[32,11],\"Unpin\",\"Pin Location\"],null]],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\"],[6,[37,6],[[32,4,[\"website\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"a\"],[15,6,[31,[[32,4,[\"website\"]]]]],[14,0,\"text-dark\"],[14,\"target\",\"_blank\"],[12],[1,[32,4,[\"website\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,13]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,6],[[30,[36,7],[[32,10],[32,9]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"row text-center\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[10,\"h3\"],[14,0,\"col-md-12\"],[12],[2,\"\\n\"],[6,[37,6],[[30,[36,5],[[32,4,[\"crowdSize\"]],0],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\\t\"],[11,\"img\"],[24,\"width\",\"40\"],[24,\"role\",\"button\"],[24,\"src\",\"/images/arrow_circle_down-24px.svg\"],[4,[38,4],[\"click\",[32,6]],null],[12],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,4,[\"crowdSize\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[11,\"img\"],[24,\"width\",\"40\"],[24,\"role\",\"button\"],[24,\"src\",\"/images/arrow_circle_up-24px.svg\"],[4,[38,4],[\"click\",[32,7]],null],[12],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Occupancy\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,4,[\"capacity\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[30,[36,0],[[32,5]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[1,[30,[36,3],[[30,[36,2],[[32,3],[32,5,[\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[3]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Visit Length:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,4,[\"visitLength\"]]],[13],[2,\"\\n\"],[6,[37,6],[[32,4,[\"menus\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Menu(s)\"],[13],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[30,[36,0],[[32,4,[\"menus\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[10,\"a\"],[15,6,[32,2,[\"url\"]]],[14,\"target\",\"_blank\"],[14,0,\"btn btn-default btn-small\"],[12],[1,[32,2,[\"name\"]]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,6],[[32,4,[\"addlPhotoUrls\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Photo(s)\"],[13],[2,\"\\n\"],[6,[37,1],[[30,[36,0],[[30,[36,0],[[32,4,[\"addlPhotoUrls\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[10,\"a\"],[15,6,[32,1]],[14,\"target\",\"_blank\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\\t\"],[10,\"img\"],[14,5,\"width: 100%;\"],[15,\"src\",[32,1]],[12],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Yelp Details \"],[1,[30,[36,3],[[30,[36,7],[[32,4,[\"yelpUrl\"]],[32,4,[\"yelpDetails\"]]],null],\"(unavailable...check back later)\"],null]],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\" \\n\\t\\t\\t\"],[10,\"iframe\"],[14,5,\"width: 100%; height: 100vh;\"],[15,\"src\",[30,[36,6],[[32,4,[\"yelpUrl\"]],[32,4,[\"yelpUrl\"]],[32,4,[\"yelpDetails\",\"url\"]]],null]],[12],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"-track-array\",\"each\",\"eq\",\"unless\",\"on\",\"gt\",\"if\",\"or\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-display/template.hbs"
     }
@@ -5042,7 +5087,7 @@
 
   _exports.default = _default;
 });
-;define("poppin-ui/pods/components/locations/location-form/component", ["exports", "poppin-ui/classes/stateful-component", "lodash", "poppin-ui/pods/components/locations/location-form/constants"], function (_exports, _statefulComponent, _lodash, _constants) {
+;define("poppin-ui/pods/components/locations/location-form/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/classes/location-entities", "lodash", "poppin-ui/pods/components/locations/location-form/constants"], function (_exports, _statefulComponent, _locationEntities, _lodash, _constants) {
   "use strict";
 
   Object.defineProperty(_exports, "__esModule", {
@@ -5052,7 +5097,7 @@
 
   let _actions$SUBMIT_LOCAT, _actions$GET_MATCHES, _actions$GET_FULL_MAT, _actions$SUBMIT_MATCH, _actions$RESOLVE_SUBM, _actions$REJECT_ACTIO;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -5092,7 +5137,7 @@
     closing: null,
     day: days[6]
   }];
-  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.computed('categoriesService.categories'), _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._tracked, _dec18 = Ember._tracked, _dec19 = Ember._tracked, _dec20 = Ember._tracked, _dec21 = Ember._tracked, _dec22 = Ember._tracked, _dec23 = Ember._tracked, _dec24 = Ember._tracked, _dec25 = Ember._tracked, _dec26 = Ember._tracked, _dec27 = Ember._tracked, _dec28 = Ember._tracked, _dec29 = Ember._tracked, _dec30 = Ember._action, _dec31 = Ember._action, _dec32 = Ember._action, _dec33 = Ember._action, _dec34 = Ember._action, _dec35 = Ember._action, (_class = (_temp = (_actions$SUBMIT_LOCAT = _constants.actions.SUBMIT_LOCATION, _actions$GET_MATCHES = _constants.actions.GET_MATCHES, _actions$GET_FULL_MAT = _constants.actions.GET_FULL_MATCH, _actions$SUBMIT_MATCH = _constants.actions.SUBMIT_MATCH, _actions$RESOLVE_SUBM = _constants.actions.RESOLVE_SUBMIT_MATCH, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
+  let LocationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember.inject.service, _dec4 = Ember.inject.service, _dec5 = Ember.computed('categoriesService.categories'), _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._tracked, _dec9 = Ember._tracked, _dec10 = Ember._tracked, _dec11 = Ember._tracked, _dec12 = Ember._tracked, _dec13 = Ember._tracked, _dec14 = Ember._tracked, _dec15 = Ember._tracked, _dec16 = Ember._tracked, _dec17 = Ember._tracked, _dec18 = Ember._tracked, _dec19 = Ember._tracked, _dec20 = Ember._tracked, _dec21 = Ember._tracked, _dec22 = Ember._tracked, _dec23 = Ember._tracked, _dec24 = Ember._tracked, _dec25 = Ember._tracked, _dec26 = Ember._tracked, _dec27 = Ember._tracked, _dec28 = Ember.computed('addlPhotoUrls'), _dec29 = Ember.computed('menus'), _dec30 = Ember._tracked, _dec31 = Ember._tracked, _dec32 = Ember._tracked, _dec33 = Ember._action, _dec34 = Ember._action, _dec35 = Ember._action, _dec36 = Ember._action, _dec37 = Ember._action, _dec38 = Ember._action, _dec39 = Ember._action, _dec40 = Ember._action, (_class = (_temp = (_actions$SUBMIT_LOCAT = _constants.actions.SUBMIT_LOCATION, _actions$GET_MATCHES = _constants.actions.GET_MATCHES, _actions$GET_FULL_MAT = _constants.actions.GET_FULL_MATCH, _actions$SUBMIT_MATCH = _constants.actions.SUBMIT_MATCH, _actions$RESOLVE_SUBM = _constants.actions.RESOLVE_SUBMIT_MATCH, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, class LocationFormComponent extends _statefulComponent.default {
     get poppinCategories() {
       return this.categoriesService.categories;
     }
@@ -5103,6 +5148,14 @@
 
     get zipCode() {
       return this.zip ? this.zip.toString().substr(0, 5) : null;
+    }
+
+    get photoUrls() {
+      return this.addlPhotoUrls;
+    }
+
+    get oldMenus() {
+      return this.menus;
     }
 
     get locationDTO() {
@@ -5119,11 +5172,12 @@
         addlPhotoUrls,
         addlPhotoUrl,
         website,
-        menuUrls,
+        menus,
+        menuName,
         menuUrl,
         yelpUrl
       } = this;
-      return {
+      var output = {
         id: locationId,
         yelpId: yelpId,
         name,
@@ -5139,7 +5193,7 @@
         mainPhotoUrl,
         addlPhotoUrls: addlPhotoUrls.concat(addlPhotoUrl).filter(p => !!p),
         website,
-        menuUrls: menuUrls.concat(menuUrl).filter(m => !!m),
+        menus,
         yelpUrl,
         categories: this.categoryList,
         capacity: parseInt(capacity, 10),
@@ -5147,6 +5201,13 @@
         hours,
         visitLength: parseInt(visitLength, 10)
       };
+
+      if (menuUrl) {
+        const newMenu = new _locationEntities.Menu(menuUrl, menuName);
+        output.menus = menus.concat(newMenu).filter(m => !!m.url);
+      }
+
+      return output;
     }
 
     get canAcceptMatch() {
@@ -5214,7 +5275,7 @@
 
       _defineProperty(this, "addlPhotoUrls", []);
 
-      _defineProperty(this, "menuUrls", []);
+      _defineProperty(this, "menus", []);
 
       _initializerDefineProperty(this, "addlPhotoUrl", _descriptor15, this);
 
@@ -5224,25 +5285,27 @@
 
       _initializerDefineProperty(this, "website", _descriptor18, this);
 
-      _initializerDefineProperty(this, "menuUrl", _descriptor19, this);
+      _initializerDefineProperty(this, "menuName", _descriptor19, this);
 
-      _initializerDefineProperty(this, "yelpUrl", _descriptor20, this);
+      _initializerDefineProperty(this, "menuUrl", _descriptor20, this);
 
-      _initializerDefineProperty(this, "geo", _descriptor21, this);
+      _initializerDefineProperty(this, "yelpUrl", _descriptor21, this);
 
-      _initializerDefineProperty(this, "capacity", _descriptor22, this);
+      _initializerDefineProperty(this, "geo", _descriptor22, this);
 
-      _initializerDefineProperty(this, "crowdSize", _descriptor23, this);
+      _initializerDefineProperty(this, "capacity", _descriptor23, this);
 
-      _initializerDefineProperty(this, "hours", _descriptor24, this);
+      _initializerDefineProperty(this, "crowdSize", _descriptor24, this);
 
-      _initializerDefineProperty(this, "visitLength", _descriptor25, this);
+      _initializerDefineProperty(this, "hours", _descriptor25, this);
 
-      _initializerDefineProperty(this, "modalTitle", _descriptor26, this);
+      _initializerDefineProperty(this, "visitLength", _descriptor26, this);
 
-      _initializerDefineProperty(this, "modalText", _descriptor27, this);
+      _initializerDefineProperty(this, "modalTitle", _descriptor27, this);
 
-      _initializerDefineProperty(this, "showModal", _descriptor28, this);
+      _initializerDefineProperty(this, "modalText", _descriptor28, this);
+
+      _initializerDefineProperty(this, "showModal", _descriptor29, this);
 
       this.categoriesService.getCategories().finally(() => this.populateFromPoppin());
       this.initMachine();
@@ -5256,14 +5319,15 @@
       this.addressLine2 = null;
       this.city = null;
       this.state = null;
-      this.zipCode = null;
+      this.zip = null;
       this.logoUrl = null;
       this.mainPhotoUrl = null;
-      this.addlPhotoUrls = [];
+      Ember.set(this, 'addlPhotoUrls', []);
       this.addlPhotoUrl = null;
       this.website = null;
-      this.menuUrls = [];
+      Ember.set(this, 'menus', []);
       this.menuUrl = null;
+      this.menuName = null;
       this.yelpUrl = null;
       this.categories = [];
       this.capacity = 0;
@@ -5271,12 +5335,19 @@
     }
 
     cancel() {
-      this.clearForm();
-      this.args.endEdit();
+      this.args.resolveAction();
     }
 
     addImg() {
       this.addlPhotoUrls.pushObject("");
+    }
+
+    removePic(url) {
+      this.addlPhotoUrls.removeObject(url);
+    }
+
+    removeMenu(menu) {
+      this.menus.removeObject(menu);
     }
 
     populateFromPoppin(location) {
@@ -5294,10 +5365,11 @@
         this.state = loc.address.state;
         this.zip = loc.address.zipCode;
         this.logoUrl = loc.logoUrl;
-        this.menuUrls = loc.menuUrls || [];
         this.mainPhotoUrl = loc.mainPhotoUrl;
-        this.addlPhotoUrls = loc.addlPhotoUrls || [];
+        Ember.set(this, 'addlPhotoUrls', loc.addlPhotoUrls || []);
         this.addlPhotoUrl = null;
+        Ember.set(this, 'menus', (loc.menus || []).map(m => new _locationEntities.Menu(m.url, m.name)));
+        this.menuName = null;
         this.menuUrl = null;
         this.website = loc.website;
         this.yelpUrl = loc.yelpUrl;
@@ -5522,67 +5594,72 @@
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor19 = _applyDecoratedDescriptor(_class.prototype, "menuUrl", [_dec20], {
+  }), _descriptor19 = _applyDecoratedDescriptor(_class.prototype, "menuName", [_dec20], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor20 = _applyDecoratedDescriptor(_class.prototype, "yelpUrl", [_dec21], {
+  }), _descriptor20 = _applyDecoratedDescriptor(_class.prototype, "menuUrl", [_dec21], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor21 = _applyDecoratedDescriptor(_class.prototype, "geo", [_dec22], {
+  }), _descriptor21 = _applyDecoratedDescriptor(_class.prototype, "yelpUrl", [_dec22], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor22 = _applyDecoratedDescriptor(_class.prototype, "capacity", [_dec23], {
+  }), _descriptor22 = _applyDecoratedDescriptor(_class.prototype, "geo", [_dec23], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor23 = _applyDecoratedDescriptor(_class.prototype, "capacity", [_dec24], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return '0';
     }
-  }), _descriptor23 = _applyDecoratedDescriptor(_class.prototype, "crowdSize", [_dec24], {
+  }), _descriptor24 = _applyDecoratedDescriptor(_class.prototype, "crowdSize", [_dec25], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return '0';
     }
-  }), _descriptor24 = _applyDecoratedDescriptor(_class.prototype, "hours", [_dec25], {
+  }), _descriptor25 = _applyDecoratedDescriptor(_class.prototype, "hours", [_dec26], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return _lodash.default.merge(defHours);
     }
-  }), _descriptor25 = _applyDecoratedDescriptor(_class.prototype, "visitLength", [_dec26], {
+  }), _descriptor26 = _applyDecoratedDescriptor(_class.prototype, "visitLength", [_dec27], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return 45;
     }
-  }), _descriptor26 = _applyDecoratedDescriptor(_class.prototype, "modalTitle", [_dec27], {
+  }), _applyDecoratedDescriptor(_class.prototype, "photoUrls", [_dec28], Object.getOwnPropertyDescriptor(_class.prototype, "photoUrls"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "oldMenus", [_dec29], Object.getOwnPropertyDescriptor(_class.prototype, "oldMenus"), _class.prototype), _descriptor27 = _applyDecoratedDescriptor(_class.prototype, "modalTitle", [_dec30], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor27 = _applyDecoratedDescriptor(_class.prototype, "modalText", [_dec28], {
+  }), _descriptor28 = _applyDecoratedDescriptor(_class.prototype, "modalText", [_dec31], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor28 = _applyDecoratedDescriptor(_class.prototype, "showModal", [_dec29], {
+  }), _descriptor29 = _applyDecoratedDescriptor(_class.prototype, "showModal", [_dec32], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return false;
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec30], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancel", [_dec31], Object.getOwnPropertyDescriptor(_class.prototype, "cancel"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "addImg", [_dec32], Object.getOwnPropertyDescriptor(_class.prototype, "addImg"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec33], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "acceptMatch", [_dec34], Object.getOwnPropertyDescriptor(_class.prototype, "acceptMatch"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillData", [_dec35], Object.getOwnPropertyDescriptor(_class.prototype, "fillData"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec33], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "cancel", [_dec34], Object.getOwnPropertyDescriptor(_class.prototype, "cancel"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "addImg", [_dec35], Object.getOwnPropertyDescriptor(_class.prototype, "addImg"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removePic", [_dec36], Object.getOwnPropertyDescriptor(_class.prototype, "removePic"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "removeMenu", [_dec37], Object.getOwnPropertyDescriptor(_class.prototype, "removeMenu"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec38], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "acceptMatch", [_dec39], Object.getOwnPropertyDescriptor(_class.prototype, "acceptMatch"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "fillData", [_dec40], Object.getOwnPropertyDescriptor(_class.prototype, "fillData"), _class.prototype)), _class));
   _exports.default = LocationFormComponent;
 });
 ;define("poppin-ui/pods/components/locations/location-form/constants", ["exports"], function (_exports) {
@@ -5621,8 +5698,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "JrtvEpBP",
-    "block": "{\"symbols\":[\"modal\",\"form\",\"cat\",\"@reverseOrder\"],\"statements\":[[6,[37,0],[[32,4]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Review Business Details\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,1],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\" //\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,1],[\"click\",[32,0,[\"cancel\"]]],null],[12],[2,\"Cancel\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Address\",\"Line 1\",\"addressLine1\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"\",\"Line 2\",\"addressLine2\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"City\",\"City\",\"city\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"State\",\"State\",\"state\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Zip Code\",\"xxxxx-xxxx\",\"zip\"]],null],[2,\"\\t\\t\\t\\t\\n\\t\\t\\t\\t\"],[8,[32,2,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"poppinCategories\"]],\"Search...\",\"name\",[32,0,[\"categories\"]],[30,[36,2],[[30,[36,3],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,3,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[3]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Logo URL\",\"https://awesomebiz.com/photos/my-logo.jpg\",\"logoUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Main Photo URL\",\"https://awesomebiz.com/photos/my-epic-banner.jpg\",\"mainPhotoUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Add'l Photo URL\",\"https://awesomebiz.com/photos/my-epic-pic.jpg\",\"addlPhotoUrl\"]],null],[2,\"\\n\"],[2,\"\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Website\",\"https://awesomebiz.com/\",\"website\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Menu URL\",\"https://awesomebiz.com/\",\"menuUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Yelp URL\",\"https://awesomebiz.com/\",\"yelpUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Capacity\",\"Capacity\",\"capacity\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,2,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Visit Length\",\"Visit Length\",\"visitLength\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[2]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[6,[37,4],[[32,4]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Yelp\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"yelp/yelp-match-form\",[],[[\"@term\",\"@location\",\"@yelpMatchId\",\"@yelpMatches\",\"@acceptMatch\",\"@fillData\",\"@canAcceptMatch\"],[[32,0,[\"name\"]],[32,0,[\"city\"]],[32,0,[\"yelpId\"]],[32,0,[\"yelpMatches\"]],[32,0,[\"acceptMatch\"]],[32,0,[\"fillData\"]],[32,0,[\"canAcceptMatch\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,5],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"unless\",\"on\",\"fn\",\"mut\",\"if\",\"action\"]}",
+    "id": "0r8OtpQn",
+    "block": "{\"symbols\":[\"modal\",\"menu\",\"pic\",\"form\",\"cat\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Review Business Details\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,1],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,0],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Name\",\"Name\",\"name\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"Address\",\"Line 1\",\"addressLine1\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"\",\"Line 2\",\"addressLine2\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"City\",\"City\",\"city\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"text\",\"State\",\"State\",\"state\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Zip Code\",\"xxxxx-xxxx\",\"zip\"]],null],[2,\"\\t\\t\\t\\t\\n\\t\\t\\t\\t\"],[8,[32,4,[\"group\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"label\"],[14,0,\"col-form-label col-md-4\"],[12],[2,\"Categories\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"col-md-8\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,\"power-select-multiple\",[],[[\"@searchEnabled\",\"@options\",\"@placeholder\",\"@searchField\",\"@selected\",\"@onChange\"],[true,[32,0,[\"poppinCategories\"]],\"Search...\",\"name\",[32,0,[\"categories\"]],[30,[36,0],[[30,[36,2],[[32,0,[\"categories\"]]],null]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,5,[\"name\"]]],[2,\"\\n\\t\\t\\t\\t\\t\\t\"]],\"parameters\":[5]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Logo URL\",\"https://awesomebiz.com/photos/my-logo.jpg\",\"logoUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Main Photo URL\",\"https://awesomebiz.com/photos/my-epic-banner.jpg\",\"mainPhotoUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Add'l Photo URL\",\"https://awesomebiz.com/photos/my-epic-pic.jpg\",\"addlPhotoUrl\"]],null],[2,\"\\n\"],[2,\"\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Website\",\"https://awesomebiz.com/\",\"website\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Add a Menu\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@label\",\"@placeholder\",\"@controlType\",\"@property\"],[\"Name\",\"Breakfast|Brunch|Lunch|Dinner|Cocktails|Wine|Beer\",\"text\",\"menuName\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@label\",\"@placeholder\",\"@controlType\",\"@property\"],[\"URL\",\"https://awesomebiz.com/menu\",\"text\",\"menuUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\"],[\"text\",\"Yelp URL\",\"https://www.yelp.com/biz/awesome-biz-2/\",\"yelpUrl\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Capacity\",\"Capacity\",\"capacity\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,[32,4,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"number\",\"Visit Length\",\"Visit Length\",\"visitLength\",true]],null],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-default\"],[4,[38,1],[\"click\",[32,0,[\"cancel\"]]],null],[12],[2,\"Cancel\"],[13],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[4]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Photos and Menus\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[12],[2,\"Click to remove. It's not final til you hit submit!\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\"],[6,[37,4],[[30,[36,3],[[30,[36,3],[[32,0,[\"photoUrls\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[11,\"img\"],[16,\"src\",[32,3]],[24,0,\"col-sm-4\"],[4,[38,1],[\"click\",[30,[36,0],[[32,0,[\"removePic\"]],[32,3]],null]],null],[12],[13],[2,\"\\n\"]],\"parameters\":[3]}]]],[2,\"\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\t\\t\\t\\n\"],[6,[37,4],[[30,[36,3],[[30,[36,3],[[32,0,[\"oldMenus\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[11,\"span\"],[16,6,[32,2,[\"url\"]]],[24,0,\"btn btn-default btn-small\"],[4,[38,1],[\"click\",[30,[36,0],[[32,0,[\"removeMenu\"]],[32,2]],null]],null],[12],[1,[32,2,[\"name\"]]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\"],[[32,0,[\"showModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[1,[32,0,[\"modalTitle\"]]],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[1,[32,0,[\"modalText\"]]]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,5],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"on\",\"mut\",\"-track-array\",\"each\",\"action\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/location-form/template.hbs"
     }
@@ -5852,8 +5929,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "F0n2eLiv",
-    "block": "{\"symbols\":[\"@stacked\",\"@vendorId\",\"@clickAction\"],\"statements\":[[10,\"div\"],[15,0,[31,[[30,[36,0],[[32,1],\"col-xl-6\"],null]]]],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Poppin\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"locations/native-search-form\",[],[[\"@searchMethod\",\"@populateResults\"],[[32,0,[\"searchMethod\"]],[32,0,[\"populateResults\"]]]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[15,0,[31,[[30,[36,0],[[32,1],\"col-xl-6\"],null]]]],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Results\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\tChoose a business \"],[6,[37,1],[[32,0,[\"results\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"results\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@vendorId\",\"@locations\",\"@joinCategories\",\"@clickAction\"],[[32,2],[32,0,[\"businesses\"]],[32,0,[\"joinCategories\"]],[32,3]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"unless\",\"if\"]}",
+    "id": "QCaXNx9e",
+    "block": "{\"symbols\":[\"@stacked\",\"@vendorId\",\"@clickAction\"],\"statements\":[[10,\"div\"],[15,0,[31,[[30,[36,0],[[32,1],\"col-md-6\"],null]]]],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Poppin\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"locations/native-search-form\",[],[[\"@searchMethod\",\"@populateResults\"],[[32,0,[\"searchMethod\"]],[32,0,[\"populateResults\"]]]],null],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\"],[10,\"div\"],[15,0,[31,[[30,[36,0],[[32,1],\"col-md-6\"],null]]]],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Search Results\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\tChoose a business \"],[6,[37,1],[[32,0,[\"results\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"results\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@vendorId\",\"@locations\",\"@joinCategories\",\"@clickAction\"],[[32,2],[32,0,[\"businesses\"]],[32,0,[\"joinCategories\"]],[32,3]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"unless\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/locations/search-and-results/template.hbs"
     }
@@ -6300,8 +6377,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "pYX8Jcbx",
-    "block": "{\"symbols\":[\"modal\",\"msg\",\"modal\",\"msg\",\"msg\",\"@vendor\",\"@refresh\"],\"statements\":[[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,5]],[13],[2,\"\\n\"]],\"parameters\":[5]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,3],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-form\",[],[[\"@vendor\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,6],[32,7],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-display\",[],[[\"@vendor\",\"@startEdit\",\"@refresh\"],[[32,6],[32,0,[\"startEdit\"]],[32,7]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\"],[8,\"users-list\",[],[[\"@title\",\"@clickAction\",\"@users\"],[\"Admins\",[32,0,[\"openMemberModal\"]],[32,6,[\"admins\"]]]],null],[2,\"\\n\\t\"],[8,\"users-list\",[],[[\"@title\",\"@clickAction\",\"@users\"],[\"Members\",[32,0,[\"openMemberModal\"]],[32,6,[\"members\"]]]],null],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Locations\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@title\",\"@locations\",\"@clickAction\"],[\"Locations\",[32,6,[\"locations\"]],[32,0,[\"openLocationModal\"]]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showLocationModal\"]],[32,0,[\"closeLocationModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,3,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[2,\"Options\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,3,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showModalMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,4]],[13],[2,\"\\n\"]],\"parameters\":[4]}]]],[2,\"\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[8,\"link-to\",[[24,0,\"btn btn-primary btn-block\"]],[[\"@route\",\"@model\"],[\"locations.location\",[32,0,[\"modalLoc\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\tView \"],[1,[32,0,[\"modalLoc\",\"name\"]]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@class\",\"@type\",\"@onClick\"],[\"btn-block\",\"outline-danger\",[30,[36,0],[[32,0,[\"removeLocation\"]],[32,0,[\"modalLoc\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Remove This Location\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,3,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,4],[[32,0],[32,3,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[3]}]]],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showMemberModal\"]],[32,0,[\"closeMemberModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[2,\"Options\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showModalMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@class\",\"@type\",\"@onClick\"],[\"btn-block\",\"primary\",[30,[36,0],[[32,0,[\"changeRole\"]],[32,0,[\"modalMember\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\tMake \"],[1,[32,0,[\"modalMember\",\"email\"]]],[2,\" \"],[1,[30,[36,3],[[32,0,[\"memberIsAdmin\"]],\"a Member\",\"an Admin\"],null]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@class\",\"@type\",\"@onClick\"],[\"btn-block\",\"outline-danger\",[30,[36,0],[[32,0,[\"removeMember\"]],[32,0,[\"modalMember\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\tRemove This \"],[1,[30,[36,3],[[32,0,[\"memberIsAdmin\"]],\"Admin\",\"Member\"],null]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,4],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"-track-array\",\"each\",\"if\",\"action\"]}",
+    "id": "Ovg5vkua",
+    "block": "{\"symbols\":[\"modal\",\"msg\",\"modal\",\"msg\",\"msg\",\"@vendor\",\"@refresh\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,5]],[13],[2,\"\\n\"]],\"parameters\":[5]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"],[6,[37,3],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-form\",[],[[\"@vendor\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,6],[32,7],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\"],[8,\"vendors/vendor-display\",[],[[\"@vendor\",\"@startEdit\",\"@refresh\"],[[32,6],[32,0,[\"startEdit\"]],[32,7]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\"],[8,\"users-list\",[],[[\"@title\",\"@clickAction\",\"@users\"],[\"Admins\",[32,0,[\"openMemberModal\"]],[32,6,[\"admins\"]]]],null],[2,\"\\n\\t\"],[8,\"users-list\",[],[[\"@title\",\"@clickAction\",\"@users\"],[\"Members\",[32,0,[\"openMemberModal\"]],[32,6,[\"members\"]]]],null],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Locations\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@title\",\"@locations\",\"@clickAction\"],[\"Locations\",[32,6,[\"locations\"]],[32,0,[\"openLocationModal\"]]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showLocationModal\"]],[32,0,[\"closeLocationModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,3,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[2,\"Options\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,3,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showModalMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,4]],[13],[2,\"\\n\"]],\"parameters\":[4]}]]],[2,\"\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[8,\"link-to\",[[24,0,\"btn btn-primary btn-block\"]],[[\"@route\",\"@model\"],[\"locations.location\",[32,0,[\"modalLoc\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\tView \"],[1,[32,0,[\"modalLoc\",\"name\"]]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@class\",\"@type\",\"@onClick\"],[\"btn-block\",\"outline-danger\",[30,[36,0],[[32,0,[\"removeLocation\"]],[32,0,[\"modalLoc\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Remove This Location\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,3,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,4],[[32,0],[32,3,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[3]}]]],[2,\"\\n\\n\"],[8,\"bs-modal\",[],[[\"@open\",\"@onHide\"],[[32,0,[\"showMemberModal\"]],[32,0,[\"closeMemberModal\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\"],[8,[32,1,[\"header\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[10,\"h4\"],[14,0,\"modal-title\"],[12],[2,\"Options\"],[13],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"body\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showModalMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@class\",\"@type\",\"@onClick\"],[\"btn-block\",\"primary\",[30,[36,0],[[32,0,[\"changeRole\"]],[32,0,[\"modalMember\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\tMake \"],[1,[32,0,[\"modalMember\",\"email\"]]],[2,\" \"],[1,[30,[36,3],[[32,0,[\"memberIsAdmin\"]],\"a Member\",\"an Admin\"],null]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@class\",\"@type\",\"@onClick\"],[\"btn-block\",\"outline-danger\",[30,[36,0],[[32,0,[\"removeMember\"]],[32,0,[\"modalMember\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\tRemove This \"],[1,[30,[36,3],[[32,0,[\"memberIsAdmin\"]],\"Admin\",\"Member\"],null]],[2,\"\\n\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[8,[32,1,[\"footer\"]],[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\"],[8,\"bs-button\",[],[[\"@onClick\"],[[30,[36,4],[[32,0],[32,1,[\"close\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"Close\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"]],\"parameters\":[]}]]],[2,\"\\n\"]],\"parameters\":[1]}]]]],\"hasEval\":false,\"upvars\":[\"fn\",\"-track-array\",\"each\",\"if\",\"action\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/vendors/existing-vendor/template.hbs"
     }
@@ -7419,8 +7496,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "AIf/a0z2",
-    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row justify-content-xl-center\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[8,\"vendors/vendor-form\",[],[[\"@resolveAction\"],[[32,0,[\"redirectToVendor\"]]]],null],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "id": "LC0VaNPF",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row justify-content-md-center\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[8,\"vendors/vendor-form\",[],[[\"@resolveAction\"],[[32,0,[\"redirectToVendor\"]]]],null],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
     "meta": {
       "moduleName": "poppin-ui/pods/vendors/add/template.hbs"
     }
@@ -7563,8 +7640,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "kC47sfy0",
-    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row justify-content-xl-center\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-xl-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\\tChoose a vendor \"],[6,[37,0],[[32,0,[\"vendorsList\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"vendorsList\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,0,[\"vendorsList\"]],[32,0,[\"clickAction\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\"]}",
+    "id": "uTvY8GYf",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row justify-content-md-center\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\\tChoose a vendor \"],[6,[37,0],[[32,0,[\"vendorsList\",\"total\"]]],null,[[\"default\"],[{\"statements\":[[2,\"(\"],[1,[32,0,[\"vendorsList\",\"total\"]]],[2,\" Result(s))\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,0,[\"vendorsList\"]],[32,0,[\"clickAction\"]]]],null],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/vendors/index/template.hbs"
     }
@@ -9335,7 +9412,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+cdc1039d"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+904191c2"});
           }
         
 //# sourceMappingURL=poppin-ui.map

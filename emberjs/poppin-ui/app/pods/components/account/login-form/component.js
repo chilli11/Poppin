@@ -24,6 +24,10 @@ export default class 	LoginFormComponent extends StatefulComponent {
 		}
 	};
 
+	get isLoading() {
+		return /ing/i.test(this.machineState);
+	}
+
 	@tracked email;
 	@tracked password;
 
