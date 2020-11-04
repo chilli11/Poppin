@@ -392,7 +392,7 @@ namespace Poppin.Services
 																				new Claim("Role", user.Role),
 																				new Claim("Id", user.Id)
 																}),
-																Expires = DateTime.UtcNow.AddHours(2),
+																Expires = DateTime.UtcNow.AddDays(30),
 																SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 												};
 
@@ -409,7 +409,7 @@ namespace Poppin.Services
 																return new RefreshToken
 																{
 																				Token = Convert.ToBase64String(randomBytes),
-																				Expires = DateTime.UtcNow.AddHours(8),
+																				Expires = DateTime.UtcNow.AddDays(120),
 																				Created = DateTime.UtcNow,
 																				CreatedByIp = ipAddress
 																};
