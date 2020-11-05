@@ -421,8 +421,10 @@ namespace Poppin.Controllers
 								private async Task<PoppinUserResult> GetPoppinUserResult(PoppinUser user)
 								{
 												var favorites = await user.GetFavorites(_locationService);
-												favorites = favorites.ToList();
-												favorites.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(favorites.Select(l => l.Id)));
+												if (favorites != null && user.Favorites.Count > 0)
+												{
+																favorites.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(favorites.Select(l => l.Id)));
+												}
 
 												return new PoppinUserResult()
 												{
