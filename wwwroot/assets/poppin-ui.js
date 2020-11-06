@@ -9412,7 +9412,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+904191c2"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+a9b0bbf9"});
           }
         
 //# sourceMappingURL=poppin-ui.map

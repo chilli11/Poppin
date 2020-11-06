@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release cd emberjs/poppin-ui&#xD;&#xA;npm run build" />
+						<Exec Command="if $(ConfigurationName) == Release cd emberjs/poppin-ui&#xD;&#xA;npm run build" />
   </Target>-->
 
 </Project>
