@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -35,8 +37,8 @@ namespace Poppin
 								// This method gets called by the runtime. Use this method to add services to the container.
 								public void ConfigureServices(IServiceCollection services)
 								{
-												services.AddDbContext<ApplicationDbContext>(options =>
-																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+												services.AddDbContextPool<ApplicationDbContext>(options =>
+																options.UseMySql(Configuration.GetConnectionString("MySQLConnection")));
 												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
 																.AddEntityFrameworkStores<ApplicationDbContext>()
 																.AddDefaultTokenProviders();
@@ -109,6 +111,8 @@ namespace Poppin
 												services.AddTransient<IUserService, UserService>();
 												services.AddTransient<ILogActionService, LogActionService>(); 
 												services.AddHttpClient<IYelpService, YelpService>();
+
+												services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 												services.AddControllersWithViews();
 												services.AddRazorPages();
