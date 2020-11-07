@@ -148,8 +148,8 @@ namespace Poppin
 								{
 												if (env.IsDevelopment())
 												{
-																app.UseDeveloperExceptionPage();
-																app.UseDatabaseErrorPage();
+																app.UseDeveloperExceptionPage()
+																				.UseDatabaseErrorPage();
 												}
 												else
 												{

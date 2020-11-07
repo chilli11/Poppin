@@ -31,7 +31,13 @@ namespace Poppin
 												Host.CreateDefaultBuilder(args)
 																.ConfigureWebHostDefaults(webBuilder =>
 																{
-																				webBuilder.UseStartup<Startup>();
+																				webBuilder.UseKestrel(opts =>
+																				{
+																								opts.ConfigureEndpointDefaults(listenOpts =>
+																								{
+																												listenOpts.UseConnectionLogging();
+																								});
+																				}).UseStartup<Startup>();
 																});
 				}
 }

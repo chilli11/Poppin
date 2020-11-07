@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Tracking;
@@ -22,6 +23,7 @@ namespace Poppin.Controllers
         protected IVendorService _vendorService;
         protected ILogActionService _logActionService;
         protected IHEREGeocoder _hereGeocoder;
+        protected ILogger<PoppinBaseController> _logger;
 
         protected string GetUserId()
         {
