@@ -1,5 +1,7 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
@@ -10,22 +12,25 @@ using System;
 
 namespace Poppin.Services
 {
-    public class SmtpService : ISmtpService
+				public class SmtpService : ISmtpService
     {
         private readonly Office365Settings _appSettings;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public SmtpService(IOptions<Office365Settings> settings)
+        public SmtpService(IOptions<Office365Settings> settings, IHttpContextAccessor hca)
         {
             _appSettings = settings.Value;
+            httpContextAccessor = hca;
         }
 
         public void SendConfirmationEmail(User user, string token)
         {
+            var hostUrl = HostUrl();
             var mailMessage = new MimeMessage();
             mailMessage.Sender = MailboxAddress.Parse(_appSettings.Sender);
             mailMessage.To.Add(MailboxAddress.Parse(user.Email));
             mailMessage.Subject = "Confirm Your Poppin Account";
-            mailMessage.Body = new TextPart(TextFormat.Html) { Text = "Click here to confirm: <a href=\"https://getpopp.in/account/confirm-email/" + user.Id + "?t=" + token + "\">CONFIRM</a>"};
+            mailMessage.Body = new TextPart(TextFormat.Html) { Text = $"Click here to confirm: <a href=\"{hostUrl}/account/confirm-email/{user.Id}?t={token}\">CONFIRM</a>"};
 
             using (var client = new SmtpClient())
             {
@@ -49,11 +54,12 @@ namespace Poppin.Services
 
         public void SendPasswordResetEmail(User user, string token)
         {
+            var hostUrl = HostUrl();
             var mailMessage = new MimeMessage();
             mailMessage.Sender = MailboxAddress.Parse(_appSettings.Sender);
             mailMessage.To.Add(MailboxAddress.Parse(user.Email));
             mailMessage.Subject = "Reset Your Poppin Password";
-            mailMessage.Body = new TextPart(TextFormat.Html) { Text = "Click here to reset your password: <a href=\"https://getpopp.in/account/reset-password/" + user.Id + "?t=" + token + "\">RESET PASSWORD</a>" };
+            mailMessage.Body = new TextPart(TextFormat.Html) { Text = $"Click here to reset your password: <a href=\"{hostUrl}/account/reset-password/{user.Id}?t={token}\">RESET PASSWORD</a>" };
 
             using (var client = new SmtpClient())
             {
@@ -74,5 +80,10 @@ namespace Poppin.Services
                 }
             }
         }
+
+        private string HostUrl()
+								{
+            return httpContextAccessor.HttpContext.Request.Host.Value;
+								}
     }
 }

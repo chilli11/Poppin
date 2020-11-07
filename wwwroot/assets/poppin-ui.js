@@ -3224,6 +3224,78 @@
     }
   });
 });
+;define("poppin-ui/pods/account/confirm-email/controller", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _dec2, _class, _descriptor, _descriptor2, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountConfirmEmailController = (_dec = Ember._tracked, _dec2 = Ember._tracked, (_class = (_temp = class AccountConfirmEmailController extends Ember.Controller {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "queryParams", ['uid', 't']);
+
+      _initializerDefineProperty(this, "t", _descriptor, this);
+
+      _initializerDefineProperty(this, "uid", _descriptor2, this);
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "t", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "uid", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountConfirmEmailController;
+});
+;define("poppin-ui/pods/account/confirm-email/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class AccountConfirmEmailRoute extends Ember.Route {}
+
+  _exports.default = AccountConfirmEmailRoute;
+});
+;define("poppin-ui/pods/account/confirm-email/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "Zg2P1sm+",
+    "block": "{\"symbols\":[],\"statements\":[[2,\"{if this.model.success 'YAAY!' 'BOOO!'}\"]],\"hasEval\":false,\"upvars\":[]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/confirm-email/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/account/index/controller", ["exports"], function (_exports) {
   "use strict";
 
@@ -3499,6 +3571,36 @@
     "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\"],[8,\"account/registration-form\",[],[[],[]],null],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
     "meta": {
       "moduleName": "poppin-ui/pods/account/register/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/account/reset-password/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class AccountResetPasswordRoute extends Ember.Route {}
+
+  _exports.default = AccountResetPasswordRoute;
+});
+;define("poppin-ui/pods/account/reset-password/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "1FBaFXQF",
+    "block": "{\"symbols\":[],\"statements\":[[1,[30,[36,1],[[30,[36,0],null,null]],null]]],\"hasEval\":false,\"upvars\":[\"-outlet\",\"component\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/reset-password/template.hbs"
     }
   });
 
@@ -7346,8 +7448,39 @@
   });
   _exports.default = void 0;
 
-  class AdminLocationsLocationRoute extends Ember.Route {}
+  var _dec, _class, _descriptor, _temp;
 
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AdminLocationsLocationRoute = (_dec = Ember.inject.service, (_class = (_temp = class AdminLocationsLocationRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _defineProperty(this, "queryParams", {
+        t: {
+          refreshModel: true
+        }
+      });
+    }
+
+    model(params) {
+      return this.accountService.confirmEmail(params.user_id, params.t);
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
   _exports.default = AdminLocationsLocationRoute;
 });
 ;define("poppin-ui/pods/locations/location/template", ["exports"], function (_exports) {
@@ -7741,6 +7874,12 @@
       this.route('register');
       this.route('login');
       this.route('me');
+      this.route('reset-password', {
+        path: 'reset-password/:user_id'
+      });
+      this.route('confirm-email', {
+        path: 'confirm-email/:user_id'
+      });
     });
     this.route('admin', function () {
       this.route('categories');
@@ -7957,6 +8096,22 @@
       });
     }
 
+    logout() {
+      this.clearUserData();
+      return Ember.RSVP.Promise.resolve();
+    }
+
+    clearUserData() {
+      this.apiService.jwt = null;
+      this.authInfo = null;
+      this.accountInfo = null;
+      this.profile = null;
+      this.vendors = null;
+      this.favorites = null;
+      this.hidden = null;
+      sessionStorage.removeItem('poppin_jwt');
+    }
+
     me() {
       if (!this.authInfo || !this.authInfo.authorized) return Ember.RSVP.Promise.reject({
         errors: ['Unauthorized']
@@ -8023,20 +8178,24 @@
       });
     }
 
-    logout() {
-      this.clearUserData();
-      return Ember.RSVP.Promise.resolve();
+    confirmEmail(userId, token) {
+      return this.apiService.request({
+        resource: _httpResources.default.confirmEmail,
+        body: {
+          userId,
+          token
+        }
+      });
     }
 
-    clearUserData() {
-      this.apiService.jwt = null;
-      this.authInfo = null;
-      this.accountInfo = null;
-      this.profile = null;
-      this.vendors = null;
-      this.favorites = null;
-      this.hidden = null;
-      sessionStorage.removeItem('poppin_jwt');
+    confirmEmail(userId, request) {
+      return this.apiService.request({
+        resource: _httpResources.default.confirmEmail,
+        body: {
+          userId,
+          request
+        }
+      });
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
@@ -9329,6 +9488,16 @@
       url: ['profile'],
       method: PUT
     },
+    confirmEmail: {
+      url: 'identity/confirm-email/:userId',
+      method: GET,
+      params: ['userId']
+    },
+    resetPassword: {
+      url: 'identity/reset-password/:userId',
+      method: POST,
+      params: ['userId']
+    },
 
     /* ===== VENDOR ===== */
     createNewVendor: {
@@ -9412,7 +9581,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+a9b0bbf9"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+c73bc4ce"});
           }
         
 //# sourceMappingURL=poppin-ui.map

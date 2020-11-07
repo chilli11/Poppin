@@ -64,6 +64,22 @@ export default class AccountService extends Service {
 		});
 	}
 
+	logout() {
+		this.clearUserData();
+		return Promise.resolve();
+	}
+
+	clearUserData() {
+		this.apiService.jwt = null;
+		this.authInfo = null;
+		this.accountInfo = null;
+		this.profile = null;
+		this.vendors = null;
+		this.favorites = null;
+		this.hidden = null;
+		sessionStorage.removeItem('poppin_jwt');
+	}
+
 	me() {
 		if (!this.authInfo || !this.authInfo.authorized)
 			return Promise.reject({ errors: ['Unauthorized'] });
@@ -117,19 +133,17 @@ export default class AccountService extends Service {
 		});
 	}
 
-	logout() {
-		this.clearUserData();
-		return Promise.resolve();
+	confirmEmail(userId, token) {
+		return this.apiService.request({
+			resource: HttpResources.confirmEmail,
+			body: { userId, token }
+		});
 	}
 
-	clearUserData() {
-		this.apiService.jwt = null;
-		this.authInfo = null;
-		this.accountInfo = null;
-		this.profile = null;
-		this.vendors = null;
-		this.favorites = null;
-		this.hidden = null;
-		sessionStorage.removeItem('poppin_jwt');
+	confirmEmail(userId, request) {
+		return this.apiService.request({
+			resource: HttpResources.confirmEmail,
+			body: { userId, request }
+		});
 	}
 }

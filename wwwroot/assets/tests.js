@@ -1038,6 +1038,29 @@ define("poppin-ui/tests/unit/pods/account-service/service-test", ["qunit", "embe
     });
   });
 });
+define("poppin-ui/tests/unit/pods/account/confirm-email/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | account/confirm-email', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:account/confirm-email');
+      assert.ok(controller);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/confirm-email/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/confirm-email', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/confirm-email');
+      assert.ok(route);
+    });
+  });
+});
 define("poppin-ui/tests/unit/pods/account/index/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -1102,6 +1125,17 @@ define("poppin-ui/tests/unit/pods/account/register/route-test", ["qunit", "ember
     (0, _emberQunit.setupTest)(hooks);
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:account/register');
+      assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/reset-password/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/reset-password', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/reset-password');
       assert.ok(route);
     });
   });

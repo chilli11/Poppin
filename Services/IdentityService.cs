@@ -72,14 +72,13 @@ namespace Poppin.Services
 																};
 												}
 
-												var newUser = new User
+												var user = new User
 												{
-																Id = Guid.NewGuid().ToString(),
 																Email = email,
 																UserName = email,
 																Role = RoleTypes.User
 												};
-												var createdUser = await _userManager.CreateAsync(newUser, password);
+												var createdUser = await _userManager.CreateAsync(user, password);
 
 												if (!createdUser.Succeeded)
 												{
@@ -89,6 +88,8 @@ namespace Poppin.Services
 																				Errors = createdUser.Errors.Select(e => e.Description)
 																};
 												}
+
+												var newUser = await _userManager.FindByEmailAsync(user.Email);
 
 												// Segment.io Analytics
 												Analytics.Client.Identify(newUser.Id, new Traits
