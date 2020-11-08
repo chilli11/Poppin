@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="dockerpub\**" />
+    <Content Remove="dockerpub\**" />
+    <EmbeddedResource Remove="dockerpub\**" />
+    <None Remove="dockerpub\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Analytics" Version="3.0.0" />
     <PackageReference Include="EWSoftware.SHFB" Version="2020.3.6" />
     <PackageReference Include="EWSoftware.SHFB.NETFramework" Version="4.8.0" />
