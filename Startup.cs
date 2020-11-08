@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -112,7 +111,7 @@ namespace Poppin
 												services.AddTransient<ILogActionService, LogActionService>(); 
 												services.AddHttpClient<IYelpService, YelpService>();
 
-												services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 												services.AddControllersWithViews();
 												services.AddRazorPages();

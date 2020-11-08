@@ -19,7 +19,7 @@ namespace Poppin.Models.BusinessEntities
 
         public PoppinUser(User user)
 								{
-            UserId = user.Id;
+            UserId = user.Id.ToString();
             Username = user.UserName;
             Role = user.Role;
             Email = user.Email;
