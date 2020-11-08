@@ -17,27 +17,29 @@
 					<p>{{msg}}</p>
 				{{/each}}
 			</BsAlert>
-			<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
-				<form.element
-					@controlType="email"
-					@label="Email Address"
-					@placeholder="xxxxxxxxxxx@xxxxx.xx"
-					@property="email"
-					@required={{true}} />
-				<form.element
-					@controlType="password"
-					@label="Password"
-					@placeholder="********"
-					@property="password"
-					@required={{true}}/>
-				<form.element
-					@controlType="password"
-					@label="Confirm Password"
-					@placeholder="********"
-					@property="password2"
-					@required={{true}} />
-				<BsButton @type="primary" type="submit" @defaultText="Submit" />
-			</BsForm>
+			<LoadingSpinner @isLoading={{this.isLoading}}>
+				<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+					<form.element
+						@controlType="email"
+						@label="Email Address"
+						@placeholder="xxxxxxxxxxx@xxxxx.xx"
+						@property="email"
+						@required={{true}} />
+					<form.element
+						@controlType="password"
+						@label="Password"
+						@placeholder="********"
+						@property="password"
+						@required={{true}}/>
+					<form.element
+						@controlType="password"
+						@label="Confirm Password"
+						@placeholder="********"
+						@property="password2"
+						@required={{true}} />
+					<BsButton @type="primary" type="submit" @defaultText="Submit" />
+				</BsForm>
+			</LoadingSpinner>
 			<hr>
 			Already have an account? <LinkTo @route="account.login" @class="btn btn-primary btn-sm">Sign in</LinkTo>.
 		</div>
