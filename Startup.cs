@@ -61,6 +61,8 @@ namespace Poppin
 												services.AddTransient<IHERESettings, HERESettings>(sp =>
 																sp.GetRequiredService<IOptions<HERESettings>>().Value);
 
+												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 												services.AddHttpClient<FBAuthService>();
 												services.AddHttpClient<GoogleAuthService>();
 												services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();

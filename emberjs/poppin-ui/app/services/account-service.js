@@ -64,6 +64,22 @@ export default class AccountService extends Service {
 		});
 	}
 
+	logout() {
+		this.clearUserData();
+		return Promise.resolve();
+	}
+
+	clearUserData() {
+		this.apiService.jwt = null;
+		this.authInfo = null;
+		this.accountInfo = null;
+		this.profile = null;
+		this.vendors = null;
+		this.favorites = null;
+		this.hidden = null;
+		sessionStorage.removeItem('poppin_jwt');
+	}
+
 	me() {
 		if (!this.authInfo || !this.authInfo.authorized)
 			return Promise.reject({ errors: ['Unauthorized'] });
@@ -117,19 +133,38 @@ export default class AccountService extends Service {
 		});
 	}
 
-	logout() {
-		this.clearUserData();
-		return Promise.resolve();
+	passwordResetRequest(request) {		
+		return this.apiService.request({
+			resource: HttpResources.passwordResetRequest,
+			body: request
+		});
 	}
 
-	clearUserData() {
-		this.apiService.jwt = null;
-		this.authInfo = null;
-		this.accountInfo = null;
-		this.profile = null;
-		this.vendors = null;
-		this.favorites = null;
-		this.hidden = null;
-		sessionStorage.removeItem('poppin_jwt');
+	confirmResetToken(userId, t) {
+		return this.apiService.request({
+			resource: HttpResources.confirmResetToken,
+			body: { userId, t }
+		});
+	}
+
+	resetPassword(userId, request) {
+		return this.apiService.request({
+			resource: HttpResources.resetPassword,
+			body: { userId, ...request }
+		});
+	}
+
+	confirmEmail(userId, t) {
+		return this.apiService.request({
+			resource: HttpResources.confirmEmail,
+			body: { userId, t }
+		});
+	}
+	
+	resendConfirmationEmail(token) {
+		return this.apiService.request({
+			resource: HttpResources.resendConfirmationEmail,
+			body: token
+		});
 	}
 }

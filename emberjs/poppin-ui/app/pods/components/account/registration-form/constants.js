@@ -7,6 +7,7 @@ export const states = {
 };
 export const actions = {
 	VALIDATE_PASSWORD: 'VALIDATE_PASSWORD',
+	RESEND_EMAIL: 'RESEND_EMAIL',
 	SUBMIT: 'SUBMIT',
 	REJECT: 'REJECT',
 	RESOLVE: 'RESOLVE'

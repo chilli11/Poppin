@@ -1,0 +1,30 @@
+<div class="col-md-6">
+	<div class="card">
+		<div class="card-header card-header-primary">
+			<h4 class="card-title">Forgot Password</h4>
+		</div>
+		<div class="card-body">
+			<LoadingSpinner @isLoading={{this.isLoading}}>
+				<BsAlert
+					@visible={{this.showMsg}}
+					@fade={{true}}
+					@type={{this.msgType}}
+					@dismissible={{true}}
+					@onDismissed={{fn this.hideMsg}}>
+					{{#each this.msgs as |msg|}}
+						<p>{{msg}}</p>
+					{{/each}}
+				</BsAlert>
+				<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+					<form.element
+						@controlType="email"
+						@label="Email Address"
+						@placeholder="xxxxxxxxxxx@xxxxx.xx"
+						@property="email"
+						@required={{true}} />
+					<BsButton @type="primary" type="submit" @defaultText="Submit" />
+				</BsForm>
+			</LoadingSpinner>
+		</div>
+	</div>
+</div>

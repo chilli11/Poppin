@@ -25,20 +25,22 @@ namespace Poppin.Controllers
     //[ValidateAntiForgeryToken]
     public class IdentityController : PoppinBaseController
     {
-        private readonly IIdentityService _identityService;
         private readonly IOAuthSettings _oAuthSettings;
         private readonly IOAuthHandler _oAuthHandler;
+        private readonly ISmtpService _smtpService;
         private readonly string stateGuid = "8d97a48c-c825-47e0-862b-3103fbd0382d";
 
         public IdentityController(
             IIdentityService idService,
             IOAuthSettings oAuthSettings,
-            IOAuthHandler oAuthHandler
+            IOAuthHandler oAuthHandler,
+            ISmtpService smtpService
         )
         {
             _identityService = idService;
             _oAuthSettings = oAuthSettings;
             _oAuthHandler = oAuthHandler;
+            _smtpService = smtpService;
         }
 
         /// <summary>
@@ -239,7 +241,25 @@ namespace Poppin.Controllers
                 {
                     return BadRequest(result);
                 }
+                _smtpService.SendPasswordConfirmationEmail(userResult.User);
                 return Ok(result);
+            }
+        }
+
+        [HttpPost("resend-confirmation")]
+        public async Task<IActionResult> ResendConfirmation(ForgotPasswordRequest request)
+        {
+            try
+            {
+                await _identityService.ResendConfirmationAsync(request.Email);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { ex.Message }
+                });
             }
         }
 

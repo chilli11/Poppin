@@ -3224,6 +3224,132 @@
     }
   });
 });
+;define("poppin-ui/pods/account/confirm-email/controller", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountConfirmEmailController = (_dec = Ember._tracked, (_class = (_temp = class AccountConfirmEmailController extends Ember.Controller {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "queryParams", ['t']);
+
+      _initializerDefineProperty(this, "t", _descriptor, this);
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "t", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountConfirmEmailController;
+});
+;define("poppin-ui/pods/account/confirm-email/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountConfirmEmailRoute = (_dec = Ember.inject.service, (_class = (_temp = class AccountConfirmEmailRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _defineProperty(this, "queryParams", {
+        t: {
+          refreshModel: true
+        }
+      });
+    }
+
+    model(params) {
+      return this.accountService.confirmEmail(params.user_id, params.t);
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountConfirmEmailRoute;
+});
+;define("poppin-ui/pods/account/confirm-email/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "WSrsKLCU",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Email Confirmation\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"h3\"],[12],[1,[30,[36,0],[[32,0,[\"model\",\"success\"]],\"Success! Log in and get Poppin!\",\"Oops! Something went wrong. Log in and request a new confirmation link.\"],null]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"if\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/confirm-email/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/account/forgot-password/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  class AccountForgotPasswordRoute extends Ember.Route {}
+
+  _exports.default = AccountForgotPasswordRoute;
+});
+;define("poppin-ui/pods/account/forgot-password/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "aaI08NdX",
+    "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\"],[8,\"account/password-reset-request\",[],[[],[]],null],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/forgot-password/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
 ;define("poppin-ui/pods/account/index/controller", ["exports"], function (_exports) {
   "use strict";
 
@@ -3499,6 +3625,107 @@
     "block": "{\"symbols\":[],\"statements\":[[10,\"div\"],[14,0,\"row\"],[12],[2,\"\\n\\t\"],[8,\"account/registration-form\",[],[[],[]],null],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[]}",
     "meta": {
       "moduleName": "poppin-ui/pods/account/register/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/account/reset-password/controller", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountResetPasswordController = (_dec = Ember._tracked, (_class = (_temp = class AccountResetPasswordController extends Ember.Controller {
+    constructor(...args) {
+      super(...args);
+
+      _defineProperty(this, "queryParams", ['t']);
+
+      _initializerDefineProperty(this, "t", _descriptor, this);
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "t", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountResetPasswordController;
+});
+;define("poppin-ui/pods/account/reset-password/route", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _dec, _class, _descriptor, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let AccountResetPasswordRoute = (_dec = Ember.inject.service, (_class = (_temp = class AccountResetPasswordRoute extends Ember.Route {
+    constructor(...args) {
+      super(...args);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _defineProperty(this, "queryParams", {
+        t: {
+          refreshModel: true
+        }
+      });
+    }
+
+    model(params) {
+      return this.accountService.confirmResetToken(params.user_id, params.t).then(response => {
+        return {
+          userId: params.user_id,
+          token: response.token
+        };
+      });
+    }
+
+  }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  })), _class));
+  _exports.default = AccountResetPasswordRoute;
+});
+;define("poppin-ui/pods/account/reset-password/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "6GxLlvgR",
+    "block": "{\"symbols\":[\"@model\"],\"statements\":[[6,[37,1],[[30,[36,0],[[32,0,[\"t\"]],[32,1,[\"token\"]]],null]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\"],[8,\"account/password-reset-form\",[],[[\"@userId\",\"@token\"],[[32,1,[\"userId\"]],[32,1,[\"token\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\"],[8,\"account/password-reset-request\",[],[[\"@brokenToken\"],[[32,1,[\"token\"]]]],null],[2,\"\\n\"]],\"parameters\":[]}]]]],\"hasEval\":false,\"upvars\":[\"and\",\"if\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/account/reset-password/template.hbs"
     }
   });
 
@@ -3943,9 +4170,9 @@
   });
   _exports.default = void 0;
 
-  let _actions$START_EDIT, _actions$END_EDIT;
+  let _actions$START_EDIT, _actions$RESEND_CONFI, _actions$RESOLVE_ACTI, _actions$REJECT_ACTIO, _actions$END_EDIT;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -3955,7 +4182,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let Component = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember.computed('args.profile.categories', 'yelpCategories', 'yc'), _dec7 = Ember._action, _dec8 = Ember._action, _dec9 = Ember._action, (_class = (_temp = (_actions$START_EDIT = _constants.actions.START_EDIT, _actions$END_EDIT = _constants.actions.END_EDIT, class Component extends _statefulComponent.default {
+  let Component = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember.computed('args.profile.categories', 'yelpCategories', 'yc'), _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = (_temp = (_actions$START_EDIT = _constants.actions.START_EDIT, _actions$RESEND_CONFI = _constants.actions.RESEND_CONFIRMATION, _actions$RESOLVE_ACTI = _constants.actions.RESOLVE_ACTION, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, _actions$END_EDIT = _constants.actions.END_EDIT, class Component extends _statefulComponent.default {
     get ageRange() {
       var filter = this.ageRanges.filter(a => a.key == this.args.profile.ageRange);
       return filter && filter.length ? filter[0] : null;
@@ -3967,7 +4194,7 @@
     }
 
     get categories() {
-      return (this.yelpCategories || []).filter(yc => (this.args.profile.categories || []).indexOf(yc.alias) > -1);
+      return (this.categories || []).filter(c => (this.args.profile.categories || []).indexOf(c.slug) > -1);
     }
 
     constructor() {
@@ -3975,13 +4202,15 @@
 
       _initializerDefineProperty(this, "accountService", _descriptor, this);
 
-      _initializerDefineProperty(this, "yelpService", _descriptor2, this);
+      _initializerDefineProperty(this, "categoriesService", _descriptor2, this);
 
-      _initializerDefineProperty(this, "isEdit", _descriptor3, this);
+      _initializerDefineProperty(this, "confirmationSent", _descriptor3, this);
 
-      _initializerDefineProperty(this, "showStatusMsg", _descriptor4, this);
+      _initializerDefineProperty(this, "isEdit", _descriptor4, this);
 
-      _initializerDefineProperty(this, "statusType", _descriptor5, this);
+      _initializerDefineProperty(this, "showStatusMsg", _descriptor5, this);
+
+      _initializerDefineProperty(this, "statusType", _descriptor6, this);
 
       _defineProperty(this, "statusMsgs", []);
 
@@ -4025,28 +4254,56 @@
         value: "Prefer Not to Say"
       }]);
 
-      _defineProperty(this, "yelpCategories", void 0);
+      _defineProperty(this, "categories", void 0);
 
       _defineProperty(this, "yc", void 0);
 
       _defineProperty(this, "transitions", {
         [_constants.states.IDLE]: {
-          [_constants.actions.START_EDIT]: _constants.states.EDIT_PROFILE
+          [_constants.actions.START_EDIT]: _constants.states.EDIT_PROFILE,
+          [_constants.actions.RESEND_CONFIRMATION]: _constants.states.LOADING
         },
         [_constants.states.EDIT_PROFILE]: {
           [_constants.actions.END_EDIT]: _constants.states.IDLE
         },
         [_constants.states.LOADING]: {
-          [_constants.actions.END_LOADING]: _constants.states.IDLE
+          [_constants.actions.END_LOADING]: _constants.states.IDLE,
+          [_constants.actions.RESOLVE_ACTION]: _constants.states.IDLE,
+          [_constants.actions.REJECT_ACTION]: _constants.states.IDLE
         }
       });
 
       this.initMachine();
-      this.yelpService.getYelpCategories().then(data => Ember.set(this, 'yelpCategories', data));
+      this.categoriesService.getCategories().then(data => Ember.set(this, 'categories', data));
     }
 
     [_actions$START_EDIT]() {
       this.isEdit = true;
+    }
+
+    [_actions$RESEND_CONFI]() {
+      const {
+        email
+      } = this;
+      this.hideMsg();
+      this.accountService.resendConfirmationEmail({
+        email
+      }).then(response => {
+        if (response.errors && response.errors.length) throw response;
+        return this.dispatch(_constants.actions.RESOLVE_ACTION, ['Email resent!']);
+      }).catch(response => this.dispatch(_constants.actions.REJECT_ACTION, response));
+    }
+
+    [_actions$RESOLVE_ACTI](msgs) {
+      Ember.set(this, 'statusMsgs', msgs);
+      this.statusType = 'success';
+      this.showStatusMsg = true;
+    }
+
+    [_actions$REJECT_ACTIO](msgs) {
+      Ember.set(this, 'statusMsgs', msgs);
+      this.statusType = 'danger';
+      this.showStatusMsg = true;
     }
 
     [_actions$END_EDIT](data) {
@@ -4073,34 +4330,43 @@
       this.showStatusMsg = false;
     }
 
+    resendEmail() {
+      return this.dispatch(_constants.actions.RESEND_CONFIRMATION);
+    }
+
   }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "yelpService", [_dec2], {
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "categoriesService", [_dec2], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "isEdit", [_dec3], {
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "confirmationSent", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "isEdit", [_dec4], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: function () {
       return false;
     }
-  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "showStatusMsg", [_dec4], {
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "showStatusMsg", [_dec5], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "statusType", [_dec5], {
+  }), _descriptor6 = _applyDecoratedDescriptor(_class.prototype, "statusType", [_dec6], {
     configurable: true,
     enumerable: true,
     writable: true,
     initializer: null
-  }), _applyDecoratedDescriptor(_class.prototype, "categories", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "categories"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "categories", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "categories"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "resendEmail", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "resendEmail"), _class.prototype)), _class));
   _exports.default = Component;
 });
 ;define("poppin-ui/pods/components/account/my-profile/constants copy", ["exports"], function (_exports) {
@@ -4152,7 +4418,9 @@
     START_EDIT: 'START_EDIT',
     END_EDIT: 'END_EDIT',
     REJECT_ACTION: 'REJECT_ACTION',
-    END_LOADING: 'END_LOADING'
+    RESOLVE_ACTION: 'RESOLVE_ACTION',
+    END_LOADING: 'END_LOADING',
+    RESEND_CONFIRMATION: 'RESEND_CONFIRMATION'
   };
   _exports.actions = actions;
 });
@@ -4165,10 +4433,350 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "p4OKKCG5",
-    "block": "{\"symbols\":[\"cat\",\"msg\",\"@vendors\",\"@vendorClickAction\",\"@profile\",\"@refresh\",\"@favorites\",\"@locationClickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,4],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\"],[6,[37,5],[[32,5,[\"profilePhoto\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"text-center\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"img\"],[15,\"src\",[32,5,[\"profilePhoto\"]]],[14,0,\"profile-photo\"],[14,5,\"max-height: 100px;\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"span\"],[12],[2,\"My Profile\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-sm btn-info\"],[24,5,\"margin:0\"],[24,\"role\",\"link\"],[4,[38,6],[\"click\",[32,0,[\"startEdit\"]]],null],[12],[2,\"Edit\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"firstName\"]]],[2,\" \"],[1,[32,5,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,\"account/profile-form\",[],[[\"@ageRanges\",\"@genders\",\"@yelpCategories\",\"@categories\",\"@profile\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,0,[\"ageRanges\"]],[32,0,[\"genders\"]],[32,0,[\"yelpCategories\"]],[32,0,[\"categories\"]],[32,5],[32,6],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Age:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"ageRange\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Gender:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"gender\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Favorite Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,1,[\"title\"]]],[1,[30,[36,1],[[30,[36,0],[[32,1],[32,0,[\"categories\",\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\t\\t\\t\\t\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,5],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,3],[32,4]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,7],[32,8]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"eq\",\"unless\",\"-track-array\",\"each\",\"fn\",\"if\",\"on\"]}",
+    "id": "Az80czoL",
+    "block": "{\"symbols\":[\"cat\",\"msg\",\"@vendors\",\"@vendorClickAction\",\"@profile\",\"@refresh\",\"@favorites\",\"@locationClickAction\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showStatusMsg\"]],true,[32,0,[\"statusType\"]],true,[30,[36,5],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"statusMsgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\"],[6,[37,6],[[32,5,[\"profilePhoto\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"div\"],[14,0,\"text-center\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"img\"],[15,\"src\",[32,5,[\"profilePhoto\"]]],[14,0,\"profile-photo\"],[14,5,\"max-height: 100px;\"],[12],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"span\"],[12],[2,\"My Profile\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[11,\"span\"],[24,0,\"btn btn-sm btn-info\"],[24,5,\"margin:0\"],[24,\"role\",\"link\"],[4,[38,4],[\"click\",[32,0,[\"startEdit\"]]],null],[12],[2,\"Edit\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\"],[6,[37,1],[[32,5,[\"user\",\"emailConfirmed\"]]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"p\"],[12],[2,\"\\n\\t\\t\\t\\t\\tYour email isn't confirmed yet.\\n\\t\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[24,0,\"text-dark\"],[4,[38,4],[\"click\",[32,0,[\"resendEmail\"]]],null],[12],[2,\"here\"],[13],[2,\" to resend the confirmation link.\\n\\t\\t\\t\\t\"],[13],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Name:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"firstName\"]]],[2,\" \"],[1,[32,5,[\"lastName\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Email:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"email\"]]],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Role:\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,5,[\"role\"]]],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,6],[[32,0,[\"isEdit\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[8,\"account/profile-form\",[],[[\"@ageRanges\",\"@genders\",\"@yelpCategories\",\"@categories\",\"@profile\",\"@refresh\",\"@isEdit\",\"@cancelAction\",\"@resolveAction\"],[[32,0,[\"ageRanges\"]],[32,0,[\"genders\"]],[32,0,[\"yelpCategories\"]],[32,0,[\"categories\"]],[32,5],[32,6],true,[32,0,[\"endEdit\"]],[32,0,[\"endEdit\"]]]],null],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"dl\"],[12],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Age:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"ageRange\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Gender:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[1,[32,0,[\"gender\",\"value\"]]],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dt\"],[12],[2,\"Favorite Categories:\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"dd\"],[12],[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"categories\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[1,[32,1,[\"title\"]]],[1,[30,[36,1],[[30,[36,0],[[32,1],[32,0,[\"categories\",\"lastObject\"]]],null],\" //\"],null]],[2,\"\\n\"]],\"parameters\":[1]}]]],[2,\"\\t\\t\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[13],[2,\"\\t\\t\\t\\t\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\"],[6,[37,6],[[32,3]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\"],[10,\"h5\"],[12],[2,\"Vendors\"],[13],[2,\"\\n\\t\\t\\t\\t\"],[8,\"vendors/vendor-list\",[],[[\"@vendors\",\"@clickAction\"],[[32,3],[32,4]]],null],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13],[2,\"\\n\\n\"],[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"My Favorites\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body location-list\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"locations/location-list\",[],[[\"@locations\",\"@clickAction\"],[[32,7],[32,8]]],null],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"eq\",\"unless\",\"-track-array\",\"each\",\"on\",\"fn\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/my-profile/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/components/account/password-reset-form/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/pods/components/account/password-reset-form/constants"], function (_exports, _statefulComponent, _constants) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  let _actions$VALIDATE_PAS, _actions$SUBMIT, _actions$RESOLVE, _actions$REJECT;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let LoginFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._action, _dec7 = Ember._action, _dec8 = Ember._action, (_class = (_temp = (_actions$VALIDATE_PAS = _constants.actions.VALIDATE_PASSWORD, _actions$SUBMIT = _constants.actions.SUBMIT, _actions$RESOLVE = _constants.actions.RESOLVE, _actions$REJECT = _constants.actions.REJECT, class LoginFormComponent extends _statefulComponent.default {
+    get msgs() {
+      return this._msgs || [];
+    }
+
+    get isLoading() {
+      return /ing/i.test(this.machineState);
+    }
+
+    get isValidPassword() {
+      const hasUpper = /[A-Z]+/.test(this.password);
+      const hasLower = /[a-z]+/.test(this.password);
+      const hasNumber = /[0-9]+/.test(this.password);
+      const hasSpecial = /[_!@#$%^&*]+/.test(this.password);
+      const isOnlyAllowed = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[_!@#$%^&*])(?=.{8,24})/i.test(this.password);
+      return hasUpper && hasLower && hasNumber && hasSpecial && isOnlyAllowed;
+    }
+
+    constructor() {
+      super(...arguments);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _defineProperty(this, "transitions", {
+        [_constants.states.IDLE]: {
+          [_constants.actions.VALIDATE_PASSWORD]: _constants.states.VALIDATING
+        },
+        [_constants.states.ERROR]: {
+          [_constants.actions.VALIDATE_PASSWORD]: _constants.states.VALIDATING
+        },
+        [_constants.states.VALIDATING]: {
+          [_constants.actions.REJECT]: _constants.states.ERROR,
+          [_constants.actions.SUBMIT]: _constants.states.SUBMITTING
+        },
+        [_constants.states.SUBMITTING]: {
+          [_constants.actions.REJECT]: _constants.states.ERROR,
+          [_constants.actions.RESOLVE]: _constants.states.SUCCESS
+        }
+      });
+
+      _defineProperty(this, "_msgs", void 0);
+
+      _initializerDefineProperty(this, "password", _descriptor2, this);
+
+      _initializerDefineProperty(this, "password2", _descriptor3, this);
+
+      _initializerDefineProperty(this, "showMsg", _descriptor4, this);
+
+      _initializerDefineProperty(this, "msgType", _descriptor5, this);
+
+      this.initMachine();
+    }
+
+    [_actions$VALIDATE_PAS]() {
+      this.hideMsg();
+      const msgs = [];
+      if (!this.isValidPassword) msgs.push(invalidPasswordErrorMsg);
+      if (this.password !== this.password2) msgs.push('Passwords don\'t match');
+      if (msgs.length) return this.dispatch(_constants.actions.REJECT, msgs);
+      Ember.set(this, '_msgs', msgs);
+      return this.dispatch(_constants.actions.SUBMIT);
+    }
+
+    [_actions$SUBMIT]() {
+      const {
+        password,
+        password2
+      } = this;
+      this.hideMsg();
+      this.accountService.resetPassword(this.args.userId, {
+        token: this.args.token,
+        password,
+        password2
+      }).then(response => {
+        if (response.errors && response.errors.length) throw response;
+        return this.dispatch(_constants.actions.RESOLVE);
+      }).catch(() => this.dispatch(_constants.actions.REJECT));
+    }
+
+    [_actions$RESOLVE]() {
+      this.msgType = 'success';
+      Ember.set(this, '_msgs', ['Success! Your password has been updated.']);
+      this.showMsg = true;
+    }
+
+    [_actions$REJECT](msgs) {
+      this.msgType = 'danger';
+      Ember.set(this, '_msgs', msgs || ['Sorry! It looks like something went wrong. Please try again later.']);
+      this.showMsg = true;
+    }
+
+    clearForm() {
+      this.password = null;
+      this.password2 = null;
+    }
+
+    submit() {
+      return this.dispatch(_constants.actions.VALIDATE_PASSWORD);
+    }
+
+    hideMsg() {
+      this.showMsg = false;
+      Ember.set(this, '_msgs', []);
+    }
+
+  }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "password", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "password2", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "showMsg", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor5 = _applyDecoratedDescriptor(_class.prototype, "msgType", [_dec5], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype)), _class));
+  _exports.default = LoginFormComponent;
+});
+;define("poppin-ui/pods/components/account/password-reset-form/constants", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.actions = _exports.states = void 0;
+  const states = {
+    IDLE: 'IDLE',
+    VALIDATING: 'VALIDATING',
+    SUBMITTING: 'SUBMITTING',
+    ERROR: 'ERROR',
+    SUCCESS: 'SUCCESS'
+  };
+  _exports.states = states;
+  const actions = {
+    VALIDATE_PASSWORD: 'VALIDATE_PASSWORD',
+    SUBMIT: 'SUBMIT',
+    REJECT: 'REJECT',
+    RESOLVE: 'RESOLVE'
+  };
+  _exports.actions = actions;
+});
+;define("poppin-ui/pods/components/account/password-reset-form/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "29aMSdCN",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Reset Password\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showMsg\"]],true,[32,0,[\"msgType\"]],true,[30,[36,1],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,3],[[30,[36,2],[[30,[36,2],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,1],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Confirm Password\",\"********\",\"password2\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"fn\",\"-track-array\",\"each\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/components/account/password-reset-form/template.hbs"
+    }
+  });
+
+  _exports.default = _default;
+});
+;define("poppin-ui/pods/components/account/password-reset-request/component", ["exports", "poppin-ui/classes/stateful-component", "poppin-ui/pods/components/account/password-reset-request/constants"], function (_exports, _statefulComponent, _constants) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  let _actions$SUBMIT, _actions$RESOLVE, _actions$REJECT;
+
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _temp;
+
+  function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
+
+  function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+  function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) { var desc = {}; Object.keys(descriptor).forEach(function (key) { desc[key] = descriptor[key]; }); desc.enumerable = !!desc.enumerable; desc.configurable = !!desc.configurable; if ('value' in desc || desc.initializer) { desc.writable = true; } desc = decorators.slice().reverse().reduce(function (desc, decorator) { return decorator(target, property, desc) || desc; }, desc); if (context && desc.initializer !== void 0) { desc.value = desc.initializer ? desc.initializer.call(context) : void 0; desc.initializer = undefined; } if (desc.initializer === void 0) { Object.defineProperty(target, property, desc); desc = null; } return desc; }
+
+  function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
+
+  let LoginFormComponent = (_dec = Ember.inject.service, _dec2 = Ember._tracked, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._action, _dec6 = Ember._action, (_class = (_temp = (_actions$SUBMIT = _constants.actions.SUBMIT, _actions$RESOLVE = _constants.actions.RESOLVE, _actions$REJECT = _constants.actions.REJECT, class LoginFormComponent extends _statefulComponent.default {
+    get msgs() {
+      return this._msgs || [];
+    }
+
+    get isLoading() {
+      return /ing/i.test(this.machineState);
+    }
+
+    constructor() {
+      super(...arguments);
+
+      _initializerDefineProperty(this, "accountService", _descriptor, this);
+
+      _defineProperty(this, "_msgs", void 0);
+
+      _initializerDefineProperty(this, "email", _descriptor2, this);
+
+      _initializerDefineProperty(this, "showMsg", _descriptor3, this);
+
+      _initializerDefineProperty(this, "msgType", _descriptor4, this);
+
+      _defineProperty(this, "transitions", {
+        [_constants.states.IDLE]: {
+          [_constants.actions.SUBMIT]: _constants.states.SUBMITTING
+        },
+        [_constants.states.SUBMITTING]: {
+          [_constants.actions.RESOLVE]: _constants.states.IDLE,
+          [_constants.actions.REJECT]: _constants.states.IDLE
+        }
+      });
+
+      if (this.args.brokenToken) {
+        Ember.set(this, '_msgs', ['Sorry! It looks like something went wrong with your reset code. Please resubmit the form and try again.']);
+      }
+
+      this.initMachine();
+    }
+
+    [_actions$SUBMIT]() {
+      this.accountService.passwordResetRequest({
+        email: this.email
+      }).then(() => this.dispatch(_constants.actions.RESOLVE)).catch(() => this.dispatch(_constants.actions.REJECT));
+    }
+
+    [_actions$RESOLVE]() {
+      this.msgType = 'success';
+      Ember.set(this, '_msgs', ['Success! Check your email for a message from @wearepoppin.com. Be sure to check your spam filter if you don\'t see it']);
+      this.showMsg = true;
+    }
+
+    [_actions$REJECT]() {
+      this.msgType = 'danger';
+      Ember.set(this, '_msgs', ['Sorry! It looks like something went wrong. Please try again later.']);
+      this.showMsg = true;
+    }
+
+    submit() {
+      this.dispatch(_constants.actions.SUBMIT);
+    }
+
+    hideMsg() {
+      this.showMsg = false;
+      Ember.set(this, '_msgs', []);
+    }
+
+  }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor2 = _applyDecoratedDescriptor(_class.prototype, "email", [_dec2], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor3 = _applyDecoratedDescriptor(_class.prototype, "showMsg", [_dec3], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _descriptor4 = _applyDecoratedDescriptor(_class.prototype, "msgType", [_dec4], {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    initializer: null
+  }), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec5], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec6], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype)), _class));
+  _exports.default = LoginFormComponent;
+});
+;define("poppin-ui/pods/components/account/password-reset-request/constants", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.actions = _exports.states = void 0;
+  const states = {
+    IDLE: 'IDLE',
+    SUBMITTING: 'SUBMITTING'
+  };
+  _exports.states = states;
+  const actions = {
+    SUBMIT: 'SUBMIT',
+    RESOLVE: 'RESOLVE',
+    REJECT: 'REJECT'
+  };
+  _exports.actions = actions;
+});
+;define("poppin-ui/pods/components/account/password-reset-request/template", ["exports"], function (_exports) {
+  "use strict";
+
+  Object.defineProperty(_exports, "__esModule", {
+    value: true
+  });
+  _exports.default = void 0;
+
+  var _default = Ember.HTMLBars.template({
+    "id": "92NaO7l0",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Forgot Password\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[32,0,[\"showMsg\"]],true,[32,0,[\"msgType\"]],true,[30,[36,0],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,2],[[30,[36,1],[[30,[36,1],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,0],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"fn\",\"-track-array\",\"each\"]}",
+    "meta": {
+      "moduleName": "poppin-ui/pods/components/account/password-reset-request/template.hbs"
     }
   });
 
@@ -4416,9 +5024,9 @@
   });
   _exports.default = void 0;
 
-  let _actions$VALIDATE_PAS, _actions$SUBMIT, _actions$REJECT, _actions$RESOLVE;
+  let _actions$VALIDATE_PAS, _actions$SUBMIT, _actions$RESEND_EMAIL, _actions$REJECT, _actions$RESOLVE;
 
-  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
+  var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _temp;
 
   function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -4429,9 +5037,13 @@
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
   const invalidPasswordErrorMsg = 'Password must be 8-24 characters and contain at least 1 of each of the following: ' + 'lowercase and uppercase letter, number, and special character';
-  let RegistrationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, (_class = (_temp = (_actions$VALIDATE_PAS = _constants.actions.VALIDATE_PASSWORD, _actions$SUBMIT = _constants.actions.SUBMIT, _actions$REJECT = _constants.actions.REJECT, _actions$RESOLVE = _constants.actions.RESOLVE, class RegistrationFormComponent extends _statefulComponent.default {
+  let RegistrationFormComponent = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember._tracked, _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = (_temp = (_actions$VALIDATE_PAS = _constants.actions.VALIDATE_PASSWORD, _actions$SUBMIT = _constants.actions.SUBMIT, _actions$RESEND_EMAIL = _constants.actions.RESEND_EMAIL, _actions$REJECT = _constants.actions.REJECT, _actions$RESOLVE = _constants.actions.RESOLVE, class RegistrationFormComponent extends _statefulComponent.default {
     get isLoading() {
       return /ing/i.test(this.machineState);
+    }
+
+    get isSuccess() {
+      return this.machineState == _constants.states.SUCCESS;
     }
 
     get isValidPassword() {
@@ -4456,9 +5068,6 @@
         [_constants.states.IDLE]: {
           [_constants.actions.VALIDATE_PASSWORD]: _constants.states.VALIDATING
         },
-        [_constants.states.ERROR]: {
-          [_constants.actions.VALIDATE_PASSWORD]: _constants.states.VALIDATING
-        },
         [_constants.states.VALIDATING]: {
           [_constants.actions.REJECT]: _constants.states.ERROR,
           [_constants.actions.SUBMIT]: _constants.states.SUBMITTING
@@ -4466,6 +5075,12 @@
         [_constants.states.SUBMITTING]: {
           [_constants.actions.REJECT]: _constants.states.ERROR,
           [_constants.actions.RESOLVE]: _constants.states.SUCCESS
+        },
+        [_constants.states.ERROR]: {
+          [_constants.actions.VALIDATE_PASSWORD]: _constants.states.VALIDATING
+        },
+        [_constants.states.SUCCESS]: {
+          [_constants.actions.RESEND_EMAIL]: _constants.states.SUBMITTING
         }
       });
 
@@ -4485,23 +5100,24 @@
     }
 
     [_actions$VALIDATE_PAS]() {
-      this.showMsg = false;
+      this.hideMsg();
       const msgs = [];
       if (!this.isValidPassword) msgs.push(invalidPasswordErrorMsg);
       if (this.password !== this.password2) msgs.push('Passwords don\'t match');
-      if (msgs.length) return this.dispatch(_constants.actions.REJECT, msgs);
+      if (msgs.length) return this.dispatch(_constants.actions.REJECT, {
+        errors: msgs
+      });
       Ember.set(this, 'msgs', msgs);
       return this.dispatch(_constants.actions.SUBMIT);
     }
 
     [_actions$SUBMIT]() {
-      this.showMsg = false;
       const {
         email,
         password,
         password2
       } = this;
-      this.showMsg = false;
+      this.hideMsg();
       this.accountService.registerAccount({
         email,
         password,
@@ -4509,17 +5125,30 @@
       }).then(response => {
         if (response.errors && response.errors.length) throw response;
         return this.dispatch(_constants.actions.RESOLVE, ['Registrtaion success!']);
-      }).catch(response => this.dispatch(_constants.actions.REJECT, response.errors));
+      }).catch(response => this.dispatch(_constants.actions.REJECT, response));
     }
 
-    [_actions$REJECT](msgs) {
-      Ember.set(this, 'msgs', msgs || []);
+    [_actions$RESEND_EMAIL]() {
+      const {
+        email
+      } = this;
+      this.hideMsg();
+      this.accountService.resendConfirmationEmail({
+        email
+      }).then(response => {
+        if (response.errors && response.errors.length) throw response;
+        return this.dispatch(_constants.actions.RESOLVE, ['Email resent!']);
+      }).catch(response => this.dispatch(_constants.actions.REJECT, response));
+    }
+
+    [_actions$REJECT](response) {
+      Ember.set(this, 'msgs', response.errors || ['Something went wrong... Try again']);
       this.msgType = 'danger';
       this.showMsg = true;
     }
 
     [_actions$RESOLVE](msgs) {
-      Ember.set(this, 'msgs', msgs || []);
+      Ember.set(this, 'msgs', msgs || ['Success!']);
       this.msgType = 'success';
       this.showMsg = true;
     }
@@ -4537,6 +5166,10 @@
     hideMsg() {
       this.showMsg = false;
       Ember.set(this, 'msgs', []);
+    }
+
+    resendEmail() {
+      return this.dispatch(_constants.actions.RESEND_EMAIL);
     }
 
   }), _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "accountService", [_dec], {
@@ -4578,7 +5211,7 @@
     initializer: function () {
       return "success";
     }
-  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype)), _class));
+  }), _applyDecoratedDescriptor(_class.prototype, "clearForm", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "clearForm"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "submit", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "submit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "resendEmail", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "resendEmail"), _class.prototype)), _class));
   _exports.default = RegistrationFormComponent;
 });
 ;define("poppin-ui/pods/components/account/registration-form/constants", ["exports"], function (_exports) {
@@ -4598,6 +5231,7 @@
   _exports.states = states;
   const actions = {
     VALIDATE_PASSWORD: 'VALIDATE_PASSWORD',
+    RESEND_EMAIL: 'RESEND_EMAIL',
     SUBMIT: 'SUBMIT',
     REJECT: 'REJECT',
     RESOLVE: 'RESOLVE'
@@ -4613,8 +5247,8 @@
   _exports.default = void 0;
 
   var _default = Ember.HTMLBars.template({
-    "id": "knJjJGPz",
-    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Sign Up\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,0],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,1],true,[34,2],true,[30,[36,3],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,5],[[30,[36,4],[[30,[36,4],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,3],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Confirm Password\",\"********\",\"password2\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\tAlready have an account? \"],[8,\"link-to\",[],[[\"@route\",\"@class\"],[\"account.login\",\"btn btn-primary btn-sm\"]],[[\"default\"],[{\"statements\":[[2,\"Sign in\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"on\",\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\"]}",
+    "id": "46BEg+gD",
+    "block": "{\"symbols\":[\"form\",\"msg\"],\"statements\":[[10,\"div\"],[14,0,\"col-md-6\"],[12],[2,\"\\n\\t\"],[10,\"div\"],[14,0,\"card\"],[12],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-header card-header-primary\"],[12],[2,\"\\n\\t\\t\\t\"],[10,\"h4\"],[14,0,\"card-title\"],[12],[2,\"Sign Up\"],[13],[2,\"\\n\\t\\t\\t\"],[10,\"p\"],[14,0,\"card-category\"],[12],[2,\"\\n\\t\\t\\t\\t\"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[4,[38,5],[\"click\",[32,0,[\"clearForm\"]]],null],[12],[2,\"Clear Form\"],[13],[2,\"\\n\\t\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[13],[2,\"\\n\\t\\t\"],[10,\"div\"],[14,0,\"card-body\"],[12],[2,\"\\n\\t\\t\\t\"],[8,\"loading-spinner\",[],[[\"@isLoading\"],[[32,0,[\"isLoading\"]]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,6],[[32,0,[\"isSuccess\"]]],null,[[\"default\",\"else\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[10,\"h3\"],[12],[2,\"Success!\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[2,\"Now you just need to confirm your email address. Check for a message from wearepoppin.com (be sure to look in your spam filter if you don't see it).\"],[13],[2,\"\\n\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[2,\"If you didn't receive it, click \"],[11,\"a\"],[24,6,\"javascript:void(0);\"],[24,0,\"text-dark\"],[4,[38,5],[\"click\",[32,0,[\"resendEmail\"]]],null],[12],[2,\"here\"],[13],[2,\" to resend.\"],[13],[2,\"\\n\"]],\"parameters\":[]},{\"statements\":[[2,\"\\t\\t\\t\\t\\t\"],[8,\"bs-alert\",[],[[\"@visible\",\"@fade\",\"@type\",\"@dismissible\",\"@onDismissed\"],[[34,0],true,[34,1],true,[30,[36,2],[[32,0,[\"hideMsg\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\"],[6,[37,4],[[30,[36,3],[[30,[36,3],[[32,0,[\"msgs\"]]],null]],null]],null,[[\"default\"],[{\"statements\":[[2,\"\\t\\t\\t\\t\\t\\t\\t\"],[10,\"p\"],[12],[1,[32,2]],[13],[2,\"\\n\"]],\"parameters\":[2]}]]],[2,\"\\t\\t\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\\t\\t\"],[8,\"bs-form\",[],[[\"@formLayout\",\"@model\",\"@onSubmit\"],[\"horizontal\",[32,0],[30,[36,2],[[32,0,[\"submit\"]]],null]]],[[\"default\"],[{\"statements\":[[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"email\",\"Email Address\",\"xxxxxxxxxxx@xxxxx.xx\",\"email\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Password\",\"********\",\"password\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,[32,1,[\"element\"]],[],[[\"@controlType\",\"@label\",\"@placeholder\",\"@property\",\"@required\"],[\"password\",\"Confirm Password\",\"********\",\"password2\",true]],null],[2,\"\\n\\t\\t\\t\\t\\t\\t\"],[8,\"bs-button\",[[24,4,\"submit\"]],[[\"@type\",\"@defaultText\"],[\"primary\",\"Submit\"]],null],[2,\"\\n\\t\\t\\t\\t\\t\"]],\"parameters\":[1]}]]],[2,\"\\n\"]],\"parameters\":[]}]]],[2,\"\\t\\t\\t\"]],\"parameters\":[]}]]],[2,\"\\n\\t\\t\\t\"],[10,\"hr\"],[12],[13],[2,\"\\n\\t\\t\\tAlready have an account? \"],[8,\"link-to\",[],[[\"@route\",\"@class\"],[\"account.login\",\"btn btn-primary btn-sm\"]],[[\"default\"],[{\"statements\":[[2,\"Sign in\"]],\"parameters\":[]}]]],[2,\".\\n\\t\\t\"],[13],[2,\"\\n\\t\"],[13],[2,\"\\n\"],[13]],\"hasEval\":false,\"upvars\":[\"showMsg\",\"msgType\",\"fn\",\"-track-array\",\"each\",\"on\",\"if\"]}",
     "meta": {
       "moduleName": "poppin-ui/pods/components/account/registration-form/template.hbs"
     }
@@ -7745,6 +8379,13 @@
       this.route('register');
       this.route('login');
       this.route('me');
+      this.route('reset-password', {
+        path: 'reset-password/:user_id'
+      });
+      this.route('confirm-email', {
+        path: 'confirm-email/:user_id'
+      });
+      this.route('forgot-password');
     });
     this.route('admin', function () {
       this.route('categories');
@@ -7961,6 +8602,22 @@
       });
     }
 
+    logout() {
+      this.clearUserData();
+      return Ember.RSVP.Promise.resolve();
+    }
+
+    clearUserData() {
+      this.apiService.jwt = null;
+      this.authInfo = null;
+      this.accountInfo = null;
+      this.profile = null;
+      this.vendors = null;
+      this.favorites = null;
+      this.hidden = null;
+      sessionStorage.removeItem('poppin_jwt');
+    }
+
     me() {
       if (!this.authInfo || !this.authInfo.authorized) return Ember.RSVP.Promise.reject({
         errors: ['Unauthorized']
@@ -8027,20 +8684,48 @@
       });
     }
 
-    logout() {
-      this.clearUserData();
-      return Ember.RSVP.Promise.resolve();
+    passwordResetRequest(request) {
+      return this.apiService.request({
+        resource: _httpResources.default.passwordResetRequest,
+        body: request
+      });
     }
 
-    clearUserData() {
-      this.apiService.jwt = null;
-      this.authInfo = null;
-      this.accountInfo = null;
-      this.profile = null;
-      this.vendors = null;
-      this.favorites = null;
-      this.hidden = null;
-      sessionStorage.removeItem('poppin_jwt');
+    confirmResetToken(userId, t) {
+      return this.apiService.request({
+        resource: _httpResources.default.confirmResetToken,
+        body: {
+          userId,
+          t
+        }
+      });
+    }
+
+    resetPassword(userId, request) {
+      return this.apiService.request({
+        resource: _httpResources.default.resetPassword,
+        body: {
+          userId,
+          ...request
+        }
+      });
+    }
+
+    confirmEmail(userId, t) {
+      return this.apiService.request({
+        resource: _httpResources.default.confirmEmail,
+        body: {
+          userId,
+          t
+        }
+      });
+    }
+
+    resendConfirmationEmail(token) {
+      return this.apiService.request({
+        resource: _httpResources.default.resendConfirmationEmail,
+        body: token
+      });
     }
 
   }, _temp), (_descriptor = _applyDecoratedDescriptor(_class.prototype, "apiService", [_dec], {
@@ -8325,7 +9010,8 @@
       return this._categories;
     }
 
-    getCategories() {
+    getCategories(force) {
+      if (this.categories && !force) return Ember.RSVP.resolve(this.categories);
       return this.apiService.request({
         resource: _httpResources.default.getCategories
       }).then(response => {
@@ -9333,6 +10019,29 @@
       url: ['profile'],
       method: PUT
     },
+    confirmEmail: {
+      url: 'identity/confirm-email/:userId',
+      method: GET,
+      params: ['userId']
+    },
+    resendConfirmationEmail: {
+      url: 'identity/resend-confirmation',
+      method: POST
+    },
+    passwordResetRequest: {
+      url: 'identity/forgot-password',
+      method: POST
+    },
+    confirmResetToken: {
+      url: 'identity/reset-password/:userId',
+      method: GET,
+      params: ['userId']
+    },
+    resetPassword: {
+      url: 'identity/reset-password/:userId',
+      method: POST,
+      params: ['userId']
+    },
 
     /* ===== VENDOR ===== */
     createNewVendor: {
@@ -9416,7 +10125,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+75ebd80c"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+e92049ff"});
           }
         
 //# sourceMappingURL=poppin-ui.map

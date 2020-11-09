@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>aspnet-Poppin-9E609860-CBE2-4487-A111-6AB7BD008E15</UserSecretsId>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>aspnet-Poppin-9E609860-CBE2-4487-A111-6AB7BD008E15</UserSecretsId>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="dockerpub\**" />
-    <Content Remove="dockerpub\**" />
-    <EmbeddedResource Remove="dockerpub\**" />
-    <None Remove="dockerpub\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="dockerpub\**" />
+        <Content Remove="dockerpub\**" />
+        <EmbeddedResource Remove="dockerpub\**" />
+        <None Remove="dockerpub\**" />
+    </ItemGroup>
 
-  <ItemGroup>
+    <ItemGroup>
     <PackageReference Include="Analytics" Version="3.0.0" />
     <PackageReference Include="EWSoftware.SHFB" Version="2020.3.6" />
     <PackageReference Include="EWSoftware.SHFB.NETFramework" Version="4.8.0" />
@@ -37,12 +37,19 @@
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
     <PackageReference Include="ProjNet" Version="2.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
-  </ItemGroup>
+    </ItemGroup>
 
-  <ItemGroup>
-    <None Include=".ebextensions\https-instance-dotnet.config" />
-    <None Include=".ebextensions\https-instance-single.config" />
-  </ItemGroup>
+    <ItemGroup>
+				    <Compile Remove="dockerpub\**" />
+				    <Content Remove="dockerpub\**" />
+				    <EmbeddedResource Remove="dockerpub\**" />
+				    <None Remove="dockerpub\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include=".ebextensions\https-instance-dotnet.config" />
+        <None Include=".ebextensions\https-instance-single.config" />
+    </ItemGroup>
 
   <!--<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 						<Exec Command="if $(ConfigurationName) == Release cd emberjs/poppin-ui&#xD;&#xA;npm run build" />

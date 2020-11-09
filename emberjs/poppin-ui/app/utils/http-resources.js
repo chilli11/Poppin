@@ -111,6 +111,29 @@ const HttpResources = {
 		url: ['profile'],
 		method: PUT
 	},
+	confirmEmail: {
+		url: 'identity/confirm-email/:userId',
+		method: GET,
+		params: ['userId']
+	},
+	resendConfirmationEmail: {
+		url: 'identity/resend-confirmation',
+		method: POST
+	},
+	passwordResetRequest: {
+		url: 'identity/forgot-password',
+		method: POST
+	},
+	confirmResetToken: {
+		url: 'identity/reset-password/:userId',
+		method: GET,
+		params: ['userId']
+	},
+	resetPassword: {
+		url: 'identity/reset-password/:userId',
+		method: POST,
+		params: ['userId']
+	},
 
 	/* ===== VENDOR ===== */
 	createNewVendor: {

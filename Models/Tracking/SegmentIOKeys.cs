@@ -17,6 +17,7 @@
 												public const string UpdateProfile = "UpdateProfile";
 												public const string ViewUserProfile = "ViewUserProfile";
 												public const string ConfirmEmail = "ConfirmEmail";
+												public const string ResendConfirmationEmail = "ResendConfirmationEmail";
 												public const string StartPasswordReset = "StartPassswordReset";
 												public const string CompletePasswordReset = "CompletePasswordReset";
 

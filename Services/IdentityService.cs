@@ -32,13 +32,15 @@ namespace Poppin.Services
 								private readonly UserManager<User> _userManager;
 								private readonly ISmtpService _smtpService;
 								private readonly IUserService _userService;
+								private readonly ILogActionService _logActionService;
 
-								public IdentityService(UserManager<User> userMgr, IJwtSettings jwtSettings, ISmtpService smtpService, IUserService userService)
+								public IdentityService(UserManager<User> userMgr, IJwtSettings jwtSettings, ISmtpService smtpService, IUserService userService, ILogActionService las)
 								{
 												_jwtSettings = jwtSettings;
 												_userManager = userMgr;
 												_smtpService = smtpService;
 												_userService = userService;
+												_logActionService = las;
 								}
 
 								public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress)
@@ -118,6 +120,23 @@ namespace Poppin.Services
 												Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.ConfirmEmail);
 
 												return await _userManager.ConfirmEmailAsync(user, token);
+								}
+
+								public async Task ResendConfirmationAsync(string email)
+								{
+												var existingUser = await _userManager.FindByEmailAsync(email);
+
+												if (existingUser != null)
+												{
+																throw new NullReferenceException("User doesn't exist");
+												}
+												var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
+												Analytics.Client.Track(existingUser.Id.ToString(), SegmentIOKeys.Actions.Register, new Properties()
+												{
+																{ "emailConfirmToken", confirmationToken }
+												});
+
+												_smtpService.SendConfirmationEmail(existingUser, confirmationToken);
 								}
 
 								public async Task<AuthenticationResult> LoginAsync(string email, string password, string ipAddress)

@@ -2,6 +2,7 @@ import Service, { inject } from '@ember/service';
 import HttpResources from '../utils/http-resources';
 import { computed } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import { resolve } from 'rsvp';
 
 export default class CategoriesServiceService extends Service {
 	@inject apiService;
@@ -12,7 +13,9 @@ export default class CategoriesServiceService extends Service {
 		return this._categories;
 	}
 
-	getCategories() {
+	getCategories(force) {
+		if (this.categories && !force) return resolve(this.categories);
+
 		return this.apiService.request({
 			resource: HttpResources.getCategories
 		}).then((response) => {
