@@ -11,5 +11,6 @@ namespace Poppin.Interfaces
 				{
 								public void SendConfirmationEmail(User user, string token);
 								public void SendPasswordResetEmail(User user, string token);
+								public void SendPasswordConfirmationEmail(User user);
 				}
 }

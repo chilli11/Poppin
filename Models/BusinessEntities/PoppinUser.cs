@@ -15,15 +15,10 @@ namespace Poppin.Models.BusinessEntities
 				[BsonIgnoreExtraElements]
     public class PoppinUser : ProfileEntity
     {
-        public PoppinUser() { }
+        public PoppinUser(IIdentityService idService) : base(idService) { }
 
-        public PoppinUser(User user)
-								{
-            UserId = user.Id.ToString();
-            Username = user.UserName;
-            Role = user.Role;
-            Email = user.Email;
-								}
+
+        public PoppinUser(User user) : base(user) { }
 
         public void Merge(PoppinUserRequest user)
         {
