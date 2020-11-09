@@ -7274,7 +7274,7 @@
         email: this.newMemberEmail,
         role: this.newMemberRole,
         userId: null
-      }).then(() => this.dispatch(_constants.actions.RESOLVE_MEMBER)).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, {
+      }).then(vendor => this.dispatch(_constants.actions.RESOLVE_MEMBER, vendor)).catch(data => this.dispatch(_constants.actions.REJECT_ACTION, {
         msgs: data.errors,
         context: 'member'
       }));
@@ -7287,17 +7287,13 @@
     [_actions$RESOLVE_MEMB]({
       admins,
       members,
-      adminIds,
-      memberIds
+      vendor
     }) {
       Ember.set(this, 'memberMsgs', ['Success!']);
       this.memberMsgType = 'success';
       this.showMemberMsg = true;
-      const vendor = this.args.vendor;
       vendor.admins = admins;
       vendor.members = members;
-      vendor.adminIds = adminIds;
-      vendor.memberIds = memberIds;
       this.args.refresh(vendor);
     }
 
@@ -10125,7 +10121,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"0.0.0+e92049ff"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"1.1.0+3a858f25"});
           }
         
 //# sourceMappingURL=poppin-ui.map

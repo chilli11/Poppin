@@ -75,9 +75,8 @@ export default class Component extends StatefulComponent {
 	}
 
 	[actions.RESEND_CONFIRMATION]() {
-		const { email } = this;
 		this.hideMsg();
-		this.accountService.resendConfirmationEmail({ email })
+		this.accountService.resendConfirmationEmail({ email: this.args.profile.email })
 		.then((response) => {
 			if (response.errors && response.errors.length) throw response;
 			return this.dispatch(actions.RESOLVE_ACTION, ['Email resent!']);
