@@ -31,6 +31,10 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		}
 	};
 
+	get isLoading() {
+		return /ing/i.test(this.machineState);
+	}
+
 	@tracked email;
 	@tracked password;
 	@tracked password2;
