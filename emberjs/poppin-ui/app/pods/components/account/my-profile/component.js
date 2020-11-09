@@ -6,8 +6,9 @@ import { states, actions } from './constants';
 
 export default class Component extends StatefulComponent {
 	@service accountService;
-	@service yelpService;
+	@service categoriesService;
 
+	@tracked confirmationSent;
 	@tracked isEdit = false;
 	@tracked showStatusMsg;
 	@tracked statusType;
@@ -29,7 +30,7 @@ export default class Component extends StatefulComponent {
 		{ key: "O", value: "Other" },
 		{ key: "D", value: "Prefer Not to Say" }
 	];
-	yelpCategories;
+	categories;
 	yc;
 
 	get ageRange() {
@@ -43,31 +44,56 @@ export default class Component extends StatefulComponent {
 
 	@computed('args.profile.categories', 'yelpCategories', 'yc')
 	get categories() {
-		return (this.yelpCategories || [])
-			.filter(yc => (this.args.profile.categories || []).indexOf(yc.alias) > -1);
+		return (this.categories || [])
+			.filter(c => (this.args.profile.categories || []).indexOf(c.slug) > -1);
 	}
 
 	transitions = {
 		[states.IDLE]: {
-			[actions.START_EDIT]: states.EDIT_PROFILE
+			[actions.START_EDIT]: states.EDIT_PROFILE,
+			[actions.RESEND_CONFIRMATION]: states.LOADING
 		},
 		[states.EDIT_PROFILE]: {
 			[actions.END_EDIT]: states.IDLE
 		},
 		[states.LOADING]: {
-			[actions.END_LOADING]: states.IDLE
+			[actions.END_LOADING]: states.IDLE,
+			[actions.RESOLVE_ACTION]: states.IDLE,
+			[actions.REJECT_ACTION]: states.IDLE
 		}
 	};
 
 	constructor() {
 		super(...arguments);
 		this.initMachine();
-		this.yelpService.getYelpCategories()
-			.then(data => set(this, 'yelpCategories', data));
+		this.categoriesService.getCategories()
+			.then(data => set(this, 'categories', data));
 	}
 
 	[actions.START_EDIT]() {
 		this.isEdit = true;
+	}
+
+	[actions.RESEND_CONFIRMATION]() {
+		const { email } = this;
+		this.hideMsg();
+		this.accountService.resendConfirmationEmail({ email })
+		.then((response) => {
+			if (response.errors && response.errors.length) throw response;
+			return this.dispatch(actions.RESOLVE_ACTION, ['Email resent!']);
+		}).catch((response) => this.dispatch(actions.REJECT_ACTION, response));
+	}
+
+	[actions.RESOLVE_ACTION](msgs) {
+		set(this, 'statusMsgs', msgs);
+		this.statusType = 'success';
+		this.showStatusMsg = true;
+	}
+
+	[actions.REJECT_ACTION](msgs) {
+		set(this, 'statusMsgs', msgs);
+		this.statusType = 'danger';
+		this.showStatusMsg = true;
 	}
 
 	[actions.END_EDIT](data) {
@@ -98,5 +124,10 @@ export default class Component extends StatefulComponent {
 	hideMsg() {
 		this.showModalMsg = false;
 		this.showStatusMsg = false;
+	}
+
+	@action
+	resendEmail() {
+		return this.dispatch(actions.RESEND_CONFIRMATION);
 	}
 }

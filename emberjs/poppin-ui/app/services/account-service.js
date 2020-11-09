@@ -133,10 +133,24 @@ export default class AccountService extends Service {
 		});
 	}
 
+	passwordResetRequest(request) {		
+		return this.apiService.request({
+			resource: HttpResources.passwordResetRequest,
+			body: request
+		});
+	}
+
+	confirmResetToken(userId, t) {
+		return this.apiService.request({
+			resource: HttpResources.confirmResetToken,
+			body: { userId, t }
+		});
+	}
+
 	resetPassword(userId, request) {
 		return this.apiService.request({
 			resource: HttpResources.resetPassword,
-			body: { userId, request }
+			body: { userId, ...request }
 		});
 	}
 
@@ -144,6 +158,13 @@ export default class AccountService extends Service {
 		return this.apiService.request({
 			resource: HttpResources.confirmEmail,
 			body: { userId, t }
+		});
+	}
+	
+	resendConfirmationEmail(token) {
+		return this.apiService.request({
+			resource: HttpResources.resendConfirmationEmail,
+			body: token
 		});
 	}
 }

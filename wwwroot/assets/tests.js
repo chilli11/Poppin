@@ -154,6 +154,78 @@ define("poppin-ui/tests/integration/pods/components/account/my-profile/component
     });
   });
 });
+define("poppin-ui/tests/integration/pods/components/account/password-reset-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | account/password-reset-form', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Account::PasswordResetForm />
+      */
+      {
+        id: "w2stR8Q/",
+        block: "{\"symbols\":[],\"statements\":[[8,\"account/password-reset-form\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Account::PasswordResetForm>
+              template block text
+            </Account::PasswordResetForm>
+          
+      */
+      {
+        id: "lIiNn4gQ",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"account/password-reset-form\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
+define("poppin-ui/tests/integration/pods/components/account/password-reset-request/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
+  "use strict";
+
+  (0, _qunit.module)('Integration | Component | account/password-reset-request', function (hooks) {
+    (0, _emberQunit.setupRenderingTest)(hooks);
+    (0, _qunit.test)('it renders', async function (assert) {
+      // Set any properties with this.set('myProperty', 'value');
+      // Handle any actions with this.set('myAction', function(val) { ... });
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        <Account::PasswordResetRequest />
+      */
+      {
+        id: "uJi1xWoj",
+        block: "{\"symbols\":[],\"statements\":[[8,\"account/password-reset-request\",[],[[],[]],null]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), ''); // Template block usage:
+
+      await (0, _testHelpers.render)(Ember.HTMLBars.template(
+      /*
+        
+            <Account::PasswordResetRequest>
+              template block text
+            </Account::PasswordResetRequest>
+          
+      */
+      {
+        id: "+PNeVlY1",
+        block: "{\"symbols\":[],\"statements\":[[2,\"\\n      \"],[8,\"account/password-reset-request\",[],[[],[]],[[\"default\"],[{\"statements\":[[2,\"\\n        template block text\\n      \"]],\"parameters\":[]}]]],[2,\"\\n    \"]],\"hasEval\":false,\"upvars\":[]}",
+        meta: {}
+      }));
+      assert.equal(this.element.textContent.trim(), 'template block text');
+    });
+  });
+});
 define("poppin-ui/tests/integration/pods/components/account/registration-form/component-test", ["qunit", "ember-qunit", "@ember/test-helpers"], function (_qunit, _emberQunit, _testHelpers) {
   "use strict";
 
@@ -1061,6 +1133,17 @@ define("poppin-ui/tests/unit/pods/account/confirm-email/route-test", ["qunit", "
     });
   });
 });
+define("poppin-ui/tests/unit/pods/account/forgot-password/route-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Route | account/forgot-password', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks);
+    (0, _qunit.test)('it exists', function (assert) {
+      let route = this.owner.lookup('route:account/forgot-password');
+      assert.ok(route);
+    });
+  });
+});
 define("poppin-ui/tests/unit/pods/account/index/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
   "use strict";
 
@@ -1126,6 +1209,18 @@ define("poppin-ui/tests/unit/pods/account/register/route-test", ["qunit", "ember
     (0, _qunit.test)('it exists', function (assert) {
       let route = this.owner.lookup('route:account/register');
       assert.ok(route);
+    });
+  });
+});
+define("poppin-ui/tests/unit/pods/account/reset-password/controller-test", ["qunit", "ember-qunit"], function (_qunit, _emberQunit) {
+  "use strict";
+
+  (0, _qunit.module)('Unit | Controller | account/reset-password', function (hooks) {
+    (0, _emberQunit.setupTest)(hooks); // Replace this with your real tests.
+
+    (0, _qunit.test)('it exists', function (assert) {
+      let controller = this.owner.lookup('controller:account/reset-password');
+      assert.ok(controller);
     });
   });
 });

@@ -24,6 +24,7 @@ Router.map(function() {
     this.route('me');
     this.route('reset-password', { path: 'reset-password/:user_id'});
     this.route('confirm-email', { path: 'confirm-email/:user_id'});
+    this.route('forgot-password');
   });
 
   this.route('admin', function() {
