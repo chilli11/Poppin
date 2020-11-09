@@ -27,10 +27,11 @@ namespace Poppin.Services
         {
             var hostUrl = HostUrl();
             var mailMessage = new MimeMessage();
+            var link = $"{hostUrl}/account/confirm-email/{user.Id}?t={token}";
             mailMessage.Sender = MailboxAddress.Parse(_appSettings.Sender);
             mailMessage.To.Add(MailboxAddress.Parse(user.Email));
             mailMessage.Subject = "Confirm Your Poppin Account";
-            mailMessage.Body = new TextPart(TextFormat.Html) { Text = $"Click here to confirm: <a href=\"{hostUrl}/account/confirm-email/{user.Id}?t={token}\">CONFIRM</a>"};
+            mailMessage.Body = new TextPart(TextFormat.Html) { Text = $"Click here to confirm: <a href=\"{link}\">CONFIRM</a>&nbsp;<br> or enter this URL in the address bar of your browser: {link}" };
 
             using (var client = new SmtpClient())
             {

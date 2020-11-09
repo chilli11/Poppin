@@ -133,17 +133,17 @@ export default class AccountService extends Service {
 		});
 	}
 
-	confirmEmail(userId, token) {
+	resetPassword(userId, request) {
 		return this.apiService.request({
-			resource: HttpResources.confirmEmail,
-			body: { userId, token }
+			resource: HttpResources.resetPassword,
+			body: { userId, request }
 		});
 	}
 
-	confirmEmail(userId, request) {
+	confirmEmail(userId, t) {
 		return this.apiService.request({
 			resource: HttpResources.confirmEmail,
-			body: { userId, request }
+			body: { userId, t }
 		});
 	}
 }
