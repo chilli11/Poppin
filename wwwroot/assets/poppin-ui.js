@@ -4282,12 +4282,9 @@
     }
 
     [_actions$RESEND_CONFI]() {
-      const {
-        email
-      } = this;
       this.hideMsg();
       this.accountService.resendConfirmationEmail({
-        email
+        email: this.args.profile.email
       }).then(response => {
         if (response.errors && response.errors.length) throw response;
         return this.dispatch(_constants.actions.RESOLVE_ACTION, ['Email resent!']);
@@ -4368,38 +4365,6 @@
     initializer: null
   }), _applyDecoratedDescriptor(_class.prototype, "categories", [_dec7], Object.getOwnPropertyDescriptor(_class.prototype, "categories"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "startEdit", [_dec8], Object.getOwnPropertyDescriptor(_class.prototype, "startEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "endEdit", [_dec9], Object.getOwnPropertyDescriptor(_class.prototype, "endEdit"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "hideMsg", [_dec10], Object.getOwnPropertyDescriptor(_class.prototype, "hideMsg"), _class.prototype), _applyDecoratedDescriptor(_class.prototype, "resendEmail", [_dec11], Object.getOwnPropertyDescriptor(_class.prototype, "resendEmail"), _class.prototype)), _class));
   _exports.default = Component;
-});
-;define("poppin-ui/pods/components/account/my-profile/constants copy", ["exports"], function (_exports) {
-  "use strict";
-
-  Object.defineProperty(_exports, "__esModule", {
-    value: true
-  });
-  _exports.actions = _exports.states = void 0;
-  const states = {
-    IDLE: 'IDLE',
-    SUBMITTING_VENDOR: 'SUBMITTING_VENDOR',
-    ADDING_MEMBER: 'ADDING_MEMBER',
-    REMOVING_MEMBER: 'REMOVING_MEMBER',
-    GETTING_LOCATION_ID: 'GETTING_LOCATION_ID',
-    ADDING_LOCATION: 'ADDING_LOCATION',
-    REMOVING_LOCATION: 'REMOVING_LOCATION'
-  };
-  _exports.states = states;
-  const actions = {
-    SUBMIT_VENDOR: 'SUBMIT_VENDOR',
-    ADD_MEMBER: 'ADD_MEMBER',
-    REMOVE_MEMBER: 'REMOVE_MEMBER',
-    GET_LOCATION_ID: 'GET_LOCATION_ID',
-    ADD_LOCATION: 'ADD_LOCATION',
-    REMOVE_LOCATION: 'REMOVE_LOCATION',
-    RESOLVE_GET_LOCATION_ID: 'RESOLVE_GET_LOCATION_ID',
-    RESOLVE_MEMBER: 'RESOLVE_MEMBER',
-    RESOLVE_LOCATION: 'RESOLVE_LOCATION',
-    RESOLVE_SUBMIT_VENDOR: 'RESOLVE_SUBMIT_VENDOR',
-    REJECT_ACTION: 'REJECT_ACTION'
-  };
-  _exports.actions = actions;
 });
 ;define("poppin-ui/pods/components/account/my-profile/constants", ["exports"], function (_exports) {
   "use strict";
@@ -10121,7 +10086,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"1.1.0+3a858f25"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"1.1.0+f7fadf16"});
           }
         
 //# sourceMappingURL=poppin-ui.map
