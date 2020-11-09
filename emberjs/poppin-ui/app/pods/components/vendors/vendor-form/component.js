@@ -206,8 +206,7 @@ export default class VendorFormComponent extends StatefulComponent {
 		set(this, 'memberMsgs', ['Success!']);
 		this.memberMsgType = 'success';
 		this.showMemberMsg = true;
-
-		const vendor = vendor;
+		
 		vendor.admins = admins;
 		vendor.members = members;
 		this.args.refresh(vendor);
