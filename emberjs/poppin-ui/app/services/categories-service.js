@@ -14,7 +14,7 @@ export default class CategoriesServiceService extends Service {
 	}
 
 	getCategories(force) {
-		if (this.categories && !force) return resolve(this.categories);
+		if (this.categories.length && !force) return resolve(this.categories);
 
 		return this.apiService.request({
 			resource: HttpResources.getCategories
