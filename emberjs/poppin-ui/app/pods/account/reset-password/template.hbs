@@ -1,0 +1,5 @@
+{{#if (and this.t @model.token)}}
+	<Account::PasswordResetForm @userId={{@model.userId}} @token={{@model.token}} />
+{{else}}
+	<Account::PasswordResetRequest @brokenToken={{@model.token}} />
+{{/if}}

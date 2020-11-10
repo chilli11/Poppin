@@ -7,37 +7,45 @@
 			</p>
 		</div>
 		<div class="card-body">
-			<BsAlert
-				@visible={{showMsg}}
-				@fade={{true}}
-				@type={{msgType}}
-				@dismissible={{true}}
-				@onDismissed={{fn this.hideMsg}}>
-				{{#each this.msgs as |msg|}}
-					<p>{{msg}}</p>
-				{{/each}}
-			</BsAlert>
-			<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
-				<form.element
-					@controlType="email"
-					@label="Email Address"
-					@placeholder="xxxxxxxxxxx@xxxxx.xx"
-					@property="email"
-					@required={{true}} />
-				<form.element
-					@controlType="password"
-					@label="Password"
-					@placeholder="********"
-					@property="password"
-					@required={{true}}/>
-				<form.element
-					@controlType="password"
-					@label="Confirm Password"
-					@placeholder="********"
-					@property="password2"
-					@required={{true}} />
-				<BsButton @type="primary" type="submit" @defaultText="Submit" />
-			</BsForm>
+			<LoadingSpinner @isLoading={{this.isLoading}}>
+				{{#if this.isSuccess}}
+					<h3>Success!</h3>
+					<p>Now you just need to confirm your email address. Check for a message from wearepoppin.com (be sure to look in your spam filter if you don't see it).</p>
+					<p>If you didn't receive it, click <a href="javascript:void(0);" class="text-dark" {{on 'click' this.resendEmail}}>here</a> to resend.</p>
+				{{else}}
+					<BsAlert
+						@visible={{showMsg}}
+						@fade={{true}}
+						@type={{msgType}}
+						@dismissible={{true}}
+						@onDismissed={{fn this.hideMsg}}>
+						{{#each this.msgs as |msg|}}
+							<p>{{msg}}</p>
+						{{/each}}
+					</BsAlert>
+					<BsForm @formLayout="horizontal" @model={{this}} @onSubmit={{fn this.submit}} as |form|>
+						<form.element
+							@controlType="email"
+							@label="Email Address"
+							@placeholder="xxxxxxxxxxx@xxxxx.xx"
+							@property="email"
+							@required={{true}} />
+						<form.element
+							@controlType="password"
+							@label="Password"
+							@placeholder="********"
+							@property="password"
+							@required={{true}}/>
+						<form.element
+							@controlType="password"
+							@label="Confirm Password"
+							@placeholder="********"
+							@property="password2"
+							@required={{true}} />
+						<BsButton @type="primary" type="submit" @defaultText="Submit" />
+					</BsForm>
+				{{/if}}
+			</LoadingSpinner>
 			<hr>
 			Already have an account? <LinkTo @route="account.login" @class="btn btn-primary btn-sm">Sign in</LinkTo>.
 		</div>

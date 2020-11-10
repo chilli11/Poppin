@@ -194,7 +194,7 @@ export default class VendorFormComponent extends StatefulComponent {
 			email: this.newMemberEmail,
 			role: this.newMemberRole,
 			userId: null,
-		}).then(() => this.dispatch(actions.RESOLVE_MEMBER))
+		}).then((vendor) => this.dispatch(actions.RESOLVE_MEMBER, vendor))
 			.catch((data) => this.dispatch(actions.REJECT_ACTION, { msgs: data.errors, context: 'member' }));
 	}
 
@@ -202,16 +202,13 @@ export default class VendorFormComponent extends StatefulComponent {
 		this.showLocationFormModal = true;
 	}
 
-	[actions.RESOLVE_MEMBER]({ admins, members, adminIds, memberIds }) {
+	[actions.RESOLVE_MEMBER]({ admins, members, vendor }) {
 		set(this, 'memberMsgs', ['Success!']);
 		this.memberMsgType = 'success';
 		this.showMemberMsg = true;
-
-		const vendor = this.args.vendor;
+		
 		vendor.admins = admins;
 		vendor.members = members;
-		vendor.adminIds = adminIds;
-		vendor.memberIds = memberIds;
 		this.args.refresh(vendor);
 	}
 
