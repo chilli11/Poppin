@@ -4182,7 +4182,7 @@
 
   function _initializerWarningHelper(descriptor, context) { throw new Error('Decorating class property failed. Please ensure that ' + 'proposal-class-properties is enabled and runs after the decorators transform.'); }
 
-  let Component = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember.computed('args.profile.categories', 'yelpCategories', 'yc'), _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = (_temp = (_actions$START_EDIT = _constants.actions.START_EDIT, _actions$RESEND_CONFI = _constants.actions.RESEND_CONFIRMATION, _actions$RESOLVE_ACTI = _constants.actions.RESOLVE_ACTION, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, _actions$END_EDIT = _constants.actions.END_EDIT, class Component extends _statefulComponent.default {
+  let Component = (_dec = Ember.inject.service, _dec2 = Ember.inject.service, _dec3 = Ember._tracked, _dec4 = Ember._tracked, _dec5 = Ember._tracked, _dec6 = Ember._tracked, _dec7 = Ember.computed('args.profile.categories', 'poppinCategories'), _dec8 = Ember._action, _dec9 = Ember._action, _dec10 = Ember._action, _dec11 = Ember._action, (_class = (_temp = (_actions$START_EDIT = _constants.actions.START_EDIT, _actions$RESEND_CONFI = _constants.actions.RESEND_CONFIRMATION, _actions$RESOLVE_ACTI = _constants.actions.RESOLVE_ACTION, _actions$REJECT_ACTIO = _constants.actions.REJECT_ACTION, _actions$END_EDIT = _constants.actions.END_EDIT, class Component extends _statefulComponent.default {
     get ageRange() {
       var filter = this.ageRanges.filter(a => a.key == this.args.profile.ageRange);
       return filter && filter.length ? filter[0] : null;
@@ -4194,7 +4194,7 @@
     }
 
     get categories() {
-      return (this.categories || []).filter(c => (this.args.profile.categories || []).indexOf(c.slug) > -1);
+      return (this.poppinCategories || []).filter(c => (this.args.profile.categories || []).indexOf(c.slug) > -1);
     }
 
     constructor() {
@@ -4254,9 +4254,7 @@
         value: "Prefer Not to Say"
       }]);
 
-      _defineProperty(this, "categories", void 0);
-
-      _defineProperty(this, "yc", void 0);
+      _defineProperty(this, "poppinCategories", void 0);
 
       _defineProperty(this, "transitions", {
         [_constants.states.IDLE]: {
@@ -4274,7 +4272,7 @@
       });
 
       this.initMachine();
-      this.categoriesService.getCategories().then(data => Ember.set(this, 'categories', data));
+      this.categoriesService.getCategories().then(data => Ember.set(this, 'poppinCategories', data));
     }
 
     [_actions$START_EDIT]() {
@@ -8972,7 +8970,7 @@
     }
 
     getCategories(force) {
-      if (this.categories && !force) return Ember.RSVP.resolve(this.categories);
+      if (this.categories.length && !force) return Ember.RSVP.resolve(this.categories);
       return this.apiService.request({
         resource: _httpResources.default.getCategories
       }).then(response => {
@@ -10086,7 +10084,7 @@ catch(err) {
 
 ;
           if (!runningTests) {
-            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"1.1.0+083f8bfa"});
+            require("poppin-ui/app")["default"].create({"LOG_RESOLVER":true,"LOG_ACTIVE_GENERATION":true,"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"LOG_VIEW_LOOKUPS":true,"name":"poppin-ui","version":"1.1.0+e5ef752a"});
           }
         
 //# sourceMappingURL=poppin-ui.map
