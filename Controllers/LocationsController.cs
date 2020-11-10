@@ -163,15 +163,15 @@ namespace Poppin.Controllers
                 var actionStr = new Dictionary<string, string>()
                 {
                     { "SearchTerm", search.Term },
-                    { "SearchLocation", search.Geo.Coordinates.ToString() },
-                    { "SearchCategories", search.Categories.Select(c => c.Slug).ToString() }
+                    { "SearchLocation", $"{search.Geo.Coordinates[0].ToString()}, {search.Geo.Coordinates[1].ToString()}" },
+                    { "SearchCategories", search.Categories.Select(c => c.Slug).ToArray().ToString() }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", search.Categories.Select(c => c.Slug) }
+                    { "SearchCategories", search.Categories.Select(c => c.Slug).ToArray() }
                 };
 
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
