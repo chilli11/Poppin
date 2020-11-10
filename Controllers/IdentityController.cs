@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Poppin.Configuration;
 using Poppin.Contracts;
 using Poppin.Contracts.Requests;
@@ -34,13 +35,17 @@ namespace Poppin.Controllers
             IIdentityService idService,
             IOAuthSettings oAuthSettings,
             IOAuthHandler oAuthHandler,
-            ISmtpService smtpService
+            ISmtpService smtpService,
+            ILogger<IdentityController> logger,
+            ILogActionService logActionService
         )
         {
             _identityService = idService;
             _oAuthSettings = oAuthSettings;
             _oAuthHandler = oAuthHandler;
             _smtpService = smtpService;
+            _logger = logger;
+            _logActionService = logActionService;
         }
 
         /// <summary>
@@ -64,6 +69,7 @@ namespace Poppin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError("Failed Registration: Invalid Model ({errors})", ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage)));
                 return BadRequest(new AuthFailedResponse
                     {
                         Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
@@ -75,11 +81,14 @@ namespace Poppin.Controllers
 
             if (!registrationResult.Success)
             {
+                _logger.LogError("Failed Registration: {errors}", registrationResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = registrationResult.Errors
                 });
             }
+
+            _logger.LogInformation("Successful Registration: {id}", request.Email);
             return Ok(new AuthSuccessResponse
             {
                 Token = registrationResult.Token
@@ -91,12 +100,14 @@ namespace Poppin.Controllers
 								{
             if (id == null || t == null)
 												{
+                _logger.LogError("Confirm Email Failed: {errors}", new { Id = id, Token = t != null });
                 return BadRequest();
 												}
 
             var userResult = await _identityService.GetUserById(id);
             if (!userResult.Success)
             {
+                _logger.LogError("Confirm Email: Find User Failed ({errors}", userResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = userResult.Errors
@@ -105,9 +116,12 @@ namespace Poppin.Controllers
 
             var result = await _identityService.ConfirmEmailAsync(userResult.User, t);
             if (!result.Succeeded)
-												{
+            {
+                _logger.LogError("Confirm Email Failed: {id}, {errors}", id, result.Errors);
                 return BadRequest(result);
 												}
+
+            _logger.LogInformation("Email Confirmed: {id}", id);
             return Ok(result);
         }
 
@@ -121,6 +135,7 @@ namespace Poppin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError("Login Failed: Invalid Model ({errors})", ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage)));
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
@@ -131,6 +146,7 @@ namespace Poppin.Controllers
 
             if (!loginResult.Success)
             {
+                _logger.LogError("Login Failed: {errors}", loginResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = loginResult.Errors
@@ -138,6 +154,7 @@ namespace Poppin.Controllers
             }
 
             SetTokenCookie(loginResult.RefreshToken);
+            _logger.LogInformation("Login Success: {id}", request.Email);
             return Ok(new AuthSuccessResponse
             {
                 Token = loginResult.Token,
@@ -154,8 +171,9 @@ namespace Poppin.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
 												if (!ModelState.IsValid)
-												{
-																return BadRequest(new AuthFailedResponse
+            {
+                _logger.LogError("Forgot Password Failed: Invalid Model ({errors})", ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage)));
+                return BadRequest(new AuthFailedResponse
 																{
 																				Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
 																}
@@ -166,12 +184,14 @@ namespace Poppin.Controllers
 
             if (!authResult.Success)
             {
+                _logger.LogError("Forgot Password Failed: {errors}", authResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = authResult.Errors
                 });
             }
 
+            _logger.LogInformation("Password Reset Email Sent: {id}", request.Email);
             return Ok(new AuthSuccessResponse
             {
                 Token = authResult.Token,
@@ -184,18 +204,21 @@ namespace Poppin.Controllers
         {
             if (id == null || t == null)
             {
+                _logger.LogError("Reset Password Validation Failed: {errors}", new { Id = id, Token = t != null });
                 return BadRequest();
             }
 
             var userResult = await _identityService.GetUserById(id);
             if (!userResult.Success)
             {
+                _logger.LogError("Reset Password Validation Failed: {errors}", userResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = userResult.Errors
                 });
             }
 
+            _logger.LogInformation("Reset Password Validated: {id}", id);
             return Ok(new AuthSuccessResponse
             {
                 Token = t
@@ -208,28 +231,34 @@ namespace Poppin.Controllers
             {
                 if (id == null || request.Token == null)
                 {
+                    _logger.LogError("Reset Password Failed: {errors}", new { Id = id, Token = request.Token != null });
                     return BadRequest();
                 }
 
                 if (!_identityService.IsValidPassword(request.Password))
                 {
+                    var errors = new[] { "Password does not meet requirements." };
+                    _logger.LogError("Reset Password Failed: {errors}", errors);
                     return BadRequest(new AuthFailedResponse
                     {
-                        Errors = new[] { "Password does not meet requirements." }
+                        Errors = errors
                     });
                 }
 
                 if (request.Password != request.Password2)
                 {
+                    var errors = new[] { "Passwords do not match." };
+                    _logger.LogError("Reset Password Failed: {errors}", errors);
                     return BadRequest(new AuthFailedResponse
                     {
-                        Errors = new[] { "Passwords do not match." }
+                        Errors = errors
                     });
                 }
 
                 var userResult = await _identityService.GetUserById(id);
                 if (!userResult.Success)
                 {
+                    _logger.LogError("Reset Password Failed: {errors}", userResult.Errors);
                     return BadRequest(new AuthFailedResponse
                     {
                         Errors = userResult.Errors
@@ -239,9 +268,12 @@ namespace Poppin.Controllers
                 var result = await _identityService.ResetPasswordAsync(userResult.User, request.Token, request.Password);
                 if (!result.Succeeded)
                 {
-                    return BadRequest(result);
+                    _logger.LogError("Reset Password Failed: {errors}", result.Errors);
+                    return BadRequest(result.Errors);
                 }
+
                 _smtpService.SendPasswordConfirmationEmail(userResult.User);
+                _logger.LogInformation("Reset Password: {id}", id);
                 return Ok(result);
             }
         }
@@ -252,10 +284,12 @@ namespace Poppin.Controllers
             try
             {
                 await _identityService.ResendConfirmationAsync(request.Email);
+                _logger.LogInformation("Resent Confirmation Email: {id}", request.Email);
                 return Ok();
             }
             catch (Exception ex)
             {
+                _logger.LogError("Resend Confirmation Failed: {exception}", new { Exception = ex });
                 return BadRequest(new GenericFailure
                 {
                     Errors = new[] { ex.Message }
@@ -268,13 +302,32 @@ namespace Poppin.Controllers
         /// </summary>
         /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
         [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken()
+        public Task<IActionResult> RefreshToken()
         {
             var refreshToken = Request.Cookies["refreshToken"];
-            var response = await _identityService.RefreshToken(refreshToken, GetIpAddress());
+            return RefreshToken(refreshToken);
+        }
 
-            if (response == null)
+        /// <summary>
+        /// Refreshes user token through cookie
+        /// </summary>
+        /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(string refreshToken)
+        {
+            if (string.IsNullOrEmpty(refreshToken))
+												{
+                _logger.LogError("Token Refresh Failed: {errors}", new[] { "No token provided" });
+                return Unauthorized(new AuthFailedResponse
+                {
+                    Errors = new[] { "Invalid token" }
+                });
+            }
+
+            var response = await _identityService.RefreshToken(refreshToken, GetIpAddress());
+            if (!response.Success)
             {
+                _logger.LogError("Token Refresh Failed: {errors}", response.Errors);
                 return Unauthorized(new AuthFailedResponse
                 {
                     Errors = new[] { "Invalid token" }
@@ -283,6 +336,7 @@ namespace Poppin.Controllers
 
             SetTokenCookie(response.RefreshToken);
 
+            _logger.LogInformation("Token Refreshed: {id}", GetUserId());
             return Ok(new AuthSuccessResponse
             {
                 Token = response.Token,
@@ -393,6 +447,7 @@ namespace Poppin.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError("Facebook Auth Failed: {exception}", ex);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = new[] { ex.Message }

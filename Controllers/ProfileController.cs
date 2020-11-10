@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver.GeoJsonObjectModel;
 using NetTopologySuite;
 using NetTopologySuite.Geometries;
@@ -12,7 +12,6 @@ using Poppin.Models;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
-using Segment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,13 +34,15 @@ namespace Poppin.Controllers
 												IUserService userService,
 												ILogActionService logActionService,
 												ILocationService locationService,
-												IVendorService vendorService)
+												IVendorService vendorService,
+												ILogger<ProfileController> logger)
 								{
 												_identityService = identityService;
 												_userService = userService;
 												_logActionService = logActionService;
 												_locationService = locationService;
 												_vendorService = vendorService;
+												_logger = logger;
 								}
 
 
@@ -56,6 +57,7 @@ namespace Poppin.Controllers
 												var id = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 												if (id == null)
 												{
+																_logger.LogError("Get Profile Failed: {reason}", new[] { "Not logged in" });
 																return Unauthorized();
 												}
 
@@ -64,6 +66,7 @@ namespace Poppin.Controllers
 																var user = await GetUserProfile(id);
                         
 																Track(id, SegmentIOKeys.Actions.ViewUserProfile);
+																_logger.LogInformation("Profile Retrieved: {id}", id);
 																return Ok(await GetPoppinUserResult(user));
 
 												}
@@ -71,6 +74,7 @@ namespace Poppin.Controllers
 												{
 																var errors = new List<string>();
 																errors.Add(ex.Message);
+																_logger.LogError("Get Profile Failed: {exception}", ex);
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
@@ -89,9 +93,11 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> Get(string id)
 								{
 												var isAdmin = GetUserRole() == RoleTypes.Admin;
+												var callerId = GetUserId();
 
 												if (!isAdmin)
 												{
+																_logger.LogError("Get Profile By Id Failed: {reason}, (user: {userId})", "Not Admin", callerId);
 																return Forbid();
 												}
 
@@ -100,8 +106,8 @@ namespace Poppin.Controllers
 																var user = await GetUserProfile(id);
 																if (user == null)
 																{
-																				var errors = new List<string>();
-																				errors.Add("User not found");
+																				var errors = new[] { "User not found" };
+																				_logger.LogError("Get Profile By Id Failed: {errors}, (id: {id})", errors, id);
 																				return BadRequest(new GenericFailure
 																				{
 																								Errors = errors
@@ -109,12 +115,14 @@ namespace Poppin.Controllers
 																}
 
 																Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.ViewUserProfile);
+																_logger.LogInformation("Get Profile By Id: User {id} (Admin User: {callerId}", id, callerId);
 																return Ok(GetPoppinUserResult(user));
 												}
 												catch (Exception ex)
 												{
 																var errors = new List<string>();
 																errors.Add(ex.Message);
+																_logger.LogError("Get Profile By Id Failed: {exception}, (user: {userId})", ex, callerId);
 																return BadRequest(new GenericFailure
 																{
 																				Errors = errors
