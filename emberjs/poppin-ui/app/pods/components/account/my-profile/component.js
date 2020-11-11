@@ -88,7 +88,8 @@ export default class Component extends StatefulComponent {
 		this.showStatusMsg = true;
 	}
 
-	[actions.REJECT_ACTION](msgs) {
+	[actions.REJECT_ACTION](response) {
+		const msgs = response.errors;
 		set(this, 'statusMsgs', msgs);
 		this.statusType = 'danger';
 		this.showStatusMsg = true;

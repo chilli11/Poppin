@@ -127,7 +127,9 @@ export default class ApiService extends Service.extend(Evented) {
 			const fn = (response) => {
 				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
 				const error = response.status > 399;
-				const output = isJson ? response.json() : (typeof response.text == 'function'? response.text() : response);
+				let output = typeof response.text == 'function'? response.text() : response;
+				
+				output = isJson ? JSON.parse(output._result) : output._result;
 				if (error) return reject(output);
 				return resolve(output);
 			};
