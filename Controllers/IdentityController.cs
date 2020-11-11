@@ -327,7 +327,7 @@ namespace Poppin.Controllers
             var response = await _identityService.RefreshToken(refreshToken, GetIpAddress());
             if (!response.Success)
             {
-                _logger.LogError("Token Refresh Failed: {errors}", response.Errors);
+                _logger.LogError(tokenType + " Refresh Failed: {errors}", response.Errors);
                 return Unauthorized(new AuthFailedResponse
                 {
                     Errors = new[] { "Invalid token" }
@@ -336,7 +336,7 @@ namespace Poppin.Controllers
 
             SetTokenCookie(response.RefreshToken);
 
-            _logger.LogInformation("Token Refreshed: {id}", GetUserId());
+            _logger.LogInformation(tokenType + " Refreshed: {id}", GetUserId());
             return Ok(new AuthSuccessResponse
             {
                 Token = response.Token,
