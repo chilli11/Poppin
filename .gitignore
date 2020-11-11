@@ -354,3 +354,9 @@ MigrationBackup/
 .ionide/
 log.txt
 *.zip
+wwwroot/index.html
+wwwroot/assets/poppin-ui.js
+wwwroot/assets/poppin-ui.map
+wwwroot/assets/test-support.js
+wwwroot/assets/vendor.js
+wwwroot/tests/index.html

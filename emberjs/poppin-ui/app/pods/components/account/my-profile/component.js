@@ -30,8 +30,7 @@ export default class Component extends StatefulComponent {
 		{ key: "O", value: "Other" },
 		{ key: "D", value: "Prefer Not to Say" }
 	];
-	categories;
-	yc;
+	poppinCategories;
 
 	get ageRange() {
 		var filter = this.ageRanges.filter(a => a.key == this.args.profile.ageRange);
@@ -42,9 +41,9 @@ export default class Component extends StatefulComponent {
 		return filter && filter.length ? filter[0] : null;
 	}
 
-	@computed('args.profile.categories', 'yelpCategories', 'yc')
+	@computed('args.profile.categories', 'poppinCategories')
 	get categories() {
-		return (this.categories || [])
+		return (this.poppinCategories || [])
 			.filter(c => (this.args.profile.categories || []).indexOf(c.slug) > -1);
 	}
 
@@ -67,7 +66,7 @@ export default class Component extends StatefulComponent {
 		super(...arguments);
 		this.initMachine();
 		this.categoriesService.getCategories()
-			.then(data => set(this, 'categories', data));
+			.then(data => set(this, 'poppinCategories', data));
 	}
 
 	[actions.START_EDIT]() {

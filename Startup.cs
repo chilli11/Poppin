@@ -42,6 +42,9 @@ namespace Poppin
 																.AddEntityFrameworkStores<ApplicationDbContext>()
 																.AddDefaultTokenProviders();
 
+												services.AddLogging();
+												ConfigNLog();
+
 												// JWT
 												var jwtSettings = new JwtSettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
@@ -153,8 +156,8 @@ namespace Poppin
 								{
 												if (env.IsDevelopment())
 												{
-																app.UseDeveloperExceptionPage();
-																app.UseDatabaseErrorPage();
+																app.UseDeveloperExceptionPage()
+																				.UseDatabaseErrorPage();
 												}
 												else
 												{
@@ -219,6 +222,13 @@ namespace Poppin
 																context.Response.ContentType = "text/html";
 																await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
 												});
+								}
+
+								public void ConfigNLog()
+								{
+												IConfigurationRoot config = new ConfigurationBuilder()
+																.AddJsonFile(path: "appsettings.json").Build();
+												NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = config;
 								}
 				}
 }

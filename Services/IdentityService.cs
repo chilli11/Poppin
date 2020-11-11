@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DnsClient.Internal;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -345,9 +346,9 @@ namespace Poppin.Services
 												var newRefreshToken = GenerateRefreshToken(ipAddress);
 
 												// update user in database with token audit trail
-												//refreshToken.Revoked = DateTime.UtcNow;
-												//refreshToken.RevokedByIp = ipAddress;
-												//refreshToken.ReplacedByToken = newRefreshToken.Token;
+												refreshToken.Revoked = DateTime.UtcNow;
+												refreshToken.RevokedByIp = ipAddress;
+												refreshToken.ReplacedByToken = newRefreshToken.Token;
 												user.RefreshTokens.Add(newRefreshToken);
 												user.RefreshTokens.Remove(refreshToken);
 												_userManager.UpdateAsync(user);
