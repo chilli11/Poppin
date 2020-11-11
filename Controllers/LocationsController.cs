@@ -1,19 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
-using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
-using Poppin.Extensions;
-using Poppin.Models.Yelp;
-using Segment;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,6 +28,7 @@ namespace Poppin.Controllers
             IYelpService yelpService,
             IVendorService vendorService,
             ILogActionService logActionService,
+            ILogger<LocationsController> logger,
             IIdentityService identityService,
             IHEREGeocoder hereGeocoder)
         {
@@ -42,6 +39,7 @@ namespace Poppin.Controllers
             _logActionService = logActionService;
             _identityService = identityService;
             _hereGeocoder = hereGeocoder;
+            _logger = logger;
         }
 
         /// <summary>
@@ -55,17 +53,19 @@ namespace Poppin.Controllers
         {
             if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
             {
+                var errors = new[] { "The location ID was invalid." };
+                _logger.LogError("Location Search Failed: {errors}", "Location ID improperly formatted.");
                 return BadRequest(new GenericFailure
                 {
-                    Errors = new[] { "The location ID was invalid." }
+                    Errors = errors
                 });
             }
 
             var location = GetLocation(locationId);
             if (location == null)
             {
-                var errors = new List<string>();
-                errors.Add("Location ID is invalid");
+                var errors = new[] { "Location ID is invalid" };
+                _logger.LogError("Location Search Failed: {errors}", "Location ID not found.");
                 return BadRequest(new GenericFailure
                 {
                     Errors = errors
@@ -78,6 +78,7 @@ namespace Poppin.Controllers
             };
             _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
+            _logger.LogInformation("Retrieved Location: {id}", location.Id);
             location.SetCrowdSize(_locationService).Wait();
             return Ok(location);
         }
@@ -136,6 +137,8 @@ namespace Poppin.Controllers
             try
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
+                var catSlugs = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
+
                 if (search.Geo.Coordinates.Length == 0)
 																{
                     if (string.IsNullOrEmpty(search.Location))
@@ -151,8 +154,8 @@ namespace Poppin.Controllers
 
                 if (search.Categories.Count > 0 && search.Categories.First().Id == null)
 																{
-                    var cats = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
-                    search.Categories = cats.ToHashSet();
+                   
+                    search.Categories = catSlugs.ToHashSet();
 																}
 
                 var locList = await _locationService.GetBySearch(search);
@@ -170,15 +173,15 @@ namespace Poppin.Controllers
                 var actionStr = new Dictionary<string, string>()
                 {
                     { "SearchTerm", search.Term },
-                    { "SearchLocation", $"{search.Geo.Coordinates[0].ToString()}, {search.Geo.Coordinates[1].ToString()}" },
-                    { "SearchCategories", search.Categories.Select(c => c.Slug).ToArray().ToString() }
+                    { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
+                    { "SearchCategories", catSlugs.ToString() }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", search.Categories.Select(c => c.Slug).ToArray() }
+                    { "SearchCategories", catSlugs }
                 };
 
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
@@ -227,10 +230,6 @@ namespace Poppin.Controllers
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
                 Track(id, SegmentIOKeys.Actions.AddLocation);
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
                 return CreatedAtAction("Post", location);
             }
             return Ok(isExisting);
@@ -260,10 +259,6 @@ namespace Poppin.Controllers
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
                 Track(id, SegmentIOKeys.Actions.UpdateLocation);
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
                 _searchedLocations.Remove(location);
                 _searchedLocations.Add(location);
                 return Ok(location);
@@ -311,10 +306,6 @@ namespace Poppin.Controllers
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
                 Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
                 _searchedLocations.Remove(location);
                 _searchedLocations.Add(location);
                 return Ok(location);
