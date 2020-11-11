@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using Poppin.Configuration;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
@@ -122,11 +123,14 @@ namespace Poppin.Services
 												return await _userManager.ConfirmEmailAsync(user, token);
 								}
 
-								public async Task ResendConfirmationAsync(string email)
+								public async Task ResendConfirmationAsync(ForgotPasswordRequest request)
 								{
-												var existingUser = await _userManager.FindByEmailAsync(email);
+												User existingUser;
 
-												if (existingUser != null)
+												if (request.UserId != null) existingUser = await _userManager.FindByIdAsync(request.UserId);
+												else existingUser = await _userManager.FindByEmailAsync(request.Email);
+
+												if (existingUser == null)
 												{
 																throw new NullReferenceException("User doesn't exist");
 												}
