@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Poppin.Contracts.Requests;
 using Poppin.Models.Identity;
 using Poppin.Models.Identity.OAuth;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace Poppin.Interfaces
 				{
 								Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress);
 								Task<IdentityResult> ConfirmEmailAsync(User user, string token);
-								Task ResendConfirmationAsync(string email);
+								Task ResendConfirmationAsync(ForgotPasswordRequest request);
 								Task<AuthenticationResult> LoginAsync(string email, string password, string ipAddress);
 								Task<AuthenticationResult> OAuthLoginAsync(IUserInfoResult userInfo, string ipAddress);
 								Task<AuthenticationResult> StartPasswordResetAsync(string email, string ipAddress);
