@@ -25,7 +25,7 @@
 			{{#unless @profile.user.emailConfirmed}}
 				<p>
 					Your email isn't confirmed yet.
-					<a href="javascript:void(0);" class="text-dark" {{on 'click' this.resendEmail}}>here</a> to resend the confirmation link.
+					<a href="javascript:void(0);" class="btn btn-small btn-primary" {{on 'click' this.resendEmail}}>click here</a> to resend the confirmation link.
 				</p>
 			{{/unless}}
 			<dl>

@@ -59,9 +59,6 @@ namespace Poppin.Controllers
             return Ok(new { authorized = !string.IsNullOrEmpty(userId) });
 								}
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="request"><see cref="UserRegistrationRequest" /></param>
         /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>)</returns>
         [HttpPost("register")]
@@ -95,6 +92,13 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Confirms user's email address using token from email sent after registration
+        /// or clicking on a resend confirmation link
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="t"></param>
+        /// <returns>400 or <see cref="Microsoft.AspNetCore.Identity.IdentityResult"</returns>
         [HttpGet("confirm-email/{id}")]
         public async Task<IActionResult> ConfirmEmail(string id, string t)
 								{
@@ -125,9 +129,6 @@ namespace Poppin.Controllers
             return Ok(result);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="request"><see cref="UserLoginRequest" /></param>
         /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
         [HttpPost("login")]
@@ -283,7 +284,7 @@ namespace Poppin.Controllers
         {
             try
             {
-                await _identityService.ResendConfirmationAsync(request.Email);
+                await _identityService.ResendConfirmationAsync(request);
                 _logger.LogInformation("Resent Confirmation Email: {id}", request.Email);
                 return Ok();
             }
@@ -301,23 +302,14 @@ namespace Poppin.Controllers
         /// Refreshes user token through cookie
         /// </summary>
         /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
-        [HttpPost("refresh-token")]
-        public Task<IActionResult> RefreshToken()
+        [HttpGet("refresh-token")]
+        public async Task<IActionResult> RefreshToken(string token)
         {
-            var refreshToken = Request.Cookies["refreshToken"];
-            return RefreshToken(refreshToken);
-        }
-
-        /// <summary>
-        /// Refreshes user token through cookie
-        /// </summary>
-        /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
-        [HttpPost("refresh-token")]
-        public async Task<IActionResult> RefreshToken(string refreshToken)
-        {
+            var refreshToken = token ?? Request.Cookies["refreshToken"];
+            var tokenType = string.IsNullOrEmpty(token) ? "Cookie Token" : "Token";
             if (string.IsNullOrEmpty(refreshToken))
-												{
-                _logger.LogError("Token Refresh Failed: {errors}", new[] { "No token provided" });
+            {
+                _logger.LogError(tokenType + " Refresh Failed: {errors}", new[] { "No token provided" });
                 return Unauthorized(new AuthFailedResponse
                 {
                     Errors = new[] { "Invalid token" }

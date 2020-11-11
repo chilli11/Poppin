@@ -183,7 +183,7 @@ namespace Poppin
 												app.UseRewriter(options);
 
 
-												app.UseHttpsRedirection();
+												//app.UseHttpsRedirection();
 												//app.UseDefaultFiles();
 												// index.html is the default if a file isn't asked for
 												app.UseDefaultFiles(new DefaultFilesOptions()
