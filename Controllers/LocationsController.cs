@@ -148,6 +148,13 @@ namespace Poppin.Controllers
                     var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
                     search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
 																}
+
+                if (search.Categories.Count > 0 && search.Categories.First().Id == null)
+																{
+                    var cats = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
+                    search.Categories = cats.ToHashSet();
+																}
+
                 var locList = await _locationService.GetBySearch(search);
 
                 if (locList.Count > 0)
