@@ -147,7 +147,7 @@ namespace Poppin.Controllers
 
             if (!loginResult.Success)
             {
-                _logger.LogError("Login Failed: {errors}", loginResult.Errors);
+                _logger.LogError("Login Failed for {id}: {errors}", request.Email, loginResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = loginResult.Errors
@@ -185,7 +185,7 @@ namespace Poppin.Controllers
 
             if (!authResult.Success)
             {
-                _logger.LogError("Forgot Password Failed: {errors}", authResult.Errors);
+                _logger.LogError("Forgot Password Failed for {id}: {errors}", request.Email, authResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = authResult.Errors
@@ -212,7 +212,7 @@ namespace Poppin.Controllers
             var userResult = await _identityService.GetUserById(id);
             if (!userResult.Success)
             {
-                _logger.LogError("Reset Password Validation Failed: {errors}", userResult.Errors);
+                _logger.LogError("Reset Password Validation Failed for {id}: {errors}", id, userResult.Errors);
                 return BadRequest(new AuthFailedResponse
                 {
                     Errors = userResult.Errors
@@ -239,7 +239,7 @@ namespace Poppin.Controllers
                 if (!_identityService.IsValidPassword(request.Password))
                 {
                     var errors = new[] { "Password does not meet requirements." };
-                    _logger.LogError("Reset Password Failed: {errors}", errors);
+                    _logger.LogError("Reset Password Failed for {id}: {errors}", id, errors);
                     return BadRequest(new AuthFailedResponse
                     {
                         Errors = errors
@@ -249,7 +249,7 @@ namespace Poppin.Controllers
                 if (request.Password != request.Password2)
                 {
                     var errors = new[] { "Passwords do not match." };
-                    _logger.LogError("Reset Password Failed: {errors}", errors);
+                    _logger.LogError("Reset Password Failed for {id}: {errors}", id, errors);
                     return BadRequest(new AuthFailedResponse
                     {
                         Errors = errors
@@ -259,7 +259,7 @@ namespace Poppin.Controllers
                 var userResult = await _identityService.GetUserById(id);
                 if (!userResult.Success)
                 {
-                    _logger.LogError("Reset Password Failed: {errors}", userResult.Errors);
+                    _logger.LogError("Reset Password Failed for {id}: {errors}", id, userResult.Errors);
                     return BadRequest(new AuthFailedResponse
                     {
                         Errors = userResult.Errors
@@ -269,7 +269,7 @@ namespace Poppin.Controllers
                 var result = await _identityService.ResetPasswordAsync(userResult.User, request.Token, request.Password);
                 if (!result.Succeeded)
                 {
-                    _logger.LogError("Reset Password Failed: {errors}", result.Errors);
+                    _logger.LogError("Reset Password Failed for {id}: {errors}", id, result.Errors);
                     return BadRequest(result.Errors);
                 }
 
@@ -290,7 +290,7 @@ namespace Poppin.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Resend Confirmation Failed: {exception}", new { Exception = ex });
+                _logger.LogError("Resend Confirmation Failed for {id}: {exception}", request.Email, new { Exception = ex });
                 return BadRequest(new GenericFailure
                 {
                     Errors = new[] { ex.Message }
