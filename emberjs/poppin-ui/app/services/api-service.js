@@ -125,10 +125,16 @@ export default class ApiService extends Service.extend(Evented) {
 		return new Promise((resolve, reject) => {
 			const fn = (response) => {
 				const error = response.status > 399;
-				const output = response.json() || response.text();
-				output.then(value => {
-					if (error) return reject(value);
-					return resolve(value);
+				return response.text().then(value => {
+					let val;
+					try {
+						val = JSON.parse(value);
+					} catch (e) {
+						val = value;
+					}
+
+					if (error) return reject(val);
+					return resolve(val);
 				});
 			};
 			fetch(fetchRequest.url, fetchRequest)
