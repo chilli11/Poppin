@@ -346,15 +346,19 @@ namespace Poppin.Controllers
             }
             var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
             var checkin = new Checkin(locationId, userId, location.VisitLength, score);
-            await _locationService.NewCheckin(checkin);
-            await location.SetCrowdSize(_locationService);
 
-            var action = new Dictionary<string, string>()
+            if (_locationService.ReconcileCheckin(checkin))
             {
-                { "LocationId", location.Id }
-            };
-            _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+                await _locationService.NewCheckin(checkin);
+                await location.SetCrowdSize(_locationService);
+
+                var action = new Dictionary<string, string>()
+                {
+                    { "LocationId", location.Id }
+                };
+                _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
+                Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+            }
 
             return Ok(location);
         }

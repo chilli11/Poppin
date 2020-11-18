@@ -21,6 +21,7 @@ namespace Poppin.Interfaces
 								public Task Delete(PoppinLocation location);
 								public Task Delete(string id);
 								public Task NewCheckin(Checkin c);
+								public bool ReconcileCheckin(Checkin c);
 								public UpdateResult InvalidateCheckin(string userId);
 								public Task InvalidateVendorCheckin(string locId);
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId);
