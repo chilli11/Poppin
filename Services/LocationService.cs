@@ -81,6 +81,36 @@ namespace Poppin.Services
 												if (c.UserId != null) InvalidateCheckin(c.UserId);
 												return _checkins.InsertOneAsync(c);
 								}
+								public bool ReconcileCheckin(Checkin c)
+								{
+												List<Checkin> checkins;
+												FilterDefinition<Checkin> filter;
+												if (c.ReliabilityScore == ReliabilityScores.User)
+												{
+																filter = Builders<Checkin>.Filter.Gt("Timestamp", DateTime.Now.AddSeconds(-90))
+																				& Builders<Checkin>.Filter.Eq("LocationId", c.LocationId)
+																				& Builders<Checkin>.Filter.Eq<string>("UserId", null);
+																checkins = _checkins.Find(filter).ToList();
+																if (checkins.Count > 0)
+																{
+																				var replace = checkins.FirstOrDefault();
+																				replace.Timeout = DateTime.Now;
+																				_checkins.ReplaceOneAsync(c => c.Id == replace.Id, replace);
+																}
+												}
+												else
+												{
+																filter = Builders<Checkin>.Filter.Gt("Timestamp", DateTime.Now.AddSeconds(-90))
+																				& Builders<Checkin>.Filter.Eq("LocationId", c.LocationId)
+																				& Builders<Checkin>.Filter.Ne<string>("UserId", null);
+																checkins = _checkins.Find(filter).ToList();
+																if (checkins.Count > 0)
+																{
+																				return false;
+																}
+												}
+												return true;
+								}
 
 								public UpdateResult InvalidateCheckin(string userId)
 								{
