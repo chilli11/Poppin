@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -18,6 +17,7 @@ using Poppin.Data;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using Poppin.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -37,7 +37,16 @@ namespace Poppin
 								public void ConfigureServices(IServiceCollection services)
 								{
 												services.AddDbContextPool<ApplicationDbContext>(options =>
-																options.UseMySql(Configuration.GetConnectionString("MySQLConnection")));
+																options.UseMySql(Configuration.GetConnectionString("MySQLConnection"),
+																				mySqlOptions => {
+																								mySqlOptions.EnableRetryOnFailure(
+																												maxRetryCount: 10,
+																												maxRetryDelay: TimeSpan.FromSeconds(10),
+																												errorNumbersToAdd: null
+																								);
+																				})
+																				.EnableSensitiveDataLogging()
+												);
 												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
 																.AddEntityFrameworkStores<ApplicationDbContext>()
 																.AddDefaultTokenProviders();
