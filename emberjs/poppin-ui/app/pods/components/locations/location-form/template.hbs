@@ -46,6 +46,7 @@
 					<BsButton @onClick={{this.addImg}}><img src="/images/add_circle-24px.svg" /> Add an image</BsButton>
 				</div> --}}
 				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
+				<form.element @controlType="tel" @label="Phone" @placeholder="Phone" @property="phone" />
 				<hr>
 				<h5>Add a Menu</h5>
 				<form.element @label="Name" @placeholder="Breakfast|Brunch|Lunch|Dinner|Cocktails|Wine|Beer" @controlType="text" @property="menuName" />
@@ -60,23 +61,44 @@
 		</div>
 	</div>
 </div>
-<div class="col-md-6">
-	<div class="card">
-		<div class="card-header card-header-primary">
-			<h4 class="card-title">Photos and Menus</h4>
-			<p>Click to remove. It's not final til you hit submit!</p>
-		</div>
-		<div class="card-body">
-			{{#each this.photoUrls as |pic|}}
-				<img src={{pic}} class="col-sm-4" {{on "click" (fn this.removePic pic)}} />
-			{{/each}}
-			<hr>			
-			{{#each this.oldMenus as |menu|}}
-				<span href={{menu.url}} {{on "click" (fn this.removeMenu menu)}} class="btn btn-default btn-small">{{menu.name}}</span>
-			{{/each}}
+
+{{#if @addNew}}
+	<div class="col-md-6">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title">Search Yelp</h4>
+			</div>
+			<div class="card-body">
+				<Yelp::YelpMatchForm
+					@term={{this.name}}
+					@location={{this.city}}
+					@yelpMatchId={{this.yelpId}}
+					@yelpMatches={{this.yelpMatches}}
+					@acceptMatch={{this.acceptMatch}}
+					@fillData={{this.fillData}}
+					@canAcceptMatch={{this.canAcceptMatch}} />
+			</div>
 		</div>
 	</div>
-</div>
+{{else}}
+	<div class="col-md-6">
+		<div class="card">
+			<div class="card-header card-header-primary">
+				<h4 class="card-title">Photos and Menus</h4>
+				<p>Click to remove. It's not final til you hit submit!</p>
+			</div>
+			<div class="card-body">
+				{{#each this.photoUrls as |pic|}}
+					<img src={{pic}} class="col-sm-4" {{on "click" (fn this.removePic pic)}} />
+				{{/each}}
+				<hr>			
+				{{#each this.oldMenus as |menu|}}
+					<span href={{menu.url}} {{on "click" (fn this.removeMenu menu)}} class="btn btn-default btn-small">{{menu.name}}</span>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+{{/if}}
 
 <BsModal @open={{this.showModal}} as |modal|>
 	<modal.header>

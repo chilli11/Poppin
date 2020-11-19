@@ -94,7 +94,7 @@ namespace Poppin.Services
 
 								public async Task<YelpBusinessSearchResponse> GetBusinessSearch(YelpBusinessSearchParams searchParams)
 								{
-												var radiusInt = int.Parse(searchParams.radius);
+												var radiusInt = int.Parse(searchParams.radius ?? "40000");
 												if (radiusInt > 40000) searchParams.radius = "40000";
 												if (radiusInt < 100) searchParams.radius = "100";
 

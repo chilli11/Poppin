@@ -61,6 +61,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked yelpMatches;
 	@tracked locationId;
 	@tracked name;
+	@tracked phone;
 	@tracked yelpId;
 	@tracked addressLine1;
 	@tracked addressLine2;
@@ -108,6 +109,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		const {
 			locationId,
 			name,
+			phone,
 			yelpId,
 			capacity,
 			crowdSize,
@@ -127,6 +129,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			id: locationId,
 			yelpId: yelpId,
 			name,
+			phone,
 			address: {
 				line1: this.addressLine1,
 				line2: this.addressLine2,
@@ -170,6 +173,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.locationId = null;
 		this.yelpId = null;
 		this.name = null;
+		this.phone = null;
 		this.addressLine1 = null;
 		this.addressLine2 = null;
 		this.city = null;
@@ -217,6 +221,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.locationId = loc.id;
 			this.yelpId = loc.yelpId;
 			this.name = loc.name;
+			this.phone = loc.phone;
 			this.addressLine1 = loc.address.line1;
 			this.addressLine2 = loc.address.line2;
 			this.city = loc.address.city;
@@ -249,12 +254,13 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.yelpEntity = loc;
 		this.yelpId = loc.id;
 		this.name = loc.name;
+		this.phone = loc.phone.substr(2);
 		this.addressLine1 = loc.location.address1;
 		this.addressLine2 = loc.location.address2;
 		this.city = loc.location.city;
 		this.state = this.statesWithCodes.filter(s => s.value == loc.location.state)[0];
 		this.zip = loc.location.zip || this.zip;
-		this.yelpUrl = loc.url;
+		this.yelpUrl = loc.url.split('?')[0];
 		this.geo = this.geo || {
 			type: 'Point',
 			coordinates: [loc.coordinates.longitude, loc.coordinates.latitude]
