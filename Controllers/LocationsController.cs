@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
@@ -220,6 +221,19 @@ namespace Poppin.Controllers
 
             if (isExisting == null)
             {
+
+                if (location.Address.Geo == null)
+                {
+                    if (string.IsNullOrEmpty(location.Address.Line1) || string.IsNullOrEmpty(location.Address.City) || string.IsNullOrEmpty(location.Address.State))
+                    {
+                        return BadRequest(new GenericFailure
+                        {
+                            Errors = new[] { "missing required address parameters" }
+                        });
+                    }
+                    location.Address.Geo = GeocodeAddress(location.Address);
+                }
+
                 await _locationService.Add(location);
 
                 var action = new Dictionary<string, string>()
@@ -249,6 +263,15 @@ namespace Poppin.Controllers
             try
             {
                 location.LastUpdate = DateTime.UtcNow;
+
+                if (location.Address.Geo == null)
+                {
+                    if (!string.IsNullOrEmpty(location.Address.Line1) && !string.IsNullOrEmpty(location.Address.City) && !string.IsNullOrEmpty(location.Address.State))
+                    {
+                        location.Address.Geo = GeocodeAddress(location.Address);
+                    }
+                }
+
                 await _locationService.Update(location.Id, location);
 
                 var action = new Dictionary<string, string>()
@@ -547,6 +570,18 @@ namespace Poppin.Controllers
                 _searchedLocations.Add(location);
             }
             return location;
+        }
+
+        private GeoJsonPoint<GeoJson2DGeographicCoordinates> GeocodeAddress(Address locationAddress)
+        {
+            var address = $"{locationAddress.Line1}, {locationAddress.City}, {locationAddress.State}";
+            var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", address } });
+            var c = new Coord
+            {
+                Longitude = geocode.Position["lng"],
+                Latitude = geocode.Position["lat"]
+            };
+            return c.ToGeoJson();
         }
 
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)

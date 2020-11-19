@@ -4,6 +4,7 @@ import { action, set, computed } from '@ember/object';
 import { Menu } from 'poppin-ui/classes/location-entities';
 import { inject as service } from '@ember/service';
 import _ from 'lodash';
+import StatesWithCodes from 'poppin-ui/utils/states-with-codes';
 
 import { states, actions } from './constants';
 
@@ -31,6 +32,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	}
 
 	days = days;
+	statesWithCodes = StatesWithCodes;
 
 	transitions = {
 		[states.IDLE]: {
@@ -129,7 +131,7 @@ export default class LocationFormComponent extends StatefulComponent {
 				line1: this.addressLine1,
 				line2: this.addressLine2,
 				city: this.city,
-				state: this.state,
+				state: this.state ? this.state.value : null,
 				zipCode: this.zipCode,
 				geo: this.geo
 			},
@@ -209,8 +211,8 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	populateFromPoppin(location) {
 		const loc = location || this.args.location
-		const coordinates = loc.address.geo.coordinates;
 		if (loc) {
+			const coordinates = loc.address.geo.coordinates;
 			this.yelpEntity = loc.yelpDetails;
 			this.locationId = loc.id;
 			this.yelpId = loc.yelpId;
@@ -218,7 +220,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			this.addressLine1 = loc.address.line1;
 			this.addressLine2 = loc.address.line2;
 			this.city = loc.address.city;
-			this.state = loc.address.state;
+			this.state = this.statesWithCodes.filter(s => s.value == loc.address.state)[0];
 			this.zip = loc.address.zipCode;
 			this.logoUrl = loc.logoUrl;
 			this.mainPhotoUrl = loc.mainPhotoUrl;
@@ -250,7 +252,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.addressLine1 = loc.location.address1;
 		this.addressLine2 = loc.location.address2;
 		this.city = loc.location.city;
-		this.state = loc.location.state;
+		this.state = this.statesWithCodes.filter(s => s.value == loc.location.state)[0];
 		this.zip = loc.location.zip || this.zip;
 		this.yelpUrl = loc.url;
 		this.geo = this.geo || {
@@ -293,13 +295,8 @@ export default class LocationFormComponent extends StatefulComponent {
 			}
 			if (location.yelpId) {
 				location.yelpDetails = this.yelpEntity;
-				return this.args.redirectToLocation(location);
 			}
-			
-			this.modalText = this.name + " has been added to Poppin!";
-			this.modalTitle = "Success!";
-			this.showModal = true;
-			return this.dispatch(actions.GET_MATCHES, location.id);
+			return this.args.redirectToLocation(location);
 		}).catch(data => this.dispatch(actions.REJECT_ACTION, data));
 	}
 
