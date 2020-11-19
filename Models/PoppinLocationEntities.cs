@@ -2,8 +2,11 @@
 using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Contracts.Requests;
 using Poppin.Extensions;
+using Poppin.Models.Geocoding;
 using Poppin.Models.Yelp;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Poppin.Models
@@ -27,14 +30,27 @@ namespace Poppin.Models
 												Line1 = a.Line1;
 												Line2 = a.Line2;
 												City = a.City;
-												State = a.State;
+
+												if (StateTransforms.StateCodes.Contains(a.State))
+												{
+																State = a.State;
+												}
+												else if (StateTransforms.StatesWithCodes.ContainsKey(a.State))
+												{
+																State = StateTransforms.StatesWithCodes[a.State];
+												}
+												else
+												{
+																throw new Exception("Invalid `state`");
+												}
+
 												ZipCode = a.ZipCode;
 												if (a.Geo != null)
 												{
 																var x = new GeoJson2DGeographicCoordinates(a.Geo.Coordinates[0], a.Geo.Coordinates[1]);
 																Geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
 												}
-												else
+												else if (a.Coordinates != null)
 												{
 																Geo = a.Coordinates.ToGeoJson();
 												}

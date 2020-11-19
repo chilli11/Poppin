@@ -12,7 +12,18 @@
 				<form.element @controlType="text" @label="Address" @placeholder="Line 1" @property="addressLine1" @required={{true}} />
 				<form.element @controlType="text" @label="" @placeholder="Line 2" @property="addressLine2" />
 				<form.element @controlType="text" @label="City" @placeholder="City" @property="city" @required={{true}} />
-				<form.element @controlType="text" @label="State" @placeholder="State" @property="state" @required={{true}} />
+				<form.group>
+					<label class="col-md-4">State</label>
+					<div class="col-md-8">
+						<PowerSelect
+							@options={{this.statesWithCodes}}
+							@placeholder="State"
+							@selected={{this.state}}
+							@onChange={{fn (mut this.state)}} as |st|>
+							{{st.name}}
+						</PowerSelect>
+					</div>
+				</form.group>
 				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />				
 				<form.group>
 					<label class="col-form-label col-md-4">Categories</label>
