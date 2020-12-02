@@ -53,7 +53,7 @@ classes in order to support full location details from our own database.
   address: [Address](#address-class),
   categories: string[], // NEW
   capacity: int,
-	capacityConfirmed: bool,
+  capacityConfirmed: bool,
   visitLength: int,
   hours: [{
   		opening: string, // 11:00
