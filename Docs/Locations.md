@@ -24,7 +24,7 @@ classes in order to support full location details from our own database.
   address: [Address](#address-class),
   categories: string[], // NEW
   capacity: int,
-	capacityConfirmed: bool,
+  capacityConfirmed: bool,
   crowdsize: int,
   visitLength: int,
   hours: [{
