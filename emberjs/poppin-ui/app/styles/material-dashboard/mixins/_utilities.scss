@@ -90,20 +90,26 @@
     }
     &.badge-info {
         background-color: $brand-info;
+        color: $white-color;
     }
     &.badge-success{
         background-color: $brand-success;
+        color: $white-color;
     }
     &.badge-warning{
         background-color: $brand-warning;
+        color: $white-color;
     }
     &.badge-danger{
         background-color: $brand-danger;
+        color: $white-color;
     }
     &.badge-rose{
       background-color: $brand-rose;
+			color: $white-color;
     }
     &.badge-default{
         background-color: $gray-light;
+        color: $white-color;
     }
 }

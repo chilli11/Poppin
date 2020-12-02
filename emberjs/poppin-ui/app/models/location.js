@@ -12,7 +12,8 @@ export default class LocationModel extends Model {
 	@attr menus;
 	@attr('string') yelpUrl;
   @attr categories;
-  @attr('number') capacity;
+	@attr('number') capacity;
+	@attr('boolean') capacityConfirmed;
   @attr('number') crowdSize;
 	@attr('number') visitLength;
 	@attr hours;

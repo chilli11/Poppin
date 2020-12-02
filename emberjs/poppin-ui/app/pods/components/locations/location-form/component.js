@@ -88,6 +88,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked yelpUrl;
 	@tracked geo;
 	@tracked capacity = '0';
+	@tracked capacityConfirmed;
 	@tracked crowdSize = '0';
 	@tracked hours = _.merge(defHours);
 	@tracked visitLength = 45;
@@ -112,6 +113,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			phone,
 			yelpId,
 			capacity,
+			capacityConfirmed,
 			crowdSize,
 			hours,
 			visitLength,
@@ -146,6 +148,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			yelpUrl,
 			categories: this.categoryList,
 			capacity: parseInt(capacity, 10),
+			capacityConfirmed: capacityConfirmed,
 			crowdSize: parseInt(crowdSize, 10),
 			hours,
 			visitLength: parseInt(visitLength, 10)
@@ -190,6 +193,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.yelpUrl = null;
 		this.categories = [];
 		this.capacity = 0;
+		this.capacityConfirmed;
 		this.hours = _.merge(defHours);
 	}
 
@@ -245,6 +249,7 @@ export default class LocationFormComponent extends StatefulComponent {
 				if (matches.length) return matches[0];
 			});
 			this.capacity = loc.capacity;
+			this.capacityConfirmed = loc.capacityConfirmed || false;
 			this.hours = loc.hours || _.merge(defHours);
 			this.visitLength = loc.visitLength;
 		}
