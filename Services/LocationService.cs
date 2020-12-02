@@ -1,5 +1,8 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Configuration;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models;
 using Poppin.Models.Tracking;
@@ -14,6 +17,7 @@ namespace Poppin.Services
 				{
 								private readonly IMongoCollection<PoppinLocation> _locations;
 								private readonly IMongoCollection<Checkin> _checkins;
+								private readonly IMongoCollection<Category> _categories;
 
 								public LocationService(IMongoDBSettings settings)
 								{
@@ -22,6 +26,7 @@ namespace Poppin.Services
 
 												_locations = database.GetCollection<PoppinLocation>("Locations");
 												_checkins = database.GetCollection<Checkin>("Checkins");
+												_categories = database.GetCollection<Category>("Categories");
 								}
 
 								public Task<PoppinLocation> Get(string id) => _locations.Find(loc => loc.Id == id).FirstAsync();
@@ -33,6 +38,22 @@ namespace Poppin.Services
 
 								public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<string> ids) =>
 												_locations.Find(loc => ids.Contains(loc.YelpId)).ToListAsync();
+
+								public Task<List<PoppinLocation>> GetBySearch(LocationSearchRequest request)
+								{
+												var x = new GeoJson2DGeographicCoordinates(request.Geo.Coordinates[0], request.Geo.Coordinates[1]);
+												var geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
+												var inRange = Builders<PoppinLocation>.Filter.Near(a => a.Address.Geo, geo, request.Radius);
+												var cats = request.Categories.SelectMany(c => c.Children);
+												cats = cats.Concat(request.Categories.Select(c => c.Slug));
+
+												var matchCat = Builders<PoppinLocation>.Filter.AnyIn("Categories", cats);
+												if (cats != null && cats.Count() > 0)
+												{
+																return _locations.Find(inRange & matchCat).ToListAsync();
+												}
+												return _locations.Find(inRange).ToListAsync();
+								}
 
 								public Task Add(PoppinLocation location)
 								{
@@ -60,16 +81,49 @@ namespace Poppin.Services
 												if (c.UserId != null) InvalidateCheckin(c.UserId);
 												return _checkins.InsertOneAsync(c);
 								}
+								public bool ReconcileCheckin(Checkin c)
+								{
+												List<Checkin> checkins;
+												FilterDefinition<Checkin> filter;
+												if (c.ReliabilityScore == ReliabilityScores.User)
+												{
+																filter = Builders<Checkin>.Filter.Gt("Timestamp", DateTime.Now.AddSeconds(-90))
+																				& Builders<Checkin>.Filter.Eq("LocationId", c.LocationId)
+																				& Builders<Checkin>.Filter.Eq<string>("UserId", null);
+																checkins = _checkins.Find(filter).ToList();
+																if (checkins.Count > 0)
+																{
+																				var replace = checkins.FirstOrDefault();
+																				replace.Timeout = DateTime.Now;
+																				_checkins.ReplaceOneAsync(c => c.Id == replace.Id, replace);
+																}
+												}
+												else
+												{
+																filter = Builders<Checkin>.Filter.Gt("Timestamp", DateTime.Now.AddSeconds(-90))
+																				& Builders<Checkin>.Filter.Eq("LocationId", c.LocationId)
+																				& Builders<Checkin>.Filter.Ne<string>("UserId", null);
+																checkins = _checkins.Find(filter).ToList();
+																if (checkins.Count > 0)
+																{
+																				return false;
+																}
+												}
+												return true;
+								}
 
 								public UpdateResult InvalidateCheckin(string userId)
 								{
-												var filter = Builders<Checkin>.Filter.Eq("UserId", userId) & Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now);
+												var filter = Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Eq("UserId", userId);
 												var update = Builders<Checkin>.Update.Set("Timeout", DateTime.Now);
 												return _checkins.UpdateMany(filter, update);
 								}
 								public Task InvalidateVendorCheckin(string locId)
 								{
-												var checkins = _checkins.Find(c => c.LocationId == locId && c.UserId == null && c.Timeout > DateTime.Now).ToList();
+												var filter = Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now)
+																& Builders<Checkin>.Filter.Eq("LocationId", locId)
+																& Builders<Checkin>.Filter.Eq<string>("UserId", null);
+												var checkins = _checkins.Find(filter).ToList();
 												if (checkins.Count > 0)
 												{
 																checkins.Sort((a, b) => a.Timeout.CompareTo(b.Timeout));
@@ -80,8 +134,24 @@ namespace Poppin.Services
 												return null;
 								}
 								public Task<List<Checkin>> GetCheckinsForLocation(string locId) =>
-												_checkins.Find(c => c.LocationId == locId && c.Timeout > DateTime.Now).ToListAsync();
-								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(c => c.UserId == uId).ToListAsync();
+												_checkins.Find(Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Eq("LocationId", locId)).ToListAsync();
+								public Task<List<Checkin>> GetCheckinsForLocations(IEnumerable<string> locIds) =>
+												_checkins.Find(Builders<Checkin>.Filter.Gt("Timeout", DateTime.Now) & Builders<Checkin>.Filter.Where(c => locIds.Contains(c.LocationId))).ToListAsync();
+								public Task<List<Checkin>> GetCheckinsForUser(string uId) => _checkins.Find(Builders<Checkin>.Filter.Eq("UserId", uId)).ToListAsync();
+
+
+								// ================ CATEGORIES ================== //
+								public Task<List<Category>> GetCategories() => _categories.Find(new BsonDocument()).ToListAsync();
+								public Task<Category> GetCategoryBySlug(string slug) => _categories.Find(c => c.Slug == slug).FirstAsync();
+								public Task<List<Category>> GetCategoriesBySlug(IEnumerable<string> slugs) => _categories.Find(c => slugs.Contains(c.Slug)).ToListAsync();
+								public Task<Category> GetCategoryByHereId(string hereId) => _categories.Find(c => c.HereId == hereId).FirstAsync();
+
+								public Task AddCategory(Category category) => _categories.InsertOneAsync(category);
+								public Task AddCategories(IEnumerable<Category> categories) => _categories.InsertManyAsync(categories);
+								public Task UpdateCategory(Category category) => _categories.ReplaceOneAsync(c => c.Slug == category.Slug, category);
+								public Task UpdateCategory(string catSlug, Category category) => _categories.ReplaceOneAsync(c => c.Slug == catSlug, category);
+								public void UpdateCategories(IEnumerable<Category> categories) => categories.ToList().ForEach(c => UpdateCategory(c));
+								public Task DeleteCategory(string catSlug) => _categories.DeleteOneAsync(c => c.Slug == catSlug);
 				}
 
 				public static class LocationExtensions

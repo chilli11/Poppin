@@ -5,7 +5,7 @@
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{this.isLoading}}>
-				<Yelp::YelpSearchForm
+				<Locations::NativeSearchForm
 					@searchMethod={{this.searchMethod}}
 					@populateResults={{this.populateResults}} />
 			</LoadingSpinner>
@@ -20,9 +20,11 @@
 				Choose a business {{#if this.results.total}}({{this.results.total}} Result(s)){{/if}}
 			</p>
 		</div>
-		<div class="card-body">
+		<div class="card-body location-list">
 			<Locations::LocationList
+				@vendorId={{@vendorId}}
 				@locations={{this.businesses}}
+				@joinCategories={{this.joinCategories}}
 				@clickAction={{@clickAction}} />
 		</div>
 	</div>

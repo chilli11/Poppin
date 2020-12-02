@@ -1,28 +1,52 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
+using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace Poppin.Models.BusinessEntities
 {
-    [BsonIgnoreExtraElements]
+				[BsonIgnoreExtraElements]
     public class PoppinUser : ProfileEntity
     {
-        public PoppinUser(User user)
-								{
-            UserId = user.Id;
-            Username = user.UserName;
-            Role = user.Role;
-            Email = user.Email;
-								}
+        public PoppinUser(IIdentityService idService) : base(idService) { }
 
-        /// <summary>
-        /// LocationIds saved by user
-        /// </summary>
-        public HashSet<string> Favorites { get; set; }
+
+        public PoppinUser(User user) : base(user) { }
+
+        public void Merge(PoppinUserRequest user)
+        {
+            if (UserId != user.UserId)
+            {
+                throw new Exception("User ID mismatch");
+            }
+
+            Username = user.Username;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
+            Email = user.Email;
+            ProfilePhoto = user.ProfilePhoto;
+            AgeRange = AgeGroups.Contains(user.AgeRange) ? user.AgeRange : null;
+            Gender = Genders.Contains(user.Gender) ? user.Gender : null;
+            Categories = new HashSet<string>(user.Categories);
+        }
+
+								public string ProfilePhoto { get; set; }
+								public string AgeRange { get; set; }
+        public string Gender { get; set; }
+
+        public HashSet<string> Categories { get; set; }
+
+								/// <summary>
+								/// LocationIds saved by user
+								/// </summary>
+								public HashSet<string> Favorites { get; set; }
 
         /// <summary>
         /// LocationIds hidden by user
@@ -53,5 +77,42 @@ namespace Poppin.Models.BusinessEntities
         {
             return await las.GetUserActivity(Id);
         }
+        private static HashSet<string> AgeGroups
+        {
+            get
+            {
+                return new HashSet<string> {
+                    { "u18" },
+                    { "u26" },
+                    { "u36" },
+                    { "u46" },
+                    { "u56" },
+                    { "o55" }
+                };
+            }
+        }
+        private static HashSet<string> Genders
+        {
+            get
+            {
+                return new HashSet<string> {
+                    { "M" },
+                    { "F" },
+                    { "O" },
+                    { "D" }
+                };
+            }
+        }
     }
+
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum GenderType
+    {  
+        Unspecified,
+        Male,
+        Female,
+        Other,
+        [EnumMember(Value = "Prefer Not to Say")]
+        Decline
+				}
 }

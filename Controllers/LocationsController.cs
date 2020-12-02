@@ -1,52 +1,46 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using MongoDB.Driver.GeoJsonObjectModel;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
-using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
-using Poppin.Models.Yelp;
-using Segment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Poppin.Controllers
 {
 				[Route("api/[controller]")]
     [ApiController]
-    public class LocationsController : ControllerBase
+    public class LocationsController : PoppinBaseController
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IUserService _userService;
-        private readonly ILocationService _locationService;
-        private readonly IYelpService _yelpService;
-        private readonly IVendorService _vendorService;
-        private readonly ILogActionService _logActionService;
-        private readonly IIdentityService _identityService;
-
         private List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
 
         public LocationsController(
-            IHttpContextAccessor httpContextAccessor,
             ILocationService locationService,
             IUserService userService,
             IYelpService yelpService,
             IVendorService vendorService,
             ILogActionService logActionService,
-            IIdentityService identityService)
+            ILogger<LocationsController> logger,
+            IIdentityService identityService,
+            IHEREGeocoder hereGeocoder)
         {
-            _httpContextAccessor = httpContextAccessor;
             _userService = userService;
             _locationService = locationService;
             _yelpService = yelpService;
             _vendorService = vendorService;
             _logActionService = logActionService;
             _identityService = identityService;
+            _hereGeocoder = hereGeocoder;
+            _logger = logger;
         }
 
         /// <summary>
@@ -58,11 +52,21 @@ namespace Poppin.Controllers
         [HttpGet("{locationId}")]
         public IActionResult Get(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                var errors = new[] { "The location ID was invalid." };
+                _logger.LogError("Location Search Failed: {errors}", "Location ID improperly formatted.");
+                return BadRequest(new GenericFailure
+                {
+                    Errors = errors
+                });
+            }
+
             var location = GetLocation(locationId);
             if (location == null)
             {
-                var errors = new List<string>();
-                errors.Add("Location ID is invalid");
+                var errors = new[] { "Location ID is invalid" };
+                _logger.LogError("Location Search Failed: {errors}", "Location ID not found.");
                 return BadRequest(new GenericFailure
                 {
                     Errors = errors
@@ -75,6 +79,7 @@ namespace Poppin.Controllers
             };
             _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
+            _logger.LogInformation("Retrieved Location: {id}", location.Id);
             location.SetCrowdSize(_locationService).Wait();
             return Ok(location);
         }
@@ -89,6 +94,14 @@ namespace Poppin.Controllers
         [HttpGet("with-yelp/{locationId}")]
         public async Task<IActionResult> GetWithYelp(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = GetLocation(locationId);
             if (location == null)
             {
@@ -119,64 +132,74 @@ namespace Poppin.Controllers
             return Ok(location);
         }
 
-        /// <summary>
-        /// Gets a list of Locations based on results of a Yelp search
-        /// </summary>
-        /// <param name="searchParams"></param>
-        /// <returns></returns>
-        // POST: api/Locations/yelp-search
-        [HttpPost("yelp-search")]
-        public async Task<IActionResult> GetByYelpSearch(YelpBusinessSearchParams searchParams)
-        {
+        [HttpPost("search")]
+        public async Task<IActionResult> Search(LocationSearchRequest search)
+								{
             try
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
-                var yelpSearchResponse = await _yelpService.GetBusinessSearch(searchParams);
-                var locList = new List<PoppinLocation>();
+                var catSlugs = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
 
-                if (yelpSearchResponse.Total > 0)
+                if (search.Geo.Coordinates.Length == 0)
+																{
+                    if (string.IsNullOrEmpty(search.Location))
+																				{
+                        return BadRequest(new GenericFailure
+                        {
+                            Errors = new[] { "`location` or `geo` parameter required" }
+                        });
+																				}
+                    var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
+                    search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
+																}
+
+                if (search.Categories.Count > 0 && search.Categories.First().Id == null)
+																{
+                   
+                    search.Categories = catSlugs.ToHashSet();
+																}
+
+                var locList = await _locationService.GetBySearch(search);
+
+                if (locList.Count > 0)
                 {
-                    locList = await _locationService.GetByYelpList(yelpSearchResponse.Businesses.Select(y => y.Id));
+                    if (!string.IsNullOrEmpty(search.Term))
+                    {
+                        locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
+                    }
 
-                    //Hidden locations: Implement in v2
-                    //if (id != string.Empty)
-                    //{
-                    //    var profile = GetUserProfile(id);
-                    //    if (profile.Hidden != null && profile.Hidden.Any())
-                    //    {
-                    //        locList = locList.Where(l => !profile.Hidden.Contains(l.Id)).ToList();
-                    //    }
-                    //}
-
-                    locList.ForEach(l => l.YelpDetails = yelpSearchResponse.Businesses.FirstOrDefault(yb => yb.Id == l.YelpId));
-                    _searchedLocations.AddRange(locList.Where(l => !_searchedLocations.Any(sl => sl.Id == l.Id)));
-                    locList.ForEach(l => l.SetCrowdSize(_locationService).Wait());
+                    locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                 }
 
-                var action = new Dictionary<string, string>()
+                var actionStr = new Dictionary<string, string>()
                 {
-                    { "SearchTerm", searchParams.term },
-                    { "SearchLocation", searchParams.location },
-                    { "SSearchCategories", searchParams.categories }
+                    { "SearchTerm", search.Term },
+                    { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
+                    { "SearchCategories", catSlugs.ToString() }
                 };
-                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.Search);
+
+                var actionObj = new Dictionary<string, object>()
+                {
+                    { "SearchTerm", search.Term },
+                    { "SearchLocation", search.Geo },
+                    { "SearchCategories", catSlugs }
+                };
+
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
+                Track(id, SegmentIOKeys.Actions.Search, actionObj);
 
                 return Ok(new PoppinSearchResponse()
                 {
                     Total = locList.Count,
                     Businesses = locList,
-                    Region = yelpSearchResponse.Region,
-                    SearchParams = yelpSearchResponse.SearchParams
+                    SearchParams = search
                 });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                var errors = new List<string>();
-                errors.Add(e.Message);
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { e.Message }
                 });
             }
         }
@@ -198,6 +221,19 @@ namespace Poppin.Controllers
 
             if (isExisting == null)
             {
+
+                if (location.Address.Geo == null)
+                {
+                    if (string.IsNullOrEmpty(location.Address.Line1) || string.IsNullOrEmpty(location.Address.City) || string.IsNullOrEmpty(location.Address.State))
+                    {
+                        return BadRequest(new GenericFailure
+                        {
+                            Errors = new[] { "missing required address parameters" }
+                        });
+                    }
+                    location.Address.Geo = GeocodeAddress(location.Address);
+                }
+
                 await _locationService.Add(location);
 
                 var action = new Dictionary<string, string>()
@@ -206,12 +242,8 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.AddLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.AddLocation);
+                Track(id, SegmentIOKeys.Actions.AddLocation);
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
                 return CreatedAtAction("Post", location);
             }
             return Ok(isExisting);
@@ -231,7 +263,16 @@ namespace Poppin.Controllers
             try
             {
                 location.LastUpdate = DateTime.UtcNow;
-                await _locationService.Update(location);
+
+                if (location.Address.Geo == null)
+                {
+                    if (!string.IsNullOrEmpty(location.Address.Line1) && !string.IsNullOrEmpty(location.Address.City) && !string.IsNullOrEmpty(location.Address.State))
+                    {
+                        location.Address.Geo = GeocodeAddress(location.Address);
+                    }
+                }
+
+                await _locationService.Update(location.Id, location);
 
                 var action = new Dictionary<string, string>()
                 {
@@ -239,12 +280,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation);
+                Track(id, SegmentIOKeys.Actions.UpdateLocation);
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
+                _searchedLocations.Remove(location);
+                _searchedLocations.Add(location);
                 return Ok(location);
             }
             catch(Exception e)
@@ -264,6 +303,14 @@ namespace Poppin.Controllers
         //[AuthorizeRoles()]
         public async Task<IActionResult> Put(string locationId, PoppinLocationRequest _location)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             if (GetUserRole() != RoleTypes.Admin)
             {
                 return Unauthorized();
@@ -280,12 +327,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
+                Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
 
-                if (!string.IsNullOrEmpty(location.YelpId))
-                {
-                    location.YelpDetails = await _yelpService.GetBusiness(location.YelpId);
-                }
+                _searchedLocations.Remove(location);
+                _searchedLocations.Add(location);
                 return Ok(location);
             }
             catch (Exception e)
@@ -301,7 +346,15 @@ namespace Poppin.Controllers
 
         [HttpGet("checkin/{locationId}")]
         public async Task<IActionResult> UserCheckIn(string locationId)
-								{
+        {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
             var location = await _locationService.Get(locationId);
 
@@ -316,15 +369,19 @@ namespace Poppin.Controllers
             }
             var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
             var checkin = new Checkin(locationId, userId, location.VisitLength, score);
-            await _locationService.NewCheckin(checkin);
-            await location.SetCrowdSize(_locationService);
 
-            var action = new Dictionary<string, string>()
+            if (_locationService.ReconcileCheckin(checkin))
             {
-                { "LocationId", location.Id }
-            };
-            _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+                await _locationService.NewCheckin(checkin);
+                await location.SetCrowdSize(_locationService);
+
+                var action = new Dictionary<string, string>()
+                {
+                    { "LocationId", location.Id }
+                };
+                _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
+                Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+            }
 
             return Ok(location);
         }
@@ -332,6 +389,14 @@ namespace Poppin.Controllers
         [HttpGet("geo-checkin/{locationId}")]
         public async Task<IActionResult> GeoCheckIn(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var userId = GetUserId(SegmentIOKeys.Actions.Checkin);
             var location = await _locationService.Get(locationId);
 
@@ -354,7 +419,7 @@ namespace Poppin.Controllers
                 { "LocationId", location.Id }
             };
             _logActionService.LogUserAction(userId, SegmentIOKeys.Actions.Checkin, action);
-            Analytics.Client.Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
+            Track(userId, SegmentIOKeys.Actions.Checkin, checkin.AsDictionary());
 
             return Ok(location);
         }
@@ -363,7 +428,16 @@ namespace Poppin.Controllers
         [HttpDelete("{locationId}")]
         [Authorize]
 								//[AuthorizeRoles()]
-								public IActionResult Delete(string locationId) {
+								public IActionResult Delete(string locationId)
+        {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             if (GetUserRole() != RoleTypes.Admin)
 												{
                 return Unauthorized();
@@ -376,16 +450,24 @@ namespace Poppin.Controllers
             };
             var id = GetUserId(SegmentIOKeys.Actions.DeleteLocation);
             _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DeleteLocation, action);
-            Analytics.Client.Track(id, SegmentIOKeys.Actions.DeleteLocation);
+            Track(id, SegmentIOKeys.Actions.DeleteLocation);
             return Ok();
         }
 
         // GET: api/Locations/incrementCrowd/5
-        [HttpGet("incrementCrowd/{locationId}")]
+        [HttpGet("increment-crowd/{locationId}")]
         [Authorize]
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> IncrementCrowd(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = GetLocation(locationId);
             var errors = new List<string>();
             if (location == null)
@@ -408,7 +490,7 @@ namespace Poppin.Controllers
                     { "LocationId", locationId }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
-                Analytics.Client.Track(id, SegmentIOKeys.Actions.IncrementCrowd);
+                Track(id, SegmentIOKeys.Actions.IncrementCrowd);
 
                 await location.SetCrowdSize(_locationService);
                 return Ok(location);
@@ -422,11 +504,19 @@ namespace Poppin.Controllers
         }
 
         // GET: api/Locations/decrementCrowd/5
-        [HttpGet("decrementCrowd/{locationId}")]
+        [HttpGet("decrement-crowd/{locationId}")]
         [Authorize]
         //[AuthorizeRoles(RoleTypes.Vendor, RoleTypes.Admin)]
         public async Task<IActionResult> DecrementCrowd(string locationId)
         {
+            if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+            {
+                return BadRequest(new GenericFailure
+                {
+                    Errors = new[] { "The location ID was invalid." }
+                });
+            }
+
             var location = await _locationService.Get(locationId);
             var errors = new List<string>();
             if (location == null)
@@ -450,7 +540,7 @@ namespace Poppin.Controllers
                         { "LocationId", locationId }
                     };
                     _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                    Analytics.Client.Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+                    Track(id, SegmentIOKeys.Actions.DecrementCrowd);
 
                     await location.SetCrowdSize(_locationService);
                     return Ok(location);
@@ -471,57 +561,27 @@ namespace Poppin.Controllers
             });
         }
 
-        private string GetUserId()
-        {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
-            {
-                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-                _identityService.Identify(id, SegmentIOKeys.Categories.Identity, "GetUserId");
-                return id;
-            }
-            return string.Empty;
-        }
-
-        private string GetUserId(string action)
-        {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
-            {
-                var id = _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-                _identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
-                return id;
-            }
-            return string.Empty;
-        }
-
-        private string GetUserRole()
-        {
-            if (_httpContextAccessor.HttpContext.User.Claims.Any())
-            {
-                return _httpContextAccessor.HttpContext.User.Claims.Single(u => u.Type == "Role").Value;
-            }
-            return string.Empty;
-        }
-
-        private PoppinUser GetUserProfile(string id)
-								{
-            PoppinUser profile = _userService.GetUserById(id).Result;
-            if (profile == null)
-												{
-                _userService.AddUser(new PoppinUser(_identityService.GetUserById(id).Result.User));
-                profile = _userService.GetUserById(id).Result;
-            }
-            return profile;
-								}
-
         private PoppinLocation GetLocation(string locationId)
         {
-            var location = _searchedLocations.Find(l => l.Id == locationId);
+            var location = _searchedLocations.SingleOrDefault(l => l.Id == locationId);
             if (location == null)
             {
                 location = _locationService.Get(locationId).Result;
                 _searchedLocations.Add(location);
             }
             return location;
+        }
+
+        private GeoJsonPoint<GeoJson2DGeographicCoordinates> GeocodeAddress(Address locationAddress)
+        {
+            var address = $"{locationAddress.Line1}, {locationAddress.City}, {locationAddress.State}";
+            var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", address } });
+            var c = new Coord
+            {
+                Longitude = geocode.Position["lng"],
+                Latitude = geocode.Position["lat"]
+            };
+            return c.ToGeoJson();
         }
 
         private async Task<bool> UserHasLocationPermissions(PoppinLocation loc, string userId)

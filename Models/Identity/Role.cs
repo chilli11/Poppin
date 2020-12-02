@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models.Identity
 {
-				public class Role : IdentityRole
+				public class Role : IdentityRole<Guid>
 				{
 				}
 

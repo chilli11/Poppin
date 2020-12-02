@@ -1,7 +1,6 @@
 import Service, { inject } from '@ember/service';
 import Evented from '@ember/object/evented';
 import { tracked } from '@glimmer/tracking';
-import { fetch } from 'fetch';
 import { Promise } from 'rsvp';
 import config from 'poppin-ui/config/environment';
 import _ from 'lodash';
@@ -101,7 +100,7 @@ export default class ApiService extends Service.extend(Evented) {
 			url: '',
 			body: options.body,
 			params: options.params,
-			cache: false,
+			cache: 'no-cache',
 			headers: _.merge({
 				'Content-Type': options.contentType || 'application/json',
 				Accept: 'application/json, text/*, */*',
@@ -125,13 +124,22 @@ export default class ApiService extends Service.extend(Evented) {
 		
 		return new Promise((resolve, reject) => {
 			const fn = (response) => {
-				const isJson = response._bodyBlob && response._bodyBlob.type === 'application/json';
 				const error = response.status > 399;
-				const output = isJson ? response.json() : (typeof response.text == 'function'? response.text() : response);
-				if (error) return reject(output);
-				return resolve(output);
+				return response.text().then(value => {
+					let val;
+					try {
+						val = JSON.parse(value);
+					} catch (e) {
+						val = value;
+					}
+
+					if (error) return reject(val);
+					return resolve(val);
+				});
 			};
-			fetch(fetchRequest.url, fetchRequest).then(fn).catch(fn)
+			fetch(fetchRequest.url, fetchRequest)
+				.then(r => fn(r))
+				.catch(r => fn(r));
 		});
 	}
 

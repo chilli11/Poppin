@@ -54,11 +54,39 @@ namespace Poppin.Models.Identity.OAuth
 
         public class UserInfoResult : IUserInfoResult
 								{
+            private string _pUrl;
             public string Email { get; set; }
             [JsonProperty("first_name")]
             public string FirstName { get; set; }
             [JsonProperty("last_name")]
             public string LastName { get; set; }
+            public PictureObj PictureObj { get; set; }
+            public string PictureUrl
+												{
+																get
+																{
+                    return PictureObj.Data.URL;
+																}
+
+																set
+																{
+                    _pUrl = value;
+																}
+												}
+								}
+
+        public class PictureObj
+								{
+            public PictureData Data { get; set; }
+								}
+
+        public class PictureData
+								{
+            public int Height { get; set; }
+            public int Width { get; set; }
+            [JsonProperty("is_silhouette")]
+            public bool IsSilhouette { get; set; }
+            public string URL { get; set; }
 								}
 				}
 }

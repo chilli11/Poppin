@@ -1,0 +1,24 @@
+<div class="card">
+	<div class="card-body">
+		<table class="table table-responsive-md table-hover">
+			<thead class="thead-light">
+				<tr>
+					<th role="button" {{on 'click' (fn this.sortBy 'name')}}>Display Name</th>
+					<th role="button" {{on 'click' (fn this.sortBy 'slug')}}>Slug</th>
+					<th role="button" {{on 'click' (fn this.sortBy 'parent')}}>Parent</th>
+					<th># of Children</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each this.sortedCategories as |cat|}}
+					<tr role="button" {{on 'click' (fn @clickAction cat)}}>
+						<td>{{cat.name}}</td>
+						<td>{{cat.slug}}</td>
+						<td>{{cat.parent}}</td>
+						<td>{{cat.children.length}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</div>

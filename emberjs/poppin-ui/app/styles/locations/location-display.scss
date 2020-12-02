@@ -1,0 +1,42 @@
+
+.location-banner {
+	background-position: center center;
+	background-size: cover;
+	height: 300px;
+	width: 100%;
+	@media(min-width: 576px) {
+		height: 600px;
+		margin: -50px 0 -500px;
+		padding: 75px 0 552px;
+	}
+	@media(min-width: 768px) {
+		margin-bottom: -400px;
+		padding-bottom: 425px;
+		&.edit {
+			margin-bottom: -450px;
+			padding-bottom: 475px;
+		}
+	}
+	@media(min-width: 992px) {
+		margin-bottom: -350px;
+		padding-bottom: 375px;
+	}
+	@media(min-width: 1200px) {
+		margin-bottom: -300px;
+		padding-bottom: 325px;
+	}
+	display: flex;
+	align-content: center;
+	align-items: center;
+	.logo {
+		width: auto;
+		flex-grow: 0;
+		flex-shrink: 1;
+		max-width: 100%;
+		margin: 0 auto;
+		img {
+			max-width: 100%;
+			max-height: 200px;
+		}
+	}
+}

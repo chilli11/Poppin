@@ -1,3 +1,11 @@
+{{#if @location.mainPhotoUrl}}
+	<div class="col-md-12 location-banner{{if (eq this.machineState 'EDIT_LOCATION') ' edit'}}" style="background-image: url({{@location.mainPhotoUrl}})">
+		<div class="logo">
+			<img src="{{@location.logoUrl}}" />
+		</div>
+	</div>
+{{/if}}
+
 {{#if (eq this.machineState 'EDIT_LOCATION')}}
 	<Locations::LocationForm
 		@reverseOrder=true
@@ -12,6 +20,7 @@
 		@profile={{this.accountService.profile}}
 		@isLoading={{eq this.machineState 'LOADING'}}
 		@location={{@location}}
+		@categories={{this.fullCategories}}
 		@startEdit={{this.startEdit}}
 		@increment={{this.increment}}
 		@decrement={{this.decrement}}

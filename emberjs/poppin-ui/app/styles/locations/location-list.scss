@@ -1,0 +1,8 @@
+.location-list {
+	.location {
+		&.vendor-match {
+			background: rgba(255,235,59,0.2);
+			border: #ffeb3b 2px solid;
+		}
+	}
+}

@@ -1,6 +1,7 @@
 const GET = 'GET';
 const POST = 'POST';
 const PUT = 'PUT';
+const DELETE = 'DELETE';
 
 const HttpResources = {
 	/* ===== LOCATIONS ===== */
@@ -21,13 +22,17 @@ const HttpResources = {
 		url: 'locations/yelp-search',
 		method: POST
 	},
+	getLocationsBySearch: {
+		url: 'locations/search',
+		method: POST
+	},
 	incrementCrowd: {
-		url: 'locations/incrementCrowd/:locId',
+		url: 'locations/increment-crowd/:locId',
 		method: GET,
 		params: ['locId']
 	},
 	decrementCrowd: {
-		url: 'locations/decrementCrowd/:locId',
+		url: 'locations/decrement-crowd/:locId',
 		method: GET,
 		params: ['locId']
 	},
@@ -40,6 +45,25 @@ const HttpResources = {
 		url: 'profile/favorites/remove/:locId',
 		method: GET,
 		params: ['locId']
+	},
+
+	/* ===== CATEGORIES ===== */
+	getCategories: {
+		url: 'categories',
+		method: GET
+	},
+	addCategory: {
+		url: 'categories',
+		method: POST
+	},
+	updateCategory: {
+		url: 'categories',
+		method: PUT
+	},
+	deleteCategory: {
+		url: 'categories/:slug',
+		method: DELETE,
+		params: ['slug']
 	},
 
 	/* ===== YELP =====*/
@@ -86,6 +110,29 @@ const HttpResources = {
 	updateProfile: {
 		url: ['profile'],
 		method: PUT
+	},
+	confirmEmail: {
+		url: 'identity/confirm-email/:userId',
+		method: GET,
+		params: ['userId']
+	},
+	resendConfirmationEmail: {
+		url: 'identity/resend-confirmation',
+		method: POST
+	},
+	passwordResetRequest: {
+		url: 'identity/forgot-password',
+		method: POST
+	},
+	confirmResetToken: {
+		url: 'identity/reset-password/:userId',
+		method: GET,
+		params: ['userId']
+	},
+	resetPassword: {
+		url: 'identity/reset-password/:userId',
+		method: POST,
+		params: ['userId']
 	},
 
 	/* ===== VENDOR ===== */

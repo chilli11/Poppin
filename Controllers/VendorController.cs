@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Internal;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
+using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
@@ -21,14 +22,8 @@ namespace Poppin.Controllers
 				[Route("api/[controller]")]
 				[Authorize]
 				[ApiController]
-				public class VendorsController : ControllerBase
+				public class VendorsController : PoppinBaseController
 				{
-								private readonly IVendorService _vendorService;
-        private readonly ILocationService _locationService;
-        private readonly IUserService _userService;
-								private readonly IIdentityService _identityService;
-
-
 								public VendorsController(
 												IVendorService vendorService,
 												ILocationService locationService,
@@ -45,7 +40,7 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> Get()
 								{
 												var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-												var profile = await GetCurrentUserProfile(userId);
+												var profile = await GetUserProfile(userId);
 												var vendors = await _vendorService.GetVendorsByIds(profile.VendorIds);
 												if (vendors == null)
 												{
@@ -103,6 +98,11 @@ namespace Poppin.Controllers
 																				Admins = vendor.GetAdmins(_userService),
 																				Members = vendor.GetMembers(_userService)
 																};
+																if (vResult.Locations.Count() > 0)
+																{
+																				var checkins = await _locationService.GetCheckinsForLocations(vResult.Locations.Select(l => l.Id));
+																				vResult.Locations.ToList().UpdateCrowdSizes(checkins);
+																}
 																if (vendor.ParentVendorId != null)
 																{
 																				vResult.Parent = await _vendorService.GetVendorById(vendor.ParentVendorId);
@@ -234,7 +234,7 @@ namespace Poppin.Controllers
 								[HttpPost("add-member/{vendorId}")]
 								public async Task<IActionResult> AddMember(string vendorId, VendorMemberRequest newMember)
 								{
-												var user = await GetUserProfile(newMember);
+												var user = await GetUserProfileByEmail(newMember.Email);
 												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null || user == null)
 												{
@@ -293,7 +293,7 @@ namespace Poppin.Controllers
 								[HttpPost("remove-member/{vendorId}")]
 								public async Task<IActionResult> RemoveMember(string vendorId, VendorMemberRequest newMember)
 								{
-												var user = await GetUserProfile(newMember);
+												var user = await GetUserProfileByEmail(newMember.Email);
 												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null || user == null)
 												{
@@ -366,7 +366,7 @@ namespace Poppin.Controllers
 								public async Task<IActionResult> AddLocation(string vendorId, IDictionary<string, string> kvp)
 								{
 												var locationId = kvp["locationId"];
-												//var loc = await _locationService.Get(locationId);
+												var loc = await _locationService.Get(locationId);
 												var vendor = await _vendorService.GetVendorById(vendorId);
 												if (vendor == null)
 												{
@@ -384,10 +384,10 @@ namespace Poppin.Controllers
 																try
 																{
 																				vendor.LocationIds.Add(locationId);
-																				//loc.VendorId = vendorId;
+																				loc.VendorId = vendorId;
 
 																				await _vendorService.UpdateVendor(vendor);
-																				//await _locationService.Update(loc);
+																				await _locationService.Update(loc);
 																				return Ok(new VendorResult
 																				{
 																								Vendor = vendor,
@@ -459,56 +459,6 @@ namespace Poppin.Controllers
 																}
 												}
 												return Unauthorized();
-								}
-
-								private string GetUserId(string action)
-								{
-												if (this.User.Claims.Any())
-												{
-																var id = this.User.Claims.Single(u => u.Type == "Id").Value;
-																_identityService.Identify(id, SegmentIOKeys.Categories.Identity, action);
-																return id;
-												}
-												return string.Empty;
-								}
-
-								private string GetUserRole()
-								{
-												if (this.User.Claims.Any())
-												{
-																return this.User.Claims.Single(u => u.Type == "Role").Value;
-												}
-												return string.Empty;
-								}
-
-								private async Task<PoppinUser> GetUserProfile(VendorMemberRequest req)
-								{
-												var user = await _userService.GetUserByEmail(req.Email);
-												if (user == null)
-												{
-																var u = await _identityService.GetUserByEmail(req.Email);
-																if (u != null)
-																{
-																				user = new PoppinUser(u.User);
-																				_userService.AddUser(user);
-																}
-												}
-												return user;
-								}
-
-								private async Task<PoppinUser> GetCurrentUserProfile(string userId)
-								{
-												var user = await _userService.GetUserById(userId);
-												if (user == null)
-												{
-																var u = await _identityService.GetUserById(userId);
-																if (u != null)
-																{
-																				user = new PoppinUser(u.User);
-																				_userService.AddUser(user);
-																}
-												}
-												return user;
 								}
 
 								// DELETE api/Vendors/5

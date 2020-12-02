@@ -30,6 +30,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+[Dd]ockerpub/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -352,3 +353,10 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 log.txt
+*.zip
+wwwroot/index.html
+wwwroot/assets/poppin-ui.js
+wwwroot/assets/poppin-ui.map
+wwwroot/assets/test-support.js
+wwwroot/assets/vendor.js
+wwwroot/tests/index.html

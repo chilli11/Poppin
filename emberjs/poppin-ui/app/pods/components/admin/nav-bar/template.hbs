@@ -1,5 +1,9 @@
-<BsNavbar class="navbar-dark bg-primary" as |navbar|>
-	<div>
+<BsNavbar
+	class="navbar-dark bg-primary"
+  @collapsed={{this.collapsed}}
+  @onCollapse={{action (mut collapsed) true}}
+  @onExpand={{action (mut collapsed) false}} as |navbar|>
+	<div class="navbar-header">
 		<navbar.toggle />
 		<a class="navbar-brand mr-0 mr-md-2 navbar-absolute-logo" href="/">Poppin</a>
 	</div>
@@ -20,6 +24,9 @@
 					</nav.item>
 					<nav.item>
 						<nav.linkTo @route="vendors.add">Add a vendor</nav.linkTo>
+					</nav.item>
+					<nav.item>
+						<nav.linkTo @route="admin.categories">Categories</nav.linkTo>
 					</nav.item>
 				{{/if}}
 				<nav.item>

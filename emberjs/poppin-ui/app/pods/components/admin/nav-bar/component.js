@@ -1,10 +1,13 @@
 import Component from '@glimmer/component'
 import { inject as service } from '@ember/service';
 import { computed, action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class NavBarComponent extends Component {
 	@service accountService;
 	@service router;
+
+	@tracked collapsed = true;
 
 	@computed('accountService.authInfo')
 	get authInfo() {
@@ -31,6 +34,6 @@ export default class NavBarComponent extends Component {
 	@action
 	logout() {
 		return this.accountService.logout()
-			.then(this.router.transitionTo('account'));
+			.then(this.router.transitionTo('index'));
 	}
 }

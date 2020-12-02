@@ -17,6 +17,7 @@ using Poppin.Data;
 using Poppin.Interfaces;
 using Poppin.Models.Identity;
 using Poppin.Services;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -35,24 +36,50 @@ namespace Poppin
 								// This method gets called by the runtime. Use this method to add services to the container.
 								public void ConfigureServices(IServiceCollection services)
 								{
-												services.AddDbContext<ApplicationDbContext>(options =>
-																options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+												services.AddDbContextPool<ApplicationDbContext>(options =>
+																options.UseMySql(Configuration.GetConnectionString("MySQLConnection"),
+																				mySqlOptions => {
+																								mySqlOptions.EnableRetryOnFailure(
+																												maxRetryCount: 10,
+																												maxRetryDelay: TimeSpan.FromSeconds(10),
+																												errorNumbersToAdd: null
+																								);
+																				})
+																				.EnableSensitiveDataLogging()
+												);
 												services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
 																.AddEntityFrameworkStores<ApplicationDbContext>()
 																.AddDefaultTokenProviders();
 
+												services.AddLogging();
+												ConfigNLog();
+
 												// JWT
 												var jwtSettings = new JwtSettings();
-												var oAuthSettings = new OAuthSettings();
 												Configuration.Bind(nameof(jwtSettings), jwtSettings);
-												Configuration.Bind(nameof(oAuthSettings), oAuthSettings);
+												
+												services.Configure<JwtSettings>(
+																Configuration.GetSection(nameof(JwtSettings)));
+												services.AddTransient<IJwtSettings, JwtSettings>(sp =>
+																sp.GetRequiredService<IOptions<JwtSettings>>().Value);
 
-												services.AddSingleton(jwtSettings);
-												services.AddSingleton(oAuthSettings);
+												services.Configure<OAuthSettings>(
+																Configuration.GetSection(nameof(OAuthSettings)));
+												services.AddTransient<IOAuthSettings, OAuthSettings>(sp =>
+																sp.GetRequiredService<IOptions<OAuthSettings>>().Value);
+
+												services.Configure<HERESettings>(
+																Configuration.GetSection(nameof(HERESettings)));
+												services.AddTransient<IHERESettings, HERESettings>(sp =>
+																sp.GetRequiredService<IOptions<HERESettings>>().Value);
+
+												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 												services.AddHttpClient<FBAuthService>();
 												services.AddHttpClient<GoogleAuthService>();
-												services.AddScoped<IOAuthHandler, OAuthHandler>();
-												services.AddScoped<IIdentityService, IdentityService>();
+												services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();
+												services.AddTransient<IOAuthHandler, OAuthHandler>();
+												services.AddTransient<IIdentityService, IdentityService>();
 												services.AddAuthentication(a =>
 												{
 																a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -81,7 +108,7 @@ namespace Poppin
 												// requires using Microsoft.Extensions.Options
 												services.Configure<MongoDBSettings>(
 																Configuration.GetSection(nameof(MongoDBSettings)));
-												services.AddSingleton<IMongoDBSettings, MongoDBSettings>(sp =>
+												services.AddTransient<IMongoDBSettings, MongoDBSettings>(sp =>
 																sp.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 												services.AddHostedService<ConfigureMongoDbIndexesService>();
 
@@ -90,14 +117,15 @@ namespace Poppin
 												Segment.Analytics.Initialize(segmentSettings.Key);
 
 												services.Configure<Office365Settings>(Configuration.GetSection(nameof(Office365Settings)));
-												services.AddSingleton<ISmtpService, SmtpService>();
+												services.AddTransient<ISmtpService, SmtpService>();
 
-												services.AddSingleton<ILocationService, LocationService>();
-												services.AddSingleton<IVendorService, VendorService>();
-												services.AddSingleton<IUserService, UserService>();
-												services.AddSingleton<ILogActionService, LogActionService>(); 
-												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+												services.AddTransient<ILocationService, LocationService>();
+												services.AddTransient<IVendorService, VendorService>();
+												services.AddTransient<IUserService, UserService>();
+												services.AddTransient<ILogActionService, LogActionService>(); 
 												services.AddHttpClient<IYelpService, YelpService>();
+
+												services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 												services.AddControllersWithViews();
 												services.AddRazorPages();
@@ -105,6 +133,7 @@ namespace Poppin
 												services.AddSwaggerGen(s =>
 												{
 																s.SwaggerDoc("v1", new OpenApiInfo() { Title = "Poppin API", Version = "v1" });
+																s.OperationFilter<SwaggerOperationFilter>();
 
 																var scheme = new OpenApiSecurityScheme
 																{
@@ -136,8 +165,8 @@ namespace Poppin
 								{
 												if (env.IsDevelopment())
 												{
-																app.UseDeveloperExceptionPage();
-																app.UseDatabaseErrorPage();
+																app.UseDeveloperExceptionPage()
+																				.UseDatabaseErrorPage();
 												}
 												else
 												{
@@ -163,7 +192,7 @@ namespace Poppin
 												app.UseRewriter(options);
 
 
-												app.UseHttpsRedirection();
+												//app.UseHttpsRedirection();
 												//app.UseDefaultFiles();
 												// index.html is the default if a file isn't asked for
 												app.UseDefaultFiles(new DefaultFilesOptions()
@@ -202,6 +231,13 @@ namespace Poppin
 																context.Response.ContentType = "text/html";
 																await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
 												});
+								}
+
+								public void ConfigNLog()
+								{
+												IConfigurationRoot config = new ConfigurationBuilder()
+																.AddJsonFile(path: "appsettings.json").Build();
+												NLog.Extensions.Logging.ConfigSettingLayoutRenderer.DefaultConfiguration = config;
 								}
 				}
 }

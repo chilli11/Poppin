@@ -3,10 +3,11 @@ using MongoDB.Bson.Serialization.Attributes;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
+using Poppin.Models.Geocoding.HERE;
+using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,9 +26,16 @@ namespace Poppin.Models
 												YelpId = v.YelpId;
 												Phone = v.Phone;
 												Address = new Address(v.Address);
+												LogoUrl = v.LogoUrl;
+												MainPhotoUrl = v.MainPhotoUrl;
+												AddlPhotoUrls = v.AddlPhotoUrls != null ? v.AddlPhotoUrls.ToHashSet() : null;
+												Website = v.Website;
+												Menus = v.Menus;
+												YelpUrl = v.YelpUrl;
 												Capacity = v.Capacity;
-												Hours = v.Hours;
+												Categories = v.Categories.ToHashSet();
 												VisitLength = v.VisitLength;
+												Hours = v.Hours;
 								}
 
 								public PoppinLocation(YelpBusiness v)
@@ -40,16 +48,32 @@ namespace Poppin.Models
 												YelpDetails = v;
 								}
 
+								public PoppinLocation(Place p)
+								{
+												Name = p.Title;
+												Address = new Address(p.Address, p.Position);
+												HereId = p.Id;
+								}
+
 								[BsonId]
 								[BsonRepresentation(BsonType.ObjectId)]
 								public string Id { get; set; }
 								public string YelpId { get; set; }
-
-								[ForeignKey("Vendor")]
+								public string HereId { get; set; }
 								public string VendorId { get; set; }
+
 								public string Name { get; set; }
 								public string Phone { get; set; }
+								public string LogoUrl { get; set; }
+								public string MainPhotoUrl { get; set; }
+								public HashSet<string> AddlPhotoUrls { get; set; }
+								public string Website { get; set; }
+								public HashSet<Menu> Menus { get; set; }
+								public string YelpUrl { get; set; }
+
 								public Address Address { get; set; }
+								public HashSet<string> Categories { get; set; }
+
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
 
@@ -57,7 +81,6 @@ namespace Poppin.Models
 								/// VisitLength is in minutes
 								/// </summary>
 								public int VisitLength { get; set; }
-								public string MenuUrl { get; set; }
 								public IList<HourSet> Hours { get; set; }
 
 								[BsonDateTimeOptions]
@@ -83,6 +106,40 @@ namespace Poppin.Models
 												var s = await _locationService.GetCheckinsForLocation(Id);
 												CrowdSize = (int)Math.Round(s.Select(c => c.ReliabilityScore).Sum());
 												return;
+								}
+
+								public void SetCrowdSize(IEnumerable<Checkin> checkins) =>
+												CrowdSize = (int)Math.Round(checkins.Select(c => c.ReliabilityScore).Sum());
+
+								public override bool Equals(Object obj)
+								{
+												var loc1 = this;
+												var loc2 = obj as PoppinLocation;
+												if (loc1 == null && loc2 == null) { return true; }
+												if (loc1 == null | loc2 == null) { return false; }
+												if (loc1.Id == loc2.Id) { return true; }
+												return false;
+								}
+								public override int GetHashCode()
+								{
+												string code = Id;
+												return code.GetHashCode();
+								}
+				}
+
+				public class PoppinLocComparer : IEqualityComparer<PoppinLocation>
+				{
+								public bool Equals(PoppinLocation loc1, PoppinLocation loc2)
+								{
+												if (loc1 == null && loc2 == null) { return true; }
+												if (loc1 == null | loc2 == null) { return false; }
+												if (loc1.Id == loc2.Id) { return true; }
+												return false;
+								}
+								public int GetHashCode(PoppinLocation l)
+								{
+												string code = l.Id;
+												return code.GetHashCode();
 								}
 				}
 }

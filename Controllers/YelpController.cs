@@ -12,10 +12,8 @@ namespace Poppin.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class YelpController : ControllerBase
+    public class YelpController : PoppinBaseController
     {
-        private readonly ILocationService _locationService;
-        private readonly IYelpService _yelpService;
         public YelpController(ILocationService locationService ,IYelpService yelpService)
         {
             _locationService = locationService;

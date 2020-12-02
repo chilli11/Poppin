@@ -1,9 +1,33 @@
 <div class="col-md-6">
+	<BsAlert
+		@visible={{this.showStatusMsg}}
+		@fade={{true}}
+		@type={{this.statusType}}
+		@dismissible={{true}}
+		@onDismissed={{fn this.hideMsg}}>
+		{{#each this.statusMsgs as |msg|}}
+			<p>{{msg}}</p>
+		{{/each}}
+	</BsAlert>
 	<div class="card">
 		<div class="card-header card-header-primary">
-			<h4 class="card-title">My Account</h4>
+			{{#if @profile.profilePhoto}}
+				<div class="text-center">
+					<img src={{@profile.profilePhoto}} class="profile-photo" style="max-height: 100px;" />
+				</div>
+			{{/if}}
+			<h4 class="card-title">
+				<span>My Profile</span>
+				<span class="btn btn-sm btn-info" style="margin:0" role="link" {{on "click" this.startEdit}}>Edit</span>
+			</h4>
 		</div>
 		<div class="card-body">
+			{{#unless @profile.user.emailConfirmed}}
+				<p>
+					Your email isn't confirmed yet.
+					<a href="javascript:void(0);" class="btn btn-small btn-primary" {{on 'click' this.resendEmail}}>click here</a> to resend the confirmation link.
+				</p>
+			{{/unless}}
 			<dl>
 				<dt>Name:</dt>
 				<dd>{{@profile.firstName}} {{@profile.lastName}}</dd>
@@ -12,6 +36,39 @@
 				<dt>Role:</dt>
 				<dd>{{@profile.role}}</dd>
 			</dl>
+			<hr>
+			{{#if this.isEdit}}
+				<Account::ProfileForm
+					@ageRanges={{this.ageRanges}}
+					@genders={{this.genders}}
+					@yelpCategories={{this.yelpCategories}}
+					@categories={{this.categories}}
+					@profile={{@profile}}
+					@refresh={{@refresh}}
+					@isEdit={{true}}
+					@cancelAction={{this.endEdit}}
+					@resolveAction={{this.endEdit}} />
+			{{else}}
+				<dl>
+					<dt>Age:</dt>
+					<dd>{{this.ageRange.value}}</dd>
+					<dt>Gender:</dt>
+					<dd>{{this.gender.value}}</dd>
+					<dt>Favorite Categories:</dt>
+					<dd>
+						{{#each this.categories as |cat|}}
+							{{cat.title}}{{unless (eq cat this.categories.lastObject) ' //'}}
+						{{/each}}
+					</dd>
+				</dl>				
+			{{/if}}
+			<hr>
+			{{#if @vendors}}
+				<h5>Vendors</h5>
+				<Vendors::VendorList
+					@vendors={{@vendors}}
+					@clickAction={{@vendorClickAction}} />
+			{{/if}}
 		</div>
 	</div>
 </div>
@@ -21,7 +78,7 @@
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">My Favorites</h4>
 		</div>
-		<div class="card-body">
+		<div class="card-body location-list">
 			<Locations::LocationList
 			 @locations={{@favorites}}
 			 @clickAction={{@locationClickAction}}/>

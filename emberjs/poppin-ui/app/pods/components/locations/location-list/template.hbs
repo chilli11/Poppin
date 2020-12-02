@@ -1,10 +1,11 @@
 {{#each @locations as |loc|}}
-	<div class="card">
+	<div class="card location{{if (eq loc.vendorId @vendorId) ' vendor-match'}}">
 		<div class="card-body" role="button" {{on "click" (fn @clickAction loc)}}>
 			<span class="strong">{{loc.name}}</span> //
-			<span>{{loc.categories}}</span>
-			<hr>
 			<span>{{loc.address.line1}} // {{loc.address.city}}, {{loc.address.state}}</span>
+			<span class="badge badge-default">
+				{{#each loc.categories as |cat i|}}{{if (gt i 0) ', '}}{{cat}}{{/each}}
+			</span>
 		</div>
 	</div>
 {{/each}}

@@ -1,5 +1,6 @@
 import StatefulComponent from 'poppin-ui/classes/stateful-component';
 import { action, computed } from '@ember/object';
+import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
 import { states, actions } from './constants';
 import { tracked } from '@glimmer/tracking';
@@ -7,6 +8,7 @@ import { tracked } from '@glimmer/tracking';
 export default class LocationFormComponent extends StatefulComponent {
 	@service store;
 	@service locationsService;
+	@service categoriesService;
 	@service accountService;
 	
 	@tracked modalTitle;
@@ -26,6 +28,13 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.accountService.profile;
 	}
 
+	// eslint-disable-next-line ember/require-computed-property-dependencies
+	@computed('categoriesService.categories')
+	get fullCategories() {
+		const cats = this.categoriesService.categories;
+		return A(cats.filter(c => (this.args.location.categories || []).indexOf(c.slug) > -1));
+	}
+
 	get authorized() {
 		return this.authInfo && this.authInfo.authorized;
 	}
@@ -41,10 +50,10 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	// eslint-disable-next-line ember/require-computed-property-dependencies
 	@computed('accountService.profile.favorites')
-	get isFavorite() {
+	@tracked isFavorite = (() => {
 		const locId = this.args.location.id;
 		return this.profile ? (this.profile.favorites || []).indexOf(locId) !== -1 : false;
-	}
+	})();
 
 	transitions = {
 		[states.IDLE]: {
@@ -74,9 +83,9 @@ export default class LocationFormComponent extends StatefulComponent {
 		const method = this.isFavorite ? 'removeFavorite' : 'addFavorite';
 		return this.accountService[method](this.args.location.id)
 			.then(() => {
-				console.log(this.isFavorite);
+				this.isFavorite = !this.isFavorite;
 				return this.dispatch(actions.END_LOADING);
-			}).catch(({ errors }) => this.dispatch(actions.REJECT_ACTION, errors));
+			}).catch(data => this.dispatch(actions.REJECT_ACTION, data.errors));
 	}
 
 	[actions.UPDATE_CROWD_SIZE](data) {

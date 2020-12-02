@@ -20,10 +20,16 @@ namespace Poppin.Contracts.Requests
 								public string Name { get; set; }
 								public string Phone { get; set; }
 								public AddressDTO Address { get; set; }
+								public string LogoUrl { get; set; }
+								public string MainPhotoUrl { get; set; }
+								public string[] AddlPhotoUrls { get; set; }
+								public string Website { get; set; }
+								public HashSet<Menu> Menus { get; set; }
+								public string YelpUrl { get; set; }
 								public string[] Categories { get; set; }
 								public int Capacity { get; set; }
 								public int CrowdSize { get; set; }
-								public IList<HourSet> Hours { get; set; }
 								public int VisitLength { get; set; }
+								public IList<HourSet> Hours { get; set; }
 				}
 }

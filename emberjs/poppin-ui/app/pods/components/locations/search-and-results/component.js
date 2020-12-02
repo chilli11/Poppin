@@ -10,14 +10,18 @@ export default class YelpSearchAndResultsComponent extends Component {
 
 	@tracked results;
 	@tracked isLoading;
+	get lastSearch() {
+		return this.locationsService.lastSearch;
+	}
 	get businesses() {
-		return this.results ? this.results.businesses : null;
+		return this.results ? this.results.businesses : (this.lastSearch ? this.lastSearch : null);
 	}
 
 	@action
 	searchMethod(params) {
 		this.isLoading = true;
-		this.locationsService.getLocationsByYelpList(params)
+		params.radius = parseFloat(params.radius);
+		this.locationsService.getLocationsBySearch(params)
 			.then(data => this.results = data)
 			.catch(data => alert(data))
 			.finally(() => this.isLoading = false);
@@ -26,5 +30,10 @@ export default class YelpSearchAndResultsComponent extends Component {
 	@action
 	populateResults() {
 		return true;
+	}
+
+	@action
+	joinCategories(loc) {
+		return loc.categories.join(', ');
 	}
 }

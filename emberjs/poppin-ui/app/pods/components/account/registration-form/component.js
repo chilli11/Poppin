@@ -18,9 +18,6 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		[states.IDLE]: {
 			[actions.VALIDATE_PASSWORD]: states.VALIDATING
 		},
-		[states.ERROR]: {
-			[actions.VALIDATE_PASSWORD]: states.VALIDATING
-		},
 		[states.VALIDATING]: {
 			[actions.REJECT]: states.ERROR,
 			[actions.SUBMIT]: states.SUBMITTING
@@ -28,8 +25,21 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 		[states.SUBMITTING]: {
 			[actions.REJECT]: states.ERROR,
 			[actions.RESOLVE]: states.SUCCESS
+		},
+		[states.ERROR]: {
+			[actions.VALIDATE_PASSWORD]: states.VALIDATING
+		},
+		[states.SUCCESS]: {
+			[actions.RESEND_EMAIL]: states.SUBMITTING
 		}
 	};
+
+	get isLoading() {
+		return /ing/i.test(this.machineState);
+	}
+	get isSuccess() {
+		return this.machineState == states.SUCCESS;
+	}
 
 	@tracked email;
 	@tracked password;
@@ -54,37 +64,47 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 	}
 
 	[actions.VALIDATE_PASSWORD]() {
-		this.showMsg = false;
-		const msgs = [];
+		this.hideMsg();
+		const msgs =[];
 		if (!this.isValidPassword) msgs.push(invalidPasswordErrorMsg);
 		if (this.password !== this.password2) msgs.push('Passwords don\'t match');
-		if (msgs.length) return this.dispatch(actions.REJECT, msgs);
+		if (msgs.length) return this.dispatch(actions.REJECT, { errors: msgs });
 
 		set(this, 'msgs', msgs);
 		return this.dispatch(actions.SUBMIT);
 	}
 
 	[actions.SUBMIT]() {
-		this.showMsg = false;
 		const { email, password, password2 } = this;
-		this.showMsg = false;
+		this.hideMsg();
 		this.accountService.registerAccount({ email, password, password2 })
 			.then((response) => {
 				if (response.errors && response.errors.length) throw response;
 				return this.dispatch(actions.RESOLVE, ['Registrtaion success!']);
-			}).catch((response) => this.dispatch(actions.REJECT, response.errors));
+			}).catch((response) => this.dispatch(actions.REJECT, response));
 	}
 
-	[actions.REJECT](msgs) {
-		set(this, 'msgs',  msgs || []);
+	[actions.RESEND_EMAIL]() {
+		const { email } = this;
+		this.hideMsg();
+		this.accountService.resendConfirmationEmail({ email })
+		.then((response) => {
+			if (response.errors && response.errors.length) throw response;
+			return this.dispatch(actions.RESOLVE, ['Email resent!']);
+		}).catch((response) => this.dispatch(actions.REJECT, response));
+	}
+
+	[actions.REJECT](response) {
+		set(this, 'msgs',  response.errors || ['Something went wrong... Try again']);
 		this.msgType = 'danger';
 		this.showMsg = true;
 	}
 
 	[actions.RESOLVE](msgs) {
-		set(this, 'msgs', msgs || []);
+		set(this, 'msgs', msgs || ['Success!']);
 		this.msgType = 'success';
 		this.showMsg = true;
+
 	}
 
 	@action
@@ -103,5 +123,10 @@ export default class 	RegistrationFormComponent extends StatefulComponent {
 	hideMsg() {
 		this.showMsg = false;
 		set(this, 'msgs', []);
+	}
+
+	@action
+	resendEmail() {
+		return this.dispatch(actions.RESEND_EMAIL);
 	}
 }
