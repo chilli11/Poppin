@@ -352,3 +352,8 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 log.txt
+wwwroot/assets/poppin-ui.js
+wwwroot/assets/poppin-ui.map
+wwwroot/assets/test-support.js
+wwwroot/assets/vendor.js
+wwwroot/tests/index.html
