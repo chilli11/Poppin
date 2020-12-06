@@ -12,6 +12,8 @@ namespace Poppin.Contracts.Requests
 								public string Location { get; set; }
 								public GeoCoords Geo { get; set; }
 								public double Radius { get; set; }
+								public int Offset { get; set; }
+								public int PageLength { get; set; }
 								public HashSet<Category> Categories { get; set; }
 				}
 }

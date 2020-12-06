@@ -15,6 +15,8 @@ namespace Poppin.Models
 				public class PoppinSearchResponse
 				{
 								public int Total { get; set; }
+								public int Offset { get; set; }
+								public int PageLength { get; set; }
 								public List<PoppinLocation> Businesses { get; set; }
 								public LocationSearchRequest SearchParams { get; set; }
 				}

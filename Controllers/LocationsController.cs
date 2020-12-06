@@ -139,6 +139,7 @@ namespace Poppin.Controllers
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
                 var catSlugs = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
+                var total = 0;
 
                 if (search.Geo.Coordinates.Length == 0)
 																{
@@ -167,8 +168,11 @@ namespace Poppin.Controllers
                     {
                         locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
                     }
+                    total = locList.Count;
+                    locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
 
-                    locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
+                    if (locList.Count > 0)
+                        locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                 }
 
                 var actionStr = new Dictionary<string, string>()
@@ -190,7 +194,9 @@ namespace Poppin.Controllers
 
                 return Ok(new PoppinSearchResponse()
                 {
-                    Total = locList.Count,
+                    Total = total,
+                    Offset = search.Offset,
+                    PageLength = search.PageLength,
                     Businesses = locList,
                     SearchParams = search
                 });
