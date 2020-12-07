@@ -57,7 +57,7 @@ export default class LocationsService extends Service {
 				resource: HttpResources.getLocationsByYelpList,
 				body: params
 			}).then((response) => {
-				this.lastSearch = response.businesses;
+				this.lastSearch = response;
 				return response;
 			});
 		} catch (e) {
@@ -78,7 +78,7 @@ export default class LocationsService extends Service {
 				resource: HttpResources.getLocationsBySearch,
 				body: params
 			}).then((response) => {
-				this.lastSearch = response.businesses;
+				this.lastSearch = response;
 				return response;
 			});
 		} catch (e) {
