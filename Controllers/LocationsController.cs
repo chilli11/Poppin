@@ -138,18 +138,7 @@ namespace Poppin.Controllers
             try
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
-                if ((search.Categories == null || search.Categories.Count == 0) && search.CategorySlugs != null && search.CategorySlugs.Count > 0)
-                {
-                    var cats = await _locationService.GetCategoriesBySlug(search.CategorySlugs);
-                    search.Categories = cats.ToHashSet();
-                }
-                else if (search.Categories != null && search.Categories.Count > 0 && search.Categories.First().Id == null)
-                {
-                    search.CategorySlugs = search.Categories.Select(c => c.Slug).ToHashSet();
-                    var cats = await _locationService.GetCategoriesBySlug(search.CategorySlugs);
-                    search.Categories = cats.ToHashSet();
-                }
-
+                var catSlugs = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
                 var total = 0;
 
                 if (search.Geo.Coordinates.Length == 0)
@@ -163,6 +152,12 @@ namespace Poppin.Controllers
 																				}
                     var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
                     search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
+																}
+
+                if (search.Categories.Count > 0 && search.Categories.First().Id == null)
+																{
+                   
+                    search.Categories = catSlugs.ToHashSet();
 																}
 
                 var locList = await _locationService.GetBySearch(search);
@@ -184,14 +179,14 @@ namespace Poppin.Controllers
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
-                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null }
+                    { "SearchCategories", catSlugs.ToString() }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", search.CategorySlugs }
+                    { "SearchCategories", catSlugs }
                 };
 
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);

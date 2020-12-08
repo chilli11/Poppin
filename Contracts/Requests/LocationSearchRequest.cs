@@ -14,7 +14,6 @@ namespace Poppin.Contracts.Requests
 								public double Radius { get; set; }
 								public int Offset { get; set; }
 								public int PageLength { get; set; }
-								public HashSet<string> CategorySlugs { get; set; }
 								public HashSet<Category> Categories { get; set; }
 				}
 }
