@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Controllers
 {
-				[Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class LocationsController : PoppinBaseController
     {
@@ -134,7 +134,7 @@ namespace Poppin.Controllers
 
         [HttpPost("search")]
         public async Task<IActionResult> Search(LocationSearchRequest search)
-								{
+        {
             try
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
@@ -152,17 +152,17 @@ namespace Poppin.Controllers
                 }
 
                 if (search.Geo.Coordinates.Length == 0)
-																{
+                {
                     if (string.IsNullOrEmpty(search.Location))
-																				{
+                    {
                         return BadRequest(new GenericFailure
                         {
                             Errors = new[] { "`location` or `geo` parameter required" }
                         });
-																				}
+                    }
                     var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
                     search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
-																}
+                }
 
                 var locList = await _locationService.GetBySearch(search);
 
@@ -173,7 +173,15 @@ namespace Poppin.Controllers
                         locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
                     }
                     total = locList.Count;
-                    locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
+
+                    if (search.PageLength > 0)
+                    {
+                        locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
+                    }
+                    else
+                    {
+                        locList = locList.Skip(search.Offset).ToList();
+                    }
 
                     if (locList.Count > 0)
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
