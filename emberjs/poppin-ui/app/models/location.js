@@ -15,6 +15,9 @@ export default class LocationModel extends Model {
   @attr('number') capacity;
   @attr('number') crowdSize;
 	@attr('number') visitLength;
+	@attr('number') waitTime;
+	@attr('number') price;
+	@attr('number') rating
 	@attr hours;
   @attr('date') lastUpdate;
   @attr('boolean') atCapacity
