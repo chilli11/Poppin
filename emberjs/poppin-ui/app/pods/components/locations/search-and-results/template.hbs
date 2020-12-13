@@ -22,8 +22,12 @@
 		</div>
 		<div class="card-body location-list">
 			<Locations::LocationList
+				@offset={{this.offset}}
+				@more={{this.more}}
 				@vendorId={{@vendorId}}
 				@locations={{this.businesses}}
+				@getNextPage={{this.getNextPage}}
+				@getPrevPage={{this.getPrevPage}}
 				@joinCategories={{this.joinCategories}}
 				@clickAction={{@clickAction}} />
 		</div>

@@ -10,12 +10,14 @@
 export class LocationSearchRequest {
 	term;
 	location;
+	categories = [];
 	geo = {
 		type: 'Point',
 		coordinates: []
 	};
 	radius = 40000;
-	categories = [];
+	pageLength = 20;
+	offset = 0;
 
 	constructor(params) {
 		if ((!params.geo || !params.geo.coordinates || !params.geo.coordinates.length) && !params.location) {
@@ -23,9 +25,11 @@ export class LocationSearchRequest {
 		}
 		this.term = params.term;
 		this.location = params.location;
+		this.categories = params.categories || [];
 		if (params.geo && params.geo.coordinates && params.geo.coordinates.length)
 			this.geo = params.geo;
 		this.radius = params.radius || 40000;
-		this.categories = params.categories || [];
+		this.pageLength = params.pageLength || 20;
+		this.offset = params.offset || 0;
 	}
 }
