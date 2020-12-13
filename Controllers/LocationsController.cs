@@ -230,9 +230,9 @@ namespace Poppin.Controllers
         public async Task<IActionResult> Post(PoppinLocationRequest _location)
         {
             if (GetUserRole() != RoleTypes.Admin)
-												{
+            {
                 return Unauthorized();
-												}
+            }
             var location = new PoppinLocation(_location);
             var isExisting = await _locationService.CheckExists(location);
             location.LastUpdate = DateTime.UtcNow;
