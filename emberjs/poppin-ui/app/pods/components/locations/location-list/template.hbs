@@ -9,3 +9,10 @@
 		</div>
 	</div>
 {{/each}}
+<hr>
+{{#if (gt @offset 0)}}
+	<span class="btn btn-small primary left" {{on "click" @getPrevPage}}>PREV</span>
+{{/if}}
+{{#if @more}}
+	<span class="btn btn-small primary right" {{on "click" @getNextPage}}>NEXT</span>
+{{/if}}

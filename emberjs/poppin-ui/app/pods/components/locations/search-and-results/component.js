@@ -8,23 +8,40 @@ export default class YelpSearchAndResultsComponent extends Component {
 	@service locationsService;
 	@service router;
 
-	@tracked results;
 	@tracked isLoading;
-	get lastSearch() {
+
+	get results() {
 		return this.locationsService.lastSearch;
 	}
 	get businesses() {
-		return this.results ? this.results.businesses : (this.lastSearch ? this.lastSearch : null);
+		return this.results ? this.results.businesses : null;
 	}
+	get currentPage() {
+		if (this.results) {
+			return this.results ? this.results.offset / this.results.pageLength : 0;
+		}
+		return 0;
+	}
+	get offset() {
+		return this.results ? this.results.offset : 0;
+	}
+	get more() {
+		if (this.results)
+			return this.results.total > this.results.offset + this.results.pageLength;
+		return false;
+	}
+	
 
 	@action
 	searchMethod(params) {
 		this.isLoading = true;
 		params.radius = parseFloat(params.radius);
-		this.locationsService.getLocationsBySearch(params)
-			.then(data => this.results = data)
+		return this.locationsService.getLocationsBySearch(params)
 			.catch(data => alert(data))
-			.finally(() => this.isLoading = false);
+			.finally(() => {
+				window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+				this.isLoading = false;
+			});
 	}
 
 	@action
@@ -35,5 +52,19 @@ export default class YelpSearchAndResultsComponent extends Component {
 	@action
 	joinCategories(loc) {
 		return loc.categories.join(', ');
+	}
+
+	@action
+	getNextPage() {
+		const params = this.results.searchParams;
+		params.offset = params.offset + params.pageLength;
+		return this.searchMethod(params);
+	}
+
+	@action
+	getPrevPage() {
+		const params = this.results.searchParams;
+		params.offset = params.offset - params.pageLength;
+		return this.searchMethod(params);
 	}
 }
