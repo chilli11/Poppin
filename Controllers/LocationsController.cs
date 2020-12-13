@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Controllers
 {
-				[Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class LocationsController : PoppinBaseController
     {
@@ -134,30 +134,35 @@ namespace Poppin.Controllers
 
         [HttpPost("search")]
         public async Task<IActionResult> Search(LocationSearchRequest search)
-								{
+        {
             try
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
-                var catSlugs = await _locationService.GetCategoriesBySlug(search.Categories.Select(c => c.Slug));
+                var total = 0;
+                if ((search.Categories == null || search.Categories.Count == 0) && search.CategorySlugs != null && search.CategorySlugs.Count > 0)
+                {
+                    var cats = await _locationService.GetCategoriesBySlug(search.CategorySlugs);
+                    search.Categories = cats.ToHashSet();
+                }
+                else if (search.Categories != null && search.Categories.Count > 0 && search.Categories.First().Id == null)
+                {
+                    search.CategorySlugs = search.Categories.Select(c => c.Slug).ToHashSet();
+                    var cats = await _locationService.GetCategoriesBySlug(search.CategorySlugs);
+                    search.Categories = cats.ToHashSet();
+                }
 
                 if (search.Geo.Coordinates.Length == 0)
-																{
+                {
                     if (string.IsNullOrEmpty(search.Location))
-																				{
+                    {
                         return BadRequest(new GenericFailure
                         {
                             Errors = new[] { "`location` or `geo` parameter required" }
                         });
-																				}
+                    }
                     var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
                     search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
-																}
-
-                if (search.Categories.Count > 0 && search.Categories.First().Id == null)
-																{
-                   
-                    search.Categories = catSlugs.ToHashSet();
-																}
+                }
 
                 var locList = await _locationService.GetBySearch(search);
 
@@ -167,22 +172,33 @@ namespace Poppin.Controllers
                     {
                         locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
                     }
+                    total = locList.Count;
 
-                    locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
+                    if (search.PageLength > 0)
+                    {
+                        locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
+                    }
+                    else
+                    {
+                        locList = locList.Skip(search.Offset).ToList();
+                    }
+
+                    if (locList.Count > 0)
+                        locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                 }
 
                 var actionStr = new Dictionary<string, string>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
-                    { "SearchCategories", catSlugs.ToString() }
+                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", catSlugs }
+                    { "SearchCategories", search.CategorySlugs }
                 };
 
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
@@ -190,7 +206,9 @@ namespace Poppin.Controllers
 
                 return Ok(new PoppinSearchResponse()
                 {
-                    Total = locList.Count,
+                    Total = total,
+                    Offset = search.Offset,
+                    PageLength = search.PageLength,
                     Businesses = locList,
                     SearchParams = search
                 });
@@ -212,9 +230,9 @@ namespace Poppin.Controllers
         public async Task<IActionResult> Post(PoppinLocationRequest _location)
         {
             if (GetUserRole() != RoleTypes.Admin)
-												{
+            {
                 return Unauthorized();
-												}
+            }
             var location = new PoppinLocation(_location);
             var isExisting = await _locationService.CheckExists(location);
             location.LastUpdate = DateTime.UtcNow;

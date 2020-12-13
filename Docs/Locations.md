@@ -11,18 +11,18 @@ classes in order to support full location details from our own database.
 {
   id: string,
   yelpId: string,
-  hereId: string, // NEW :: not yet in use
+  hereId: string, :: not yet in use
   vendorId: string,
   name: string,
   phone: string,
-  logoUrl: string, // NEW
-  mainPhotoUrl: string, // NEW
-  addlPhotoUrls: string[], // NEW
-  website: string, // NEW
-  menus: [Menu](#menu-class)[], // NEW 
-  yelpUrl: string, // NEW
+  logoUrl: string,
+  mainPhotoUrl: string,
+  addlPhotoUrls: string[],
+  website: string,
+  menus: [Menu](#menu-class)[], 
+  yelpUrl: string,
   address: [Address](#address-class),
-  categories: string[], // NEW
+  categories: string[],
   capacity: int,
   capacityConfirmed: bool,
   crowdsize: int,
@@ -45,13 +45,13 @@ classes in order to support full location details from our own database.
   yelpId: string,
   name: string,
   phone: string,
-  mainPhotoUrl: string, // NEW
-  addlPhotoUrls: string[], // NEW
-  website: string, // NEW
-  menus: [Menu](#menu-class)[], // NEW 
-  yelpUrl: string, // NEW
+  mainPhotoUrl: string,
+  addlPhotoUrls: string[],
+  website: string,
+  menus: [Menu](#menu-class)[],
+  yelpUrl: string,
   address: [Address](#address-class),
-  categories: string[], // NEW
+  categories: string[],
   capacity: int,
   capacityConfirmed: bool,
   visitLength: int,
@@ -70,7 +70,20 @@ classes in order to support full location details from our own database.
   location: string, // required if no geo,
   geo: [GeoJsonPoint](https://docs.mongodb.com/manual/reference/geojson/#point),
   radius: string, // float, in meters
+	offset: int, // for pagination, 0 is first page // NEW
+	pageLength: int, // default 20 // NEW
   categories: string // comma separated list of slugs from the category list
+}
+```
+
+#### PoppinSearchResponse Class
+```
+{
+	total: int, // total locations in search
+	offset: int, // page offset; number of locations, not page number // NEW
+	pageLength: int, // number of items to return // NEW
+	businesses: PoppinLocation[],
+	searchParams: LocationSearchRequest
 }
 ```
 
