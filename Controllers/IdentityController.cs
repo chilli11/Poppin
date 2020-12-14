@@ -523,19 +523,6 @@ namespace Poppin.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Gets user id claim from current token
-        /// </summary>
-        /// <returns>String</returns>
-        private string GetUserId()
-        {
-            if (HttpContext.User.Claims.Any())
-            {
-                return HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-            }
-            return string.Empty;
-        }
-
         // helper methods
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace Poppin.Interfaces
 		void Identify(User user, string category, string action);
 		void Identify(string userId, string category, string action);
 
-		Task<AuthenticationResult> RefreshToken(string token, string ipAddress);
+		//Task<AuthenticationResult> RefreshToken(string token, string ipAddress);
 		Task<AuthenticationResult> RefreshToken(string token, string refreshToken, string ipAddress);
 		Task<bool> RevokeToken(string token, string ipAddress);
 		bool IsValidPassword(string password);

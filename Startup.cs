@@ -46,7 +46,18 @@ namespace Poppin
 						);
 					})
 					.EnableSensitiveDataLogging()
+			).AddDbContextPool<TokenDbContext>(options =>
+				options.UseMySql(Configuration.GetConnectionString("MySQLConnection"),
+					mySqlOptions => {
+						mySqlOptions.EnableRetryOnFailure(
+							maxRetryCount: 10,
+							maxRetryDelay: TimeSpan.FromSeconds(10),
+							errorNumbersToAdd: null
+						);
+					})
+					.EnableSensitiveDataLogging()
 			);
+
 			services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
 				.AddEntityFrameworkStores<ApplicationDbContext>()
 				.AddDefaultTokenProviders();
@@ -80,18 +91,7 @@ namespace Poppin
 			services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();
 			services.AddTransient<IOAuthHandler, OAuthHandler>();
 			services.AddTransient<IIdentityService, IdentityService>();
-
-			var tokenValidationParameters = new TokenValidationParameters
-			{
-				ValidateIssuerSigningKey = true,
-				IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
-				ValidateIssuer = false,
-				ValidateAudience = false,
-				RequireExpirationTime = false, // needs change eventually
-				ValidateLifetime = true
-			};
-
-			services.AddSingleton(tokenValidationParameters);
+			services.AddTransient<ITokenService, TokenService>();
 
 			services.AddAuthentication(a =>
 			{
@@ -101,7 +101,7 @@ namespace Poppin
 			}).AddJwtBearer(b =>
 			{
 				b.SaveToken = true;
-				b.TokenValidationParameters = tokenValidationParameters;
+				b.TokenValidationParameters = new TokenService(jwtSettings).TokenValidationParameters;
 			});
 
 			services.AddAuthorization(opts =>
@@ -129,8 +129,6 @@ namespace Poppin
 			services.AddTransient<IUserService, UserService>();
 			services.AddTransient<ILogActionService, LogActionService>(); 
 			services.AddHttpClient<IYelpService, YelpService>();
-
-			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 			services.AddControllersWithViews();
 			services.AddRazorPages();

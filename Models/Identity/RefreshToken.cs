@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Poppin.Models.Identity
 {
-    [Owned]
     public class RefreshToken
     {
         [Key]

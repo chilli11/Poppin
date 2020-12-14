@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Interfaces
 {
-    interface ITokenService
+    public interface ITokenService
     {
         public TokenValidationParameters TokenValidationParameters { get; set; }
     }
