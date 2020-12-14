@@ -171,14 +171,13 @@ namespace Poppin.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
-												if (!ModelState.IsValid)
+			if (!ModelState.IsValid)
             {
                 _logger.LogError("Forgot Password Failed: Invalid Model ({errors})", ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage)));
                 return BadRequest(new AuthFailedResponse
-																{
-																				Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
-																}
-																);
+				{
+					Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
+				});
             }
 
             var authResult = await _identityService.StartPasswordResetAsync(request.Email, GetIpAddress());
