@@ -35,14 +35,22 @@ namespace Poppin.Services
 		private readonly ISmtpService _smtpService;
 		private readonly IUserService _userService;
 		private readonly ILogActionService _logActionService;
+		private readonly TokenValidationParameters _tokenValidationParameters;
 
-		public IdentityService(UserManager<User> userMgr, IJwtSettings jwtSettings, ISmtpService smtpService, IUserService userService, ILogActionService las)
+		public IdentityService(
+			UserManager<User> userMgr,
+			IJwtSettings jwtSettings,
+			ISmtpService smtpService,
+			IUserService userService,
+			ILogActionService las,
+			TokenValidationParameters tvp)
 		{
 			_jwtSettings = jwtSettings;
 			_userManager = userMgr;
 			_smtpService = smtpService;
 			_userService = userService;
 			_logActionService = las;
+			_tokenValidationParameters = tvp;
 		}
 
 		public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress)
@@ -354,6 +362,12 @@ namespace Poppin.Services
 			_userManager.UpdateAsync(user);
 			return GenerateAuthenticationResultForUser(user, ipAddress);
 		}
+
+		public async Task<AuthenticationResult> RefreshToken(string token, string refreshToken, string ipAddress)
+        {
+
+        }
+
 		public void Identify(User user, string category, string action)
 		{
 			Analytics.Client.Identify(user.Id.ToString(), new Traits
@@ -393,6 +407,30 @@ namespace Poppin.Services
 			return true;
 		}
 
+		private ClaimsPrincipal GetPrincipalFromToken(string token)
+        {
+			var handler = new JwtSecurityTokenHandler();
+            try
+            {
+				var principal = handler.ValidateToken(token, _tokenValidationParameters, out var securityToken);
+				if (!IsValidJWT(securityToken))
+                {
+					return null;
+                }
+				return principal;
+            }
+			catch
+            {
+				return null;
+            }
+        }
+
+		private bool IsValidJWT(SecurityToken securityToken)
+        {
+			return (securityToken is JwtSecurityToken jwtSecurityToken) &&
+				jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
+					StringComparison.InvariantCultureIgnoreCase);
+        }
 
 		private AuthenticationResult GenerateAuthenticationResultForUser(User user, string ipAddress)
 		{											

@@ -80,6 +80,19 @@ namespace Poppin
 			services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();
 			services.AddTransient<IOAuthHandler, OAuthHandler>();
 			services.AddTransient<IIdentityService, IdentityService>();
+
+			var tokenValidationParameters = new TokenValidationParameters
+			{
+				ValidateIssuerSigningKey = true,
+				IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
+				ValidateIssuer = false,
+				ValidateAudience = false,
+				RequireExpirationTime = false, // needs change eventually
+				ValidateLifetime = true
+			};
+
+			services.AddSingleton(tokenValidationParameters);
+
 			services.AddAuthentication(a =>
 			{
 				a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,15 +101,7 @@ namespace Poppin
 			}).AddJwtBearer(b =>
 			{
 				b.SaveToken = true;
-				b.TokenValidationParameters = new TokenValidationParameters
-				{
-					ValidateIssuerSigningKey = true,
-					IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
-					ValidateIssuer = false,
-					ValidateAudience = false,
-					RequireExpirationTime = false, // needs change eventually
-					ValidateLifetime = true
-				};
+				b.TokenValidationParameters = tokenValidationParameters;
 			});
 
 			services.AddAuthorization(opts =>

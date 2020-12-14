@@ -29,4 +29,10 @@ namespace Poppin.Contracts.Requests
 		public string Password { get; set; }
 		public string Password2 { get; set; }
 	}
+
+	public class RefreshTokenRequest
+    {
+		public string Token { get; set; }
+		public string RefreshToken { get; set; }
+    }
 }

@@ -301,11 +301,11 @@ namespace Poppin.Controllers
         /// Refreshes user token through cookie
         /// </summary>
         /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
-        [HttpGet("refresh-token")]
-        public async Task<IActionResult> RefreshToken(string token)
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
         {
-            var refreshToken = token ?? Request.Cookies["refreshToken"];
-            var tokenType = string.IsNullOrEmpty(token) ? "Cookie Token" : "Token";
+            var refreshToken = request.RefreshToken;
+            var tokenType = string.IsNullOrEmpty(request.RefreshToken) ? "Cookie Token" : "Token";
             if (string.IsNullOrEmpty(refreshToken))
             {
                 _logger.LogError(tokenType + " Refresh Failed: {errors}", new[] { "No token provided" });
@@ -315,7 +315,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            var response = await _identityService.RefreshToken(refreshToken, GetIpAddress());
+            var response = await _identityService.RefreshToken(request.Token, request.RefreshToken, GetIpAddress());
             if (!response.Success)
             {
                 _logger.LogError(tokenType + " Refresh Failed: {errors}", response.Errors);
