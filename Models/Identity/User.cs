@@ -9,8 +9,7 @@ namespace Poppin.Models.Identity
     {
         public string Role { get; set; }
 
-        [JsonIgnore]
-        public List<RefreshToken> RefreshTokens = new List<RefreshToken>();
+        public List<RefreshToken> RefreshTokens { get; set; }
 
         public Role RoleEntity { get; set; }
     }
