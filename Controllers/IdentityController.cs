@@ -377,7 +377,7 @@ namespace Poppin.Controllers
         /// </summary>
         /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="UserSuccessResponse"/>)</returns>
         [Authorize]
-								[HttpPost("me")]
+		[HttpPost("me")]
         public async Task<IActionResult> GetUser()
 								{
             var userResult = await _identityService.GetUserById(GetUserId());
@@ -395,13 +395,18 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}/refresh-tokens")]
         public async Task<IActionResult> GetRefreshTokens(string id)
         {
             var userResult = await _identityService.GetUserById(id);
             if (userResult.User == null) return NotFound();
 
-            return Ok(userResult.User.RefreshTokens);
+            return Ok(new List<Models.Identity.RefreshToken>());
         }
 
         // ====================== OAUTH STUFF ====================== //

@@ -344,30 +344,6 @@ namespace Poppin.Services
 				Success = true
 			};
 		}
-		//public async Task<AuthenticationResult> RefreshToken(string token, string ipAddress)
-		//{
-		//	var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
-
-		//	// return null if no user found with token
-		//	if (user == null) return null;
-
-		//	var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
-
-		//	// return null if token is no longer active
-		//	if (!refreshToken.IsActive) return null;
-
-		//	// replace old refresh token with a new one and save
-		//	var newRefreshToken = GenerateRefreshToken(user.Id, "", ipAddress);
-
-		//	// update user in database with token audit trail
-		//	refreshToken.Revoked = DateTime.UtcNow;
-		//	refreshToken.RevokedByIp = ipAddress;
-		//	refreshToken.ReplacedByToken = newRefreshToken.Token;
-		//	user.RefreshTokens.Add(newRefreshToken);
-		//	user.RefreshTokens.Remove(refreshToken);
-		//	_userManager.UpdateAsync(user);
-		//	return GenerateAuthenticationResultForUser(user, ipAddress);
-		//}
 
 		public async Task<AuthenticationResult> RefreshToken(string token, string refreshToken, string ipAddress)
         {
@@ -381,15 +357,17 @@ namespace Poppin.Services
 			}
 
 			var expiresUnix = long.Parse(validatedToken.Claims.Single(c => c.Type == JwtRegisteredClaimNames.Exp).Value);
-			//if (new DateTime(0, DateTimeKind.Utc).AddSeconds(expiresUnix) > DateTime.UtcNow)
-   //         {
-			//	return new AuthenticationResult
-			//	{
-			//		Errors = new[] { "Token hasn't expired." }
-			//	};
-   //         }
+            if (new DateTime(0, DateTimeKind.Utc).AddSeconds(expiresUnix) > DateTime.UtcNow)
+            {
+                return new AuthenticationResult
+                {
+					Success = true,
+                    Token = token,
+					RefreshToken = refreshToken
+                };
+            }
 
-			var jti = validatedToken.Claims.Single(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
+            var jti = validatedToken.Claims.Single(c => c.Type == JwtRegisteredClaimNames.Jti).Value;
 			var storedRefreshToken = await _tokenContext.RefreshTokens.SingleOrDefaultAsync(rt => rt.Token == refreshToken);
 			if (storedRefreshToken == null)
 			{
@@ -453,20 +431,17 @@ namespace Poppin.Services
 
 		public async Task<bool> RevokeToken(string token, string ipAddress)
 		{
-			var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshTokens.Any(t => t.Token == token));
+			var storedToken = await _tokenContext.RefreshTokens.SingleOrDefaultAsync(rt => rt.Token == token);
 
 			// return false if no user found with token
-			if (user == null) return false;
-
-			var refreshToken = user.RefreshTokens.Single(x => x.Token == token);
+			if (storedToken == null) return false;
 
 			// return false if token is not active
-			if (!refreshToken.IsActive) return false;
+			if (!storedToken.IsActive) return false;
 
 			// revoke token and save
-			user.RefreshTokens.Remove(refreshToken);
-			_userManager.UpdateAsync(user);
-
+			storedToken.Revoked = DateTime.UtcNow;
+			_tokenContext.RefreshTokens.Update(storedToken);
 			return true;
 		}
 
