@@ -37,7 +37,8 @@ namespace Poppin.Controllers
             IOAuthHandler oAuthHandler,
             ISmtpService smtpService,
             ILogger<IdentityController> logger,
-            ILogActionService logActionService
+            ILogActionService logActionService,
+            IUserService userService
         )
         {
             _identityService = idService;
@@ -46,6 +47,7 @@ namespace Poppin.Controllers
             _smtpService = smtpService;
             _logger = logger;
             _logActionService = logActionService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -103,10 +105,10 @@ namespace Poppin.Controllers
         public async Task<IActionResult> ConfirmEmail(string id, string t)
 								{
             if (id == null || t == null)
-												{
+			{
                 _logger.LogError("Confirm Email Failed: {errors}", new { Id = id, Token = t != null });
                 return BadRequest();
-												}
+			}
 
             var userResult = await _identityService.GetUserById(id);
             if (!userResult.Success)
@@ -123,8 +125,9 @@ namespace Poppin.Controllers
             {
                 _logger.LogError("Confirm Email Failed: {id}, {errors}", id, result.Errors);
                 return BadRequest(result);
-												}
+			}
 
+            _userService.UpdateUser(userResult.User);
             _logger.LogInformation("Email Confirmed: {id}", id);
             return Ok(result);
         }
@@ -273,6 +276,7 @@ namespace Poppin.Controllers
                 }
 
                 _smtpService.SendPasswordConfirmationEmail(userResult.User);
+                _userService.UpdateUser(userResult.User);
                 _logger.LogInformation("Reset Password: {id}", id);
                 return Ok(result);
             }
