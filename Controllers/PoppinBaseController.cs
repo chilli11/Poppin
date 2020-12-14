@@ -59,13 +59,21 @@ namespace Poppin.Controllers
         protected async Task<PoppinUser> GetUserProfile(string id)
         {
             var user = await _userService.GetUserById(id);
-            if (user == null)
+            if (user == null || user.User == null)
             {
                 var u = await _identityService.GetUserById(id);
                 if (u.User != null)
                 {
-                    user = new PoppinUser(u.User);
-                    _userService.AddUser(user);
+                    if (user == null)
+                    {
+                        user = new PoppinUser(u.User);
+                        _userService.AddUser(user);
+                    }
+                    else
+                    {
+                        user.User = u.User;
+                        _userService.UpdateUser(user);
+                    }
                 }
             }
             return user;
