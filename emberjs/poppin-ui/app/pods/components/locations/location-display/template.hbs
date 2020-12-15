@@ -32,7 +32,7 @@
 				{{/if}}
 				<dl>
 					<dt>Occupancy</dt>
-					<dd>{{@location.capacity}}</dd>
+					<dd>{{@location.capacity}} - <div class="badge badge-{{if @location.capacityConfirmed 'info' 'default'}}">{{if @location.capacityConfirmed 'Confirmed' 'Unconfirmed'}}</div></dd>
 					<dt>Categories:</dt>
 					<dd>
 						{{#each @categories as |category|}}
@@ -66,7 +66,7 @@
 	</div>
 </div>
 
-<div class="col-md-8">
+{{!-- <div class="col-md-8">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Yelp Details {{unless (or @location.yelpUrl @location.yelpDetails) '(unavailable...check back later)'}}</h4>
@@ -75,4 +75,4 @@
 			<iframe style="width: 100%; height: 100vh;" src={{if @location.yelpUrl @location.yelpUrl @location.yelpDetails.url}} />
 		</div>
 	</div>
-</div>
+</div> --}}

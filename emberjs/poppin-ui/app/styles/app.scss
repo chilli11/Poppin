@@ -52,3 +52,7 @@ body * {
 	top: 0;
 	width: 100%;
 }
+
+.badge {
+	@include badge-color()
+}

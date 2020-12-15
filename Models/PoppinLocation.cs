@@ -33,6 +33,7 @@ namespace Poppin.Models
 			Menus = v.Menus;
 			YelpUrl = v.YelpUrl;
 			Capacity = v.Capacity;
+			CapacityConfirmed = v.CapacityConfirmed;
 			Categories = v.Categories.ToHashSet();
 			VisitLength = v.VisitLength;
 			WaitTime = v.WaitTime;
@@ -78,6 +79,7 @@ namespace Poppin.Models
 		public HashSet<string> Categories { get; set; }
 
 		public int Capacity { get; set; }
+		public bool CapacityConfirmed { get; set; }
 		public int CrowdSize { get; set; }
 
 		/// <summary>
