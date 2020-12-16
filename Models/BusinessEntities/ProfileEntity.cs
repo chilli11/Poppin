@@ -6,12 +6,12 @@ using Poppin.Models.Identity;
 
 namespace Poppin.Models.BusinessEntities
 {
-				public class ProfileEntity
+	public class ProfileEntity
     {
         public ProfileEntity(IIdentityService idService)
-								{
+		{
             _identityService = idService;
-								}
+		}
 
         public ProfileEntity(User user)
         {
@@ -36,8 +36,6 @@ namespace Poppin.Models.BusinessEntities
         {
             get
             {
-                if (_user != null) return _user;
-                _user = _identityService.GetUserById(UserId).Result.User;
                 return _user;
             }
             set

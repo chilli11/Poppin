@@ -53,7 +53,18 @@
 				<form.element @label="URL" @placeholder="https://awesomebiz.com/menu" @controlType="text" @property="menuUrl" />
 				<hr>
 				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://www.yelp.com/biz/awesome-biz-2/" @property="yelpUrl" />
-				<form.element @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
+				<div class="form-group row">
+					<form.element class="col-md-6" @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
+					<div class="form-check col-md-6">
+						<label class="form-check-label col-form-label">
+							<Input class="form-check-input" @type="checkbox" @checked={{this.capacityConfirmed}} />
+							Confirmed?
+							<span class="form-check-sign">
+									<span class="check"></span>
+							</span>
+						</label>
+					</div>
+				</div>
 				<form.element @controlType="number" @label="Visit Length" @placeholder="Visit Length" @property="visitLength" @required={{true}} />
 				<BsButton @type="primary" type="submit" @defaultText="Submit" />
 				<span class="btn btn-default" {{on "click" this.cancel}}>Cancel</span>

@@ -37,7 +37,8 @@ namespace Poppin.Controllers
             IOAuthHandler oAuthHandler,
             ISmtpService smtpService,
             ILogger<IdentityController> logger,
-            ILogActionService logActionService
+            ILogActionService logActionService,
+            IUserService userService
         )
         {
             _identityService = idService;
@@ -46,6 +47,7 @@ namespace Poppin.Controllers
             _smtpService = smtpService;
             _logger = logger;
             _logActionService = logActionService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -103,10 +105,10 @@ namespace Poppin.Controllers
         public async Task<IActionResult> ConfirmEmail(string id, string t)
 								{
             if (id == null || t == null)
-												{
+			{
                 _logger.LogError("Confirm Email Failed: {errors}", new { Id = id, Token = t != null });
                 return BadRequest();
-												}
+			}
 
             var userResult = await _identityService.GetUserById(id);
             if (!userResult.Success)
@@ -123,8 +125,9 @@ namespace Poppin.Controllers
             {
                 _logger.LogError("Confirm Email Failed: {id}, {errors}", id, result.Errors);
                 return BadRequest(result);
-												}
+			}
 
+            _userService.UpdateUser(userResult.User);
             _logger.LogInformation("Email Confirmed: {id}", id);
             return Ok(result);
         }
@@ -171,14 +174,13 @@ namespace Poppin.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
-												if (!ModelState.IsValid)
+			if (!ModelState.IsValid)
             {
                 _logger.LogError("Forgot Password Failed: Invalid Model ({errors})", ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage)));
                 return BadRequest(new AuthFailedResponse
-																{
-																				Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
-																}
-																);
+				{
+					Errors = ModelState.Values.SelectMany(ms => ms.Errors.Select(e => e.ErrorMessage))
+				});
             }
 
             var authResult = await _identityService.StartPasswordResetAsync(request.Email, GetIpAddress());
@@ -274,6 +276,7 @@ namespace Poppin.Controllers
                 }
 
                 _smtpService.SendPasswordConfirmationEmail(userResult.User);
+                _userService.UpdateUser(userResult.User);
                 _logger.LogInformation("Reset Password: {id}", id);
                 return Ok(result);
             }
@@ -302,11 +305,11 @@ namespace Poppin.Controllers
         /// Refreshes user token through cookie
         /// </summary>
         /// <returns>401 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>, with RefreshToken)</returns>
-        [HttpGet("refresh-token")]
-        public async Task<IActionResult> RefreshToken(string token)
+        [HttpPost("refresh-token")]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
         {
-            var refreshToken = token ?? Request.Cookies["refreshToken"];
-            var tokenType = string.IsNullOrEmpty(token) ? "Cookie Token" : "Token";
+            var refreshToken = request.RefreshToken;
+            var tokenType = string.IsNullOrEmpty(request.RefreshToken) ? "Cookie Token" : "Token";
             if (string.IsNullOrEmpty(refreshToken))
             {
                 _logger.LogError(tokenType + " Refresh Failed: {errors}", new[] { "No token provided" });
@@ -316,13 +319,13 @@ namespace Poppin.Controllers
                 });
             }
 
-            var response = await _identityService.RefreshToken(refreshToken, GetIpAddress());
+            var response = await _identityService.RefreshToken(request.Token, request.RefreshToken, GetIpAddress());
             if (!response.Success)
             {
                 _logger.LogError(tokenType + " Refresh Failed: {errors}", response.Errors);
                 return Unauthorized(new AuthFailedResponse
                 {
-                    Errors = new[] { "Invalid token" }
+                    Errors = response.Errors
                 });
             }
 
@@ -374,7 +377,7 @@ namespace Poppin.Controllers
         /// </summary>
         /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="UserSuccessResponse"/>)</returns>
         [Authorize]
-								[HttpPost("me")]
+		[HttpPost("me")]
         public async Task<IActionResult> GetUser()
 								{
             var userResult = await _identityService.GetUserById(GetUserId());
@@ -392,13 +395,18 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Deprecated
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}/refresh-tokens")]
         public async Task<IActionResult> GetRefreshTokens(string id)
         {
             var userResult = await _identityService.GetUserById(id);
             if (userResult.User == null) return NotFound();
 
-            return Ok(userResult.User.RefreshTokens);
+            return Ok(new List<Models.Identity.RefreshToken>());
         }
 
         // ====================== OAUTH STUFF ====================== //
@@ -524,23 +532,10 @@ namespace Poppin.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Gets user id claim from current token
-        /// </summary>
-        /// <returns>String</returns>
-        private string GetUserId()
-        {
-            if (HttpContext.User.Claims.Any())
-            {
-                return HttpContext.User.Claims.Single(u => u.Type == "Id").Value;
-            }
-            return string.Empty;
-        }
-
         // helper methods
 
         /// <summary>
-        /// Sets cookie, with a 7 day expiration
+        /// Sets cookie, with a 120 day expiration
         /// </summary>
         /// <param name="token"></param>
         private void SetTokenCookie(string token)
@@ -548,7 +543,7 @@ namespace Poppin.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(120)
             };
             Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
