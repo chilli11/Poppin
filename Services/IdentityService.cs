@@ -485,7 +485,7 @@ namespace Poppin.Services
 					new Claim("Role", user.Role),
 					new Claim("Id", user.Id.ToString())
 				}),
-				Expires = DateTime.UtcNow.AddDays(1),
+				Expires = DateTime.UtcNow.AddDays(30),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 
@@ -510,13 +510,13 @@ namespace Poppin.Services
 					UserId = userId,
 					JwtId = jwt.Id,
 					Token = Convert.ToBase64String(randomBytes),
-					Expires = DateTime.UtcNow.AddDays(90),
+					Expires = DateTime.UtcNow.AddDays(120),
 					Created = DateTime.UtcNow,
 					CreatedByIp = ipAddress
 				};
 
-				_tokenContext.Add(rt);
-				_tokenContext.SaveChanges();
+				var addResult = _tokenContext.Add(rt);
+				var saveResult = _tokenContext.SaveChanges();
 
 				return rt;
 			}

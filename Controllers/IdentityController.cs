@@ -325,7 +325,7 @@ namespace Poppin.Controllers
                 _logger.LogError(tokenType + " Refresh Failed: {errors}", response.Errors);
                 return Unauthorized(new AuthFailedResponse
                 {
-                    Errors = new[] { "Invalid token" }
+                    Errors = response.Errors
                 });
             }
 
@@ -535,7 +535,7 @@ namespace Poppin.Controllers
         // helper methods
 
         /// <summary>
-        /// Sets cookie, with a 7 day expiration
+        /// Sets cookie, with a 120 day expiration
         /// </summary>
         /// <param name="token"></param>
         private void SetTokenCookie(string token)
@@ -543,7 +543,7 @@ namespace Poppin.Controllers
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = DateTime.UtcNow.AddDays(7)
+                Expires = DateTime.UtcNow.AddDays(120)
             };
             Response.Cookies.Append("refreshToken", token, cookieOptions);
         }
