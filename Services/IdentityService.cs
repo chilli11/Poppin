@@ -485,7 +485,7 @@ namespace Poppin.Services
 					new Claim("Role", user.Role),
 					new Claim("Id", user.Id.ToString())
 				}),
-				Expires = DateTime.UtcNow.AddDays(30),
+				Expires = DateTime.UtcNow.AddDays(1),
 				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
 			};
 
