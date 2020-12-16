@@ -1,6 +1,16 @@
 ﻿# Identity
 Reference for `api/locations` endpoints. Contains OAuth;
 
+## Request Classes
+
+#### RefreshTokenRequest
+```
+{
+  token: string,
+  refreshToken: string
+}
+```
+
 ## Response Classes
 
 #### AuthSuccessResponse
@@ -93,13 +103,13 @@ Response: AuthSuccessResponse
 The endpoint will validate the token again, then reset the password if it meets requirements.
 
 ### POST api/identity/refresh-token
-Request: Empty  
+Request: RefreshTokenRequest  
 Response: AuthSuccessResponse
 
 Checks the cookies for a valid refresh token
 
 ### POST api/identity/revoke-token
-Request: RevokeTokenRequest  
+Request: `{ token: string }`
 Response: `{ message: string }`
 
 ### POST api/identity/me
