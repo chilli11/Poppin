@@ -367,14 +367,21 @@ namespace Poppin.Controllers
 		{
 			var locationId = kvp["locationId"];
 			var loc = await _locationService.Get(locationId);
+
+			if (loc.VendorId != null)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "Location has already been claimed." }
+				});
+			}
+
 			var vendor = await _vendorService.GetVendorById(vendorId);
 			if (vendor == null)
 			{
-				var errors = new List<string>();
-				errors.Add("Vendor ID is invalid");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "Vendor ID is invalid." }
 				});
 			}
 
@@ -420,15 +427,21 @@ namespace Poppin.Controllers
 		public async Task<IActionResult> RemoveLocation(string vendorId, IDictionary<string, string> kvp)
 		{
 			var locationId = kvp["locationId"];
-			//var loc = await _locationService.Get(locationId);
+			var loc = await _locationService.Get(locationId);
+			if (loc.VendorId != vendorId)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "You don't have the proper permissions for this action." }
+				});
+			}
+
 			var vendor = await _vendorService.GetVendorById(vendorId);
 			if (vendor == null)
 			{
-				var errors = new List<string>();
-				errors.Add("Vendor ID is invalid");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "Vendor ID is invalid." }
 				});
 			}
 
@@ -438,10 +451,10 @@ namespace Poppin.Controllers
 				try
 				{
 					vendor.LocationIds.Remove(locationId);
-					//loc.VendorId = null;
+					loc.VendorId = null;
 
 					await _vendorService.UpdateVendor(vendor);
-					//await _locationService.Update(locationId, loc);
+					await _locationService.Update(locationId, loc);
 					return Ok(new VendorResult
 					{
 						Vendor = vendor,
