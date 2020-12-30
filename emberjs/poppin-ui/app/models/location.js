@@ -1,7 +1,8 @@
 import Model, { attr } from '@ember-data/model';
 
 export default class LocationModel extends Model {
-  @attr('string') yelpId;
+	@attr('string') yelpId;
+	@attr('string') vendorId;
   @attr('string') name;
   @attr('string') phone;
 	@attr address;
