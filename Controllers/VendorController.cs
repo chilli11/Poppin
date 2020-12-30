@@ -98,7 +98,7 @@ namespace Poppin.Controllers
 					Admins = vendor.GetAdmins(_userService),
 					Members = vendor.GetMembers(_userService)
 				};
-				if (vResult.Locations.Count() > 0)
+				if (vResult.Locations != null)
 				{
 					var checkins = await _locationService.GetCheckinsForLocations(vResult.Locations.Select(l => l.Id));
 					vResult.Locations.ToList().UpdateCrowdSizes(checkins);
