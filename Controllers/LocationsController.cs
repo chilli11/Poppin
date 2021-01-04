@@ -608,7 +608,7 @@ namespace Poppin.Controllers
 
             if (vendor != null)
             {
-                return vendor.MemberIds.Contains(userId);
+                return vendor.MemberIds.Contains(userId) || vendor.AdminIds.Contains(userId);
             }
             return false;
         }
