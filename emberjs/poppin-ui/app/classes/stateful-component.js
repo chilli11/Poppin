@@ -22,6 +22,10 @@ export default class extends Component {
 			if (!machineState || typeof machineState !== 'string') {
 				console.error(currentStateErrorMessage, namespace);
 			}
+
+			if (this.init && typeof this.init == 'function') {
+				this.init();
+			}
 			this.callStack.push({ machineState: machineState, action: '_INIT_' });
 		} else {
 			console.error('No model provided');
