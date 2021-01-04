@@ -366,3 +366,9 @@ wwwroot/assets/poppin-ui.css.map
 wwwroot/assets/tests.js
 wwwroot/assets/test-support.css
 wwwroot/assets/vendor.css
+wwwroot/assets/auto-import-fastboot.js
+wwwroot/assets/popper.js.map
+wwwroot/assets/tests.map
+wwwroot/assets/test-support.map
+wwwroot/assets/vendor.map
+wwwroot/ember-welcome-page/images/construction.png
