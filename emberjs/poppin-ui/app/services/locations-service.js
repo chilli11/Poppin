@@ -45,6 +45,13 @@ export default class LocationsService extends Service {
 		});
 	}
 
+	checkin(locId) {
+		return this.apiService.request({
+			resource: HttpResources.checkin,
+			body: { locId }
+		});
+	}
+
 	/**
 	 * Gets a list of Poppin-enabled businesses,
 	 * based on a Yelp search

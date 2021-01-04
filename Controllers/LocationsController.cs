@@ -385,7 +385,7 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
+            var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Geo : ReliabilityScores.User;
             var checkin = new Checkin(locationId, userId, location.VisitLength, score);
 
             if (_locationService.ReconcileCheckin(checkin))
