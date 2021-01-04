@@ -48,7 +48,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	}
 	get isVendor() {
 		const vendorId = this.args.location.vendorId;
-		return vendorId && (this.profile.vendorIds || []).indexOf(vendorId) !== -1;
+		return vendorId && this.profile && (this.profile.vendorIds || []).indexOf(vendorId) !== -1;
 	}
 
 	// eslint-disable-next-line ember/require-computed-property-dependencies
