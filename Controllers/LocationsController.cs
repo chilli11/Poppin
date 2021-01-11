@@ -170,18 +170,13 @@ namespace Poppin.Controllers
                 {
                     if (!string.IsNullOrEmpty(search.Term))
                     {
-                        locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
+                        locList = locList.Where(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
                     }
                     total = locList.Count;
 
-                    if (search.PageLength > 0)
-                    {
-                        locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
-                    }
-                    else
-                    {
-                        locList = locList.Skip(search.Offset).ToList();
-                    }
+
+                    if (search.PageLength == 0) search.PageLength = 20;
+                    locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
 
                     if (locList.Count > 0)
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
