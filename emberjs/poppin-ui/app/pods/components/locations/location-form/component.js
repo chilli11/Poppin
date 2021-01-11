@@ -19,6 +19,14 @@ const defHours = [
 	{ opening: null, closing: null,  day: days[6] },
 ];
 
+const ratingOptions = [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5];
+const priceOptions = [
+	{ value: 1, name: '$' },
+	{ value: 2, name: '$$' },
+	{ value: 3, name: '$$$' },
+	{ value: 4, name: '$$$$' }
+];
+
 export default class LocationFormComponent extends StatefulComponent {
 	namespace = 'LocationForm';
 	@service locationsService;
@@ -33,6 +41,8 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	days = days;
 	statesWithCodes = StatesWithCodes;
+	ratingOptions = ratingOptions;
+	priceOptions = priceOptions;
 
 	transitions = {
 		[states.IDLE]: {
@@ -87,6 +97,8 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked menuUrl;
 	@tracked yelpUrl;
 	@tracked geo;
+	@tracked rating;
+	@tracked price;
 	@tracked capacity = '0';
 	@tracked capacityConfirmed;
 	@tracked crowdSize = '0';
@@ -126,6 +138,8 @@ export default class LocationFormComponent extends StatefulComponent {
 			menuName,
 			menuUrl,
 			yelpUrl,
+			rating,
+			price
 		} = this;
 		var output = {
 			id: locationId,
@@ -147,6 +161,8 @@ export default class LocationFormComponent extends StatefulComponent {
 			menus,
 			yelpUrl,
 			categories: this.categoryList,
+			rating: rating,
+			price: price.value,
 			capacity: parseInt(capacity, 10),
 			capacityConfirmed: capacityConfirmed,
 			crowdSize: parseInt(crowdSize, 10),
@@ -248,6 +264,8 @@ export default class LocationFormComponent extends StatefulComponent {
 				var matches = this.poppinCategories.filter(pc => pc.slug == c);
 				if (matches.length) return matches[0];
 			});
+			this.price = priceOptions[(loc.price || 1) - 1];
+			this.rating = loc.rating;
 			this.capacity = loc.capacity;
 			this.capacityConfirmed = loc.capacityConfirmed || false;
 			this.hours = loc.hours || _.merge(defHours);
