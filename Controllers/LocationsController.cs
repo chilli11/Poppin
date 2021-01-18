@@ -78,7 +78,9 @@ namespace Poppin.Controllers
             {
                 { "LocationId", location.Id }
             };
-            _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
+            var id = GetUserId(SegmentIOKeys.Actions.ViewLocation);
+            _logActionService.LogUserAction(id, SegmentIOKeys.Actions.ViewLocation, action);
+            Track(id, SegmentIOKeys.Actions.ViewLocation, action);
 
             _logger.LogInformation("Retrieved Location: {id}", location.Id);
             location.SetCrowdSize(_locationService).Wait();
@@ -183,18 +185,21 @@ namespace Poppin.Controllers
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                 }
 
+                var locIds = locList.Select(l => l.Id).ToList();
                 var actionStr = new Dictionary<string, string>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
-                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null }
+                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null },
+                    { "SearchResults", locIds.ToString() }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", search.CategorySlugs }
+                    { "SearchCategories", search.CategorySlugs },
+                    { "SearchResults", locIds }
                 };
 
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
@@ -441,8 +446,8 @@ namespace Poppin.Controllers
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]
         [Authorize]
-								//[AuthorizeRoles()]
-								public IActionResult Delete(string locationId)
+		//[AuthorizeRoles()]
+		public IActionResult Delete(string locationId)
         {
             if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
             {
@@ -498,15 +503,16 @@ namespace Poppin.Controllers
             {
                 var c = new Checkin(locationId, null, location.VisitLength, ReliabilityScores.Vendor);
                 await _locationService.NewCheckin(c);
+                await location.SetCrowdSize(_locationService);
 
                 var action = new Dictionary<string, string>()
                 {
-                    { "LocationId", locationId }
+                    { "LocationId", locationId },
+                    { "CrowdSize", location.CrowdSize.ToString() }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
-                Track(id, SegmentIOKeys.Actions.IncrementCrowd);
+                Track(id, SegmentIOKeys.Actions.IncrementCrowd, action);
 
-                await location.SetCrowdSize(_locationService);
                 return Ok(location);
             }
 
@@ -548,24 +554,25 @@ namespace Poppin.Controllers
                 try
                 {
                     await _locationService.InvalidateVendorCheckin(locationId);
+                    await location.SetCrowdSize(_locationService);
 
                     var action = new Dictionary<string, string>()
                     {
-                        { "LocationId", locationId }
+                        { "LocationId", locationId },
+                        { "CrowdSize", location.CrowdSize.ToString() }
                     };
                     _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                    Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+                    Track(id, SegmentIOKeys.Actions.DecrementCrowd, action);
 
-                    await location.SetCrowdSize(_locationService);
                     return Ok(location);
                 }
                 catch (Exception ex)
-																{
+				{
                     return BadRequest(new GenericFailure
                     {
                         Errors = new[] { "No eligible checkins to remove" }
                     });
-																}
+				}
             }
 
             errors.Add("You don't have permission.");

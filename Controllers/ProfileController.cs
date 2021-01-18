@@ -338,6 +338,7 @@ namespace Poppin.Controllers
 				// Segment.io Analytics
 				_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
 				Track(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
+				_logActionService.LogUserAction(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
 				return Ok(user);
 			}
 			catch (Exception ex)
@@ -349,14 +350,15 @@ namespace Poppin.Controllers
 			}
 		}
 
-		// DELETE api/<ProfileController>/5
-		[HttpDelete("{id}")]
-		public void Delete(string id)
-		{
-			// Segment.io Analytics
-			_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-			Track(id, SegmentIOKeys.Actions.UpdateProfile);
-		}
+		//// DELETE api/<ProfileController>/5
+		//[HttpDelete("{id}")]
+		//public void Delete(string id)
+		//{
+		//	// Segment.io Analytics
+		//	_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+		//	_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateProfile);
+		//	Track(id, SegmentIOKeys.Actions.UpdateProfile);
+		//}
 
 		/// <summary>
 		/// Update User location
@@ -367,6 +369,7 @@ namespace Poppin.Controllers
 			var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
 			var coords = new GeoJson2DGeographicCoordinates(geoJson.Coordinates[0], geoJson.Coordinates[1]);
 			var action = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords).AsStringDictionary();
+
 			_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, (Dictionary<string,string>)action);
 			Track(id, SegmentIOKeys.Actions.UpdateGeo);
 

@@ -94,16 +94,22 @@ namespace Poppin.Controllers
             return user;
         }
 
-        protected void Track(string id, string search)
+        protected void Track(string id, string eventName)
         {
             var trackingId = string.IsNullOrEmpty(id) ? SegmentIOKeys.AnonId : id;
-            Analytics.Client.Track(trackingId, search);
+            Analytics.Client.Track(trackingId, eventName);
         }
 
         protected void Track(string id, string search, IDictionary<string, object> properties)
         {
             var trackingId = string.IsNullOrEmpty(id) ? SegmentIOKeys.AnonId : id;
             Analytics.Client.Track(trackingId, search, properties);
+        }
+
+        protected void Track(string id, string search, IDictionary<string, string> properties)
+        {
+            var trackingId = string.IsNullOrEmpty(id) ? SegmentIOKeys.AnonId : id;
+            Analytics.Client.Track(trackingId, search, (Dictionary<string, object>)properties);
         }
     }
 }

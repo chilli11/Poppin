@@ -14,6 +14,7 @@ using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models.Identity.OAuth;
+using Poppin.Models.Tracking;
 using RTools_NTS.Util;
 
 namespace Poppin.Controllers
@@ -56,10 +57,10 @@ namespace Poppin.Controllers
         /// <returns>401 or 200</returns>
         [HttpGet("is-authenticated")]
         public IActionResult IsAuthenticated()
-								{
+		{
             var userId = GetUserId();
             return Ok(new { authorized = !string.IsNullOrEmpty(userId) });
-								}
+		}
 
         /// <param name="request"><see cref="UserRegistrationRequest" /></param>
         /// <returns>400 (<see cref="AuthFailedResponse"/>) or 200 (<see cref="AuthSuccessResponse"/>)</returns>
@@ -129,6 +130,7 @@ namespace Poppin.Controllers
 
             _userService.UpdateUser(userResult.User);
             _logger.LogInformation("Email Confirmed: {id}", id);
+            _logActionService.LogUserAction(id, SegmentIOKeys.Actions.ConfirmEmail);
             return Ok(result);
         }
 
@@ -195,6 +197,7 @@ namespace Poppin.Controllers
             }
 
             _logger.LogInformation("Password Reset Email Sent: {id}", request.Email);
+            _logActionService.LogUserAction(request.UserId, SegmentIOKeys.Actions.StartPasswordReset);
             return Ok(new AuthSuccessResponse
             {
                 Token = authResult.Token,
@@ -277,7 +280,9 @@ namespace Poppin.Controllers
 
                 _smtpService.SendPasswordConfirmationEmail(userResult.User);
                 _userService.UpdateUser(userResult.User);
+
                 _logger.LogInformation("Reset Password: {id}", id);
+                _logActionService.LogUserAction(id, SegmentIOKeys.Actions.CompletePasswordReset);
                 return Ok(result);
             }
         }
@@ -289,6 +294,7 @@ namespace Poppin.Controllers
             {
                 await _identityService.ResendConfirmationAsync(request);
                 _logger.LogInformation("Resent Confirmation Email: {id}", request.Email);
+                _logActionService.LogUserAction(request.UserId, SegmentIOKeys.Actions.ResendConfirmationEmail);
                 return Ok();
             }
             catch (Exception ex)
