@@ -16,6 +16,10 @@
 				<a href="{{@location.website}}" class="text-dark" target="_blank">{{@location.website}}</a>
 			</p>
 			{{/if}}
+			<p>
+				Price: {{@price.name}} // Rating: <span class="rating" style="width:{{multiply-stuff @location.rating 18}}px"></span>
+				
+			</p>
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{@isLoading}}>
@@ -32,7 +36,7 @@
 						</h1>
 					</div>
 				<dl>
-					<dt>Occupancy</dt>
+					<dt>Occupancy Limit</dt>
 					<dd>{{@location.capacity}} - <div class="badge badge-{{if @location.capacityConfirmed 'info' 'default'}}">{{if @location.capacityConfirmed 'Confirmed' 'Unconfirmed'}}</div></dd>
 					<dt>Categories:</dt>
 					<dd>
@@ -40,8 +44,6 @@
 							{{category.name}}{{unless (eq category @categories.lastObject) ' //'}}
 						{{/each}}
 					</dd>
-					<dt>Visit Length:</dt>
-					<dd>{{@location.visitLength}}</dd>
 					{{#if @location.menus}}
 						<dt>Menu(s)</dt>
 						{{#each @location.menus as |menu|}}

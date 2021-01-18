@@ -24,7 +24,7 @@
 						</PowerSelect>
 					</div>
 				</form.group>
-				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />				
+				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />	
 				<form.group>
 					<label class="col-form-label col-md-4">Categories</label>
 					<div class="col-md-8">
@@ -37,6 +37,32 @@
 							@onChange={{fn (mut this.categories)}} as |cat|>
 							{{cat.name}}
 						</PowerSelectMultiple>
+					</div>
+				</form.group>
+				{{#if @isAdmin}}
+					<form.group>
+						<label class="col-md-4">Rating</label>
+						<div class="col-md-8">
+							<PowerSelect
+								@options={{this.ratingOptions}}
+								@placeholder="Rating"
+								@selected={{this.rating}}
+								@onChange={{fn (mut this.rating)}} as |r|>
+								{{r}}
+							</PowerSelect>
+						</div>
+					</form.group>
+				{{/if}}
+				<form.group>
+					<label class="col-md-4">Price</label>
+					<div class="col-md-8">
+						<PowerSelect
+							@options={{this.priceOptions}}
+							@placeholder="$$$$"
+							@selected={{this.price}}
+							@onChange={{fn (mut this.price)}} as |p|>
+							{{p.name}}
+						</PowerSelect>
 					</div>
 				</form.group>
 				<form.element @controlType="text" @label="Logo URL" @placeholder="https://awesomebiz.com/photos/my-logo.jpg" @property="logoUrl" />

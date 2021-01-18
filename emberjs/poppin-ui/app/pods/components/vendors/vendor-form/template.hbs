@@ -15,8 +15,10 @@
 		</BsAlert>
 		<BsButtonGroup @class="btn-group-block" as |bg|>
 			{{#if @isEdit}}
-				<bg.button @type="outline-primary" @onClick={{this.startAddLocation}}>Add Location</bg.button>
-				<bg.button @type="outline-primary" @onClick={{this.startAddMember}}>Add Member</bg.button>
+				{{#if @isSiteAdmin}}
+					<bg.button @type="primary" @onClick={{this.startAddLocation}}>Add Location</bg.button>
+				{{/if}}
+				<bg.button @type="primary" @onClick={{this.startAddMember}}>Add Member</bg.button>
 			{{/if}}
 			<bg.button @type="outline-danger" @onclick={{this.clearForm}}>Clear Form</bg.button>
 		</BsButtonGroup>

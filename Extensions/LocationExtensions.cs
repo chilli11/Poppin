@@ -1,4 +1,5 @@
 ﻿using Poppin.Models;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Tracking;
 using System;
 using System.Collections.Generic;

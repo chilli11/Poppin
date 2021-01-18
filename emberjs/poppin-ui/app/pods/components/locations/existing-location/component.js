@@ -5,6 +5,13 @@ import { inject as service } from '@ember/service';
 import { states, actions } from './constants';
 import { tracked } from '@glimmer/tracking';
 
+const priceOptions = [
+	{ value: 1, name: '$' },
+	{ value: 2, name: '$$' },
+	{ value: 3, name: '$$$' },
+	{ value: 4, name: '$$$$' }
+];
+
 export default class LocationFormComponent extends StatefulComponent {
 	@service store;
 	@service locationsService;
@@ -36,6 +43,10 @@ export default class LocationFormComponent extends StatefulComponent {
 	get fullCategories() {
 		const cats = this.categoriesService.categories;
 		return A(cats.filter(c => (this.args.location.categories || []).indexOf(c.slug) > -1));
+	}
+
+	get price() {
+		return priceOptions[(this.args.location.price || 1) - 1];
 	}
 
 	get authorized() {

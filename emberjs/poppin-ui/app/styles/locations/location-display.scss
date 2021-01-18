@@ -40,3 +40,13 @@
 		}
 	}
 }
+
+.rating {
+	display: inline-block;
+	height: 24px;
+	width: 0;
+	position: relative;
+	top: 7px;
+	background: url(/images/rating-balloon.png) top left repeat-x;
+	background-size: contain;
+}
