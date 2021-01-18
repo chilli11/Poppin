@@ -7,8 +7,10 @@ import { states, actions } from './constants';
 export default class VendorFormComponent extends StatefulComponent {
 	@service store;
 	@service vendorsService;
+	@service accountService;
 
 	@tracked showLocationModal;
+	@tracked showRemoveLocationModal;
 	@tracked modalLoc;
 	@tracked showMemberModal;
 	@tracked modalMember;
@@ -17,6 +19,16 @@ export default class VendorFormComponent extends StatefulComponent {
 		if (this.args.vendor && this.args.vendor.adminIds && this.modalMember)
 			return this.args.vendor.adminIds.indexOf(this.modalMember.userId) > -1;
 		return false;
+	}
+
+	get profile() {
+		return this.accountService.profile;
+	}
+	get isSiteAdmin() {
+		return this.profile.role == 'Admin';
+	}
+	get isVendorAdmin() {
+		this.args.vendor.adminIds.indexOf(this.profile.userId)
 	}
 
 	@tracked showStatusMsg;
@@ -37,11 +49,16 @@ export default class VendorFormComponent extends StatefulComponent {
 		[states.LOADING]: {
 			[actions.END_LOADING]: states.IDLE,
 			[actions.CLOSE_LOCATION]: states.IDLE,
-			[actions.CLOSE_MEMBER]: states.IDLE
+			[actions.CLOSE_MEMBER]: states.IDLE,
+			[actions.CLOSE_REMOVE_LOCATION]: states.IDLE
 		},
 		[states.LOCATION_MODAL]: {
-			[actions.REMOVE_LOCATION]: states.LOADING,
+			[actions.REMOVE_LOCATION]: states.REMOVE_LOCATION_MODAL,
 			[actions.CLOSE_LOCATION]: states.IDLE
+		},
+		[states.REMOVE_LOCATION_MODAL]: {
+			[actions.CONFIRM_REMOVE_LOCATION]: states.LOADING,
+			[actions.CLOSE_REMOVE_LOCATION]: states.IDLE
 		},
 		[states.MEMBER_MODAL]: {
 			[actions.ADD_MEMBER]: states.LOADING,
@@ -86,11 +103,23 @@ export default class VendorFormComponent extends StatefulComponent {
 
 	[actions.REMOVE_LOCATION](locationId) {
 		this.hideMsg();
+		this.showLocationModal = false;
+		this.showRemoveLocationModal = true;
+	}
+
+	[actions.CLOSE_REMOVE_LOCATION]() {
+		this.hideMsg();
+		this.modalLoc = null;
+		this.showRemoveLocationModal = false;
+	}
+
+	[actions.CONFIRM_REMOVE_LOCATION](locationId) {
+		this.hideMsg();
 		return this.vendorsService.removeLocation({
 			vendorId: this.args.vendor.id,
 			locationId
 		}).then((data) => {
-			this.closeLocationModal();
+			this.closeRemoveLocationModal();
 			set(this, 'statusMsgs', ['Location Successfully Removed']);
 			this.statusType = 'success';
 			this.showStatusMsg = true;
@@ -168,6 +197,16 @@ export default class VendorFormComponent extends StatefulComponent {
 	@action
 	removeLocation(loc) {
 		return this.dispatch(actions.REMOVE_LOCATION, loc.id);
+	}
+
+	@action
+	confirmRemoveLocation(loc) {
+		return this.dispatch(actions.CONFIRM_REMOVE_LOCATION, loc.id);
+	}
+	
+	@action
+	closeRemoveLocationModal() {
+		return this.dispatch(actions.CLOSE_REMOVE_LOCATION);
 	}
 
 	@action

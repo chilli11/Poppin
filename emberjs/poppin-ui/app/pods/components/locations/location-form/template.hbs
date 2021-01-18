@@ -39,18 +39,20 @@
 						</PowerSelectMultiple>
 					</div>
 				</form.group>
-				<form.group>
-					<label class="col-md-4">Rating</label>
-					<div class="col-md-8">
-						<PowerSelect
-							@options={{this.ratingOptions}}
-							@placeholder="Rating"
-							@selected={{this.rating}}
-							@onChange={{fn (mut this.rating)}} as |r|>
-							{{r}}
-						</PowerSelect>
-					</div>
-				</form.group>
+				{{#if @isAdmin}}
+					<form.group>
+						<label class="col-md-4">Rating</label>
+						<div class="col-md-8">
+							<PowerSelect
+								@options={{this.ratingOptions}}
+								@placeholder="Rating"
+								@selected={{this.rating}}
+								@onChange={{fn (mut this.rating)}} as |r|>
+								{{r}}
+							</PowerSelect>
+						</div>
+					</form.group>
+				{{/if}}
 				<form.group>
 					<label class="col-md-4">Price</label>
 					<div class="col-md-8">

@@ -9,6 +9,7 @@
 {{#if (eq this.machineState 'EDIT_LOCATION')}}
 	<Locations::LocationForm
 		@reverseOrder=true
+		@isAdmin={{this.isAdmin}}
 		@location={{@location}}
 		@resolveAction={{this.endEdit}} />
 {{else}}
