@@ -105,11 +105,5 @@ namespace Poppin.Controllers
             var trackingId = string.IsNullOrEmpty(id) ? SegmentIOKeys.AnonId : id;
             Analytics.Client.Track(trackingId, search, properties);
         }
-
-        protected void Track(string id, string search, IDictionary<string, string> properties)
-        {
-            var trackingId = string.IsNullOrEmpty(id) ? SegmentIOKeys.AnonId : id;
-            Analytics.Client.Track(trackingId, search, (Dictionary<string, object>)properties);
-        }
     }
 }

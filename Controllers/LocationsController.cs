@@ -80,7 +80,10 @@ namespace Poppin.Controllers
             };
             var id = GetUserId(SegmentIOKeys.Actions.ViewLocation);
             _logActionService.LogUserAction(id, SegmentIOKeys.Actions.ViewLocation, action);
-            Track(id, SegmentIOKeys.Actions.ViewLocation, action);
+            Track(id, SegmentIOKeys.Actions.ViewLocation, new Dictionary<string, object>()
+            {
+                { "LocationId", location.Id }
+            });
 
             _logger.LogInformation("Retrieved Location: {id}", location.Id);
             location.SetCrowdSize(_locationService).Wait();
@@ -261,7 +264,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.AddLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
-                Track(id, SegmentIOKeys.Actions.AddLocation);
+                Track(id, SegmentIOKeys.Actions.AddLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id }
+                });
 
                 return CreatedAtAction("Post", location);
             }
@@ -299,7 +305,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Track(id, SegmentIOKeys.Actions.UpdateLocation);
+                Track(id, SegmentIOKeys.Actions.UpdateLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id }
+                });
 
                 _searchedLocations.Remove(location);
                 _searchedLocations.Add(location);
@@ -346,7 +355,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
+                Track(id, SegmentIOKeys.Actions.UpdateLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id }
+                });
 
                 _searchedLocations.Remove(location);
                 _searchedLocations.Add(location);
@@ -469,7 +481,10 @@ namespace Poppin.Controllers
             };
             var id = GetUserId(SegmentIOKeys.Actions.DeleteLocation);
             _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DeleteLocation, action);
-            Track(id, SegmentIOKeys.Actions.DeleteLocation);
+            Track(id, SegmentIOKeys.Actions.DeleteLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", locationId }
+                });
             return Ok();
         }
 
@@ -511,7 +526,11 @@ namespace Poppin.Controllers
                     { "CrowdSize", location.CrowdSize.ToString() }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
-                Track(id, SegmentIOKeys.Actions.IncrementCrowd, action);
+                Track(id, SegmentIOKeys.Actions.IncrementCrowd, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id },
+                    { "CrowdSize", location.CrowdSize.ToString() }
+                });
 
                 return Ok(location);
             }
@@ -562,7 +581,11 @@ namespace Poppin.Controllers
                         { "CrowdSize", location.CrowdSize.ToString() }
                     };
                     _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                    Track(id, SegmentIOKeys.Actions.DecrementCrowd, action);
+                    Track(id, SegmentIOKeys.Actions.DecrementCrowd, new Dictionary<string, object>()
+                    {
+                        { "LocationId", locationId },
+                        { "CrowdSize", location.CrowdSize.ToString() }
+                    });
 
                     return Ok(location);
                 }
