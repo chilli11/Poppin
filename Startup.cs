@@ -84,6 +84,11 @@ namespace Poppin
 			services.AddTransient<IHERESettings, HERESettings>(sp =>
 				sp.GetRequiredService<IOptions<HERESettings>>().Value);
 
+			services.Configure<BestTimeSettings>(
+				Configuration.GetSection(nameof(BestTimeSettings)));
+			services.AddTransient<IBestTimeSettings, BestTimeSettings>(sp =>
+				sp.GetRequiredService<IOptions<BestTimeSettings>>().Value);
+
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 			services.AddHttpClient<FBAuthService>();

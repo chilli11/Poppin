@@ -2,6 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
+using Poppin.Models.BestTimeEntities;
 using Poppin.Models.Geocoding.HERE;
 using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
@@ -63,6 +64,7 @@ namespace Poppin.Models.BusinessEntities
 		public string Id { get; set; }
 		public string YelpId { get; set; }
 		public string HereId { get; set; }
+		public string BestTimeId { get; set; }
 		public string VendorId { get; set; }
 
 		public string Name { get; set; }
@@ -80,6 +82,7 @@ namespace Poppin.Models.BusinessEntities
 		public int Capacity { get; set; }
 		public bool CapacityConfirmed { get; set; }
 		public int CrowdSize { get; set; }
+		public BestTimeWeek Forecast { get; set; }
 
 		/// <summary>
 		/// VisitLength is in minutes

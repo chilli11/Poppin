@@ -90,14 +90,14 @@ namespace Poppin.Models.BusinessEntities
 		[BsonSerializer(typeof(TestingObjectTypeSerializer))]
 		public string ZipCode { get; set; }
 		public Coord Coordinates {
-						get
-						{
-										return new Coord()
-										{
-														Latitude = Geo.Coordinates.Latitude,
-														Longitude = Geo.Coordinates.Longitude
-										};
-						}
+			get
+			{
+				return new Coord()
+				{
+					Latitude = Geo.Coordinates.Latitude,
+					Longitude = Geo.Coordinates.Longitude
+				};
+			}
 		}
 		public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
 	}
@@ -157,9 +157,8 @@ namespace Poppin.Models.BusinessEntities
 		public double[] Coordinates { get; set; }
 	}
 
-	public class PoppinInsertActionResponse
+	public interface IForecast
 	{
-		public PoppinLocation location { get; set; }
-		public YelpBusinessSearchResponse yelpMatches { get; set; }
+		public double GetForecastOccupancy();
 	}
 }
