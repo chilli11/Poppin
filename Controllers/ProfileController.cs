@@ -65,7 +65,7 @@ namespace Poppin.Controllers
 			{
 				var user = await GetUserProfile(id);
                         
-				Track(id, SegmentIOKeys.Actions.ViewUserProfile);
+				Track(id, user.Email, SegmentIOKeys.Actions.ViewUserProfile);
 				_logger.LogInformation("Profile Retrieved: {id}", id);
 				return Ok(await GetPoppinUserResult(user));
 
@@ -93,7 +93,7 @@ namespace Poppin.Controllers
 		public async Task<IActionResult> Get(string id)
 		{
 			var isAdmin = GetUserRole() == RoleTypes.Admin;
-			var callerId = GetUserId();
+			var callerId = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 
 			if (!isAdmin)
 			{
@@ -114,7 +114,7 @@ namespace Poppin.Controllers
 					});
 				}
 
-				Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.ViewUserProfile);
+				Track(callerId, SegmentIOKeys.Actions.ViewUserProfile);
 				_logger.LogInformation("Get Profile By Id: User {id} (Admin User: {callerId}", id, callerId);
 				return Ok(GetPoppinUserResult(user));
 			}
@@ -337,7 +337,7 @@ namespace Poppin.Controllers
 				await _userService.UpdateUser(user);
 				// Segment.io Analytics
 				_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-				Track(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
+				Track(user.UserId, user.Email, SegmentIOKeys.Actions.UpdateProfile);
 				_logActionService.LogUserAction(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
 				return Ok(user);
 			}
