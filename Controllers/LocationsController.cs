@@ -7,6 +7,7 @@ using Poppin.Contracts.Responses;
 using Poppin.Extensions;
 using Poppin.Interfaces;
 using Poppin.Models;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
 using Poppin.Models.Tracking;
 using System;
@@ -77,7 +78,12 @@ namespace Poppin.Controllers
             {
                 { "LocationId", location.Id }
             };
-            _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
+            var id = GetUserId(SegmentIOKeys.Actions.ViewLocation);
+            _logActionService.LogUserAction(id, SegmentIOKeys.Actions.ViewLocation, action);
+            Track(id, SegmentIOKeys.Actions.ViewLocation, new Dictionary<string, object>()
+            {
+                { "LocationId", location.Id }
+            });
 
             _logger.LogInformation("Retrieved Location: {id}", location.Id);
             location.SetCrowdSize(_locationService).Wait();
@@ -170,35 +176,33 @@ namespace Poppin.Controllers
                 {
                     if (!string.IsNullOrEmpty(search.Term))
                     {
-                        locList = locList.FindAll(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
+                        locList = locList.Where(l => l.Name.IndexOf(search.Term, StringComparison.InvariantCultureIgnoreCase) >= 0).ToList();
                     }
                     total = locList.Count;
 
-                    if (search.PageLength > 0)
-                    {
-                        locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
-                    }
-                    else
-                    {
-                        locList = locList.Skip(search.Offset).ToList();
-                    }
+
+                    if (search.PageLength == 0) search.PageLength = 20;
+                    locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
 
                     if (locList.Count > 0)
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                 }
 
+                var locIds = locList.Select(l => l.Id).ToList();
                 var actionStr = new Dictionary<string, string>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
-                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null }
+                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null },
+                    { "SearchResults", locIds.ToString() }
                 };
 
                 var actionObj = new Dictionary<string, object>()
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", search.Geo },
-                    { "SearchCategories", search.CategorySlugs }
+                    { "SearchCategories", search.CategorySlugs },
+                    { "SearchResults", locIds }
                 };
 
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.Search, actionStr);
@@ -260,7 +264,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.AddLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.AddLocation, action);
-                Track(id, SegmentIOKeys.Actions.AddLocation);
+                Track(id, SegmentIOKeys.Actions.AddLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id }
+                });
 
                 return CreatedAtAction("Post", location);
             }
@@ -298,7 +305,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Track(id, SegmentIOKeys.Actions.UpdateLocation);
+                Track(id, SegmentIOKeys.Actions.UpdateLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id }
+                });
 
                 _searchedLocations.Remove(location);
                 _searchedLocations.Add(location);
@@ -345,7 +355,10 @@ namespace Poppin.Controllers
                 };
                 var id = GetUserId(SegmentIOKeys.Actions.UpdateLocation);
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateLocation, action);
-                Track(id, SegmentIOKeys.Actions.UpdateLocation, action.AsDictionary());
+                Track(id, SegmentIOKeys.Actions.UpdateLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id }
+                });
 
                 _searchedLocations.Remove(location);
                 _searchedLocations.Add(location);
@@ -385,7 +398,7 @@ namespace Poppin.Controllers
                     Errors = errors
                 });
             }
-            var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
+            var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Geo : ReliabilityScores.User;
             var checkin = new Checkin(locationId, userId, location.VisitLength, score);
 
             if (_locationService.ReconcileCheckin(checkin))
@@ -445,8 +458,8 @@ namespace Poppin.Controllers
         // DELETE: api/Locations/5
         [HttpDelete("{locationId}")]
         [Authorize]
-								//[AuthorizeRoles()]
-								public IActionResult Delete(string locationId)
+		//[AuthorizeRoles()]
+		public IActionResult Delete(string locationId)
         {
             if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
             {
@@ -468,7 +481,10 @@ namespace Poppin.Controllers
             };
             var id = GetUserId(SegmentIOKeys.Actions.DeleteLocation);
             _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DeleteLocation, action);
-            Track(id, SegmentIOKeys.Actions.DeleteLocation);
+            Track(id, SegmentIOKeys.Actions.DeleteLocation, new Dictionary<string, object>()
+                {
+                    { "LocationId", locationId }
+                });
             return Ok();
         }
 
@@ -502,15 +518,20 @@ namespace Poppin.Controllers
             {
                 var c = new Checkin(locationId, null, location.VisitLength, ReliabilityScores.Vendor);
                 await _locationService.NewCheckin(c);
+                await location.SetCrowdSize(_locationService);
 
                 var action = new Dictionary<string, string>()
                 {
-                    { "LocationId", locationId }
+                    { "LocationId", locationId },
+                    { "CrowdSize", location.CrowdSize.ToString() }
                 };
                 _logActionService.LogUserAction(id, SegmentIOKeys.Actions.IncrementCrowd, action);
-                Track(id, SegmentIOKeys.Actions.IncrementCrowd);
+                Track(id, SegmentIOKeys.Actions.IncrementCrowd, new Dictionary<string, object>()
+                {
+                    { "LocationId", location.Id },
+                    { "CrowdSize", location.CrowdSize.ToString() }
+                });
 
-                await location.SetCrowdSize(_locationService);
                 return Ok(location);
             }
 
@@ -552,24 +573,29 @@ namespace Poppin.Controllers
                 try
                 {
                     await _locationService.InvalidateVendorCheckin(locationId);
+                    await location.SetCrowdSize(_locationService);
 
                     var action = new Dictionary<string, string>()
                     {
-                        { "LocationId", locationId }
+                        { "LocationId", locationId },
+                        { "CrowdSize", location.CrowdSize.ToString() }
                     };
                     _logActionService.LogUserAction(id, SegmentIOKeys.Actions.DecrementCrowd, action);
-                    Track(id, SegmentIOKeys.Actions.DecrementCrowd);
+                    Track(id, SegmentIOKeys.Actions.DecrementCrowd, new Dictionary<string, object>()
+                    {
+                        { "LocationId", locationId },
+                        { "CrowdSize", location.CrowdSize.ToString() }
+                    });
 
-                    await location.SetCrowdSize(_locationService);
                     return Ok(location);
                 }
                 catch (Exception ex)
-																{
+				{
                     return BadRequest(new GenericFailure
                     {
                         Errors = new[] { "No eligible checkins to remove" }
                     });
-																}
+				}
             }
 
             errors.Add("You don't have permission.");

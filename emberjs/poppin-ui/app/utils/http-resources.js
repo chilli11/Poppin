@@ -36,6 +36,11 @@ const HttpResources = {
 		method: GET,
 		params: ['locId']
 	},
+	checkin: {
+		url: 'locations/checkin/:locId',
+		method: GET,
+		params: ['locId']
+	},
 	addFavorite: {
 		url: 'profile/favorites/add/:locId',
 		method: GET,

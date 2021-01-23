@@ -5,6 +5,7 @@ using Poppin.Configuration;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
 using Poppin.Models;
+using Poppin.Models.BusinessEntities;
 using Poppin.Models.Tracking;
 using System;
 using System.Collections.Generic;

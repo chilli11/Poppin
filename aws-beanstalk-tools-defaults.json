@@ -1,12 +1,12 @@
 
 {
     "comment" : "This file is used to help set default values when using the dotnet CLI extension Amazon.ElasticBeanstalk.Tools. For more information run \"dotnet eb --help\" from the project root.",
-    "profile" : "Poppin",
+    "profile" : "default",
     "region"  : "us-west-2",
-    "application" : "Poppin-dev2",
-    "environment" : "PoppinDev2-env",
+    "application" : "PoppinProd",
+    "environment" : "Poppinprod-env",
     "cname"       : "poppin-dev",
-    "solution-stack" : "64bit Windows Server 2019 v2.5.10 running IIS 10.0",
+    "solution-stack" : "64bit Windows Server 2019 v2.6.0 running IIS 10.0",
     "environment-type" : "SingleInstance",
     "instance-profile" : "aws-elasticbeanstalk-ec2-role",
     "service-role"     : "aws-elasticbeanstalk-service-role",

@@ -2,7 +2,6 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
-using Poppin.Models.BusinessEntities;
 using Poppin.Models.Geocoding.HERE;
 using Poppin.Models.Tracking;
 using Poppin.Models.Yelp;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Poppin.Models
+namespace Poppin.Models.BusinessEntities
 {
 	[BsonIgnoreExtraElements]
 	public class PoppinLocation

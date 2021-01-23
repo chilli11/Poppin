@@ -16,22 +16,26 @@
 				<a href="{{@location.website}}" class="text-dark" target="_blank">{{@location.website}}</a>
 			</p>
 			{{/if}}
+			<p>
+				Price: {{@price.name}} // Rating: <span class="rating" style="width:{{multiply-stuff @location.rating 18}}px"></span>	
+			</p>
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{@isLoading}}>
-				{{#if (or @isAdmin @isVendor)}}
 					<div class="row text-center">
-						<h3 class="col-md-12">
-							{{#if (gt @location.crowdSize 0)}}
+						<h3 class="col-md-12">Current Crowd</h3>
+						<h1 class="col-md-12">
+							{{#if (and (gt @location.crowdSize 0)  (or @isAdmin @isVendor))}}
 								<img width="40" role="button" src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
 							{{/if}}
 							{{@location.crowdSize}}
-							<img width="40" role="button" src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
-						</h3>
+							{{#if (or @isAdmin @isVendor)}}
+								<img width="40" role="button" src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
+							{{/if}}
+						</h1>
 					</div>
-				{{/if}}
 				<dl>
-					<dt>Occupancy</dt>
+					<dt>Occupancy Limit</dt>
 					<dd>{{@location.capacity}} - <div class="badge badge-{{if @location.capacityConfirmed 'info' 'default'}}">{{if @location.capacityConfirmed 'Confirmed' 'Unconfirmed'}}</div></dd>
 					<dt>Categories:</dt>
 					<dd>
@@ -39,8 +43,6 @@
 							{{category.name}}{{unless (eq category @categories.lastObject) ' //'}}
 						{{/each}}
 					</dd>
-					<dt>Visit Length:</dt>
-					<dd>{{@location.visitLength}}</dd>
 					{{#if @location.menus}}
 						<dt>Menu(s)</dt>
 						{{#each @location.menus as |menu|}}
