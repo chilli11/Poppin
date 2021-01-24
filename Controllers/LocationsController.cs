@@ -32,7 +32,8 @@ namespace Poppin.Controllers
             ILogActionService logActionService,
             ILogger<LocationsController> logger,
             IIdentityService identityService,
-            IHEREGeocoder hereGeocoder)
+            IHEREGeocoder hereGeocoder,
+            IBestTimeService btService)
         {
             _userService = userService;
             _locationService = locationService;
@@ -41,6 +42,7 @@ namespace Poppin.Controllers
             _logActionService = logActionService;
             _identityService = identityService;
             _hereGeocoder = hereGeocoder;
+            _btService = btService;
             _logger = logger;
         }
 
@@ -74,6 +76,12 @@ namespace Poppin.Controllers
                 });
             }
 
+            if (location.ForecastWeek == null || location.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddDays(-14))
+            {
+                _btService.StoreForecast(location);
+            }
+
+            // Tracking
             var action = new Dictionary<string, string>()
             {
                 { "LocationId", location.Id }
@@ -185,7 +193,13 @@ namespace Poppin.Controllers
                     locList = locList.Skip(search.Offset).Take(search.PageLength).ToList();
 
                     if (locList.Count > 0)
+                    {
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
+                        locList.ForEach((l) => {
+                            if (l.ForecastWeek == null || l.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddDays(-14))
+                                _btService.StoreForecast(l);
+                        });
+                    }
                 }
 
                 var locIds = locList.Select(l => l.Id).ToList();
@@ -256,6 +270,7 @@ namespace Poppin.Controllers
                     location.Address.Geo = GeocodeAddress(location.Address);
                 }
 
+                await _btService.StoreForecast(location);
                 await _locationService.Add(location);
 
                 var action = new Dictionary<string, string>()

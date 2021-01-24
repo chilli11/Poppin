@@ -433,6 +433,7 @@ namespace Poppin.Controllers
 			if (favorites != null && user.Favorites.Count > 0)
 			{
 				favorites.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(favorites.Select(l => l.Id)));
+				favorites.StoreForecasts(_btService);
 			}
 
 			return new PoppinUserResult()
