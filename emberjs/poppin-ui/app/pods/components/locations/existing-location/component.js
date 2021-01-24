@@ -25,6 +25,10 @@ export default class LocationFormComponent extends StatefulComponent {
 	@tracked showLoginModal;
 	@tracked showQrModal;
 
+	@tracked showAlert;
+	@tracked alertType;
+	@tracked alertMsg;
+
 	@computed('accountService.authInfo')
 	get authInfo() {
 		return this.accountService.authInfo;
@@ -86,7 +90,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		},
 		[states.LOGIN_MODAL]: {
 			[actions.CHECKIN]: states.LOADING,
-			[actions.HIDE_LOGIN_MODAL]: states.IDLE
+			[actions.HIDE_LOGIN_MODAL]: states.QR_MODAL
 		},
 		[states.LOADING]: {
 			[actions.END_LOADING]: states.IDLE,
@@ -115,7 +119,7 @@ export default class LocationFormComponent extends StatefulComponent {
 		return this.accountService[method](this.args.location.id)
 			.then(() => {
 				this.isFavorite = !this.isFavorite;
-				return this.dispatch(actions.END_LOADING);
+				return this.dispatch(actions.RESOLVE_ACTION);
 			}).catch(data => this.dispatch(actions.REJECT_ACTION, data.errors));
 	}
 
@@ -125,7 +129,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			.then((location) => {
 				this.store.findRecord('location', location.id)
 					.then((loc) => loc.crowdSize = location.crowdSize);
-				location.yelpDetails = this.args.location.yelpDetails;
+				// location.yelpDetails = this.args.location.yelpDetails;
 				this.args.refresh(location);
 				return this.dispatch(actions.END_LOADING);
 			}).catch(() => this.dispatch(actions.REJECT_ACTION, { errors: data < 0 ? 'There were no eligible checkins to remove.' : 'Something went wrong...'}));
@@ -133,22 +137,30 @@ export default class LocationFormComponent extends StatefulComponent {
 
 	[actions.CHECKIN]() {
 		return this.locationsService.checkin(this.args.location.id)
-			.then(() => this.dispatch(actions.RESOLVE_ACTION));
+			.then((location) => {
+				this.store.findRecord('location', location.id)
+					.then((loc) => loc.crowdSize = location.crowdSize);
+				this.args.refresh(location);
+				return this.dispatch(actions.RESOLVE_ACTION, "You've checked in successfully");
+			});
 	}
 
-	[actions.RESOLVE_ACTION]() {
-		this.modalMsg = 'Success!'
-		setTimeout(() => {
+	[actions.RESOLVE_ACTION](msg) {
 			this.showQrModal = false;
 			this.showLoginModal = false;
-			this.modalMsg = null;
-		}, 2000);
+
+			this.showAlert = true;
+			this.alertMsg = msg || 'Success!';
+			this.alertType = 'success';
 	}
 
 	[actions.REJECT_ACTION](data) {
-		this.modalText = data.errors.toString();
-		this.modalTitle = "Error!";
-		this.showModal = true;
+		this.showQrModal = false;
+		this.showLoginModal = false;
+
+		this.alertMsg = data.errors.toString() || "Error!";
+		this.alertType = 'danger';
+		this.showAlert = true;
 		return console.error(data);
 	}
 
@@ -168,6 +180,12 @@ export default class LocationFormComponent extends StatefulComponent {
 		this.showLoginModal = false;
 	}
 
+	@action
+	hideAlert() {
+		this.showAlert = false;
+		this.alertMsg = null;
+		this.alertType = null;
+	}
 
 	@action
 	startEdit() {
