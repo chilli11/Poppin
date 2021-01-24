@@ -50,3 +50,17 @@
 	background: url(/images/rating-balloon.png) top left repeat-x;
 	background-size: contain;
 }
+
+.crowd-mgmt {
+	h1 {
+		.arrow {
+			display: inline-block;
+			position: relative;
+			width: 52px;
+			top: 0;
+			&.disabled {
+				opacity: 0.4;
+			}
+		}
+	}
+}

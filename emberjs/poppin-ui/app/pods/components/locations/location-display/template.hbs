@@ -23,15 +23,19 @@
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{@isLoading}}>
-					<div class="row text-center">
+					<div class="row text-center crowd-mgmt">
 						<h3 class="col-md-12">Current Crowd</h3>
 						<h1 class="col-md-12">
-							{{#if (and (gt @location.crowdSize 0)  (or @isAdmin @isVendor))}}
-								<img width="40" role="button" src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
+							{{#if (or @isAdmin @isVendor)}}
+								{{#if (gt @location.crowdSize 0)}}
+									<img role="button" class="arrow" src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
+								{{else}}
+									<img class="disabled arrow" src="/images/arrow_circle_down-24px.svg" />
+								{{/if}}
 							{{/if}}
 							{{@location.crowdSize}}
 							{{#if (or @isAdmin @isVendor)}}
-								<img width="40" role="button" src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
+								<img role="button" class="arrow" src="/images/arrow_circle_up-24px.svg" {{on 'click' @increment}} />
 							{{/if}}
 						</h1>
 					</div>
