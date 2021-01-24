@@ -4,6 +4,11 @@
 	background-size: cover;
 	height: 300px;
 	width: 100%;
+	@media(max-width: 575px) {
+		&.vendor {
+			margin-bottom: -280px;
+		}
+	}
 	@media(min-width: 576px) {
 		height: 600px;
 		margin: -50px 0 -500px;
@@ -49,4 +54,18 @@
 	top: 7px;
 	background: url(/images/rating-balloon.png) top left repeat-x;
 	background-size: contain;
+}
+
+.crowd-mgmt {
+	h1 {
+		.arrow {
+			display: inline-block;
+			position: relative;
+			width: 55px;
+			top: -5px;
+			&.disabled {
+				opacity: 0.4;
+			}
+		}
+	}
 }
