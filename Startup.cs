@@ -94,6 +94,7 @@ namespace Poppin
 			services.AddHttpClient<FBAuthService>();
 			services.AddHttpClient<GoogleAuthService>();
 			services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();
+			services.AddHttpClient<IBestTimeService, BestTimeService>();
 			services.AddTransient<IOAuthHandler, OAuthHandler>();
 			services.AddTransient<IIdentityService, IdentityService>();
 			services.AddTransient<ITokenService, TokenService>();

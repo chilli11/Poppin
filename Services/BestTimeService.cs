@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Poppin.Configuration;
 using Poppin.Contracts.Requests;
@@ -15,14 +16,22 @@ namespace Poppin.Services
 {
     public class BestTimeService : IBestTimeService
     {
+        private string _apiUrl = "https://besttime.app/api/v1/";
         private HttpClient _httpClient;
         private IBestTimeSettings _btSettings;
-        private string _apiUrl = "https://besttime.app/api/v1/";
+        private ILocationService _locationService;
+        private ILogger<BestTimeService> _logger;
 
-        public BestTimeService(HttpClient httpClient, IBestTimeSettings btSettings)
+        public BestTimeService(
+            HttpClient httpClient,
+            IBestTimeSettings btSettings,
+            ILocationService locationService,
+            ILogger<BestTimeService> logger)
         {
             _httpClient = httpClient;
             _btSettings = btSettings;
+            _locationService = locationService;
+            _logger = logger;
         }
         public BestTimeWeek GetRawWeek(string venueId)
         {
@@ -32,10 +41,34 @@ namespace Poppin.Services
         {
             return new BestTimeWeek();
         }
-        public Task<BestTimeWeek> ForecastRawWeekAsync(PoppinLocation loc)
+        public async Task<BestTimeWeek> ForecastRawWeekAsync(PoppinLocation loc)
         {
             var request = new BestTimeRequest(loc, _btSettings.PrivateKey);
-            return RetrieveAndDeserialize<BestTimeWeek>("forecasts/week/raw2", request.AsStringDictionary(), HttpMethod.Post);
+            loc.ForecastWeek = await RetrieveAndDeserialize<BestTimeWeek>("forecasts/week/raw2", request.AsStringDictionary(), HttpMethod.Post);
+            loc.ForecastWeek.ForecastUpdatedOn = DateTime.Now;
+            try
+            {
+                await _locationService.Update(loc);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
+            return loc.ForecastWeek;
+        }
+        public async Task StoreForecast(PoppinLocation loc)
+        {
+            var request = new BestTimeRequest(loc, _btSettings.PrivateKey);
+            loc.ForecastWeek = await RetrieveAndDeserialize<BestTimeWeek>("forecasts/week/raw2", request.AsStringDictionary(), HttpMethod.Post);
+            loc.ForecastWeek.ForecastUpdatedOn = DateTime.Now;
+            try
+            {
+                await _locationService.Update(loc);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+            }
         }
 
         private async Task<T> RetrieveAndDeserialize<T>(string path, IDictionary<string, string> queryParams, HttpMethod method)

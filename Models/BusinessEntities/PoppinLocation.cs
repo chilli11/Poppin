@@ -82,7 +82,19 @@ namespace Poppin.Models.BusinessEntities
 		public int Capacity { get; set; }
 		public bool CapacityConfirmed { get; set; }
 		public int CrowdSize { get; set; }
-		public BestTimeWeek Forecast { get; set; }
+		public int Forecast
+        {
+			get
+            {
+				int cast;
+				if (ForecastWeek != null && ForecastWeek.Analysis != null)
+					cast = ForecastWeek.GetForecastOccupancy();
+				else
+					cast = 0;
+				return cast;
+            }
+        }
+		public BestTimeWeek ForecastWeek { get; set; }
 
 		/// <summary>
 		/// VisitLength is in minutes
@@ -121,6 +133,8 @@ namespace Poppin.Models.BusinessEntities
 
 		public void SetCrowdSize(IEnumerable<Checkin> checkins) =>
 			CrowdSize = (int)Math.Round(checkins.Select(c => c.ReliabilityScore).Sum());
+
+		public double Occupancy() => Capacity > 0 ? CrowdSize / Capacity : 0;
 
 		public override bool Equals(Object obj)
 		{

@@ -159,6 +159,6 @@ namespace Poppin.Models.BusinessEntities
 
 	public interface IForecast
 	{
-		public double GetForecastOccupancy();
+		public int GetForecastOccupancy();
 	}
 }
