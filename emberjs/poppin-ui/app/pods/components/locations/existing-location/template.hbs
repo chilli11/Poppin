@@ -1,11 +1,21 @@
 {{#if @location.mainPhotoUrl}}
-	<div class="col-md-12 location-banner{{if (eq this.machineState 'EDIT_LOCATION') ' edit'}}" style="background-image: url({{@location.mainPhotoUrl}})">
+	<div class="col-lg-12 location-banner{{if (eq this.machineState 'EDIT_LOCATION') ' edit'}}{{if (or this.isAdmin this.isVendor) ' vendor'}}" style="background-image: url({{@location.mainPhotoUrl}})">
 		<div class="logo">
 			<img src="{{@location.logoUrl}}" />
 		</div>
 	</div>
 {{/if}}
 
+<div class="col-lg-12">
+	<BsAlert
+		@visible={{this.showAlert}}
+		@fade={{true}}
+		@type={{this.alertType}}
+		@dismissible={{true}}
+		@onDismissed={{fn this.hideAlert}}>
+		<p>{{alertMsg}}</p>
+	</BsAlert>
+</div>
 {{#if (eq this.machineState 'EDIT_LOCATION')}}
 	<Locations::LocationForm
 		@reverseOrder=true
@@ -44,19 +54,18 @@
 		<h4 class="modal-title">WELCOME TO POPP!N</h4>
 	</modal.header>
 	<modal.body>
-		{{#if this.modalMsg}}
-			<p>{{this.modalMsg}}</p>
-		{{/if}}
-		{{#if this.profile}}
-			<BsButton @type="primary" @onClick={{this.checkin}}>Check in to {{@location.name}}</BsButton>
-		{{else}}
-			<BsButton @type="primary" @onClick={{this.startLoginModal}}>Check in to {{@location.name}}</BsButton>
-		{{/if}}
-		<a href="http://get-poppin.com" target="_blank" class="btn btn-info">Learn about Popp!n</a>
-		<hr>
-		<h4>Download the app:</h4>
-		<a href="https://apps.apple.com/us/app/popp-n/id1528110407" class="btn btn-default" target="_blank">Apple App Store</a>
-		<a href="https://play.google.com/store/apps/details?id=com.getpoppin.app" class="btn btn-default" target="_blank">Google Play</a>
+		<LoadingSpinner @isLoading={{eq this.machineState 'LOADING'}}>
+			{{#if this.profile}}
+				<BsButton @type="primary" @onClick={{this.checkin}}>Check in to {{@location.name}}</BsButton>
+			{{else}}
+				<BsButton @type="primary" @onClick={{this.startLoginModal}}>Check in to {{@location.name}}</BsButton>
+			{{/if}}
+			<a href="http://get-poppin.com" target="_blank" class="btn btn-info">Learn about Popp!n</a>
+			<hr>
+			<h4>Download the app:</h4>
+			<a href="https://apps.apple.com/us/app/popp-n/id1528110407" class="btn btn-default" target="_blank">Apple App Store</a>
+			<a href="https://play.google.com/store/apps/details?id=com.getpoppin.app" class="btn btn-default" target="_blank">Google Play</a>
+		</LoadingSpinner>
 	</modal.body>
 	<modal.footer>
 		<BsButton @onClick={{this.endQrModal}}>Close</BsButton>
@@ -65,14 +74,14 @@
 
 <BsModal @open={{this.showLoginModal}} as |modal|>
 	<modal.body>
-		{{#if this.modalMsg}}
-			<p>{{this.modalMsg}}</p>
-		{{/if}}
-		<p>
-			Sign up in less than 2 minutes with an email address. We DO NOT share your personal information.
-			See our <a href="https://www.termsfeed.com/live/fd313d9c-42e9-4957-9c65-815152a2ec0c">privacy policy</a> for details.
-		</p>
-		<Account::LoginForm @refresh={{this.checkin}} />
+		<LoadingSpinner @isLoading={{eq this.machineState 'LOADING'}}>
+			<p>
+				Sign up in less than 2 minutes with an email address. We DO NOT share your personal information.
+				See our <a class="btn btn-sm" href="https://www.termsfeed.com/live/fd313d9c-42e9-4957-9c65-815152a2ec0c">privacy policy</a> for details.
+				Or <span role="button" class="btn btn-sm" {{on "click" this.checkin}}>Check in without an account</span>
+			</p>
+			<Account::LoginForm @refresh={{this.checkin}} />
+		</LoadingSpinner>
 	</modal.body>
 	<modal.footer>
 		<BsButton @onClick={{this.endLoginModal}}>Close</BsButton>
