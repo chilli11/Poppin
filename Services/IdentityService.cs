@@ -92,6 +92,7 @@ namespace Poppin.Services
 
 			var user = new User
 			{
+				Id = Guid.NewGuid(),
 				Email = email,
 				UserName = email,
 				Role = RoleTypes.User
@@ -107,33 +108,34 @@ namespace Poppin.Services
 				};
 			}
 
-			var newUser = await _userManager.FindByEmailAsync(user.Email);
 
 			// Segment.io Analytics
-			Analytics.Client.Identify(newUser.Id.ToString(), new Traits
+			Analytics.Client.Identify(user.Id.ToString(), new Traits
 			{
-				{ "email", newUser.Email },
-				{ "username", newUser.UserName },
+				{ "email", user.Email },
+				{ "username", user.UserName },
 				{ "category", SegmentIOKeys.Categories.Identity },
 				{ "action", SegmentIOKeys.Actions.Register },
 				{ "createdAt", DateTime.UtcNow }
 			});
+			_logActionService.LogUserAction(user.Id.ToString(), SegmentIOKeys.Actions.Register);
 
-			var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
-			Analytics.Client.Track(newUser.Id.ToString(), SegmentIOKeys.Actions.Register, new Properties()
+			var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+			Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.Register, new Properties()
 			{
+				{ "email", user.Email },
 				{ "emailConfirmToken", confirmationToken }
 			});
 
-			_smtpService.SendConfirmationEmail(newUser, confirmationToken);
-			return GenerateAuthenticationResultForUser(newUser, ipAddress);
+			_smtpService.SendConfirmationEmail(user, confirmationToken);
+			return GenerateAuthenticationResultForUser(user, ipAddress);
 		}
 
 		public async Task<IdentityResult> ConfirmEmailAsync(User user, string token)
 		{
 			// Segment.io Analytics
 			Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.ConfirmEmail);
-			Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.ConfirmEmail);
+			Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.ConfirmEmail, new Properties() { { "email", user.Email } });
 
 			return await _userManager.ConfirmEmailAsync(user, token);
 		}
@@ -152,6 +154,7 @@ namespace Poppin.Services
 			var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
 			Analytics.Client.Track(existingUser.Id.ToString(), SegmentIOKeys.Actions.Register, new Properties()
 			{
+				{ "email", existingUser.Email },
 				{ "emailConfirmToken", confirmationToken }
 			});
 
@@ -182,7 +185,7 @@ namespace Poppin.Services
 
 			// Segment.io Analytics
 			Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
-			Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.Login);
+			Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.Login, new Traits() { { "email", user.Email } });
 
 			return GenerateAuthenticationResultForUser(user, ipAddress);
 		}
@@ -240,6 +243,7 @@ namespace Poppin.Services
 
 				Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.Register, new Properties()
 				{
+					{ "email", user.Email },
 					{ "emailConfirmToken", "OAuth-register" }
 				});
 			}
@@ -247,7 +251,7 @@ namespace Poppin.Services
 			{
 				// Segment.io Analytics
 				Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.Login);
-				Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.Login);
+				Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.Login, new Traits() { { "email", user.Email } });
 			}
 
 			return GenerateAuthenticationResultForUser(user, ipAddress);
@@ -270,6 +274,7 @@ namespace Poppin.Services
 			Identify(user, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.StartPasswordReset);
 			Analytics.Client.Track(user.Id.ToString(), SegmentIOKeys.Actions.StartPasswordReset, new Properties()
 			{
+				{ "email", user.Email },
 				{ "passwordResetToken", resetToken }
 			});
 

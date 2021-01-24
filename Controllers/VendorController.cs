@@ -362,11 +362,27 @@ namespace Poppin.Controllers
 		/// <param name="vendorId"></param>
 		/// <param name="kvp"></param>
 		/// <returns></returns>
+		[Authorize(Policy = RoleTypes.Admin)]
 		[HttpPost("add-location/{vendorId}")]
 		public async Task<IActionResult> AddLocation(string vendorId, IDictionary<string, string> kvp)
 		{
 			var locationId = kvp["locationId"];
 			var loc = await _locationService.Get(locationId);
+			var vendor = await _vendorService.GetVendorById(vendorId);
+			if (vendor == null)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "Vendor ID is invalid." }
+				});
+			}
+			if (loc == null)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "Locataion ID is invalid." }
+				});
+			}
 
 			if (loc.VendorId != null)
 			{
@@ -376,42 +392,29 @@ namespace Poppin.Controllers
 				});
 			}
 
-			var vendor = await _vendorService.GetVendorById(vendorId);
-			if (vendor == null)
+			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+			try
 			{
-				return BadRequest(new GenericFailure
+				vendor.LocationIds.Add(locationId);
+				loc.VendorId = vendorId;
+
+				await _vendorService.UpdateVendor(vendor);
+				await _locationService.Update(loc);
+				return Ok(new VendorResult
 				{
-					Errors = new[] { "Vendor ID is invalid." }
+					Vendor = vendor,
+					Locations = vendor.GetLocations(_locationService)
 				});
 			}
-
-			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-			if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
+			catch (Exception e)
 			{
-				try
+				var errors = new List<string>();
+				errors.Add(e.Message);
+				return BadRequest(new GenericFailure
 				{
-					vendor.LocationIds.Add(locationId);
-					loc.VendorId = vendorId;
-
-					await _vendorService.UpdateVendor(vendor);
-					await _locationService.Update(loc);
-					return Ok(new VendorResult
-					{
-						Vendor = vendor,
-						Locations = vendor.GetLocations(_locationService)
-					});
-				}
-				catch (Exception e)
-				{
-					var errors = new List<string>();
-					errors.Add(e.Message);
-					return BadRequest(new GenericFailure
-					{
-						Errors = errors
-					});
-				}
+					Errors = errors
+				});
 			}
-			return Unauthorized();
 		}
 
 		//POST api/Vendors/remove-location/5
@@ -423,19 +426,10 @@ namespace Poppin.Controllers
 		/// <param name="vendorId"></param>
 		/// <param name="kvp"></param>
 		/// <returns></returns>
+		[Authorize(Policy = RoleTypes.Admin)]
 		[HttpPost("remove-location/{vendorId}")]
 		public async Task<IActionResult> RemoveLocation(string vendorId, IDictionary<string, string> kvp)
 		{
-			var locationId = kvp["locationId"];
-			var loc = await _locationService.Get(locationId);
-			if (loc.VendorId != vendorId)
-			{
-				return BadRequest(new GenericFailure
-				{
-					Errors = new[] { "You don't have the proper permissions for this action." }
-				});
-			}
-
 			var vendor = await _vendorService.GetVendorById(vendorId);
 			if (vendor == null)
 			{
@@ -445,33 +439,46 @@ namespace Poppin.Controllers
 				});
 			}
 
-			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
-			if (vendor.AdminIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
+			var locationId = kvp["locationId"];
+			var loc = await _locationService.Get(locationId);
+			if (loc == null)
 			{
-				try
+				return BadRequest(new GenericFailure
 				{
-					vendor.LocationIds.Remove(locationId);
-					loc.VendorId = null;
-
-					await _vendorService.UpdateVendor(vendor);
-					await _locationService.Update(locationId, loc);
-					return Ok(new VendorResult
-					{
-						Vendor = vendor,
-						Locations = vendor.GetLocations(_locationService)
-					});
-				}
-				catch (Exception e)
-				{
-					var errors = new List<string>();
-					errors.Add(e.Message);
-					return BadRequest(new GenericFailure
-					{
-						Errors = errors
-					});
-				}
+					Errors = new[] { "Location ID is invalid." }
+				});
 			}
-			return Unauthorized();
+			if (loc.VendorId != null && loc.VendorId != vendorId)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "Location not claimed by this vendor." }
+				});
+			}
+
+			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+			try
+			{
+				vendor.LocationIds.Remove(locationId);
+				loc.VendorId = null;
+
+				await _vendorService.UpdateVendor(vendor);
+				await _locationService.Update(locationId, loc);
+				return Ok(new VendorResult
+				{
+					Vendor = vendor,
+					Locations = vendor.GetLocations(_locationService)
+				});
+			}
+			catch (Exception e)
+			{
+				var errors = new List<string>();
+				errors.Add(e.Message);
+				return BadRequest(new GenericFailure
+				{
+					Errors = errors
+				});
+			}
 		}
 
 		// DELETE api/Vendors/5

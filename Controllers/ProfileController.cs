@@ -65,7 +65,7 @@ namespace Poppin.Controllers
 			{
 				var user = await GetUserProfile(id);
                         
-				Track(id, SegmentIOKeys.Actions.ViewUserProfile);
+				Track(id, user.Email, SegmentIOKeys.Actions.ViewUserProfile);
 				_logger.LogInformation("Profile Retrieved: {id}", id);
 				return Ok(await GetPoppinUserResult(user));
 
@@ -93,7 +93,7 @@ namespace Poppin.Controllers
 		public async Task<IActionResult> Get(string id)
 		{
 			var isAdmin = GetUserRole() == RoleTypes.Admin;
-			var callerId = GetUserId();
+			var callerId = GetUserId(SegmentIOKeys.Actions.ViewUserProfile);
 
 			if (!isAdmin)
 			{
@@ -114,7 +114,7 @@ namespace Poppin.Controllers
 					});
 				}
 
-				Track(GetUserId(SegmentIOKeys.Actions.ViewUserProfile), SegmentIOKeys.Actions.ViewUserProfile);
+				Track(callerId, SegmentIOKeys.Actions.ViewUserProfile);
 				_logger.LogInformation("Get Profile By Id: User {id} (Admin User: {callerId}", id, callerId);
 				return Ok(GetPoppinUserResult(user));
 			}
@@ -337,7 +337,8 @@ namespace Poppin.Controllers
 				await _userService.UpdateUser(user);
 				// Segment.io Analytics
 				_identityService.Identify(user.UserId, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-				Track(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
+				Track(user.UserId, user.Email, SegmentIOKeys.Actions.UpdateProfile);
+				_logActionService.LogUserAction(user.UserId, SegmentIOKeys.Actions.UpdateProfile);
 				return Ok(user);
 			}
 			catch (Exception ex)
@@ -349,14 +350,15 @@ namespace Poppin.Controllers
 			}
 		}
 
-		// DELETE api/<ProfileController>/5
-		[HttpDelete("{id}")]
-		public void Delete(string id)
-		{
-			// Segment.io Analytics
-			_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
-			Track(id, SegmentIOKeys.Actions.UpdateProfile);
-		}
+		//// DELETE api/<ProfileController>/5
+		//[HttpDelete("{id}")]
+		//public void Delete(string id)
+		//{
+		//	// Segment.io Analytics
+		//	_identityService.Identify(id, SegmentIOKeys.Categories.Identity, SegmentIOKeys.Actions.UpdateProfile);
+		//	_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateProfile);
+		//	Track(id, SegmentIOKeys.Actions.UpdateProfile);
+		//}
 
 		/// <summary>
 		/// Update User location
@@ -367,6 +369,7 @@ namespace Poppin.Controllers
 			var id = GetUserId(SegmentIOKeys.Actions.UpdateGeo);
 			var coords = new GeoJson2DGeographicCoordinates(geoJson.Coordinates[0], geoJson.Coordinates[1]);
 			var action = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(coords).AsStringDictionary();
+
 			_logActionService.LogUserAction(id, SegmentIOKeys.Actions.UpdateGeo, (Dictionary<string,string>)action);
 			Track(id, SegmentIOKeys.Actions.UpdateGeo);
 
