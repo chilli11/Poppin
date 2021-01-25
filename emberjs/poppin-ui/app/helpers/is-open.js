@@ -11,21 +11,19 @@ const isOpen = function isOpen(params) {
     const today = new Date();
     var day = today.getDay();
     var hour = today.getHours();
-
-    var afterOpen = false;
-    var beforeClose = false;
+    var minute = today.getMinutes();
 
     if (day == 0) day = 6;
     else day--;
     let todayHours = location.hours[day];
     
     // RETURN TRUE IF NO DATA
-    if (!todayHours.opening || todayHours.closing) return true;
+    if (!todayHours.opening || !todayHours.closing) return true;
 
     let opening = parseInt(todayHours.opening.substr(0,2), 10);
     let closing = parseInt(todayHours.closing.substr(0,2), 10);
 
-    if (opening < hour)
+    if (opening <= hour)
     {
       if (closing < opening || closing > hour) {
         return true;
