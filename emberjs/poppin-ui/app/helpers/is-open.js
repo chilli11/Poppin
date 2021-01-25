@@ -18,7 +18,7 @@ const isOpen = function isOpen(params) {
     let todayHours = location.hours[day];
     
     // RETURN TRUE IF NO DATA
-    if (!todayHours.opening || todayHours.closing) return true;
+    if (!todayHours.opening || !todayHours.closing) return true;
 
     let opening = parseInt(todayHours.opening.substr(0,2), 10);
     let closing = parseInt(todayHours.closing.substr(0,2), 10);
