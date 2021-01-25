@@ -74,14 +74,39 @@
 				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
 				<form.element @controlType="tel" @label="Phone" @placeholder="Phone" @property="phone" />
 				<hr>
+				<h5 class="card-title">Hours</h5>
+				{{#each this.hours as |day|}}					
+					<form.group>
+						<label class="col-sm-4">{{day.day}}</label>
+						<label class="col-sm-2">Open:</label>
+						<div class="col-sm-2">
+							<PowerSelect
+								@options={{this.hourOptions}}
+								@selected={{day.opening}}
+								@onChange={{fn (mut day.opening)}} as |h|>
+								{{h}}
+							</PowerSelect>
+						</div>
+						<label class="col-sm-2">Close:</label>
+						<div class="col-sm-2">
+							<PowerSelect
+								@options={{this.hourOptions}}
+								@selected={{day.closing}}
+								@onChange={{fn (mut day.closing)}} as |h|>
+								{{h}}
+							</PowerSelect>
+						</div>
+					</form.group>
+				{{/each}}
+				<hr>
 				<h5>Add a Menu</h5>
 				<form.element @label="Name" @placeholder="Breakfast|Brunch|Lunch|Dinner|Cocktails|Wine|Beer" @controlType="text" @property="menuName" />
 				<form.element @label="URL" @placeholder="https://awesomebiz.com/menu" @controlType="text" @property="menuUrl" />
 				<hr>
 				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://www.yelp.com/biz/awesome-biz-2/" @property="yelpUrl" />
-				<div class="form-group row">
-					<form.element class="col-lg-6" @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
-					<div class="form-check col-lg-6">
+				<div class="row">
+					<form.element class="col-sm-6" @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
+					<div class="form-check col-sm-6">
 						<label class="form-check-label col-form-label">
 							<Input class="form-check-input" @type="checkbox" @checked={{this.capacityConfirmed}} />
 							Confirmed?

@@ -19,6 +19,15 @@ const defHours = [
 	{ opening: null, closing: null,  day: days[6] },
 ];
 
+const makeHourOpts = function() {
+	const output = [];
+	for (var i=0;i<24;i++) {
+		output.push(('0' + i).substr(-2) + ':00');
+	}
+	return output;
+}
+const hourOpts = makeHourOpts();
+
 const ratingOptions = [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5];
 const priceOptions = [
 	{ value: 1, name: '$' },
@@ -43,6 +52,7 @@ export default class LocationFormComponent extends StatefulComponent {
 	statesWithCodes = StatesWithCodes;
 	ratingOptions = ratingOptions;
 	priceOptions = priceOptions;
+	hourOptions = hourOpts;
 
 	transitions = {
 		[states.IDLE]: {
