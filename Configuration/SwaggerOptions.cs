@@ -19,9 +19,6 @@ namespace Poppin.Configuration
         private readonly IEnumerable<string> objectIdIgnoreParameters = new[]
         {
             nameof(ObjectId.Timestamp),
-            nameof(ObjectId.Machine),
-            nameof(ObjectId.Pid),
-            nameof(ObjectId.Increment),
             nameof(ObjectId.CreationTime)
         };
 
