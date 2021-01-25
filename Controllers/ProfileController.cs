@@ -35,6 +35,7 @@ namespace Poppin.Controllers
 			ILogActionService logActionService,
 			ILocationService locationService,
 			IVendorService vendorService,
+			IBestTimeService btService,
 			ILogger<ProfileController> logger)
 		{
 			_identityService = identityService;
@@ -42,6 +43,7 @@ namespace Poppin.Controllers
 			_logActionService = logActionService;
 			_locationService = locationService;
 			_vendorService = vendorService;
+			_btService = btService;
 			_logger = logger;
 		}
 

@@ -20,6 +20,10 @@ export default class AdminCategoriesController extends Controller {
 		return this.categoriesService.categories;
 	}
 
+	/**
+	 * Populates fields on the controller
+	 * @param {CategoryModel} cat
+	 */
 	populateForm(cat) {
 		const parCatArr = this.categories.filter(c => c.slug == cat.parent);
 		set(this, 'cleanCategory', cat);
@@ -32,6 +36,10 @@ export default class AdminCategoriesController extends Controller {
 		set(this, 'children', this.categories.filter(c => (cat.children || []).indexOf(c.slug) > -1) || []);
 	}
 
+	/**
+	 * Uses controller properties to POST or PUT
+	 * a category, depending on inputs
+	 */
 	@action
 	addOrUpdateCategory() {
 		let method = this.isUpdate ? 'updateCategory' : 'addCategory';

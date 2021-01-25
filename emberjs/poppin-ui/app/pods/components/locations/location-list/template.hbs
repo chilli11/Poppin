@@ -1,11 +1,34 @@
+<p class="small">* Estimate based on previous data</p>
 {{#each @locations as |loc|}}
 	<div class="card location{{if (eq loc.vendorId @vendorId) ' vendor-match'}}">
 		<div class="card-body" role="button" {{on "click" (fn @clickAction loc)}}>
+			{{#if (is-open loc)}}
+				{{#if loc.vendorId}}
+					<span class="badge badge-primary">
+						{{loc.crowdSize}} checkins
+					</span>
+				{{else}}
+					{{#if loc.forecastWeek.analysis}}
+						{{#if (lt loc.forecast 35)}}
+							<span class="badge badge-success">{{loc.forecast}}%*</span>
+						{{/if}}
+						{{#if (and (gte loc.forecast 35) (lt loc.forecast 70))}}
+							<span class="badge badge-warning">{{loc.forecast}}%*</span>
+						{{/if}}
+						{{#if (gte loc.forecast 70)}}
+							<span class="badge badge-danger">{{loc.forecast}}%*</span>
+						{{/if}}
+					{{/if}}
+				{{/if}}
+			{{/if}}
+					
 			<span class="strong">{{loc.name}}</span> //
 			<span>{{loc.address.line1}} // {{loc.address.city}}, {{loc.address.state}}</span>
-			<span class="badge badge-default">
-				{{#each loc.categories as |cat i|}}{{if (gt i 0) ', '}}{{cat}}{{/each}}
-			</span>
+			{{#if loc.categories}}
+				<span class="badge badge-default">
+					{{#each loc.categories as |cat i|}}{{if (gt i 0) ', '}}{{cat}}{{/each}}
+				</span>
+			{{/if}}
 		</div>
 	</div>
 {{/each}}

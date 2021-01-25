@@ -24,9 +24,11 @@
 		</div>
 		<div class="card-body">
 			<LoadingSpinner @isLoading={{@isLoading}}>
-					<div class="row text-center crowd-mgmt">
-						<h3 class="col-lg-12">Current Crowd</h3>
-						<h1 class="col-lg-12">
+				{{!-- Crowd Info --}}
+				<div class="row text-center crowd-mgmt">
+					<div class="col-sm-6 live-data">
+						<h3 class="col-sm-12">Live Occupancy</h3>
+						<h1 class="col-sm-12">
 							{{#if (or @isAdmin @isVendor)}}
 								{{#if (gt @location.crowdSize 0)}}
 									<img role="button" class="arrow" src="/images/arrow_circle_down-24px.svg" {{on 'click' @decrement}} />
@@ -40,6 +42,13 @@
 							{{/if}}
 						</h1>
 					</div>
+					<div class="col-sm-6 forecast">
+						<h3 class="col-sm-12">Estimate</h3>
+						<h1 class="col-sm-12">{{if @location.forecastWeek.analysis (concat @location.forecast '%') '--'}}</h1>
+						<span class="small">* Estimate is based on past occupancy patterns and is not as reliable as live counts from Poppin Partners.</span>
+					</div>
+				</div>
+				{{!-- /Crowd Info --}}
 				<dl>
 					<dt>Occupancy Limit</dt>
 					<dd>{{@location.capacity}} - <div class="badge badge-{{if @location.capacityConfirmed 'info' 'default'}}">{{if @location.capacityConfirmed 'Confirmed' 'Unconfirmed'}}</div></dd>
