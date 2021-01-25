@@ -74,12 +74,10 @@ namespace Poppin.Controllers
 			}
 			catch (Exception ex)
 			{
-				var errors = new List<string>();
-				errors.Add(ex.Message);
 				_logger.LogError("Get Profile Failed: {exception}", ex);
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { ex.Message }
 				});
 			}
 		}
@@ -122,12 +120,10 @@ namespace Poppin.Controllers
 			}
 			catch (Exception ex)
 			{
-				var errors = new List<string>();
-				errors.Add(ex.Message);
 				_logger.LogError("Get Profile By Id Failed: {exception}, (user: {userId})", ex, callerId);
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { ex.Message }
 				});
 			}
 		}
@@ -449,8 +445,8 @@ namespace Poppin.Controllers
 
 		private List<PoppinLocation> GetRecentLocationList(string id, int dayOffset, int hourOffset)
 		{
-			if (hourOffset > 0) hourOffset = hourOffset * -1;
-			if (dayOffset > 0) dayOffset = dayOffset * -1;
+			if (hourOffset > 0) hourOffset *= -1;
+			if (dayOffset > 0) dayOffset *= -1;
 
 			var startDay = DateTime.Today;
 			if (hourOffset == 0)

@@ -22,7 +22,7 @@ namespace Poppin.Controllers
     [ApiController]
     public class LocationsController : PoppinBaseController
     {
-        private List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
+        private readonly List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
 
         public LocationsController(
             ILocationService locationService,
@@ -119,11 +119,9 @@ namespace Poppin.Controllers
             var location = GetLocation(locationId);
             if (location == null)
             {
-                var errors = new List<string>();
-                errors.Add("Location ID is invalid");
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { "Location ID is invalid" }
                 });
             }
             if (location.YelpDetails == null)
@@ -207,7 +205,7 @@ namespace Poppin.Controllers
                 {
                     { "SearchTerm", search.Term },
                     { "SearchLocation", $"{search.Geo.Coordinates[0]}, {search.Geo.Coordinates[1]}" },
-                    { "SearchCategories", search.CategorySlugs != null ? search.CategorySlugs.ToString() : null },
+                    { "SearchCategories", search.CategorySlugs?.ToString() },
                     { "SearchResults", locIds.ToString() }
                 };
 
@@ -331,11 +329,9 @@ namespace Poppin.Controllers
             }
             catch(Exception e)
             {
-                var errors = new List<string>();
-                errors.Add(e.Message);
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { e.Message }
                 });
             }
         }
@@ -381,11 +377,9 @@ namespace Poppin.Controllers
             }
             catch (Exception e)
             {
-                var errors = new List<string>();
-                errors.Add(e.Message);
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { e.Message }
                 });
             }
         }
@@ -406,11 +400,9 @@ namespace Poppin.Controllers
 
             if (location == null)
             {
-                var errors = new List<string>();
-                errors.Add("Location ID is invalid");
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { "Location ID is invalid" }
                 });
             }
             var score = string.IsNullOrEmpty(userId) ? ReliabilityScores.Vendor : ReliabilityScores.User;
@@ -448,11 +440,9 @@ namespace Poppin.Controllers
 
             if (location == null)
             {
-                var errors = new List<string>();
-                errors.Add("Location ID is invalid");
                 return BadRequest(new GenericFailure
                 {
-                    Errors = errors
+                    Errors = new[] { "Location ID is invalid" }
                 });
             }
 
@@ -604,7 +594,7 @@ namespace Poppin.Controllers
 
                     return Ok(location);
                 }
-                catch (Exception ex)
+                catch
 				{
                     return BadRequest(new GenericFailure
                     {
