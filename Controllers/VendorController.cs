@@ -28,12 +28,14 @@ namespace Poppin.Controllers
 			IVendorService vendorService,
 			ILocationService locationService,
 			IUserService userService,
-			IIdentityService identityService)
+			IIdentityService identityService,
+			IBestTimeService btService)
 		{
 			_vendorService = vendorService;
 			_locationService = locationService;
 			_userService = userService;
 			_identityService = identityService;
+			_btService = btService;
 		}
 
 		[HttpGet]
@@ -90,11 +92,14 @@ namespace Poppin.Controllers
 			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendor);
 			if (vendor.AdminIds.Contains(userId) || vendor.MemberIds.Contains(userId) || GetUserRole() == RoleTypes.Admin)
 			{
+				var locations = vendor.GetLocations(_locationService).ToList();
+				locations.StoreForecasts(_btService);
+
 				var vResult = new VendorResult
 				{
 					Vendor = vendor,
 					SubVendors = vendor.GetSubVendors(_vendorService),
-					Locations = vendor.GetLocations(_locationService),
+					Locations = locations,
 					Admins = vendor.GetAdmins(_userService),
 					Members = vendor.GetMembers(_userService)
 				};
