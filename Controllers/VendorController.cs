@@ -46,11 +46,9 @@ namespace Poppin.Controllers
 			var vendors = await _vendorService.GetVendorsByIds(profile.VendorIds);
 			if (vendors == null)
 			{
-				var errors = new List<string>();
-				errors.Add("No Results Found");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "No Results Found" }
 				});
 			}
 			return Ok(vendors);
@@ -64,11 +62,9 @@ namespace Poppin.Controllers
 			var vendors = await _vendorService.GetAll();
 			if (vendors == null)
 			{
-				var errors = new List<string>();
-				errors.Add("No Results Found");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "No Results Found" }
 				});
 			}
 			return Ok(vendors);
@@ -81,11 +77,9 @@ namespace Poppin.Controllers
 			var vendor = await _vendorService.GetVendorById(vendorId);
 			if (vendor == null)
 			{
-				var errors = new List<string>();
-				errors.Add("Vendor ID is invalid");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "Vendor ID is invalid" }
 				});
 			}
 
@@ -126,11 +120,9 @@ namespace Poppin.Controllers
 
 			if (vendors == null)
 			{
-				var errors = new List<string>();
-				errors.Add("No Results Found");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "No Results Found" }
 				});
 			}
 
@@ -148,11 +140,9 @@ namespace Poppin.Controllers
 			var vendors = await _vendorService.GetVendorsBySearch(searchTerm);
 			if (vendors == null)
 			{
-				var errors = new List<string>();
-				errors.Add("No Results Found");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "No Results Found" }
 				});
 			}
 			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
@@ -197,11 +187,9 @@ namespace Poppin.Controllers
 				}
 				catch (Exception e)
 				{
-					var errors = new List<string>();
-					errors.Add(e.Message);
 					return BadRequest(new GenericFailure
 					{
-						Errors = errors
+						Errors = new[] { e.Message }
 					});
 				}
 			}
@@ -224,11 +212,9 @@ namespace Poppin.Controllers
 				}
 				catch (Exception e)
 				{
-					var errors = new List<string>();
-					errors.Add(e.Message);
 					return BadRequest(new GenericFailure
 					{
-						Errors = errors
+						Errors = new[] { e.Message }
 					});
 				}
 			}
@@ -243,11 +229,9 @@ namespace Poppin.Controllers
 			var vendor = await _vendorService.GetVendorById(vendorId);
 			if (vendor == null || user == null)
 			{
-				var errors = new List<string>();
-				errors.Add("Vendor or User ID is invalid");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "Vendor or User ID is invalid" }
 				});
 			}
 
@@ -283,11 +267,9 @@ namespace Poppin.Controllers
 				}
 				catch (Exception e)
 				{
-					var errors = new List<string>();
-					errors.Add(e.Message);
 					return BadRequest(new GenericFailure
 					{
-						Errors = errors
+						Errors = new[] { e.Message }
 					});
 				}
 			}
@@ -302,11 +284,9 @@ namespace Poppin.Controllers
 			var vendor = await _vendorService.GetVendorById(vendorId);
 			if (vendor == null || user == null)
 			{
-				var errors = new List<string>();
-				errors.Add("Vendor or User ID is invalid");
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { "Vendor or User ID is invalid" }
 				});
 			}
 
@@ -320,11 +300,9 @@ namespace Poppin.Controllers
 					{
 						if (userId == newMember.UserId && authRole != RoleTypes.Admin)
 						{
-							var errors = new List<string>();
-							errors.Add("You can't remove your own Admin privileges!");
 							return BadRequest(new GenericFailure
 							{
-								Errors = errors
+								Errors = new[] { "You can't remove your own Admin privileges!" }
 							});
 						}
 						vendor.AdminIds.Remove(newMember.UserId);
@@ -347,11 +325,9 @@ namespace Poppin.Controllers
 				}
 				catch (Exception e)
 				{
-					var errors = new List<string>();
-					errors.Add(e.Message);
 					return BadRequest(new GenericFailure
 					{
-						Errors = errors
+						Errors = new[] { e.Message }
 					});
 				}
 			}
@@ -397,7 +373,7 @@ namespace Poppin.Controllers
 				});
 			}
 
-			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+			GetUserId(SegmentIOKeys.Actions.ViewVendorList);
 			try
 			{
 				vendor.LocationIds.Add(locationId);
@@ -413,11 +389,9 @@ namespace Poppin.Controllers
 			}
 			catch (Exception e)
 			{
-				var errors = new List<string>();
-				errors.Add(e.Message);
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { e.Message }
 				});
 			}
 		}
@@ -461,7 +435,7 @@ namespace Poppin.Controllers
 				});
 			}
 
-			var userId = GetUserId(SegmentIOKeys.Actions.ViewVendorList);
+			GetUserId(SegmentIOKeys.Actions.ViewVendorList);
 			try
 			{
 				vendor.LocationIds.Remove(locationId);
@@ -477,19 +451,11 @@ namespace Poppin.Controllers
 			}
 			catch (Exception e)
 			{
-				var errors = new List<string>();
-				errors.Add(e.Message);
 				return BadRequest(new GenericFailure
 				{
-					Errors = errors
+					Errors = new[] { e.Message }
 				});
 			}
-		}
-
-		// DELETE api/Vendors/5
-		[HttpDelete("{vendorId}")]
-		public void Delete(string vendorId)
-		{
 		}
 	}
 }

@@ -425,14 +425,18 @@ namespace Poppin.Controllers
         [HttpGet("facebook-login-uri")]
         public IActionResult FacebookLoginUri()
 								{
-            var parameters = new NameValueCollection();
-            parameters["client_id"] = _oAuthSettings.Facebook.ClientId;
-            parameters["redirect_uri"] = this.Url.Action(nameof(FacebookAuth), nameof(IdentityController), null, "https");
-            parameters["state"] = stateGuid;
+            var parameters = new NameValueCollection
+            {
+                ["client_id"] = _oAuthSettings.Facebook.ClientId,
+                ["redirect_uri"] = this.Url.Action(nameof(FacebookAuth), nameof(IdentityController), null, "https"),
+                ["state"] = stateGuid
+            };
 
-            var uri = new UriBuilder("https", "www.facebook.com");
-            uri.Path = "v8.0/dialog/oauth";
-            uri.Query = parameters.ToString();
+            UriBuilder uri = new UriBuilder("https", "www.facebook.com")
+            {
+                Path = "v8.0/dialog/oauth",
+                Query = parameters.ToString()
+            };
             return Ok(new { fbLoginUri = uri.ToString() });
 								}
 

@@ -7,37 +7,37 @@ using static Poppin.Models.Identity.OAuth.Google;
 
 namespace Poppin.Services
 {
-				public class GoogleAuthService : IOAuthService
-				{
-								private readonly HttpClient _httpClient;
-								private const string AccessTokenUrl = "";
-								private const string TokenValidationUrl = "";
-								private const string UserInfoUrl = "";
-								IOAuthSettings _oAuthSettings;
+    public class GoogleAuthService : IOAuthService
+    {
+        private readonly HttpClient _httpClient;
+        private const string AccessTokenUrl = "";
+        private const string TokenValidationUrl = "";
+        private const string UserInfoUrl = "";
+        private readonly IOAuthSettings _oAuthSettings;
 
-								public GoogleAuthService(IOAuthSettings oAuthSettings, HttpClient httpClient)
-								{
-												_oAuthSettings = oAuthSettings;
-												_httpClient = httpClient;
-								}
+        public GoogleAuthService(IOAuthSettings oAuthSettings, HttpClient httpClient)
+        {
+            _oAuthSettings = oAuthSettings;
+            _httpClient = httpClient;
+        }
 
-								public async Task<IAccessTokenResult> GetAccessTokenAsync(string authCode)
-								{
-												return new AccessTokenResult();
-								}
-								public async Task<IAccessTokenResult> GetAccessTokenAsync(string authCode, string redirectUri)
-								{
-												return new AccessTokenResult();
-								}
+        public async Task<IAccessTokenResult> GetAccessTokenAsync(string authCode)
+        {
+            return new AccessTokenResult();
+        }
+        public async Task<IAccessTokenResult> GetAccessTokenAsync(string authCode, string redirectUri)
+        {
+            return new AccessTokenResult();
+        }
 
-								public async Task<IValidationData> ValidateAccessTokenAsync(string accessToken)
-								{
-												return new GoogleValidationData();
-								}
+        public async Task<IValidationData> ValidateAccessTokenAsync(string accessToken)
+        {
+            return new GoogleValidationData();
+        }
 
-								public async Task<IUserInfoResult> GetUserInfoAsync(string accessToken)
-								{
-												return new UserInfoResult();
-								}
-				}
+        public async Task<IUserInfoResult> GetUserInfoAsync(string accessToken)
+        {
+            return new UserInfoResult();
+        }
+    }
 }
