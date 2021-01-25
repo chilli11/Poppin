@@ -38,7 +38,6 @@ namespace Poppin.Services
 		private readonly ILogActionService _logActionService;
 		private readonly ITokenService _tokenService;
 		private readonly TokenDbContext _tokenContext;
-		private readonly JwtSecurityTokenHandler _tokenHandler;
 
 		public IdentityService(
 			UserManager<User> userMgr,
@@ -56,7 +55,6 @@ namespace Poppin.Services
 			_logActionService = las;
 			_tokenService = ts;
 			_tokenContext = tokenContext;
-			_tokenHandler = new JwtSecurityTokenHandler();
 		}
 
 		public async Task<AuthenticationResult> RegisterAsync(string email, string password, string password2, string ipAddress)
@@ -226,7 +224,7 @@ namespace Poppin.Services
 					};
 					await _userService.AddUser(profile);
 				}
-				catch (Exception ex)
+				catch
 				{
 
 				}
@@ -520,9 +518,8 @@ namespace Poppin.Services
 					CreatedByIp = ipAddress
 				};
 
-				var addResult = _tokenContext.Add(rt);
-				var saveResult = _tokenContext.SaveChanges();
-
+				_tokenContext.Add(rt);
+				_tokenContext.SaveChanges();
 				return rt;
 			}
 		}
