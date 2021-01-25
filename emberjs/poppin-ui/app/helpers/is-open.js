@@ -1,5 +1,10 @@
 import { helper } from '@ember/component/helper';
 
+/**
+ * Determines if business is open
+ * @param {LocationModel} params 
+ * @return {bool}
+ */
 const isOpen = function isOpen(params) {
   const location = params[0];
   if (location.hours) {

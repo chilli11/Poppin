@@ -6,6 +6,8 @@
  * @prop {GeoJson} geo https://geojsonlint.com/
  * @prop {Float} radius in meters, max 40000
  * @prop {String[]} categories slugs
+ * @prop {Int} [pageLength] defaults to 20
+ * @prop {int} [offset] defaults to 0
  */
 export class LocationSearchRequest {
 	term;

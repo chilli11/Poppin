@@ -11,6 +11,15 @@ export default class extends Component {
 
 	@tracked machineState = 'IDLE';
 
+	/**
+	 * Machine start up, must be run manually in the constructor
+	 * after any component specific logic has been run.
+	 * Sets up transitions and throws errors if no transitions are given,
+	 * if the `transitions` prop is not an object, r if the `machineState`
+	 * is not a string.
+	 * 
+	 * Adds '_INIT' to the call stack.
+	 */
 	initMachine() {
 		if (this.transitions) {
 			const { transitions, namespace, machineState } = this;
@@ -33,6 +42,8 @@ export default class extends Component {
 	}
 
 	/**
+	 * Dispatches action through the machine using transitions config.
+	 * Multiple levels of error handling.
 	 * @param {String} action
 	 * @param {*} [data]
 	 * @param {Boolean} [scroll] - override for `scrollToTop`
