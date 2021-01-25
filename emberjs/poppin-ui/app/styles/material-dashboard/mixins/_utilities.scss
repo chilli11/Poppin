@@ -87,6 +87,7 @@
 @mixin badge-color() {
     &.badge-primary{
         background-color: $brand-primary;
+        color: $black-color;
     }
     &.badge-info {
         background-color: $brand-info;
