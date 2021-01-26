@@ -159,7 +159,7 @@ classes in order to support full location details from our own database.
 #### BTWDayRaw Class
 ```
 {
-  dayInt: int, `0` is Monday
+  dayInt: int, // `0` is Monday
   dayRaw: int[24] // hourly forecast // `0` is 6am, `23` is 5am the next day
 }
 ```
@@ -214,9 +214,9 @@ Response: [PoppinLocation](#poppinlocation-class)
 
 ## Checkins
 Each [Checkin](#checkin-class) has a reliability score attached.   
-- User direct checkin: 1.5  
+- User direct checkin: 1.2  
 - Vendor checkin (increment- or decrement-crowd): 1  
-- User geogrpahic checkin: .5
+- User geogrpahic checkin: .6
 
 `crowdSize` = The sum of the reliability scores for valid checkins (those that haven't
 timed out or been invalidated)
@@ -225,13 +225,13 @@ timed out or been invalidated)
 Request: Empty  
 Response: [PoppinLocation](#poppinlocation-class) with updated `crowdSize`
 
-User direct checkin (score 1.5)
+User direct checkin (score 1.2)
 
 ### GET api/locations/geo-checkin/{locationId}
 Request: Empty  
 Response: [PoppinLocation](#poppinlocation-class) with updated `crowdSize`
 
-User geo checkin (score .5)
+User geo checkin (score .6)
 
 ### GET api/locations/increment-crowd/{locationId}
 Request: Empty  
