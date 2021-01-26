@@ -160,7 +160,7 @@ classes in order to support full location details from our own database.
 ```
 {
   dayInt: int, `0` is Monday
-  dayRaw: int[24] // hourly forecast; `0` is 6am, `23` is 5am the next day
+  dayRaw: int[24] // hourly forecast // `0` is 6am, `23` is 5am the next day
 }
 ```
 
