@@ -73,8 +73,8 @@ classes in order to support full location details from our own database.
   location: string, // required if no geo,
   geo: [GeoJsonPoint](https://docs.mongodb.com/manual/reference/geojson/#point),
   radius: string, // float, in meters
-	offset: int, // for pagination, 0 is first page // NEW
-	pageLength: int, // default 20 // NEW
+	offset: int, // for pagination, 0 is first page
+	pageLength: int, // default 20
   categories: string // comma separated list of slugs from the category list
 }
 ```
@@ -83,8 +83,8 @@ classes in order to support full location details from our own database.
 ```
 {
 	total: int, // total locations in search
-	offset: int, // page offset; number of locations, not page number // NEW
-	pageLength: int, // number of items to return // NEW
+	offset: int, // page offset // number of locations, not page number
+	pageLength: int, // number of items to return
 	businesses: PoppinLocation[],
 	searchParams: LocationSearchRequest
 }
