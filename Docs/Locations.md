@@ -213,9 +213,9 @@ Request: [PoppinLocationRequest](#poppinlocationrequest-class)
 Response: [PoppinLocation](#poppinlocation-class)
 
 ## Checkins
-Each [Checkin](#checkin-class) has a reliability score attached.  
-- User direct checkin: 1.5
-- Vendor checkin (increment- or decrement-crowd): 1
+Each [Checkin](#checkin-class) has a reliability score attached.   
+- User direct checkin: 1.5  
+- Vendor checkin (increment- or decrement-crowd): 1  
 - User geogrpahic checkin: .5
 
 `crowdSize` = The sum of the reliability scores for valid checkins (those that haven't
@@ -243,4 +243,4 @@ Vendor checkin (score 1)
 Request: Empty  
 Repsonse: [PoppinLocation](#poppinlocation-class) with updated `crowdSize
 
-Invalidates *oldest* checkin at the location 
+Invalidates *oldest* checkin at the location  
