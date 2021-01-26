@@ -26,6 +26,8 @@ classes in order to support full location details from our own database.
   capacity: int,
   capacityConfirmed: bool,
   crowdsize: int,
+  forecast: int,
+  forecastWeek: [ForecastWeek](#forecastweek-class),
   visitLength: int,
   hours: [{
     opening: string, // 11:00
@@ -34,7 +36,7 @@ classes in order to support full location details from our own database.
   }],
   lastUpdate: Date,
   atCapacity: bool
-  yelpDetails: YelpBusiness or YelpShortBusiness // available in limited scenarios
+  yelpDetails: YelpBusiness or YelpShortBusiness // deprecated
 }
 ```
 
@@ -45,6 +47,7 @@ classes in order to support full location details from our own database.
   yelpId: string,
   name: string,
   phone: string,
+  logoUrl: string,
   mainPhotoUrl: string,
   addlPhotoUrls: string[],
   website: string,
@@ -121,6 +124,43 @@ classes in order to support full location details from our own database.
   timeout: date,
   reliabilityScore: float,
   isValid: bool // if the timeout is in the future
+}
+```
+
+#### ForecastWeek Class
+```
+{
+  analysis: {
+    weekRaw: BTWDayRaw[],
+    epochAnalysis: int,
+    venueName: string,
+    window: {
+      dayWindowEndInt: int,
+      dayWindowEndTxt: string,
+      dayWindowStartInt: int,
+      dayWindowStartTxt: string,
+      timeWindowEndInt: int,
+      timeWindowEndTxt: string,
+      timeWindowStartInt: int,
+      timeWindowStartTxt: string,
+      weekWindow: string,
+    },
+    forecastUpdatedOn: date,
+    venueInfo: {
+      venueAddress: string, // '100 Main St, Dallas'
+      venueId: string,
+      venueName: string,
+      venueTimezone: string, // 'America/Chicago'
+    }
+  }
+}
+```
+
+#### BTWDayRaw Class
+```
+{
+  dayInt: int, `0` is Monday
+  dayRaw: int[24] // hourly forecast; `0` is 6am, `23` is 5am the next day
 }
 ```
 
