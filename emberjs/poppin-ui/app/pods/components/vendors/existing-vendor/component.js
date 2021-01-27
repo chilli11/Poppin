@@ -28,7 +28,7 @@ export default class VendorFormComponent extends StatefulComponent {
 		return this.profile.role == 'Admin';
 	}
 	get isVendorAdmin() {
-		this.args.vendor.adminIds.indexOf(this.profile.userId)
+		return this.args.vendor && this.args.vendor.adminIds && this.args.vendor.adminIds.indexOf(this.profile.userId) > -1;
 	}
 
 	@tracked showStatusMsg;

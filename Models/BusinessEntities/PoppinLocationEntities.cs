@@ -159,7 +159,7 @@ namespace Poppin.Models.BusinessEntities
 
 	public class PoppinInsertActionResponse
 	{
-		public PoppinLocation location { get; set; }
-		public YelpBusinessSearchResponse yelpMatches { get; set; }
+		public PoppinLocation Location { get; set; }
+		public YelpBusinessSearchResponse YelpMatches { get; set; }
 	}
 }

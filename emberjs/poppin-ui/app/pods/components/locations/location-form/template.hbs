@@ -1,4 +1,4 @@
-<div class="col-md-6">
+<div class="col-lg-6">
 	<div class="card">
 		<div class="card-header card-header-primary">
 			<h4 class="card-title">Review Business Details</h4>
@@ -13,8 +13,8 @@
 				<form.element @controlType="text" @label="" @placeholder="Line 2" @property="addressLine2" />
 				<form.element @controlType="text" @label="City" @placeholder="City" @property="city" @required={{true}} />
 				<form.group>
-					<label class="col-md-4">State</label>
-					<div class="col-md-8">
+					<label class="col-lg-4">State</label>
+					<div class="col-lg-8">
 						<PowerSelect
 							@options={{this.statesWithCodes}}
 							@placeholder="State"
@@ -26,8 +26,8 @@
 				</form.group>
 				<form.element @controlType="text" @label="Zip Code" @placeholder="xxxxx-xxxx" @property="zip" />	
 				<form.group>
-					<label class="col-form-label col-md-4">Categories</label>
-					<div class="col-md-8">
+					<label class="col-form-label col-lg-4">Categories</label>
+					<div class="col-lg-8">
 						<PowerSelectMultiple
 							@searchEnabled={{true}}
 							@options={{this.poppinCategories}}
@@ -41,8 +41,8 @@
 				</form.group>
 				{{#if @isAdmin}}
 					<form.group>
-						<label class="col-md-4">Rating</label>
-						<div class="col-md-8">
+						<label class="col-lg-4">Rating</label>
+						<div class="col-lg-8">
 							<PowerSelect
 								@options={{this.ratingOptions}}
 								@placeholder="Rating"
@@ -54,8 +54,8 @@
 					</form.group>
 				{{/if}}
 				<form.group>
-					<label class="col-md-4">Price</label>
-					<div class="col-md-8">
+					<label class="col-lg-4">Price</label>
+					<div class="col-lg-8">
 						<PowerSelect
 							@options={{this.priceOptions}}
 							@placeholder="$$$$"
@@ -68,20 +68,45 @@
 				<form.element @controlType="text" @label="Logo URL" @placeholder="https://awesomebiz.com/photos/my-logo.jpg" @property="logoUrl" />
 				<form.element @controlType="text" @label="Main Photo URL" @placeholder="https://awesomebiz.com/photos/my-epic-banner.jpg" @property="mainPhotoUrl" />
 				<form.element @controlType="text" @label="Add'l Photo URL" @placeholder="https://awesomebiz.com/photos/my-epic-pic.jpg" @property="addlPhotoUrl" />
-				{{!-- <div class="form-group row justify-content-md-center">
+				{{!-- <div class="form-group row justify-content-lg-center">
 					<BsButton @onClick={{this.addImg}}><img src="/images/add_circle-24px.svg" /> Add an image</BsButton>
 				</div> --}}
 				<form.element @controlType="text" @label="Website" @placeholder="https://awesomebiz.com/" @property="website" />
 				<form.element @controlType="tel" @label="Phone" @placeholder="Phone" @property="phone" />
+				<hr>
+				<h5 class="card-title">Hours</h5>
+				{{#each this.hours as |day|}}					
+					<form.group>
+						<label class="col-sm-4">{{day.day}}</label>
+						<label class="col-sm-2">Open:</label>
+						<div class="col-sm-2">
+							<PowerSelect
+								@options={{this.hourOptions}}
+								@selected={{day.opening}}
+								@onChange={{fn (mut day.opening)}} as |h|>
+								{{h}}
+							</PowerSelect>
+						</div>
+						<label class="col-sm-2">Close:</label>
+						<div class="col-sm-2">
+							<PowerSelect
+								@options={{this.hourOptions}}
+								@selected={{day.closing}}
+								@onChange={{fn (mut day.closing)}} as |h|>
+								{{h}}
+							</PowerSelect>
+						</div>
+					</form.group>
+				{{/each}}
 				<hr>
 				<h5>Add a Menu</h5>
 				<form.element @label="Name" @placeholder="Breakfast|Brunch|Lunch|Dinner|Cocktails|Wine|Beer" @controlType="text" @property="menuName" />
 				<form.element @label="URL" @placeholder="https://awesomebiz.com/menu" @controlType="text" @property="menuUrl" />
 				<hr>
 				<form.element @controlType="text" @label="Yelp URL" @placeholder="https://www.yelp.com/biz/awesome-biz-2/" @property="yelpUrl" />
-				<div class="form-group row">
-					<form.element class="col-md-6" @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
-					<div class="form-check col-md-6">
+				<div class="row">
+					<form.element class="col-sm-6" @controlType="number" @label="Capacity" @placeholder="Capacity" @property="capacity" @required={{true}} />
+					<div class="form-check col-sm-6">
 						<label class="form-check-label col-form-label">
 							<Input class="form-check-input" @type="checkbox" @checked={{this.capacityConfirmed}} />
 							Confirmed?
@@ -100,7 +125,7 @@
 </div>
 
 {{#if @addNew}}
-	<div class="col-md-6">
+	<div class="col-lg-6">
 		<div class="card">
 			<div class="card-header card-header-primary">
 				<h4 class="card-title">Search Yelp</h4>
@@ -118,7 +143,7 @@
 		</div>
 	</div>
 {{else}}
-	<div class="col-md-6">
+	<div class="col-lg-6">
 		<div class="card">
 			<div class="card-header card-header-primary">
 				<h4 class="card-title">Photos and Menus</h4>
