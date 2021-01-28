@@ -251,7 +251,6 @@ namespace Poppin.Controllers
             }
             var location = new PoppinLocation(_location);
             var isExisting = await _locationService.CheckExists(location);
-            location.LastUpdate = DateTime.UtcNow;
 
             if (isExisting == null)
             {
@@ -300,8 +299,6 @@ namespace Poppin.Controllers
             var location = new PoppinLocation(_location);
             try
             {
-                location.LastUpdate = DateTime.UtcNow;
-
                 if (location.Address.Geo == null)
                 {
                     if (!string.IsNullOrEmpty(location.Address.Line1) && !string.IsNullOrEmpty(location.Address.City) && !string.IsNullOrEmpty(location.Address.State))
@@ -357,7 +354,6 @@ namespace Poppin.Controllers
             var location = new PoppinLocation(_location);
             try
             {
-                location.LastUpdate = DateTime.UtcNow;
                 await _locationService.Update(locationId, location);
 
                 var action = new Dictionary<string, string>()
