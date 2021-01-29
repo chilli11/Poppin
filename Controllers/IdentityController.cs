@@ -169,9 +169,10 @@ namespace Poppin.Controllers
         }
 
         /// <summary>
+        /// Sends password reset email
         /// From https://code-maze.com/password-reset-aspnet-core-identity/
         /// </summary>
-        /// <param name="request"></param>
+        /// <param name="request"><see cref="ForgotPasswordRequest"/></param>
         /// <returns></returns>
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
@@ -205,6 +206,12 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Validates Password Reset Token
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="t"></param>
+        /// <returns></returns>
         [HttpGet("reset-password/{id}")]
         public async Task<IActionResult> ResetPassword(string id, string t)
         {
@@ -231,6 +238,12 @@ namespace Poppin.Controllers
             });
         }
 
+        /// <summary>
+        /// Resets password
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="request"><see cref="ResetPasswordRequest"/></param>
+        /// <returns></returns>
         [HttpPost("reset-password/{id}")]
         public async Task<IActionResult> ResetPassword(string id, [FromBody] ResetPasswordRequest request)
         {
@@ -287,11 +300,24 @@ namespace Poppin.Controllers
             }
         }
 
+        /// <summary>
+        /// Resends confirmation email to email address on file
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
         [HttpPost("resend-confirmation")]
-        public async Task<IActionResult> ResendConfirmation(ForgotPasswordRequest request)
+        public async Task<IActionResult> ResendConfirmation()
         {
+            var userResult = await _identityService.GetUserById(GetUserId());
+            var request = new ForgotPasswordRequest
+            {
+                Email = userResult.User.Email,
+                UserId = userResult.User.Id.ToString()
+            };
+
             try
             {
+
                 await _identityService.ResendConfirmationAsync(request);
                 _logger.LogInformation("Resent Confirmation Email: {id}", request.Email);
                 _logActionService.LogUserAction(request.UserId, SegmentIOKeys.Actions.ResendConfirmationEmail);
@@ -385,7 +411,7 @@ namespace Poppin.Controllers
         [Authorize]
 		[HttpPost("me")]
         public async Task<IActionResult> GetUser()
-								{
+        {
             var userResult = await _identityService.GetUserById(GetUserId());
 
             if (!userResult.Success)

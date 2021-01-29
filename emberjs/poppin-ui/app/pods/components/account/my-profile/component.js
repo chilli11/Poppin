@@ -73,9 +73,12 @@ export default class Component extends StatefulComponent {
 		this.isEdit = true;
 	}
 
+	/**
+	 * Resends confirmation email to email address on file
+	 */
 	[actions.RESEND_CONFIRMATION]() {
 		this.hideMsg();
-		this.accountService.resendConfirmationEmail({ email: this.args.profile.email })
+		this.accountService.resendConfirmationEmail()
 		.then((response) => {
 			if (response.errors && response.errors.length) throw response;
 			return this.dispatch(actions.RESOLVE_ACTION, ['Email resent!']);
