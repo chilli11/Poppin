@@ -87,7 +87,8 @@ namespace Poppin.Models.BusinessEntities
 			get
             {
 				int cast;
-				if (ForecastWeek != null && ForecastWeek.Analysis != null && !string.IsNullOrEmpty(TimeZone.UtcOffset))
+				if (ForecastWeek != null && ForecastWeek.Analysis != null
+					&& TimeZone != null && !string.IsNullOrEmpty(TimeZone.UtcOffset))
 					cast = ForecastWeek.GetForecastOccupancy(TimeZone);
 				else
 					cast = 0;
