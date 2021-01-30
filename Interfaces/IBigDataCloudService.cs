@@ -6,7 +6,6 @@ namespace Poppin.Interfaces
 {
     public interface IBigDataCloudService
     {
-        public Task<PoppinLocation> StoreTimeZoneInfo(PoppinLocation loc);
         public Task<PoppinLocation> GetTimeZoneInfo(PoppinLocation loc);
     }
 }

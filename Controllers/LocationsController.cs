@@ -82,7 +82,10 @@ namespace Poppin.Controllers
                 _btService.StoreForecast(location);
 
             if (location.TimeZone == null || location.TimeZone.UtcOffset == null)
-                location = await _bdcService.StoreTimeZoneInfo(location);
+            {
+                location = await _bdcService.GetTimeZoneInfo(location);
+                _locationService.Update(location);
+            }
 
             // Tracking
             var action = new Dictionary<string, string>()
@@ -201,7 +204,10 @@ namespace Poppin.Controllers
                                 _btService.StoreForecast(l);
 
                             if (l.TimeZone == null || l.TimeZone.UtcOffset == null)
-                                l = await _bdcService.StoreTimeZoneInfo(l);
+                            {
+                                l = await _bdcService.GetTimeZoneInfo(l);
+                                _locationService.Update(l);
+                            }
                         });
                     }
                 }

@@ -33,22 +33,6 @@ namespace Poppin.Services
             _logger = logger;
         }
 
-        public async Task<PoppinLocation> StoreTimeZoneInfo(PoppinLocation loc)
-        {
-            var request = new BigDataCloudTZRequest(loc.Address.Coordinates, _bdcSettings.ApiKey);
-            try
-            {
-                loc.TimeZone = await RetrieveAndDeserialize<PoppinTimeZone>("timezone-by-location", request.AsStringDictionary(), HttpMethod.Get);
-                _locationService.Update(loc);
-                return loc;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex);
-                return loc;
-            }
-        }
-
         public async Task<PoppinLocation> GetTimeZoneInfo(PoppinLocation loc)
         {
             var request = new BigDataCloudTZRequest(loc.Address.Coordinates, _bdcSettings.ApiKey);

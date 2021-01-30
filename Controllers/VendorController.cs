@@ -29,13 +29,15 @@ namespace Poppin.Controllers
 			ILocationService locationService,
 			IUserService userService,
 			IIdentityService identityService,
-			IBestTimeService btService)
+			IBestTimeService btService,
+			IBigDataCloudService bdcService)
 		{
 			_vendorService = vendorService;
 			_locationService = locationService;
 			_userService = userService;
 			_identityService = identityService;
 			_btService = btService;
+			_bdcService = bdcService;
 		}
 
 		[HttpGet]
@@ -88,6 +90,14 @@ namespace Poppin.Controllers
 			{
 				var locations = vendor.GetLocations(_locationService).ToList();
 				locations.StoreForecasts(_btService);
+				locations.ForEach((l) => {
+					if (l.TimeZone == null || l.TimeZone.UtcOffset == null)
+					{
+						l = _bdcService.GetTimeZoneInfo(l).Result;
+						_locationService.Update(l);
+					}
+				});
+
 
 				var vResult = new VendorResult
 				{
