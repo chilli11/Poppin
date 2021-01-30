@@ -87,14 +87,15 @@ namespace Poppin.Models.BusinessEntities
 			get
             {
 				int cast;
-				if (ForecastWeek != null && ForecastWeek.Analysis != null)
-					cast = ForecastWeek.GetForecastOccupancy();
+				if (ForecastWeek != null && ForecastWeek.Analysis != null && !string.IsNullOrEmpty(TimeZone.UtcOffset))
+					cast = ForecastWeek.GetForecastOccupancy(TimeZone);
 				else
 					cast = 0;
 				return cast;
             }
         }
 		public BestTimeWeek ForecastWeek { get; set; }
+		public PoppinTimeZone TimeZone { get; set; }
 
 		/// <summary>
 		/// VisitLength is in minutes

@@ -24,6 +24,7 @@ namespace Poppin.Controllers
         protected ILogActionService _logActionService;
         protected IHEREGeocoder _hereGeocoder;
         protected IBestTimeService _btService;
+        protected IBigDataCloudService _bdcService;
         protected ILogger<PoppinBaseController> _logger;
 
         protected string GetUserId()
