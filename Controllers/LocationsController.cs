@@ -33,7 +33,8 @@ namespace Poppin.Controllers
             ILogger<LocationsController> logger,
             IIdentityService identityService,
             IHEREGeocoder hereGeocoder,
-            IBestTimeService btService)
+            IBestTimeService btService,
+            IBigDataCloudService bdcService)
         {
             _userService = userService;
             _locationService = locationService;
@@ -43,6 +44,7 @@ namespace Poppin.Controllers
             _identityService = identityService;
             _hereGeocoder = hereGeocoder;
             _btService = btService;
+            _bdcService = bdcService;
             _logger = logger;
         }
 
@@ -53,7 +55,7 @@ namespace Poppin.Controllers
         /// <returns></returns>
         // GET: api/Locations/5
         [HttpGet("{locationId}")]
-        public IActionResult Get(string locationId)
+        public async Task<IActionResult> Get(string locationId)
         {
             if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
             {
@@ -65,7 +67,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            var location = GetLocation(locationId);
+            var location = await GetLocation(locationId);
             if (location == null)
             {
                 var errors = new[] { "Location ID is invalid" };
@@ -77,8 +79,12 @@ namespace Poppin.Controllers
             }
 
             if (location.ForecastWeek == null || location.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddDays(-14))
-            {
                 _btService.StoreForecast(location);
+
+            if (location.TimeZone == null || location.TimeZone.UtcOffset == null)
+            {
+                location = await _bdcService.GetTimeZoneInfo(location);
+                _locationService.Update(location);
             }
 
             // Tracking
@@ -94,7 +100,7 @@ namespace Poppin.Controllers
             });
 
             _logger.LogInformation("Retrieved Location: {id}", location.Id);
-            location.SetCrowdSize(_locationService).Wait();
+            await location.SetCrowdSize(_locationService);
             return Ok(location);
         }
 
@@ -116,7 +122,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            var location = GetLocation(locationId);
+            var location = await GetLocation(locationId);
             if (location == null)
             {
                 return BadRequest(new GenericFailure
@@ -140,7 +146,7 @@ namespace Poppin.Controllers
             };
             _logActionService.LogUserAction(GetUserId(SegmentIOKeys.Actions.ViewLocation), SegmentIOKeys.Actions.ViewLocation, action);
 
-            location.SetCrowdSize(_locationService).Wait();
+            await location.SetCrowdSize(_locationService);
             return Ok(location);
         }
 
@@ -172,7 +178,7 @@ namespace Poppin.Controllers
                             Errors = new[] { "`location` or `geo` parameter required" }
                         });
                     }
-                    var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
+                    var geocode = await _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", search.Location } });
                     search.Geo.Coordinates = new double[] { geocode.Position["lng"], geocode.Position["lat"] };
                 }
 
@@ -193,9 +199,15 @@ namespace Poppin.Controllers
                     if (locList.Count > 0)
                     {
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
-                        locList.ForEach((l) => {
+                        locList.ForEach(async (l) => {
                             if (l.ForecastWeek == null || l.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddDays(-14))
                                 _btService.StoreForecast(l);
+
+                            if (l.TimeZone == null || l.TimeZone.UtcOffset == null)
+                            {
+                                l = await _bdcService.GetTimeZoneInfo(l);
+                                _locationService.Update(l);
+                            }
                         });
                     }
                 }
@@ -264,11 +276,11 @@ namespace Poppin.Controllers
                             Errors = new[] { "missing required address parameters" }
                         });
                     }
-                    location.Address.Geo = GeocodeAddress(location.Address);
+                    location.Address.Geo = await GeocodeAddress(location.Address);
                 }
 
                 await _btService.StoreForecast(location);
-                await _locationService.Add(location);
+                await _locationService.Add(await _bdcService.GetTimeZoneInfo(location));
 
                 var action = new Dictionary<string, string>()
                 {
@@ -303,7 +315,7 @@ namespace Poppin.Controllers
                 {
                     if (!string.IsNullOrEmpty(location.Address.Line1) && !string.IsNullOrEmpty(location.Address.City) && !string.IsNullOrEmpty(location.Address.State))
                     {
-                        location.Address.Geo = GeocodeAddress(location.Address);
+                        location.Address.Geo = await GeocodeAddress(location.Address);
                     }
                 }
 
@@ -503,7 +515,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            var location = GetLocation(locationId);
+            var location = await GetLocation(locationId);
             var errors = new List<string>();
             if (location == null)
             {
@@ -606,21 +618,21 @@ namespace Poppin.Controllers
             });
         }
 
-        private PoppinLocation GetLocation(string locationId)
+        private async Task<PoppinLocation> GetLocation(string locationId)
         {
             var location = _searchedLocations.SingleOrDefault(l => l.Id == locationId);
             if (location == null)
             {
-                location = _locationService.Get(locationId).Result;
+                location = await _locationService.Get(locationId);
                 _searchedLocations.Add(location);
             }
             return location;
         }
 
-        private GeoJsonPoint<GeoJson2DGeographicCoordinates> GeocodeAddress(Address locationAddress)
+        private async Task<GeoJsonPoint<GeoJson2DGeographicCoordinates>> GeocodeAddress(Address locationAddress)
         {
             var address = $"{locationAddress.Line1}, {locationAddress.City}, {locationAddress.State}";
-            var geocode = _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", address } });
+            var geocode = await _hereGeocoder.Geocode(new Dictionary<string, string> { { "q", address } });
             var c = new Coord
             {
                 Longitude = geocode.Position["lng"],

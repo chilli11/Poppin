@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
+using Newtonsoft.Json;
 using Poppin.Contracts.Requests;
 using Poppin.Extensions;
 using Poppin.Models.Geocoding;
@@ -157,8 +158,16 @@ namespace Poppin.Models.BusinessEntities
 		public double[] Coordinates { get; set; }
 	}
 
+	public class PoppinTimeZone
+	{
+		[JsonProperty("displayName")]
+		public string Name { get; set; }
+		public int UtcOffsetSeconds { get; set; }
+		public string UtcOffset { get; set; }
+    }
+
 	public interface IForecast
 	{
-		public int GetForecastOccupancy();
+		public int GetForecastOccupancy(PoppinTimeZone tz);
 	}
 }

@@ -36,6 +36,7 @@ namespace Poppin.Controllers
 			ILocationService locationService,
 			IVendorService vendorService,
 			IBestTimeService btService,
+			IBigDataCloudService bdcService,
 			ILogger<ProfileController> logger)
 		{
 			_identityService = identityService;
@@ -44,6 +45,7 @@ namespace Poppin.Controllers
 			_locationService = locationService;
 			_vendorService = vendorService;
 			_btService = btService;
+			_bdcService = bdcService;
 			_logger = logger;
 		}
 
@@ -432,6 +434,13 @@ namespace Poppin.Controllers
 			{
 				favorites.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(favorites.Select(l => l.Id)));
 				favorites.StoreForecasts(_btService);
+				favorites.ForEach((l) => {
+					if (l.TimeZone == null || l.TimeZone.UtcOffset == null)
+					{
+						l = _bdcService.GetTimeZoneInfo(l).Result;
+						_locationService.Update(l);
+					}
+				});
 			}
 
 			return new PoppinUserResult()

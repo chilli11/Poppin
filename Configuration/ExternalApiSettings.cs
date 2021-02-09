@@ -47,6 +47,16 @@ namespace Poppin.Configuration
         public string PrivateKey { get; set; }
     }
 
+    public class BigDataCloudSettings : IBigDataCloudSettings
+    {
+        public string ApiKey { get; set; }
+    }
+
+    public interface IBigDataCloudSettings
+    {
+        public string ApiKey { get; set; }
+    }
+
     public class SegmentSettings
     {
         public string Key { get; set; }

@@ -22,11 +22,11 @@ namespace Poppin.Models.BestTimeEntities
 		[JsonProperty("venue_info")]
 		public BTVenueInfo VenueInfo { get; set; }
 
-		public int GetForecastOccupancy()
+		public int GetForecastOccupancy(PoppinTimeZone tz)
 		{
 			if (Analysis == null || Analysis.WeekRaw == null) return 0;
 
-			var now = DateTime.Now;
+			var now = DateTime.Now.AddSeconds(tz.UtcOffsetSeconds);
 			var day = FixDay(now.Hour, (int)now.DayOfWeek);
 			var hour = FixHour(now.Hour);
 			var dayRaw = (BTWDayRaw)Analysis.WeekRaw.GetValue(day);
