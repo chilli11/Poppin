@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Models.BusinessEntities
 {
-				[BsonIgnoreExtraElements]
+    [BsonIgnoreExtraElements]
     public class PoppinUser : ProfileEntity
     {
         public PoppinUser(IIdentityService idService) : base(idService) { }
@@ -37,16 +37,16 @@ namespace Poppin.Models.BusinessEntities
             Categories = new HashSet<string>(user.Categories);
         }
 
-								public string ProfilePhoto { get; set; }
-								public string AgeRange { get; set; }
+        public string ProfilePhoto { get; set; }
+        public string AgeRange { get; set; }
         public string Gender { get; set; }
 
         public HashSet<string> Categories { get; set; }
 
-								/// <summary>
-								/// LocationIds saved by user
-								/// </summary>
-								public HashSet<string> Favorites { get; set; }
+        /// <summary>
+        /// LocationIds saved by user
+        /// </summary>
+        public HashSet<string> Favorites { get; set; }
 
         /// <summary>
         /// LocationIds hidden by user
@@ -57,6 +57,11 @@ namespace Poppin.Models.BusinessEntities
         /// Vendors that the user is a member of
         /// </summary>
         public HashSet<string> VendorIds { get; set; }
+
+        /// <summary>
+        /// LocationIds the user wants as partners
+        /// </summary>
+        public HashSet<string> RequestedLocations { get; set; }
 
         public async Task<List<Vendor>> GetVendors(IVendorService vs)
         {
@@ -107,12 +112,12 @@ namespace Poppin.Models.BusinessEntities
 
     [JsonConverter(typeof(StringEnumConverter))]
     public enum GenderType
-    {  
+    {
         Unspecified,
         Male,
         Female,
         Other,
         [EnumMember(Value = "Prefer Not to Say")]
         Decline
-				}
+    }
 }

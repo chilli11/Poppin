@@ -19,7 +19,8 @@ Reference for `api/locations` endpoints
   categories: string[], // aliases to Yelp categories
   favorites: string[], // location IDs
   hidden: string[], // location IDs
-  vendorIds: string[]
+  vendorIds: string[],
+  requestedLocations: string[], // IDs of locations the user requested to be added as partners
 }
 ```
 
@@ -70,6 +71,13 @@ Request: Empty
 Return: [PoppinLocation](./Locations.md#poppinlocation-class)[]
 
 List of locations the user recently clicked to view. This does not pull recent search results.
+
+### NEW in 1.2.1
+### GET api/profile/request/{locationId}
+Request: Empty
+Response: Empty
+
+Adds the location to the list of user requests for partnership, and to the user's list of requested locations.
 
 ### GET api/profile/favorites/add/{locationId}
 Request: Empty  
