@@ -162,6 +162,53 @@ namespace Poppin.Controllers
 		}
 
 		/// <summary>
+		/// Submits a request to add a location as a partner
+		/// </summary>
+		/// <param name="locationId"></param>
+		[HttpGet("request/{locationid}")]
+		public async Task<IActionResult> RequestLocation(string locationId)
+		{
+			if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "The location ID was invalid." }
+				});
+			}
+
+			var loc = await _locationService.Get(locationId);
+			if (loc == null)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "The location ID was invalid." }
+				});
+			}
+
+			try
+			{
+				var id = GetUserId(SegmentIOKeys.Actions.RequestLocation);
+				var action = new Dictionary<string, string>()
+				{
+					{ "LocationId", locationId }
+				};
+
+				// Tracking
+				Track(id, SegmentIOKeys.Actions.RequestLocation, locationId);
+				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RequestLocation, action);
+				_userService.RequestLocation(id, loc);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { ex.Message }
+				});
+			}
+		}
+
+		/// <summary>
 		/// Add a location to the user's favorites list
 		/// </summary>
 		/// <param name="locationId"></param>
@@ -176,7 +223,7 @@ namespace Poppin.Controllers
 				});
 			}
 
-			try 
+			try
 			{
 				var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
 				var action = new Dictionary<string, string>()

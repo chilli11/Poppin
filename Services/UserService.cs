@@ -3,6 +3,7 @@ using Poppin.Configuration;
 using Poppin.Interfaces;
 using Poppin.Models.BusinessEntities;
 using Poppin.Models.Identity;
+using Poppin.Models.Tracking;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -13,7 +14,8 @@ namespace Poppin.Services
 {
 	public class UserService : IUserService
 	{
-		private readonly IMongoCollection<PoppinUser> _poppinUsers;
+        private readonly IMongoCollection<PoppinUser> _poppinUsers;
+		private readonly IMongoCollection<UserLocationRequest> _userLocationRequests;
 
 		public UserService(IMongoDBSettings settings)
 		{
@@ -21,6 +23,7 @@ namespace Poppin.Services
 			var database = client.GetDatabase(settings.DatabaseName);
 
 			_poppinUsers = database.GetCollection<PoppinUser>("PoppinUsers");
+			_userLocationRequests = database.GetCollection<UserLocationRequest>("UserLocationRequests");
 		}
 		public Task<PoppinUser> GetUser(string id) =>
 			_poppinUsers.FindAsync(p => p.Id == id).Result.FirstOrDefaultAsync();
@@ -82,5 +85,22 @@ namespace Poppin.Services
 			profile.Hidden.Remove(locationId);
 			return UpdateUser(profile);
 		}
+
+		public Task RequestLocation(string userId, PoppinLocation location)
+        {
+			var profile = GetUserById(userId).Result;
+			var req = new UserLocationRequest
+			{
+				UserId = userId,
+				LocationId = location.Id,
+				LocationGeo = location.Address.Geo,
+				Timestamp = DateTime.Now
+			};
+			if (profile.RequestedLocations == null) profile.RequestedLocations = new HashSet<string>();
+			profile.RequestedLocations.Add(location.Id);
+
+			UpdateUser(profile);
+			return _userLocationRequests.InsertOneAsync(req);
+        }
 	}
 }
