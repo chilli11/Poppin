@@ -125,7 +125,7 @@ namespace Poppin.Services
 				{ "emailConfirmToken", confirmationToken }
 			});
 
-			_smtpService.SendConfirmationEmail(user, confirmationToken);
+			//_smtpService.SendConfirmationEmail(user, confirmationToken);
 			return GenerateAuthenticationResultForUser(user, ipAddress);
 		}
 
