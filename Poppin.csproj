@@ -50,6 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <None Include=".ebextensions\env-properties.config" />
         <None Include=".ebextensions\https-instance-dotnet.config" />
         <None Include=".ebextensions\https-instance-single.config" />
     </ItemGroup>

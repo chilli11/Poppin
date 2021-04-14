@@ -35,6 +35,8 @@ namespace Poppin.Controllers
 			ILogActionService logActionService,
 			ILocationService locationService,
 			IVendorService vendorService,
+			IBestTimeService btService,
+			IBigDataCloudService bdcService,
 			ILogger<ProfileController> logger)
 		{
 			_identityService = identityService;
@@ -42,6 +44,8 @@ namespace Poppin.Controllers
 			_logActionService = logActionService;
 			_locationService = locationService;
 			_vendorService = vendorService;
+			_btService = btService;
+			_bdcService = bdcService;
 			_logger = logger;
 		}
 
@@ -158,6 +162,53 @@ namespace Poppin.Controllers
 		}
 
 		/// <summary>
+		/// Submits a request to add a location as a partner
+		/// </summary>
+		/// <param name="locationId"></param>
+		[HttpGet("request/{locationid}")]
+		public async Task<IActionResult> RequestLocation(string locationId)
+		{
+			if (!Regex.IsMatch(locationId, "^[a-zA-Z0-9]{24}$"))
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "The location ID was invalid." }
+				});
+			}
+
+			var loc = await _locationService.Get(locationId);
+			if (loc == null)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { "The location ID was invalid." }
+				});
+			}
+
+			try
+			{
+				var id = GetUserId(SegmentIOKeys.Actions.RequestLocation);
+				var action = new Dictionary<string, string>()
+				{
+					{ "LocationId", locationId }
+				};
+
+				// Tracking
+				Track(id, SegmentIOKeys.Actions.RequestLocation, locationId);
+				_logActionService.LogUserAction(id, SegmentIOKeys.Actions.RequestLocation, action);
+				_userService.RequestLocation(id, loc);
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return BadRequest(new GenericFailure
+				{
+					Errors = new[] { ex.Message }
+				});
+			}
+		}
+
+		/// <summary>
 		/// Add a location to the user's favorites list
 		/// </summary>
 		/// <param name="locationId"></param>
@@ -172,7 +223,7 @@ namespace Poppin.Controllers
 				});
 			}
 
-			try 
+			try
 			{
 				var id = GetUserId(SegmentIOKeys.Actions.AddFavorite);
 				var action = new Dictionary<string, string>()
@@ -429,6 +480,14 @@ namespace Poppin.Controllers
 			if (favorites != null && user.Favorites.Count > 0)
 			{
 				favorites.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(favorites.Select(l => l.Id)));
+				favorites.StoreForecasts(_btService);
+				favorites.ForEach((l) => {
+					if (l.TimeZone == null || l.TimeZone.UtcOffset == null)
+					{
+						l = _bdcService.GetTimeZoneInfo(l).Result;
+						_locationService.Update(l);
+					}
+				});
 			}
 
 			return new PoppinUserResult()

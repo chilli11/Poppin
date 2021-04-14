@@ -40,6 +40,10 @@ export default class 	LoginFormComponent extends StatefulComponent {
 		this.initMachine();
 	}
 
+	/**
+	 * Submits login to API
+	 * Requires `email` and `password` properties
+	 */
 	[actions.SUBMIT]() {
 		this.showMsg = false;
 		const { email, password } = this;
@@ -52,6 +56,11 @@ export default class 	LoginFormComponent extends StatefulComponent {
 			}).catch((response) => this.dispatch(actions.REJECT, response));
 	}
 
+	/**
+	 * Displays Bootstrap alert
+	 * @param {Object} response 
+	 * @param {String[]} response.errors
+	 */
 	[actions.REJECT](response) {
 		const msgs = response.errors;
 		set(this, 'msgs',  msgs || []);
@@ -59,6 +68,11 @@ export default class 	LoginFormComponent extends StatefulComponent {
 		this.showMsg = true;
 	}
 
+
+	/**
+	 * Displays Bootstrap alert
+	 * @param {String[]} msgs
+	 */
 	[actions.RESOLVE](msgs) {
 		set(this, 'msgs', msgs || []);
 		this.msgType = 'success';

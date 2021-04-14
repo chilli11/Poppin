@@ -26,6 +26,8 @@ classes in order to support full location details from our own database.
   capacity: int,
   capacityConfirmed: bool,
   crowdsize: int,
+  forecast: int,
+  forecastWeek: [ForecastWeek](#forecastweek-class),
   visitLength: int,
   hours: [{
     opening: string, // 11:00
@@ -34,7 +36,7 @@ classes in order to support full location details from our own database.
   }],
   lastUpdate: Date,
   atCapacity: bool
-  yelpDetails: YelpBusiness or YelpShortBusiness // available in limited scenarios
+  yelpDetails: YelpBusiness or YelpShortBusiness // deprecated
 }
 ```
 
@@ -45,6 +47,7 @@ classes in order to support full location details from our own database.
   yelpId: string,
   name: string,
   phone: string,
+  logoUrl: string,
   mainPhotoUrl: string,
   addlPhotoUrls: string[],
   website: string,
@@ -70,8 +73,8 @@ classes in order to support full location details from our own database.
   location: string, // required if no geo,
   geo: [GeoJsonPoint](https://docs.mongodb.com/manual/reference/geojson/#point),
   radius: string, // float, in meters
-	offset: int, // for pagination, 0 is first page // NEW
-	pageLength: int, // default 20 // NEW
+	offset: int, // for pagination, 0 is first page
+	pageLength: int, // default 20
   categories: string // comma separated list of slugs from the category list
 }
 ```
@@ -80,8 +83,8 @@ classes in order to support full location details from our own database.
 ```
 {
 	total: int, // total locations in search
-	offset: int, // page offset; number of locations, not page number // NEW
-	pageLength: int, // number of items to return // NEW
+	offset: int, // page offset // number of locations, not page number
+	pageLength: int, // number of items to return
 	businesses: PoppinLocation[],
 	searchParams: LocationSearchRequest
 }
@@ -121,6 +124,43 @@ classes in order to support full location details from our own database.
   timeout: date,
   reliabilityScore: float,
   isValid: bool // if the timeout is in the future
+}
+```
+
+#### ForecastWeek Class
+```
+{
+  analysis: {
+    weekRaw: BTWDayRaw[],
+    epochAnalysis: int,
+    venueName: string,
+    window: {
+      dayWindowEndInt: int,
+      dayWindowEndTxt: string,
+      dayWindowStartInt: int,
+      dayWindowStartTxt: string,
+      timeWindowEndInt: int,
+      timeWindowEndTxt: string,
+      timeWindowStartInt: int,
+      timeWindowStartTxt: string,
+      weekWindow: string,
+    },
+    forecastUpdatedOn: date,
+    venueInfo: {
+      venueAddress: string, // '100 Main St, Dallas'
+      venueId: string,
+      venueName: string,
+      venueTimezone: string, // 'America/Chicago'
+    }
+  }
+}
+```
+
+#### BTWDayRaw Class
+```
+{
+  dayInt: int, // `0` is Monday
+  dayRaw: int[24] // hourly forecast // `0` is 6am, `23` is 5am the next day
 }
 ```
 
@@ -173,10 +213,10 @@ Request: [PoppinLocationRequest](#poppinlocationrequest-class)
 Response: [PoppinLocation](#poppinlocation-class)
 
 ## Checkins
-Each [Checkin](#checkin-class) has a reliability score attached.  
-- User direct checkin: 1.5
-- Vendor checkin (increment- or decrement-crowd): 1
-- User geogrpahic checkin: .5
+Each [Checkin](#checkin-class) has a reliability score attached.   
+- User direct checkin: 1.2  
+- Vendor checkin (increment- or decrement-crowd): 1  
+- User geogrpahic checkin: .6
 
 `crowdSize` = The sum of the reliability scores for valid checkins (those that haven't
 timed out or been invalidated)
@@ -185,13 +225,13 @@ timed out or been invalidated)
 Request: Empty  
 Response: [PoppinLocation](#poppinlocation-class) with updated `crowdSize`
 
-User direct checkin (score 1.5)
+User direct checkin (score 1.2)
 
 ### GET api/locations/geo-checkin/{locationId}
 Request: Empty  
 Response: [PoppinLocation](#poppinlocation-class) with updated `crowdSize`
 
-User geo checkin (score .5)
+User geo checkin (score .6)
 
 ### GET api/locations/increment-crowd/{locationId}
 Request: Empty  
@@ -203,4 +243,4 @@ Vendor checkin (score 1)
 Request: Empty  
 Repsonse: [PoppinLocation](#poppinlocation-class) with updated `crowdSize
 
-Invalidates *oldest* checkin at the location 
+Invalidates *oldest* checkin at the location  

@@ -21,5 +21,6 @@ namespace Poppin.Interfaces
 		public Task RemoveFavorite(string userId, string locationId);
 		public Task HideLocation(string userId, string locationId);
 		public Task UnhideLocation(string userId, string locationId);
+		public Task RequestLocation(string userId, PoppinLocation location);
 	}
 }

@@ -4,6 +4,9 @@ import environment from 'poppin-ui/config/environment';
 import { inject as service } from '@ember/service';
 import { computed } from '@ember/object';
 
+/**
+ * Sets the Authorization header with the Bearer token for Ember Data calls
+ */
 export default class ApplicationAdapter extends RESTAdapter {
 	@service apiService;
 

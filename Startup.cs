@@ -84,11 +84,23 @@ namespace Poppin
 			services.AddTransient<IHERESettings, HERESettings>(sp =>
 				sp.GetRequiredService<IOptions<HERESettings>>().Value);
 
+			services.Configure<BestTimeSettings>(
+				Configuration.GetSection(nameof(BestTimeSettings)));
+			services.AddTransient<IBestTimeSettings, BestTimeSettings>(sp =>
+				sp.GetRequiredService<IOptions<BestTimeSettings>>().Value);
+
+			services.Configure<BigDataCloudSettings>(
+				Configuration.GetSection(nameof(BigDataCloudSettings)));
+			services.AddTransient<IBigDataCloudSettings, BigDataCloudSettings>(sp =>
+				sp.GetRequiredService<IOptions<BigDataCloudSettings>>().Value);
+
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 			services.AddHttpClient<FBAuthService>();
 			services.AddHttpClient<GoogleAuthService>();
 			services.AddHttpClient<IHEREGeocoder, HEREGeocoder>();
+			services.AddHttpClient<IBestTimeService, BestTimeService>();
+			services.AddHttpClient<IBigDataCloudService, BigDataCloudService>();
 			services.AddTransient<IOAuthHandler, OAuthHandler>();
 			services.AddTransient<IIdentityService, IdentityService>();
 			services.AddTransient<ITokenService, TokenService>();

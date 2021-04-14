@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver.GeoJsonObjectModel;
+using Newtonsoft.Json;
 using Poppin.Contracts.Requests;
 using Poppin.Extensions;
 using Poppin.Models.Geocoding;
@@ -90,14 +91,14 @@ namespace Poppin.Models.BusinessEntities
 		[BsonSerializer(typeof(TestingObjectTypeSerializer))]
 		public string ZipCode { get; set; }
 		public Coord Coordinates {
-						get
-						{
-										return new Coord()
-										{
-														Latitude = Geo.Coordinates.Latitude,
-														Longitude = Geo.Coordinates.Longitude
-										};
-						}
+			get
+			{
+				return new Coord()
+				{
+					Latitude = Geo.Coordinates.Latitude,
+					Longitude = Geo.Coordinates.Longitude
+				};
+			}
 		}
 		public GeoJsonPoint<GeoJson2DGeographicCoordinates> Geo { get; set; }
 	}
@@ -157,9 +158,16 @@ namespace Poppin.Models.BusinessEntities
 		public double[] Coordinates { get; set; }
 	}
 
-	public class PoppinInsertActionResponse
+	public class PoppinTimeZone
 	{
-		public PoppinLocation Location { get; set; }
-		public YelpBusinessSearchResponse YelpMatches { get; set; }
+		[JsonProperty("displayName")]
+		public string Name { get; set; }
+		public int UtcOffsetSeconds { get; set; }
+		public string UtcOffset { get; set; }
+    }
+
+	public interface IForecast
+	{
+		public int GetForecastOccupancy(PoppinTimeZone tz);
 	}
 }

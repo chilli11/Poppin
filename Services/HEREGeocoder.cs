@@ -26,14 +26,25 @@ namespace Poppin.Services
 			_hereSettings = hereSettings;
 		}
 
-		public Place Lookup(IDictionary<string, string> queryParams) =>
-			RetrieveAndDeserialize<Place>("lookup", queryParams).Result;
-		public Geocode Geocode(IDictionary<string, string> queryParams) =>
-			RetrieveAndDeserialize<Geocodes>("geocode", queryParams).Result.Items.First();
-		public IEnumerable<Place> Discover(IDictionary<string, string> queryParams, GeoCoords at) =>
-			RetrieveAndDeserialize<Places>("discover", queryParams, at).Result.Items;
-		public IEnumerable<Place> Browse(IDictionary<string, string> queryParams, GeoCoords at) =>
-			RetrieveAndDeserialize<Places>("browse", queryParams, at).Result.Items;
+		public async Task<Place> Lookup(IDictionary<string, string> queryParams) =>
+			await RetrieveAndDeserialize<Place>("lookup", queryParams);
+
+		public async Task<Geocode> Geocode(IDictionary<string, string> queryParams) {
+			var result = await RetrieveAndDeserialize<Geocodes>("geocode", queryParams);
+			return result.Items.First();
+		}
+
+		public async Task<IEnumerable<Place>> Discover(IDictionary<string, string> queryParams, GeoCoords at)
+		{
+			var result = await RetrieveAndDeserialize<Places>("discover", queryParams, at);
+			return result.Items;
+		}
+
+		public async Task<IEnumerable<Place>> Browse(IDictionary<string, string> queryParams, GeoCoords at)
+		{
+			var result = await RetrieveAndDeserialize<Places>("browse", queryParams, at);
+			return result.Items;
+		}
 
 		private async Task<T> RetrieveAndDeserialize<T>(string path, IDictionary<string, string> queryParams)
 		{

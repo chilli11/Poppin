@@ -13,7 +13,7 @@ using System.Web;
 
 namespace Poppin.Services
 {
-				public class SmtpService : ISmtpService
+	public class SmtpService : ISmtpService
     {
         private readonly Office365Settings _appSettings;
         private readonly IHttpContextAccessor httpContextAccessor;

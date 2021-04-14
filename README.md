@@ -1,10 +1,8 @@
 ﻿# Poppin
-Poppin app
-
+Poppin app v 1.2.1
 
 # API Basics
-See API formats in Swagger docs @ /swagger in dev or local
-
+See API formats in Swagger docs @ /swagger in dev or local  
 This site uses standard bearer authorization with JWT. 
 
 ## Locations
@@ -12,26 +10,28 @@ This site uses standard bearer authorization with JWT.
 
 All location information can be found and updated from /locations APIs. These APIs use a basic cache (TODO: Redis). 
 
-`GET /api/locations/{locationId}`: does not return Yelp data unless it's been previously retrieved and in cache; don't expect it.
-+ use `GET /api/locations/with-yelp/{locationId}` instead
-
 ### Checkins
 [Reference](Docs/Locations.md#checkins)
 
-`​GET /api​/Locations​/checkin​/{locationId}`: Can be anonymous, represents a user initiated check in
-+ Has a value of 1.5
-+ Vendor Checkin has value of 1 (`incrementcrowd` and `decrementcrowd`)
-+ Geo Checkin has value of .5
+`​GET /api​/Locations​/checkin​/{locationId}`: Can be anonymous, represents a user initiated check in  
+- Has a value of 1.2  
+- Vendor Checkin has value of 1 (`incrementcrowd` and `decrementcrowd`)  
+- Geo Checkin has value of .6
 
 `GET /api/locations/increment-crowd` and `GET /api/locations/decrement-crowd` are for Vendor view only.
 
+### Forecasts
+[Reference](Docs/Locations.md#forecastweek-class)  
+- `PoppinLocation.Forecast` {int}  
+- Forecasts are from [BestTime](https://besttime.app).  
+
+Every time a location is accessed - by search, direct access, user profile, or vendor page - the app checks `PoppinLocation.ForecastWeek.ForecastUpdatedOn`. If it has been more than 14 days, a new forecast is pulled and stored in the background. It WILL NOT be returned during that action. Forecasts can take up to several seconds, so the API won't wait. The forecast will be updated on the `PoppinLocation` object and stored in Mongo. 
+
 ### Yelp
-`GET /api/yelp/match/{locactionId}`: returns just the Yelp info for the location
-
-`GET /api/yelp/{yelpId}`: returns the Yelp info for a given Yelp ID
-
-`POST /api/yelp/businesses`: a basic Yelp search
-+ Body:
+`GET /api/yelp/match/{locactionId}`: returns just the Yelp info for the location  
+`GET /api/yelp/{yelpId}`: returns the Yelp info for a given Yelp ID  
+`POST /api/yelp/businesses`: a basic Yelp search  
+- Body:
     ```
     {
       "term": "string",
@@ -51,8 +51,8 @@ All location information can be found and updated from /locations APIs. These AP
     }
     ```
 
-`POST /api/yelp/match`: gets Yelp data based on business name and location or phone number
-+ Body
+`POST /api/yelp/match`: gets Yelp data based on business name and location or phone number  
+- Body
     ```
     {
       "name": "string",
@@ -76,23 +76,22 @@ All location information can be found and updated from /locations APIs. These AP
 
 Data cannot be manipulated through /identity APIs
 
-Login: `/api/identity/login`
-Registration: `/api/identity/register`
-+ Password requirements: 1 upper, 1 lower, 1 number, 1 symbol (_!@#$%^&*)
-Basic User info: `POST /api/identity/me` (contains user role)
+Login: `/api/identity/login`  
+Registration: `/api/identity/register`  
+- Password requirements: 1 upper, 1 lower, 1 number, 1 symbol (_!@#$%^&*)  
+Basic User info: `POST /api/identity/me` (contains user role)  
 Validate Auth: `GET /api/identity/is-authenticated`  
-Refresh Token: `POST /api/identity/refresh-token`
-+ Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
+Refresh Token: `POST /api/identity/refresh-token`  
+- Refresh tokens have a life of 8 hours as of 28-08-2020. Will likely update to permanent or 30 days.
 
 Revoke Token: `POST /api/identity/revoke-token`
   
 ### Profiles
-[Reference](Docs/Profiles.md)
-  
+[Reference](Docs/Profiles.md)   
 User Profile: `/api/profile` (GET, PUT, POST)
 
-Track User Location: `POST /api/profile/update-geo`
-+ Uses GeoJson Point geometry type as body
+Track User Location: `POST /api/profile/update-geo`  
+- Uses GeoJson Point geometry type as body
     Example: 
     ```
     {
@@ -103,5 +102,5 @@ Track User Location: `POST /api/profile/update-geo`
         ]
     }
     ```
-+ If the nearest location searched in the previous 2 hours is within 50 meters, a Geo Checkin will be logged
+- If the nearest location searched in the previous 2 hours is within 50 meters, a Geo Checkin will be logged
 

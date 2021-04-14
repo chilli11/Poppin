@@ -59,17 +59,20 @@ namespace Poppin.Services
 		public Task Add(PoppinLocation location)
 		{
 			location.YelpDetails = null;
+			location.LastUpdate = DateTime.UtcNow;
 			return _locations.InsertOneAsync(location);
 		}
 
 		public Task Update(string id, PoppinLocation location)
 		{
 			location.YelpDetails = null;
+			location.LastUpdate = DateTime.UtcNow;
 			return _locations.ReplaceOneAsync(l => l.Id == location.Id, location);
 		}
 		public Task Update(PoppinLocation location)
 		{
 			location.YelpDetails = null;
+			location.LastUpdate = DateTime.UtcNow;
 			return _locations.ReplaceOneAsync(l => l.Id == location.Id, location);
 		}
 		public Task Delete(PoppinLocation location) => _locations.DeleteOneAsync(loc => loc.Id == location.Id);

@@ -12,9 +12,9 @@ using Segment;
 
 namespace Poppin.Controllers
 {
-				[Route("api/[controller]")]
-				[ApiController]
-				public class PoppinBaseController : ControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+    public class PoppinBaseController : ControllerBase
     {
         protected IIdentityService _identityService;
         protected IUserService _userService;
@@ -23,6 +23,8 @@ namespace Poppin.Controllers
         protected IVendorService _vendorService;
         protected ILogActionService _logActionService;
         protected IHEREGeocoder _hereGeocoder;
+        protected IBestTimeService _btService;
+        protected IBigDataCloudService _bdcService;
         protected ILogger<PoppinBaseController> _logger;
 
         protected string GetUserId()
@@ -106,7 +108,7 @@ namespace Poppin.Controllers
             Analytics.Client.Track(trackingId, search, new Dictionary<string, object>() { { "email", email } });
         }
 
-        protected void Track(string id,  string search, IDictionary<string, object> properties)
+        protected void Track(string id, string search, IDictionary<string, object> properties)
         {
             var trackingId = string.IsNullOrEmpty(id) ? SegmentIOKeys.AnonId : id;
             Analytics.Client.Track(trackingId, search, properties);
