@@ -172,7 +172,7 @@ export default class LocationFormComponent extends StatefulComponent {
 			yelpUrl,
 			categories: this.categoryList,
 			rating: rating,
-			price: price.value,
+			price: price ? price.value : null,
 			capacity: parseInt(capacity, 10),
 			capacityConfirmed: capacityConfirmed,
 			crowdSize: parseInt(crowdSize, 10),
