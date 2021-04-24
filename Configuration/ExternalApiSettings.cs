@@ -39,12 +39,14 @@ namespace Poppin.Configuration
     {
         public string ApiKey { get; set; }
         public string PrivateKey { get; set; }
+        public int ForecastLifetime { get; set; }
     }
 
     public interface IBestTimeSettings
     {
         public string ApiKey { get; set; }
         public string PrivateKey { get; set; }
+        public int ForecastLifetime { get; set; }
     }
 
     public class BigDataCloudSettings : IBigDataCloudSettings

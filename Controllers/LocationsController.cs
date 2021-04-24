@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver.GeoJsonObjectModel;
+using Poppin.Configuration;
 using Poppin.Contracts.Requests;
 using Poppin.Contracts.Responses;
 using Poppin.Extensions;
@@ -23,6 +24,7 @@ namespace Poppin.Controllers
     public class LocationsController : PoppinBaseController
     {
         private readonly List<PoppinLocation> _searchedLocations = new List<PoppinLocation>();
+        private IBestTimeSettings _btSettings;
 
         public LocationsController(
             ILocationService locationService,
@@ -34,6 +36,7 @@ namespace Poppin.Controllers
             IIdentityService identityService,
             IHEREGeocoder hereGeocoder,
             IBestTimeService btService,
+            IBestTimeSettings btSettings,
             IBigDataCloudService bdcService)
         {
             _userService = userService;
@@ -44,6 +47,7 @@ namespace Poppin.Controllers
             _identityService = identityService;
             _hereGeocoder = hereGeocoder;
             _btService = btService;
+            _btSettings = btSettings;
             _bdcService = bdcService;
             _logger = logger;
         }
@@ -78,7 +82,7 @@ namespace Poppin.Controllers
                 });
             }
 
-            if (location.ForecastWeek == null || location.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddDays(-14))
+            if (location.ForecastWeek == null || location.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddMinutes(-1 * _btSettings.ForecastLifetime))
                 _btService.StoreForecast(location);
 
             if (location.TimeZone == null || location.TimeZone.UtcOffset == null)
@@ -200,7 +204,7 @@ namespace Poppin.Controllers
                     {
                         locList.UpdateCrowdSizes(await _locationService.GetCheckinsForLocations(locList.Select(l => l.Id)));
                         locList.ForEach(async (l) => {
-                            if (l.ForecastWeek == null || l.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddDays(-14))
+                            if (l.ForecastWeek == null || l.ForecastWeek.ForecastUpdatedOn < DateTime.Now.AddMinutes(-1 * _btSettings.ForecastLifetime))
                                 _btService.StoreForecast(l);
 
                             if (l.TimeZone == null || l.TimeZone.UtcOffset == null)
