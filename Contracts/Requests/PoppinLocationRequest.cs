@@ -33,7 +33,7 @@ namespace Poppin.Contracts.Requests
 		public int CrowdSize { get; set; }
 		public int VisitLength { get; set; }
 		public int WaitTime { get; set; }
-		public int Price { get; set; }
+		public int? Price { get; set; }
 		public double Rating { get; set; }
 		public IList<HourSet> Hours { get; set; }
 	}
