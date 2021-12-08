@@ -66,7 +66,8 @@ namespace Poppin.Models.BusinessEntities
 		public string HereId { get; set; }
 		public string BestTimeId { get; set; }
 		public string VendorId { get; set; }
-
+		[BsonIgnore]
+		public int Relevance { get; set; }
 		public string Name { get; set; }
 		public string Phone { get; set; }
 		public string LogoUrl { get; set; }

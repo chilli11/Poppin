@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace Poppin.Controllers
 {
-	[Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class LocationsController : PoppinBaseController
     {
@@ -161,17 +161,6 @@ namespace Poppin.Controllers
             {
                 var id = GetUserId(SegmentIOKeys.Actions.Search);
                 var total = 0;
-                if ((search.Categories == null || search.Categories.Count == 0) && search.CategorySlugs != null && search.CategorySlugs.Count > 0)
-                {
-                    var cats = await _locationService.GetCategoriesBySlug(search.CategorySlugs);
-                    search.Categories = cats.ToHashSet();
-                }
-                else if (search.Categories != null && search.Categories.Count > 0 && search.Categories.First().Id == null)
-                {
-                    search.CategorySlugs = search.Categories.Select(c => c.Slug).ToHashSet();
-                    var cats = await _locationService.GetCategoriesBySlug(search.CategorySlugs);
-                    search.Categories = cats.ToHashSet();
-                }
 
                 if (search.Geo.Coordinates.Length == 0)
                 {
