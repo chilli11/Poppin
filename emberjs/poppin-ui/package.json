@@ -69,6 +69,6 @@
   "dependencies": {
     "ember-simple-auth": "^3.0.0",
     "ember-simple-auth-token": "^5.2.0",
-    "node-sass": "^4.14.1"
+    "node-sass": "^7.0.0"
   }
 }
