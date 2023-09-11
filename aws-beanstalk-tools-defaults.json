@@ -15,7 +15,7 @@
     "key-pair"         : "",
     "iis-website"      : "Default Web Site",
     "app-path"         : "/",
-    "enable-xray"      : false,
+    "enable-xray"      : true,
     "configuration"    : "Release",
     "framework"        : "netcoreapp3.1",
     "self-contained"   : false,

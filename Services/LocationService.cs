@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GeoJsonObjectModel;
+using Pluralize.NET;
 using Poppin.Configuration;
 using Poppin.Contracts.Requests;
 using Poppin.Interfaces;
@@ -19,6 +20,7 @@ namespace Poppin.Services
 		private readonly IMongoCollection<PoppinLocation> _locations;
 		private readonly IMongoCollection<Checkin> _checkins;
 		private readonly IMongoCollection<Category> _categories;
+		IPluralize pluralizer = new Pluralizer();
 
 		public LocationService(IMongoDBSettings settings)
 		{
@@ -40,20 +42,29 @@ namespace Poppin.Services
 		public Task<List<PoppinLocation>> GetByYelpList(IEnumerable<string> ids) =>
 			_locations.Find(loc => ids.Contains(loc.YelpId)).ToListAsync();
 
-		public Task<List<PoppinLocation>> GetBySearch(LocationSearchRequest request)
+		public async Task<List<PoppinLocation>> GetBySearch(LocationSearchRequest request)
 		{
+			List<PoppinLocation> locations;
+			string[] split = request.Term.Split(' ');
+			var Terms = split.Concat(split.Select(w => Pluralize(w)));
+			var text = Builders<PoppinLocation>.Filter.Text(String.Join(" ", Terms));
+
 			var x = new GeoJson2DGeographicCoordinates(request.Geo.Coordinates[0], request.Geo.Coordinates[1]);
 			var geo = new GeoJsonPoint<GeoJson2DGeographicCoordinates>(x);
 			var inRange = Builders<PoppinLocation>.Filter.Near(a => a.Address.Geo, geo, request.Radius);
+
+			var Categories = await ExpandCategories(request.Categories, request.CategorySlugs);
 			var cats = request.Categories.SelectMany(c => c.Children);
 			cats = cats.Concat(request.Categories.Select(c => c.Slug));
+			cats = cats.Concat(Terms);
 
-			var matchCat = Builders<PoppinLocation>.Filter.AnyIn("Categories", cats);
 			if (cats != null && cats.Count() > 0)
 			{
-				return _locations.Find(inRange & matchCat).ToListAsync();
+				var matchCat = Builders<PoppinLocation>.Filter.AnyIn("Categories", cats);
+				locations = await _locations.Find(inRange & matchCat).ToListAsync();
 			}
-			return _locations.Find(inRange).ToListAsync();
+			locations = await _locations.Find(inRange).ToListAsync();
+			return locations;
 		}
 
 		public Task Add(PoppinLocation location)
@@ -156,6 +167,33 @@ namespace Poppin.Services
 		public Task UpdateCategory(string catSlug, Category category) => _categories.ReplaceOneAsync(c => c.Slug == catSlug, category);
 		public void UpdateCategories(IEnumerable<Category> categories) => categories.ToList().ForEach(c => UpdateCategory(c));
 		public Task DeleteCategory(string catSlug) => _categories.DeleteOneAsync(c => c.Slug == catSlug);
+
+		private string Pluralize(string word)
+		{
+			return pluralizer.IsSingular(word) ? pluralizer.Pluralize(word) : pluralizer.Singularize(word);
+		}
+
+		private async Task<List<Category>> ExpandCategories(IEnumerable<Category> categories, IEnumerable<string> slugs)
+        {
+			List<Category> cats;
+			if ((categories == null || categories.Count() == 0) && slugs != null && slugs.Count() > 0)
+			{
+				cats = await GetCategoriesBySlug(slugs);
+				categories = cats.ToHashSet();
+			}
+			else if (categories != null && categories.Count() > 0 && categories.First().Id == null)
+			{
+				slugs = categories.Select(c => c.Slug).ToHashSet();
+				cats = await GetCategoriesBySlug(slugs);
+				categories = cats.ToHashSet();
+			}
+			else
+            {
+				cats = new List<Category>();
+            }
+
+			return cats;
+		}
 	}
 
 	public static class LocationExtensions

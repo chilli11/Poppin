@@ -37,7 +37,7 @@ namespace Poppin.Models.BusinessEntities
 			Categories = v.Categories.ToHashSet();
 			VisitLength = v.VisitLength;
 			WaitTime = v.WaitTime;
-			Price = v.Price;
+			Price = v.Price ?? default(int);
 			Rating = v.Rating;
 			Hours = v.Hours;
 		}
@@ -66,7 +66,8 @@ namespace Poppin.Models.BusinessEntities
 		public string HereId { get; set; }
 		public string BestTimeId { get; set; }
 		public string VendorId { get; set; }
-
+		[BsonIgnore]
+		public int Relevance { get; set; }
 		public string Name { get; set; }
 		public string Phone { get; set; }
 		public string LogoUrl { get; set; }

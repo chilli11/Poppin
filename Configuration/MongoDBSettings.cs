@@ -53,12 +53,12 @@ namespace Poppin.Configuration
                 Unique = true
             };
 
-            var lNameIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Text(l => l.Name));
+            var lTextIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Text("$**"));
             var lSpatialIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Geo2DSphere(l => l.Address.Geo));
             var lCatsIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Ascending(l => l.Categories));
             var lSpatialCatsIndex = new CreateIndexModel<PoppinLocation>(Builders<PoppinLocation>.IndexKeys.Combine(lSpatialIndex.Keys, lCatsIndex.Keys));
             _locations.Indexes.CreateManyAsync(new[] {
-                lNameIndex, lSpatialCatsIndex
+                lTextIndex, lSpatialCatsIndex
             });
 
             var vOrgNameIndex = new CreateIndexModel<Vendor>(Builders<Vendor>.IndexKeys.Text(c => c.OrganizationName));
